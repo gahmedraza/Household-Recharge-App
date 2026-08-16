@@ -1,6 +1,29 @@
 <resources>
     <string name="app_name">HouseholdRecharge</string>
     <string name="household">Household</string>
+    <string name="add">Add</string>
+    <string name="name">Name</string>
+    <string name="mobile">Mobile</string>
+    <string name="plan">Plan</string>
+    <string name="cancel">Cancel</string>
+    <string name="requested">Requested</string>
+    <string name="done">Done</string>
+    <string name="request">Request</string>
+
     <string name="james">James</string>
     <string name="emily">Emily</string>
+
+    <string name="recharged">Recharged</string>
+    <string name="expires">Expires</string>
+
+    <string name="active">Active</string>
+    <string name="due">Due</string>
+    <string name="expired">Expired</string>
+
+    <string name="manager">Manager</string>
+    <string name="member">Member</string>
+
+    <string name="days_remaining">%d days</string>
+    <string name="today">Today</string>
+    <string name="days_overdue">%d days overdue</string>
 </resources>
