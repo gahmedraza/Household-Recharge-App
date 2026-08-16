@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MemberDao {
-    @Query("SELECT * FROM members ORDER BY id")
-    fun observeMembers(): Flow<List<MemberEntity>>
+    @Query("SELECT * FROM members WHERE householdId = :householdId ORDER BY id")
+    fun observeMembers(householdId: Long): Flow<List<MemberEntity>>
 
     @Insert
     suspend fun insert(member: MemberEntity)

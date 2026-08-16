@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class MemberEntity (
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
+    val householdId: Long = 1,
     val name: String,
     val mobileNumber: String,
     val planDurationDays: Int,

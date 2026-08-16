@@ -16,8 +16,10 @@ class MemberViewModel(
     private val repository: MemberRepository
 ) : ViewModel() {
 
+    private val householdId = 1L
+
     val members: StateFlow<List<MemberEntity>> =
-        repository.observerMembers()
+        repository.observerMembers(householdId)
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -71,6 +73,7 @@ class MemberViewModel(
         viewModelScope.launch {
             repository.insert(
                 MemberEntity(
+                    householdId = householdId,
                     name= name,
                     mobileNumber = mobileNumber,
                     planDurationDays = planDurationDays,
