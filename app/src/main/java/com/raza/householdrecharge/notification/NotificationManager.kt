@@ -1,9 +1,13 @@
 package com.raza.householdrecharge.notification
 
+import android.Manifest
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.raza.householdrecharge.R
 
 object AppNotificationManager {
 
@@ -23,6 +27,7 @@ object AppNotificationManager {
         manager.createNotificationChannel(channel)
     }
 
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     fun show(
         context: Context,
         notificationId: Int,

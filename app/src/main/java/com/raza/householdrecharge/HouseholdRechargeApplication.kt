@@ -99,15 +99,15 @@ private val MIGRATION_3_4 = object : Migration(3, 4) {
         database.execSQL("DROP TABLE members")
         database.execSQL("ALTER TABLE members_new RENAME TO members")
     }
+}
 
-    private val MIGRATION_4_5 = object: Migration(4,5) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL(
-                """
+private val MIGRATION_4_5 = object: Migration(4,5) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            """
                    ALTER TABLE recharge_requests
                     ADD COLUMN status TEXT NOT NULL DEFAULT 'PENDING'
                 """
-            )
-        }
+        )
     }
 }
