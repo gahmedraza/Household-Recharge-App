@@ -1,5 +1,6 @@
 package com.raza.householdrecharge.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,7 +26,9 @@ import com.raza.householdrecharge.HouseholdRechargeApplication
 import com.raza.householdrecharge.MemberViewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.data.UserRole
+import com.raza.householdrecharge.notification.RechargeNotification
 
+@SuppressLint("MissingPermission")
 @Composable
 fun HouseHoldContent(
     viewModel: MemberViewModel,
@@ -45,6 +48,8 @@ fun HouseHoldContent(
     var showAddMember by remember { mutableStateOf(false) }
 
     val userRole by viewModel.userRole.collectAsState()
+
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -113,6 +118,11 @@ fun HouseHoldContent(
                         activeRequest = activeRequest,
                         onRequestRecharge = {
                             viewModel.requestRecharge(member.id)
+
+                            RechargeNotification.showRequest(
+                                context = context,
+                                memberName = member.name
+                            )
                         },
                         onRechargeDone = {
                             viewModel.markRechargeDone(

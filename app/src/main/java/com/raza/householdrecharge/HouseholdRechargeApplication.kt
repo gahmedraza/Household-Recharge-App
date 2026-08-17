@@ -3,7 +3,9 @@ package com.raza.householdrecharge
 import android.app.Application
 import androidx.room.Room
 import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.sqlite.SQLiteConnection
+import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import androidx.sqlite.execSQL
 import com.raza.householdrecharge.data.UserPreferences
 import com.raza.householdrecharge.notification.AppNotificationManager
 
@@ -13,11 +15,14 @@ class HouseholdRechargeApplication : Application() {
             this,
             AppDatabase::class.java,
             "household_recharge.db"
-        ).addMigrations(
+        )
+            .setDriver(BundledSQLiteDriver())
+            .addMigrations(
             MIGRATION_1_2,
             MIGRATIONS_2_3,
             MIGRATION_3_4,
-            MIGRATION_4_5
+            MIGRATION_4_5,
+            MIGRATION_5_6
         ).build()
     }
 
@@ -41,73 +46,93 @@ class HouseholdRechargeApplication : Application() {
 }
 
 private val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        super.migrate(database)
-
-        database.execSQL(
-            "ALTER TABLE members ADD COLUMN householdID INTEGER NOT NULL DEFAULT 1"
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("""
+                ALTER TABLE members 
+                    ADD COLUMN householdID 
+                        INTEGER NOT NULL DEFAULT 1
+            """.trimIndent()
         )
 
-        database.execSQL(
-            "CREATE TABLE IF NOT EXISTS households (id INTEGER NOT NULL PRIMARY KEY, name TEXT NOT NULL)"
+        connection.execSQL("""
+                CREATE TABLE IF NOT EXISTS households (
+                    id INTEGER NOT NULL PRIMARY KEY, 
+                    name TEXT NOT NULL)
+            """.trimIndent()
         )
     }
 }
 
 private val MIGRATIONS_2_3 = object : Migration(2, 3) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-            """
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("""
                CREATE TABLE IF NOT EXISTS recharge_requests(
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                memberId INTEGER NOT NULL,
-                requestedAt INTEGER NOT NULL,
-                completedAt INTEGER)
-            """
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    memberId INTEGER NOT NULL,
+                    requestedAt INTEGER NOT NULL,
+                    completedAt INTEGER)
+            """.trimIndent()
         )
     }
 }
 
 private val MIGRATION_3_4 = object : Migration(3, 4) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-            """
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("""
                CREATE TABLE members_new (
-                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                 householdId INTEGER NOT NULL,
-                 name TEXT NOT NULL,
-                 mobileNumber TEXT NOT NULL,
-                 planDurationDays INTEGER NOT NULL,
-                 lastRechargeDate INTEGER,
-                 planExpiryDate INTEGER
-                )
-                """
+                    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    householdId INTEGER NOT NULL,
+                    name TEXT NOT NULL,
+                    mobileNumber TEXT NOT NULL,
+                    planDurationDays INTEGER NOT NULL,
+                    lastRechargeDate INTEGER,
+                    planExpiryDate INTEGER)
+                """.trimIndent()
         )
 
-        database.execSQL(
-            """
+        connection.execSQL("""
                 INSERT INTO members_new (
-                id, householdId, name, mobileNumber,planDurationDays
-                lastRechargeDate, planExpiryDate
+                    id, 
+                    householdId, 
+                    name, 
+                    mobileNumber,
+                    planDurationDays,
+                    lastRechargeDate, 
+                    planExpiryDate
                 )
                 SELECT
-                id, householdId, name, mobileNumber, planDurationDays, 
-                lastRechargeDate, planExpiryDate FROM members
-            """
+                    id, 
+                    householdId, 
+                    name, 
+                    mobileNumber, 
+                    planDurationDays, 
+                    lastRechargeDate, 
+                    planExpiryDate 
+                FROM members
+            """.trimIndent()
         )
 
-        database.execSQL("DROP TABLE members")
-        database.execSQL("ALTER TABLE members_new RENAME TO members")
+        connection.execSQL("DROP TABLE members")
+        connection.execSQL("ALTER TABLE members_new RENAME TO members")
     }
 }
 
 private val MIGRATION_4_5 = object : Migration(4, 5) {
-    override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-            """
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("""
                    ALTER TABLE recharge_requests
-                    ADD COLUMN status TEXT NOT NULL DEFAULT 'PENDING'
-                """
+                   ADD COLUMN status TEXT NOT NULL DEFAULT 'PENDING'
+                """.trimIndent()
+        )
+    }
+}
+
+private val MIGRATION_5_6 = object: Migration(5,6) {
+    override fun migrate(connection: SQLiteConnection) {
+        connection.execSQL("""
+                ALTER TABLE members
+                ADD COLUMN rechargeRequested INTEGER NOT NULL DEFAULT 0
+            """.trimIndent()
         )
     }
 }
