@@ -33,7 +33,7 @@ class MemberViewModel(
         }
     }
 
-    fun markRechargeDone(id: Long, planDurationDays: Int) {
+    fun markRechargeDone(id: Long, planDurationDays: Int, requestId: Long?) {
         viewModelScope.launch {
             val rechargeDate = System.currentTimeMillis()
 
@@ -51,6 +51,13 @@ class MemberViewModel(
                 rechargeDate = rechargeDate,
                 expiryDate = expiryDate
             )
+
+            requestId?.let {
+                repository.completeRechargeRequest(
+                    requestId = it,
+                    completedAt = rechargeDate
+                )
+            }
         }
     }
 
@@ -112,5 +119,13 @@ class MemberViewModel(
             .stateIn(scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = null)
+    }
+
+    fun observeRequestHistory(memberId: Long): StateFlow<List<RechargeRequestEntity>> {
+        return repository
+            .observeRequestHistory(memberId)
+            .stateIn(scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyList())
     }
 }

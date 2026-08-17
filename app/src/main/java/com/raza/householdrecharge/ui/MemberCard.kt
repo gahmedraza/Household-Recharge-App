@@ -19,13 +19,15 @@ import com.raza.householdrecharge.data.UserRole
 import com.raza.householdrecharge.util.calculateMemberStatus
 import com.raza.householdrecharge.util.calculatePlanStatus
 import com.raza.householdrecharge.util.formatDate
-
+import com.raza.householdrecharge.data.RechargeRequestEntity
 @Composable
 fun MemberCard(
     member: MemberEntity,
     userRole: UserRole,
+    activeRequest: RechargeRequestEntity?,
     onRequestRecharge: () -> Unit,
-    onRechargeDone: () -> Unit
+    onRechargeDone: () -> Unit,
+    onHistory: () -> Unit
 ) {
 
     val memberStatus = calculateMemberStatus(
@@ -93,23 +95,21 @@ fun MemberCard(
 
             when (userRole) {
                 UserRole.MANAGER -> {
-                    if (member.rechargeRequested) {
-                        Text(
-                            text = stringResource(R.string.requested),
-                            color = MaterialTheme.colorScheme.error
-                        )
+                    activeRequest?.let {
+                        Text(text = stringResource(R.string.requested_on, formatDate(it.requestedAt)))
+                    }
 
-                        Button(
-                            onClick = onRechargeDone,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(stringResource(R.string.done))
-                        }
+                    Button(
+                        onClick = onRechargeDone,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(stringResource(R.string.done))
                     }
                 }
 
                 UserRole.MEMBER -> {
-                    if (calculatePlanStatus(member.planExpiryDate) != PlanStatus.ACTIVE) {
+                    if (status != PlanStatus.ACTIVE &&
+                        activeRequest == null) {
                         Button(
                             onClick = onRequestRecharge,
                             modifier = Modifier.fillMaxWidth()
@@ -134,6 +134,13 @@ fun MemberCard(
                     )
                 }
             }*/
+
+            Button(
+                onClick = onHistory,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.history))
+            }
         }
     }
 }

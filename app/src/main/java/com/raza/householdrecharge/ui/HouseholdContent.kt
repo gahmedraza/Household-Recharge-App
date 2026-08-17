@@ -29,7 +29,9 @@ import com.raza.householdrecharge.data.UserRole
 @Composable
 fun HouseHoldContent(
     viewModel: MemberViewModel,
-    userRole: UserRole
+    userRole: UserRole,
+    onHistory: (Long) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val application = LocalContext.current.applicationContext
             as HouseholdRechargeApplication
@@ -44,7 +46,7 @@ fun HouseHoldContent(
 
     val userRole by viewModel.userRole.collectAsState()
 
-    Column(modifier = Modifier.fillMaxWidth(),
+    Column(modifier = modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Button(
             onClick = {
@@ -96,17 +98,27 @@ fun HouseHoldContent(
                     items = members,
                     key = { member -> member.id }
                 ) { member ->
+
+                    val activeRequest by viewModel
+                        .observeActiveRequest(member.id)
+                        .collectAsState()
+
                     MemberCard(
                         member = member,
                         userRole = userRole!!,
+                        activeRequest = activeRequest,
                         onRequestRecharge = {
                             viewModel.requestRecharge(member.id)
                         },
                         onRechargeDone = {
                             viewModel.markRechargeDone(
                                 member.id,
-                                member.planDurationDays
+                                member.planDurationDays,
+                                activeRequest?.id
                             )
+                        },
+                        onHistory = {
+                            onHistory(member.id)
                         }
                     )
                 }

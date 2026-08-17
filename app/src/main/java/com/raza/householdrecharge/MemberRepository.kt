@@ -32,4 +32,17 @@ class MemberRepository(private val memberDao: MemberDao,
 
     suspend fun markRechargeDone(id: Long, rechargeDate: Long, expiryDate: Long) =
         memberDao.markRechargeDone(id = id, rechargeDate = rechargeDate, expiryDate = expiryDate)
+
+    suspend fun completeRechargeRequest(
+        requestId: Long,
+        completedAt: Long
+    ) {
+        rechargeRequestDao.completeRequest(
+            requestId = requestId,
+            completedAt = completedAt
+        )
+    }
+
+    fun observeRequestHistory(memberId: Long): Flow<List<RechargeRequestEntity>> =
+        rechargeRequestDao.observeRequestHistory(memberId)
 }

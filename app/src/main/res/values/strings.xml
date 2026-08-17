@@ -26,4 +26,11 @@
     <string name="days_remaining">%d days</string>
     <string name="today">Today</string>
     <string name="days_overdue">%d days overdue</string>
+
+    <string name="requested_on">Requested: %1$s</string>
+
+    <string name="history">History</string>
+    <string name="completed_on">Completed: %1$s</string>
+
+    <string name="recharge">Recharge</string>
 </resources>

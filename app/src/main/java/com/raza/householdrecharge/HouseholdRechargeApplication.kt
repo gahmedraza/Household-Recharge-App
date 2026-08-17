@@ -5,6 +5,7 @@ import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.raza.householdrecharge.data.UserPreferences
+import com.raza.householdrecharge.notification.AppNotificationManager
 
 class HouseholdRechargeApplication : Application() {
     val database by lazy {
@@ -15,7 +16,8 @@ class HouseholdRechargeApplication : Application() {
         ).addMigrations(
             MIGRATION_1_2,
             MIGRATIONS_2_3,
-            MIGRATION_3_4
+            MIGRATION_3_4,
+            MIGRATION_4_5
         ).build()
     }
 
@@ -29,6 +31,12 @@ class HouseholdRechargeApplication : Application() {
             rechargeRequestDao = database.rechargeRequestDao(),
             userPreferences = userPreferences
         )
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+        AppNotificationManager.createChannel(this)
     }
 }
 
@@ -90,5 +98,16 @@ private val MIGRATION_3_4 = object : Migration(3, 4) {
 
         database.execSQL("DROP TABLE members")
         database.execSQL("ALTER TABLE members_new RENAME TO members")
+    }
+
+    private val MIGRATION_4_5 = object: Migration(4,5) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL(
+                """
+                   ALTER TABLE recharge_requests
+                    ADD COLUMN status TEXT NOT NULL DEFAULT 'PENDING'
+                """
+            )
+        }
     }
 }

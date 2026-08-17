@@ -9,5 +9,6 @@ data class RechargeRequestEntity(
     val id: Long = 0,
     val membersId: Long,
     val requestedAt: Long,
-    val completedAt: Long? = null
+    val completedAt: Long? = null,
+    val status: RechargeRequestStatus = RechargeRequestStatus.PENDING
 )
