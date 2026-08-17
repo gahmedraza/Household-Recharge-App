@@ -17,10 +17,12 @@ interface RechargeRequestDao {
     @Query("UPDATE recharge_requests SET completedAt = :completedAt, status = 'COMPLETED' WHERE id = :requestId")
     suspend fun completeRequest(requestId: Long, completedAt: Long)
 
-    @Query("""
+    @Query(
+        """
         SELECT * FROM recharge_requests
         WHERE membersId = :memberId
         ORDER BY requestedAt DESC
-    """)
+    """
+    )
     fun observeRequestHistory(memberId: Long): Flow<List<RechargeRequestEntity>>
 }

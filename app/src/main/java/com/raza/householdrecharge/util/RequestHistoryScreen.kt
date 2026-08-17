@@ -28,13 +28,17 @@ fun RequestHistoryScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = stringResource(R.string.history),
-            style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = stringResource(R.string.history),
+            style = MaterialTheme.typography.headlineMedium
+        )
 
-        LazyColumn(modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             items(items = requests, key = { it.id }) { request ->
                 RequestHistoryCard(request)
             }
@@ -50,11 +54,13 @@ private fun RequestHistoryCard(request: RechargeRequestEntity) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = stringResource(R.string.requested_on,
-                    formatDate(request.requestedAt))
+                text = stringResource(
+                    R.string.requested_on,
+                    formatDate(request.requestedAt)
+                )
             )
 
-            if(request.status == RechargeRequestStatus.COMPLETED) {
+            if (request.status == RechargeRequestStatus.COMPLETED) {
                 request.completedAt?.let {
                     Text(text = stringResource(R.string.completed_on, formatDate(it)))
                 }

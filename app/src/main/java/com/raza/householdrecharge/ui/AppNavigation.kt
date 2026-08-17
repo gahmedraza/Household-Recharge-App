@@ -39,14 +39,16 @@ fun AppNavigation(
         composable(AppRoute.Household.route) {
             Scaffold(topBar = {
                 TopAppBar(title = {
-                    Text(stringResource(R.string.household)
+                    Text(
+                        stringResource(R.string.household)
                     )
                 }
                 )
             }
             ) { paddingValues ->
 
-                HouseHoldContent(viewModel = viewModel,
+                HouseHoldContent(
+                    viewModel = viewModel,
                     userRole = userRole,
                     onHistory = { memberId ->
                         navController.navigate(
@@ -56,90 +58,92 @@ fun AppNavigation(
                     },
                     modifier = Modifier
                         .padding(paddingValues)
-                    )}}
-
-                composable(
-                    route = AppRoute.History.route,
-                    arguments = listOf(
-                        navArgument("memberId") {
-                            type = NavType.LongType
-                        }
-                    )
-                ) { backStackEntry ->
-
-                    val memberId = backStackEntry.arguments?.getLong("memberId")
-                        ?: return@composable
-
-                    val requests by viewModel
-                        .observeRequestHistory(memberId)
-                        .collectAsState()
-
-                    Scaffold(
-                        topBar = {
-                            TopAppBar(
-                                title = {
-                                    Text(
-                                        stringResource(R.string.history)
-                                    )
-                                },
-                                navigationIcon = {
-                                    IconButton(
-                                        onClick = {
-                                            navController.popBackStack()
-                                        }
-                                    ) {
-                                        Icon(
-                                            imageVector =
-                                                Icons.AutoMirrored.Filled.ArrowBack,
-                                            contentDescription = null
-                                        )
-                                    }
-                                }
-                            )
-                        }
-                    ) { paddingValues->
-
-                        RequestHistoryScreen(
-                            requests = requests,
-                            modifier = Modifier
-                                .padding(paddingValues)
-                        )
-                    }
-                }
-
+                )
             }
         }
 
-    //
-    //composable(AppRoute.Household.route) {
-    //            HouseHoldContent(
-    //                viewModel= viewModel,
-    //                userRole = userRole,
-    //                onHistory = { memberId ->
-    //                    navController.navigate(
-    //                        AppRoute.History.create(memberId)
-    //                    )
-    //                }
-    //            )
-    //        }
-    //
-    //        composable(route = AppRoute.History.route,
-    //            arguments = listOf(
-    //                navArgument("memberId") {
-    //                    type = NavType.LongType
-    //                }
-    //            )
-    //        ) { backStackEntry ->
-    //
-    //            val memberId = backStackEntry.arguments?.getLong("memberId")?: return@composable
-    //
-    //            val requests by viewModel
-    //                .observeRequestHistory(memberId)
-    //                .collectAsState()
-    //
-    //            RequestHistoryScreen(
-    //                requests = requests
-    //            )
-    //
-    //        }
-    //
+        composable(
+            route = AppRoute.History.route,
+            arguments = listOf(
+                navArgument("memberId") {
+                    type = NavType.LongType
+                }
+            )
+        ) { backStackEntry ->
+
+            val memberId = backStackEntry.arguments?.getLong("memberId")
+                ?: return@composable
+
+            val requests by viewModel
+                .observeRequestHistory(memberId)
+                .collectAsState()
+
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(
+                                stringResource(R.string.history)
+                            )
+                        },
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    navController.popBackStack()
+                                }
+                            ) {
+                                Icon(
+                                    imageVector =
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = null
+                                )
+                            }
+                        }
+                    )
+                }
+            ) { paddingValues ->
+
+                RequestHistoryScreen(
+                    requests = requests,
+                    modifier = Modifier
+                        .padding(paddingValues)
+                )
+            }
+        }
+
+    }
+}
+
+//
+//composable(AppRoute.Household.route) {
+//            HouseHoldContent(
+//                viewModel= viewModel,
+//                userRole = userRole,
+//                onHistory = { memberId ->
+//                    navController.navigate(
+//                        AppRoute.History.create(memberId)
+//                    )
+//                }
+//            )
+//        }
+//
+//        composable(route = AppRoute.History.route,
+//            arguments = listOf(
+//                navArgument("memberId") {
+//                    type = NavType.LongType
+//                }
+//            )
+//        ) { backStackEntry ->
+//
+//            val memberId = backStackEntry.arguments?.getLong("memberId")?: return@composable
+//
+//            val requests by viewModel
+//                .observeRequestHistory(memberId)
+//                .collectAsState()
+//
+//            RequestHistoryScreen(
+//                requests = requests
+//            )
+//
+//        }
+//

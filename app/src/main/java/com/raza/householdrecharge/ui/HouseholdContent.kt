@@ -46,8 +46,12 @@ fun HouseHoldContent(
 
     val userRole by viewModel.userRole.collectAsState()
 
-    Column(modifier = modifier.fillMaxSize().padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         Button(
             onClick = {
                 viewModel.setUserRole(UserRole.MANAGER)
@@ -67,12 +71,12 @@ fun HouseHoldContent(
         }
     }
 
-    if(showAddMember) {
+    if (showAddMember) {
         AddMemberScreen(
-            onAdd = {
-                    name, mobileNumber, planDurationDays -> viewModel.addMember(
-                name = name, mobileNumber = mobileNumber, planDurationDays = planDurationDays
-            )
+            onAdd = { name, mobileNumber, planDurationDays ->
+                viewModel.addMember(
+                    name = name, mobileNumber = mobileNumber, planDurationDays = planDurationDays
+                )
                 showAddMember = false
             },
             onCancel = {

@@ -12,7 +12,7 @@ import com.raza.householdrecharge.data.RechargeRequestEntity
         HouseholdEntity::class,
         MemberEntity::class,
         RechargeRequestEntity::class
-               ],
+    ],
     version = 5,
     exportSchema = false
 )

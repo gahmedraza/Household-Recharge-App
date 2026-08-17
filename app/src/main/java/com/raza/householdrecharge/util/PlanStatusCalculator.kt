@@ -8,7 +8,7 @@ import java.time.ZoneId
 fun calculatePlanStatus(
     expiryDate: Long?
 ): PlanStatus {
-    if(expiryDate == null) {
+    if (expiryDate == null) {
         return PlanStatus.DUE
     }
 

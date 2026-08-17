@@ -20,6 +20,7 @@ import com.raza.householdrecharge.util.calculateMemberStatus
 import com.raza.householdrecharge.util.calculatePlanStatus
 import com.raza.householdrecharge.util.formatDate
 import com.raza.householdrecharge.data.RechargeRequestEntity
+
 @Composable
 fun MemberCard(
     member: MemberEntity,
@@ -57,18 +58,24 @@ fun MemberCard(
 
             Text(text = member.mobileNumber)
 
-            when(status) {
+            when (status) {
                 PlanStatus.ACTIVE -> {
-                    Text(text =
-                    stringResource(
-                        R.string.days_remaining,
-                        memberStatus.daysRemaining
-                    ))
+                    Text(
+                        text =
+                            stringResource(
+                                R.string.days_remaining,
+                                memberStatus.daysRemaining
+                            )
+                    )
                 }
+
                 PlanStatus.DUE -> {
-                    Text(text =
-                    stringResource(R.string.today))
+                    Text(
+                        text =
+                            stringResource(R.string.today)
+                    )
                 }
+
                 PlanStatus.EXPIRED -> {
                     Text(
                         text =
@@ -96,7 +103,12 @@ fun MemberCard(
             when (userRole) {
                 UserRole.MANAGER -> {
                     activeRequest?.let {
-                        Text(text = stringResource(R.string.requested_on, formatDate(it.requestedAt)))
+                        Text(
+                            text = stringResource(
+                                R.string.requested_on,
+                                formatDate(it.requestedAt)
+                            )
+                        )
                     }
 
                     Button(
@@ -109,7 +121,8 @@ fun MemberCard(
 
                 UserRole.MEMBER -> {
                     if (status != PlanStatus.ACTIVE &&
-                        activeRequest == null) {
+                        activeRequest == null
+                    ) {
                         Button(
                             onClick = onRequestRecharge,
                             modifier = Modifier.fillMaxWidth()

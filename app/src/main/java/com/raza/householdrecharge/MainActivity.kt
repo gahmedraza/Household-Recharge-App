@@ -19,11 +19,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if(android.os.Build.VERSION.SDK_INT >=
+        if (android.os.Build.VERSION.SDK_INT >=
             android.os.Build.VERSION_CODES.TIRAMISU &&
             checkSelfPermission(
                 Manifest.permission.POST_NOTIFICATIONS
-            )!= PackageManager.PERMISSION_GRANTED
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
 
             ActivityCompat.requestPermissions(
@@ -35,13 +35,15 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                val application  = LocalContext.current.applicationContext as HouseholdRechargeApplication
+                val application =
+                    LocalContext.current.applicationContext as HouseholdRechargeApplication
 
-                val viewModel: MemberViewModel = viewModel(factory = MemberViewModel.Factory(application.repository))
+                val viewModel: MemberViewModel =
+                    viewModel(factory = MemberViewModel.Factory(application.repository))
 
                 val userRole by viewModel.userRole.collectAsState()
 
-                when(val role = userRole) {
+                when (val role = userRole) {
                     null -> {
                         RoleScreen(onRoleSelected = viewModel::setUserRole)
                     }

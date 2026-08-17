@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.data
 
-data class Member (
+data class Member(
     val id: Long,
     val name: String,
     val mobileNumber: String,

@@ -7,19 +7,23 @@ import com.raza.householdrecharge.data.UserPreferences
 import com.raza.householdrecharge.data.UserRole
 import kotlinx.coroutines.flow.Flow
 
-class MemberRepository(private val memberDao: MemberDao,
-                       private val rechargeRequestDao: RechargeRequestDao,
-                       private val userPreferences: UserPreferences) {
+class MemberRepository(
+    private val memberDao: MemberDao,
+    private val rechargeRequestDao: RechargeRequestDao,
+    private val userPreferences: UserPreferences
+) {
 
     val userRole: Flow<UserRole?> = userPreferences.userRole
 
     suspend fun setUserRole(role: UserRole) = userPreferences.setUserRole(role)
 
-    fun observerMembers(householdId: Long): Flow<List<MemberEntity>> = memberDao.observeMembers(householdId)
+    fun observerMembers(householdId: Long): Flow<List<MemberEntity>> =
+        memberDao.observeMembers(householdId)
 
     suspend fun insert(member: MemberEntity) = memberDao.insert(member)
 
-    fun observeActiveRequest(memberId: Long): Flow<RechargeRequestEntity?> = rechargeRequestDao.observeActiveRequest(memberId)
+    fun observeActiveRequest(memberId: Long): Flow<RechargeRequestEntity?> =
+        rechargeRequestDao.observeActiveRequest(memberId)
 
     suspend fun requestRecharge(memberId: Long) {
         rechargeRequestDao.insert(

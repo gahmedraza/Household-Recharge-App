@@ -66,7 +66,7 @@ class MemberViewModel(
     ) : ViewModelProvider.Factory {
 
         @Suppress("UNCHECKED_CAST")
-        override fun <T: ViewModel> create(
+        override fun <T : ViewModel> create(
             modelCLass: Class<T>
         ): T {
             return MemberViewModel(repository) as T
@@ -82,7 +82,7 @@ class MemberViewModel(
             repository.insert(
                 MemberEntity(
                     householdId = householdId,
-                    name= name,
+                    name = name,
                     mobileNumber = mobileNumber,
                     planDurationDays = planDurationDays,
                     lastRechargeDate = null,
@@ -116,16 +116,20 @@ class MemberViewModel(
 
     fun observeActiveRequest(memberId: Long): StateFlow<RechargeRequestEntity?> {
         return repository.observeActiveRequest(memberId)
-            .stateIn(scope = viewModelScope,
+            .stateIn(
+                scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = null)
+                initialValue = null
+            )
     }
 
     fun observeRequestHistory(memberId: Long): StateFlow<List<RechargeRequestEntity>> {
         return repository
             .observeRequestHistory(memberId)
-            .stateIn(scope = viewModelScope,
+            .stateIn(
+                scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptyList())
+                initialValue = emptyList()
+            )
     }
 }

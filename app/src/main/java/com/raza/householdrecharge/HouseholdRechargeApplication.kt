@@ -40,7 +40,7 @@ class HouseholdRechargeApplication : Application() {
     }
 }
 
-private val MIGRATION_1_2 = object: Migration(1,2) {
+private val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
         super.migrate(database)
 
@@ -54,7 +54,7 @@ private val MIGRATION_1_2 = object: Migration(1,2) {
     }
 }
 
-private val MIGRATIONS_2_3 = object: Migration(2,3) {
+private val MIGRATIONS_2_3 = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL(
             """
@@ -101,7 +101,7 @@ private val MIGRATION_3_4 = object : Migration(3, 4) {
     }
 }
 
-private val MIGRATION_4_5 = object: Migration(4,5) {
+private val MIGRATION_4_5 = object : Migration(4, 5) {
     override fun migrate(database: SupportSQLiteDatabase) {
         database.execSQL(
             """

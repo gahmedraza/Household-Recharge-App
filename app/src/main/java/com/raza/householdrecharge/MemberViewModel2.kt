@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @Deprecated("MemberViewModel is latest")
-class MemberViewModel2: ViewModel() {
+class MemberViewModel2 : ViewModel() {
 
     private val _members = MutableStateFlow(
         listOf(
@@ -34,7 +34,7 @@ class MemberViewModel2: ViewModel() {
 
     fun requestRecharge(memberId: Long) {
         _members.value = _members.value.map { member ->
-            if(member.id == memberId) {
+            if (member.id == memberId) {
                 member.copy(rechargeRequested = true)
             } else {
                 member
@@ -46,7 +46,7 @@ class MemberViewModel2: ViewModel() {
         val today = System.currentTimeMillis()
 
         _members.value = _members.value.map { member ->
-            if(member.id == memberId) {
+            if (member.id == memberId) {
                 member.copy(
                     lastRechargeDate = today,
                     planExpiryDate =

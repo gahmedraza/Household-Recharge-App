@@ -17,7 +17,9 @@ interface MemberDao {
     @Query("UPDATE members SET rechargeRequested = 1 WHERE id = :id")
     suspend fun requestRecharge(id: Long)
 
-    @Query(""" UPDATE members SET lastRechargeDate = :rechargeDate, 
-        planExpiryDate = :expiryDate, rechargeRequested = 0 WHERE id = :id """)
+    @Query(
+        """ UPDATE members SET lastRechargeDate = :rechargeDate, 
+        planExpiryDate = :expiryDate, rechargeRequested = 0 WHERE id = :id """
+    )
     suspend fun markRechargeDone(id: Long, rechargeDate: Long, expiryDate: Long)
 }
