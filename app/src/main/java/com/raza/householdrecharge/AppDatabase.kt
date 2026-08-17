@@ -13,7 +13,7 @@ import com.raza.householdrecharge.data.RechargeRequestEntity
         MemberEntity::class,
         RechargeRequestEntity::class
                ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

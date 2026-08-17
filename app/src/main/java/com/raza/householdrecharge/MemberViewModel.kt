@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.data.MemberEntity
+import com.raza.householdrecharge.data.RechargeRequestEntity
 import com.raza.householdrecharge.data.UserRole
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -78,8 +79,7 @@ class MemberViewModel(
                     mobileNumber = mobileNumber,
                     planDurationDays = planDurationDays,
                     lastRechargeDate = null,
-                    planExpiryDate = null,
-                    rechargeRequested = false
+                    planExpiryDate = null
                 )
             )
         }
@@ -105,5 +105,12 @@ class MemberViewModel(
         viewModelScope.launch {
             repository.setUserRole(role)
         }
+    }
+
+    fun observeActiveRequest(memberId: Long): StateFlow<RechargeRequestEntity?> {
+        return repository.observeActiveRequest(memberId)
+            .stateIn(scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = null)
     }
 }

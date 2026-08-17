@@ -12,6 +12,5 @@ data class MemberEntity (
     val mobileNumber: String,
     val planDurationDays: Int,
     val lastRechargeDate: Long?,
-    val planExpiryDate: Long?,
-    val rechargeRequested: Boolean
+    val planExpiryDate: Long?
 )

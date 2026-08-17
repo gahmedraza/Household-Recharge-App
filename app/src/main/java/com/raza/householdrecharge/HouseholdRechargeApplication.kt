@@ -14,7 +14,8 @@ class HouseholdRechargeApplication : Application() {
             "household_recharge.db"
         ).addMigrations(
             MIGRATION_1_2,
-            MIGRATIONS_2_3
+            MIGRATIONS_2_3,
+            MIGRATION_3_4
         ).build()
     }
 
@@ -56,5 +57,38 @@ private val MIGRATIONS_2_3 = object: Migration(2,3) {
                 completedAt INTEGER)
             """
         )
+    }
+}
+
+private val MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        database.execSQL(
+            """
+               CREATE TABLE members_new (
+                 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                 householdId INTEGER NOT NULL,
+                 name TEXT NOT NULL,
+                 mobileNumber TEXT NOT NULL,
+                 planDurationDays INTEGER NOT NULL,
+                 lastRechargeDate INTEGER,
+                 planExpiryDate INTEGER
+                )
+                """
+        )
+
+        database.execSQL(
+            """
+                INSERT INTO members_new (
+                id, householdId, name, mobileNumber,planDurationDays
+                lastRechargeDate, planExpiryDate
+                )
+                SELECT
+                id, householdId, name, mobileNumber, planDurationDays, 
+                lastRechargeDate, planExpiryDate FROM members
+            """
+        )
+
+        database.execSQL("DROP TABLE members")
+        database.execSQL("ALTER TABLE members_new RENAME TO members")
     }
 }
