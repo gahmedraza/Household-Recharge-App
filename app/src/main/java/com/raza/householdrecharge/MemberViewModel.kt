@@ -6,10 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.data.MemberEntity
 import com.raza.householdrecharge.data.RechargeRequestEntity
 import com.raza.householdrecharge.data.UserRole
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -91,14 +89,6 @@ class MemberViewModel(
             )
         }
     }
-
-    /*private val _userRole = MutableStateFlow(UserRole.MANAGER)
-
-    val userRole: StateFlow<UserRole> = _userRole.asStateFlow()
-
-    fun setUserRole(role: UserRole) {
-        _userRole.value = role
-    }*/
 
     val userRole: StateFlow<UserRole?> =
         repository.userRole

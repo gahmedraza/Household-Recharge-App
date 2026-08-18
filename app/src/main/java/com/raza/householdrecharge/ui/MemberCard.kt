@@ -15,11 +15,10 @@ import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.data.MemberEntity
 import com.raza.householdrecharge.data.PlanStatus
+import com.raza.householdrecharge.data.RechargeRequestEntity
 import com.raza.householdrecharge.data.UserRole
 import com.raza.householdrecharge.util.calculateMemberStatus
-import com.raza.householdrecharge.util.calculatePlanStatus
 import com.raza.householdrecharge.util.formatDate
-import com.raza.householdrecharge.data.RechargeRequestEntity
 
 @Composable
 fun MemberCard(
@@ -132,21 +131,6 @@ fun MemberCard(
                     }
                 }
             }
-
-            /*when (userRole) {
-                null -> {
-                    RoleScreen(
-                        onRoleSelected = viewModel::setUserRole
-                    )
-                }
-
-                else -> {
-                    HouseholdScreen(
-                        viewModel = viewModel,
-                        userRole = userRole
-                    )
-                }
-            }*/
 
             Button(
                 onClick = onHistory,

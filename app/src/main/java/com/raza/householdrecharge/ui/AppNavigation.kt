@@ -113,37 +113,3 @@ fun AppNavigation(
 
     }
 }
-
-//
-//composable(AppRoute.Household.route) {
-//            HouseHoldContent(
-//                viewModel= viewModel,
-//                userRole = userRole,
-//                onHistory = { memberId ->
-//                    navController.navigate(
-//                        AppRoute.History.create(memberId)
-//                    )
-//                }
-//            )
-//        }
-//
-//        composable(route = AppRoute.History.route,
-//            arguments = listOf(
-//                navArgument("memberId") {
-//                    type = NavType.LongType
-//                }
-//            )
-//        ) { backStackEntry ->
-//
-//            val memberId = backStackEntry.arguments?.getLong("memberId")?: return@composable
-//
-//            val requests by viewModel
-//                .observeRequestHistory(memberId)
-//                .collectAsState()
-//
-//            RequestHistoryScreen(
-//                requests = requests
-//            )
-//
-//        }
-//
