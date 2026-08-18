@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.ui.AppNavigation
-import com.raza.householdrecharge.ui.HouseHoldContent
 import com.raza.householdrecharge.ui.RoleScreen
 
 class MainActivity : ComponentActivity() {

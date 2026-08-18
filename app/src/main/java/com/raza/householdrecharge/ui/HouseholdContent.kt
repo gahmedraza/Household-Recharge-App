@@ -21,8 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.raza.householdrecharge.HouseholdRechargeApplication
 import com.raza.householdrecharge.MemberViewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.data.UserRole
@@ -36,18 +34,9 @@ fun HouseHoldContent(
     onHistory: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val application = LocalContext.current.applicationContext
-            as HouseholdRechargeApplication
-
-    val viewModel: MemberViewModel = viewModel(
-        factory = MemberViewModel.Factory(application.repository)
-    )
-
     val members by viewModel.members.collectAsState()
 
     var showAddMember by remember { mutableStateOf(false) }
-
-    val userRole by viewModel.userRole.collectAsState()
 
     val context = LocalContext.current
 
