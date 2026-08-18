@@ -32,34 +32,36 @@ fun AppNavigation(
 ) {
     val navController = rememberNavController()
 
+    val startDestination = when(userRole) {
+        UserRole.MANAGER -> AppRoute.Manager.route
+        UserRole.MEMBER -> AppRoute.Member.route
+    }
+
     NavHost(
         navController = navController,
-        startDestination = AppRoute.Household.route
+        startDestination = startDestination
     ) {
-        composable(AppRoute.Household.route) {
-            Scaffold(topBar = {
-                TopAppBar(title = {
-                    Text(
-                        stringResource(R.string.household)
+        composable(AppRoute.Manager.route) {
+
+            ManagerScreen(
+                viewModel = viewModel,
+                onHistory = { memberId ->
+                    navController.navigate(
+                        AppRoute.History.create(memberId)
                     )
                 }
-                )
-            }
-            ) { paddingValues ->
+            )
+        }
 
-                HouseHoldContent(
-                    viewModel = viewModel,
-                    userRole = userRole,
-                    onHistory = { memberId ->
-                        navController.navigate(
-                            AppRoute.History.create(memberId)
-                        )
-
-                    },
-                    modifier = Modifier
-                        .padding(paddingValues)
-                )
-            }
+        composable(AppRoute.Member.route) {
+            MemberScreen(
+                viewModel = viewModel,
+                onHistory = { memberId ->
+                    navController.navigate(
+                        AppRoute.History.create(memberId)
+                    )
+                }
+            )
         }
 
         composable(
@@ -71,45 +73,40 @@ fun AppNavigation(
             )
         ) { backStackEntry ->
 
-            val memberId = backStackEntry.arguments?.getLong("memberId")
+            val memberId = backStackEntry
+                .arguments?.getLong("memberId")
                 ?: return@composable
 
             val requests by viewModel
                 .observeRequestHistory(memberId)
                 .collectAsState()
 
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        title = {
-                            Text(
-                                stringResource(R.string.history)
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(
-                                onClick = {
-                                    navController.popBackStack()
-                                }
-                            ) {
-                                Icon(
-                                    imageVector =
-                                        Icons.AutoMirrored.Filled.ArrowBack,
-                                    contentDescription = null
-                                )
+            Scaffold(topBar = {
+                TopAppBar(title = {
+                    Text(stringResource(R.string.history))
+                },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                navController.popBackStack()
                             }
+                        ) {
+                            Icon(
+                                imageVector =
+                                    Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = null
+                            )
                         }
+                    }
                     )
-                }
+            }
             ) { paddingValues ->
 
                 RequestHistoryScreen(
                     requests = requests,
-                    modifier = Modifier
-                        .padding(paddingValues)
+                    modifier = Modifier.padding(paddingValues)
                 )
             }
         }
-
     }
 }
