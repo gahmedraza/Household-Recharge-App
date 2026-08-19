@@ -1,36 +1,42 @@
 <resources>
-    <string name="app_name">HouseholdRecharge</string>
+    <string name="app_name">Household Recharge</string>
+
     <string name="household">Household</string>
-    <string name="add">Add</string>
+
+    <string name="manager">Manager</string>
+    <string name="member">Member</string>
+
     <string name="name">Name</string>
-    <string name="mobile">Mobile</string>
-    <string name="plan">Plan</string>
+    <string name="mobile">Mobile number</string>
+    <string name="plan">Plan duration (days)</string>
+
+    <string name="add">Add</string>
     <string name="cancel">Cancel</string>
-    <string name="requested">Requested</string>
-    <string name="done">Done</string>
-    <string name="request">Request</string>
-
-    <string name="james">James</string>
-    <string name="emily">Emily</string>
-
-    <string name="recharged">Recharged</string>
-    <string name="expires">Expires</string>
 
     <string name="active">Active</string>
     <string name="due">Due</string>
     <string name="expired">Expired</string>
 
-    <string name="manager">Manager</string>
-    <string name="member">Member</string>
+    <string name="days_remaining">%1$d days remaining</string>
+    <string name="days_overdue">%1$d days overdue</string>
 
-    <string name="days_remaining">%d days</string>
-    <string name="today">Today</string>
-    <string name="days_overdue">%d days overdue</string>
+    <string name="today">Recharge due today</string>
+
+    <string name="recharged">Recharged: %1$s</string>
+    <string name="expires">Expires : %1$s</string>
 
     <string name="requested_on">Requested: %1$s</string>
-
-    <string name="history">History</string>
     <string name="completed_on">Completed: %1$s</string>
 
+    <string name="request">Request Recharge</string>
+    <string name="request_pending">Recharge requested</string>
+
+    <string name="done">Recharge Done</string>
+
+    <string name="history">History</string>
+
     <string name="recharge">Recharge</string>
+
+    <string name="no_members">No members added</string>
+    <string name="add_first_member">Add a member to begin tracking recharge plans.</string>
 </resources>

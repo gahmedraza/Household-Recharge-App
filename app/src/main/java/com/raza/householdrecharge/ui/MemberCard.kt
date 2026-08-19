@@ -2,11 +2,14 @@ package com.raza.householdrecharge.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -36,12 +39,6 @@ fun MemberCard(
 
     val status = memberStatus.planStatus
 
-    val statusText = when (status) {
-        PlanStatus.ACTIVE -> stringResource(R.string.active)
-        PlanStatus.DUE -> stringResource(R.string.due)
-        PlanStatus.EXPIRED -> stringResource(R.string.expired)
-    }
-
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -55,58 +52,77 @@ fun MemberCard(
                 style = MaterialTheme.typography.titleLarge
             )
 
-            Text(text = member.mobileNumber)
+            Text(text = member.mobileNumber,
+                style = MaterialTheme.typography.bodyMedium)
+
+            Spacer(
+                modifier = Modifier.height(4.dp)
+            )
 
             when (status) {
+
                 PlanStatus.ACTIVE -> {
+
                     Text(
-                        text =
-                            stringResource(
+                        text = stringResource(
                                 R.string.days_remaining,
                                 memberStatus.daysRemaining
-                            )
+                            ),
+                        style = MaterialTheme.typography.titleMedium
                     )
+
+                    member.planExpiryDate?.let {
+                        Text(
+                            text = stringResource(
+                                R.string.expires,
+                                formatDate(it)
+                            )
+                        )
+                    }
                 }
 
                 PlanStatus.DUE -> {
+
                     Text(
-                        text =
-                            stringResource(R.string.today)
+                        text = stringResource(R.string.today),
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
 
                 PlanStatus.EXPIRED -> {
+
                     Text(
-                        text =
-                            stringResource(
+                        text = stringResource(
                                 R.string.days_overdue,
                                 -memberStatus.daysRemaining
-                            )
+                            ),
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             }
 
             member.lastRechargeDate?.let {
                 Text(
-                    text = "${stringResource(R.string.recharged)}: ${formatDate(it)}"
+                    text = stringResource(
+                        R.string.recharged,
+                        formatDate(it)
+                    ),
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
-            member.planExpiryDate?.let {
-                Text(
-                    text = "${stringResource(R.string.expires)} : ${formatDate(it)}"
-                )
-            }
-
+            Spacer(modifier = Modifier.height(4.dp))
 
             when (userRole) {
                 UserRole.MANAGER -> {
-                    activeRequest?.let {
+
+                    if(activeRequest != null) {
                         Text(
                             text = stringResource(
                                 R.string.requested_on,
-                                formatDate(it.requestedAt)
-                            )
+                                formatDate(activeRequest.requestedAt)
+                            ),
+                            style = MaterialTheme.typography.bodyMedium
                         )
                     }
 
@@ -119,24 +135,37 @@ fun MemberCard(
                 }
 
                 UserRole.MEMBER -> {
-                    if (status != PlanStatus.ACTIVE &&
-                        activeRequest == null
-                    ) {
-                        Button(
-                            onClick = onRequestRecharge,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(stringResource(R.string.request))
+
+                    when {
+
+                        activeRequest != null -> {
+
+                            Text(
+                                text = stringResource(R.string.request_pending),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+
+                        status != PlanStatus.ACTIVE -> {
+                            Button(
+                                onClick = onRequestRecharge,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(
+                                    stringResource(R.string.request)
+                                )
+                            }
                         }
                     }
                 }
             }
 
-            Button(
+            OutlinedButton(
                 onClick = onHistory,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(stringResource(R.string.history))
+                Text(stringResource(R.string.history)
+                )
             }
         }
     }

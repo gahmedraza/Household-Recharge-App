@@ -2,6 +2,7 @@ package com.raza.householdrecharge.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +23,7 @@ import com.raza.householdrecharge.data.UserRole
 import com.raza.householdrecharge.notification.RechargeNotification
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.text.style.LineHeightStyle.Alignment
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,13 +44,29 @@ fun MemberScreen(
         }
     ) { paddingValues ->
 
-        MemberList(
-            members = members,
-            userRole = UserRole.MEMBER,
-            viewModel = viewModel,
-            onHistory = onHistory,
-            modifier = Modifier.padding(paddingValues)
-        )
+        if(members.isEmpty()) {
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+                //contentAlignment = Alignment.Center TODO
+            ) {
+
+                Text(
+                    text = stringResource(R.string.no_members)
+                )
+            }
+        } else {
+
+            MemberList(
+                members = members,
+                userRole = UserRole.MEMBER,
+                viewModel = viewModel,
+                onHistory = onHistory,
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
     }
 }
 

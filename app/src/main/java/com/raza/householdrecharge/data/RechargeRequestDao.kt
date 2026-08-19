@@ -15,7 +15,7 @@ interface RechargeRequestDao {
                 ORDER BY requestedAt 
                 DESC LIMIT 1 
         """)
-    fun observeActiveRequest(memberId: Long): Flow<RechargeRequestEntity>
+    fun observeActiveRequest(memberId: Long): Flow<RechargeRequestEntity?>
 
     @Insert
     suspend fun insert(request: RechargeRequestEntity)

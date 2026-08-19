@@ -1,12 +1,17 @@
 package com.raza.householdrecharge.ui
 
+import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.R
 
@@ -28,6 +34,13 @@ fun AddMemberScreen(
     var mobileNumber by remember { mutableStateOf("") }
     var planDuration by remember { mutableStateOf("") }
 
+    var planDays = planDuration.toIntOrNull()
+
+    val canAdd = name.isNotBlank() &&
+            mobileNumber.isNotBlank() &&
+            planDays != null &&
+            planDays > 0
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -35,7 +48,7 @@ fun AddMemberScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
-            text = "Add",
+            text = stringResource(R.string.add),
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -43,6 +56,7 @@ fun AddMemberScreen(
             value = name,
             onValueChange = { name = it },
             modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
             label = {
                 Text(stringResource(R.string.name))
             }
@@ -52,6 +66,7 @@ fun AddMemberScreen(
             value = mobileNumber,
             onValueChange = { mobileNumber = it },
             modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
             label = {
                 Text(stringResource(R.string.mobile))
             }
@@ -59,27 +74,42 @@ fun AddMemberScreen(
 
         OutlinedTextField(
             value = planDuration,
-            onValueChange = { planDuration = it },
+            onValueChange = {
+                if(it.all { character ->
+                    character.isDigit()
+                    }) {
+
+                    planDuration = it
+                }},
             modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number
+            ),
             label = {
                 Text(stringResource(R.string.plan))
             }
         )
 
+        Spacer(
+            modifier = Modifier.height(8.dp)
+        )
+
         Button(
             onClick = {
                 onAdd(
-                    name,
-                    mobileNumber,
-                    planDuration.toIntOrNull() ?: 0
+                    name.trim(),
+                    mobileNumber.trim(),
+                    planDays ?: 0
                 )
             },
+            enabled = canAdd,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(stringResource(R.string.add))
         }
 
-        Button(
+        OutlinedButton(
             onClick = onCancel,
             modifier = Modifier.fillMaxWidth()
         ) {
