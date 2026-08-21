@@ -39,4 +39,6 @@
 
     <string name="no_members">No members added</string>
     <string name="add_first_member">Add a member to begin tracking recharge plans.</string>
+
+    <string name="logo_message">Seamless \nRecharge \nTracking</string>
 </resources>
