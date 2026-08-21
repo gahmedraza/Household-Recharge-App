@@ -1,6 +1,7 @@
 package com.raza.householdrecharge.v2.splash
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,7 +14,11 @@ class HandlerActivity : ComponentActivity() {
 
         setContent {
             HouseholdRechargeTheme(dynamicColor = false) {
-                SplashScreen()
+                SplashScreen(
+                    onSplashFinished = {
+                        Log.d("TAG", "Splash finished")
+                    }
+                )
             }
         }
     }
