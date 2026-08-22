@@ -14,17 +14,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
-fun SplashScreen(onSplashFinished: () -> Unit) {
+fun SplashScreen(
+    onLoggedIn: () -> Unit,
+    onNotLoggedIn: () -> Unit
+) {
 
     LaunchedEffect(Unit) {
         delay(2000.milliseconds)
-        onSplashFinished()
+
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            onNotLoggedIn()
+        } else {
+            onLoggedIn()
+        }
     }
 
     Box(
@@ -50,7 +60,7 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
 @Composable
 fun SplashScreenDarkPreview() {
     HouseholdRechargeTheme(dynamicColor = false) {
-        SplashScreen {}
+        SplashContent()
     }
 }
 
@@ -61,6 +71,14 @@ fun SplashScreenDarkPreview() {
 @Composable
 fun SplashScreenLightPreview() {
     HouseholdRechargeTheme(dynamicColor = false) {
-        SplashScreen {}
+        SplashContent()
     }
+}
+
+@Composable
+fun SplashContent() {
+    SplashScreen(
+        onLoggedIn = {},
+        onNotLoggedIn = {}
+    )
 }

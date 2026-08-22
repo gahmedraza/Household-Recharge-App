@@ -1,12 +1,11 @@
 package com.raza.householdrecharge.data
 
 data class Member(
-    val id: Long,
-    val name: String,
-    val mobileNumber: String,
-    val planDurationDays: Int,
-    val lastRechargeDate: Long?,
-    val planExpiryDate: Long?,
+    val id: Long = 0L,
+    val name: String = "",
+    val mobileNumber: String = "",
+    val planDurationDays: Int = 0,
+    val lastRechargeDate: Long? = 0L,
+    val planExpiryDate: Long? = 0L,
     val rechargeRequested: Boolean = false
 )
-

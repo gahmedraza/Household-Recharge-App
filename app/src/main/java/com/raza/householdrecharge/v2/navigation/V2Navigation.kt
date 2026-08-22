@@ -23,10 +23,15 @@ fun V2Navigation() {
         composable("Splash") {
 
             SplashScreen(
-                onSplashFinished = {
+                onNotLoggedIn = {
                     Log.d("TAG", "OnSplashFinished")
                     navController.navigate("SignIn")
-                })
+                },
+
+                onLoggedIn = {
+                    navController.navigate("Dashboard")
+                }
+            )
         }
 
         composable("SignIn") {

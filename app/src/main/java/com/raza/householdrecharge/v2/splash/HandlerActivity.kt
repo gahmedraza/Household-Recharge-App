@@ -15,7 +15,6 @@ import com.raza.householdrecharge.v2.navigation.V2Navigation
 class HandlerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
 
         setContent {
             HouseholdRechargeTheme(dynamicColor = false) {
