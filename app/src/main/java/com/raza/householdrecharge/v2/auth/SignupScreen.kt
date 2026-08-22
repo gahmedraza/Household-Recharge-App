@@ -1,6 +1,7 @@
 package com.raza.householdrecharge.v2.auth
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,15 +20,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun SignupScreen(
+    viewModel: SignupViewModel,
     onSignup: () -> Unit,
     onSignIn: () -> Unit
 ) {
-    var mobileNumber by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -43,14 +43,14 @@ fun SignupScreen(
                 modifier = Modifier.fillMaxWidth(),
 
                 onValueChange = {
-                    mobileNumber = it
+                    viewModel.mobileNumber = it
                 },
 
                 label = {
                     Text("Mobile Number")
                 },
 
-                value = mobileNumber
+                value = viewModel.mobileNumber
             )
 
             Spacer(modifier = Modifier.padding(20.dp))
@@ -59,14 +59,30 @@ fun SignupScreen(
                 modifier = Modifier.fillMaxWidth(),
 
                 onValueChange = {
-                    password = it
+                    viewModel.password = it
                 },
 
                 label = {
                     Text("Password")
                 },
 
-                value = password
+                value = viewModel.password
+            )
+
+            Spacer(modifier = Modifier.padding(20.dp))
+
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+
+                onValueChange = {
+                    viewModel.password = it
+                },
+
+                label = {
+                    Text("Confirm Password")
+                },
+
+                value = viewModel.password
             )
 
             Spacer(modifier = Modifier.padding(120.dp))
@@ -75,7 +91,15 @@ fun SignupScreen(
                 modifier = Modifier.fillMaxWidth(),
 
                 onClick = {
-                    onSignup()
+
+                    viewModel.signup(
+                        onSuccess = {
+                            onSignup()
+                        },
+                        onFailure = {
+                            Log.d("TAG", "Sign In Failed")
+                        }
+                    )
                 }
             ) {
                 Text("Signup")
@@ -102,7 +126,7 @@ fun SignupScreen(
 )
 @Composable
 fun darkPreviewSignup() {
-    SignInScreen({}, {})
+    SignupContent()
 }
 
 @Preview(
@@ -111,5 +135,17 @@ fun darkPreviewSignup() {
 )
 @Composable
 fun lightPreviewSignup() {
-    SignInScreen({}, {})
+    SignupContent()
+}
+
+@Composable
+fun SignupContent() {
+    SignupScreen(
+        viewModel = viewModel(),
+        onSignup = {
+
+        },
+        onSignIn = {
+
+        })
 }

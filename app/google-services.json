@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "550745761832",
+    "project_id": "householdrecharge",
+    "storage_bucket": "householdrecharge.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:550745761832:android:647f68665b138f631b6d1d",
+        "android_client_info": {
+          "package_name": "com.raza.householdrecharge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXPvbIxbVhGCVakD6xdbx4YZARLSm7uNI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

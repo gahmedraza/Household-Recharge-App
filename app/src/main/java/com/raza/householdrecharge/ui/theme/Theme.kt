@@ -27,6 +27,18 @@ private val LightColorScheme = lightColorScheme(
     primaryFixed = LightLogoColor
 )
 
+private val DarkColorScheme2 = darkColorScheme(
+    primary = DarkLogoColor,
+    onPrimary = DarkBackgroundColor,
+    onSurfaceVariant = DarkLogoColor
+)
+
+private val LightColorScheme2 = lightColorScheme(
+    primary = LightLogoColor,
+    onPrimary = LightBackgroundColor,
+    onSurfaceVariant = LightLogoColor
+)
+
 @Composable
 fun HouseholdRechargeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -43,10 +55,10 @@ fun HouseholdRechargeTheme(
         colorScheme = dynamicLightColorScheme(context)
     }
     else if (darkTheme) {
-        colorScheme = DarkColorScheme
+        colorScheme = DarkColorScheme2
     }
     else {
-        colorScheme = LightColorScheme
+        colorScheme = LightColorScheme2
     }
 
     MaterialTheme(
