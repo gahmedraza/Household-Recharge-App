@@ -13,6 +13,7 @@ import com.raza.householdrecharge.v2.auth.SignupScreen
 import com.raza.householdrecharge.v2.dashbord.DashboardScreen
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryScreen
+import com.raza.householdrecharge.v2.settings.SettingScreen
 import com.raza.householdrecharge.v2.splash.SplashScreen
 
 @Composable
@@ -79,6 +80,15 @@ fun V2Navigation() {
                 },
                 onAddMember = {
                     navController.navigate("AddRechargeHistory")
+                },
+                onDashboardClick = {
+                    navController.navigate("Dashboard")
+                },
+                onRechargeHistoryClick = {
+
+                },
+                onSettingClick = {
+                    navController.navigate("SettingScreen")
                 }
             )
         }
@@ -138,6 +148,10 @@ fun V2Navigation() {
 
                 }
             )
+        }
+
+        composable("SettingScreen") {
+            SettingScreen()
         }
     }
 }

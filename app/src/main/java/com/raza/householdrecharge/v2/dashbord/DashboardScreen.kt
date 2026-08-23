@@ -15,12 +15,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,7 +43,10 @@ import com.raza.householdrecharge.v2.TitleBar
 fun DashboardScreen(
     viewModel: DashboardViewModel,
     onClick: (Long, String) -> Unit,
-    onAddMember: () -> Unit
+    onAddMember: () -> Unit,
+    onDashboardClick: () -> Unit,
+    onRechargeHistoryClick: () -> Unit,
+    onSettingClick: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.loadMembers(
@@ -61,6 +69,15 @@ fun DashboardScreen(
         },
         onAddMember = {
             onAddMember()
+        },
+        onDashboardClick = {
+            onDashboardClick()
+        },
+        onRechargeHistoryClick = {
+            onRechargeHistoryClick()
+        },
+        onSettingClick = {
+            onSettingClick()
         }
     )
 }
@@ -70,7 +87,10 @@ fun DashboardScreen(
 fun DashboardContent(
     viewModel: DashboardViewModel,
     onClick: (Long, String) -> Unit,
-    onAddMember: () -> Unit
+    onAddMember: () -> Unit,
+    onDashboardClick: () -> Unit,
+    onRechargeHistoryClick: () -> Unit,
+    onSettingClick: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -89,6 +109,58 @@ fun DashboardContent(
                         contentDescription = "add member"
                     )
                 }
+            }
+        },
+
+        bottomBar = {
+            NavigationBar{
+                NavigationBarItem(
+                    selected = true,
+                    onClick = {
+                        onDashboardClick()
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Dashboard"
+                        )
+                    },
+                    label = {
+                        Text("Dashboard")
+                    }
+                )
+
+                NavigationBarItem(
+                    selected = false,
+                    onClick = {
+                        onRechargeHistoryClick()
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.History,
+                            contentDescription = "Recharge History"
+                        )
+                    },
+                    label = {
+                        Text("History")
+                    }
+                )
+
+                NavigationBarItem(
+                    selected = false,
+                    onClick = {
+                        onSettingClick()
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Setting"
+                        )
+                    },
+                    label = {
+                        Text("Setting")
+                    }
+                )
             }
         }
     ) { paddingValues ->
@@ -143,6 +215,15 @@ fun content() {
 
         },
         onAddMember = {
+
+        },
+        onDashboardClick = {
+
+        },
+        onRechargeHistoryClick = {
+
+        },
+        onSettingClick = {
 
         }
     )
