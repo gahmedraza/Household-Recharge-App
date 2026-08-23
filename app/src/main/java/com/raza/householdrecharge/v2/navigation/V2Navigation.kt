@@ -6,9 +6,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.raza.householdrecharge.v2.addmember.MemberScreen
+import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryScreen
 import com.raza.householdrecharge.v2.auth.SignInScreen
 import com.raza.householdrecharge.v2.auth.SignupScreen
 import com.raza.householdrecharge.v2.dashbord.DashboardScreen
+import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
+import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryScreen
 import com.raza.householdrecharge.v2.splash.SplashScreen
 
 @Composable
@@ -67,7 +71,53 @@ fun V2Navigation() {
         }
 
         composable("Dashboard") {
-            DashboardScreen(viewModel = viewModel())
+            DashboardScreen(
+                viewModel = viewModel(),
+                onClick = {
+
+                    navController.navigate("RechargeHistory")
+                },
+                onAddMember = {
+                    navController.navigate("AddRechargeHistory")
+                }
+            )
+        }
+
+        composable("Member") {
+            MemberScreen(
+                viewModel = viewModel(),
+                onSuccess = {
+
+                },
+                onFailure = {
+
+                }
+            )
+        }
+
+        composable("RechargeHistory") {
+            RechargeHistoryScreen(
+                viewModel = viewModel(),
+                onSuccess = {
+                    navController.navigate("Dashboard")
+                },
+                onFailure = {
+
+                }
+            )
+        }
+
+        composable("AddRechargeHistory") {
+            AddRechargeHistoryScreen(
+                viewModel = viewModel(),
+                onSuccess = {
+
+                    navController.navigate("Dashboard")
+                },
+                onFailure = {
+
+                }
+            )
         }
     }
 }

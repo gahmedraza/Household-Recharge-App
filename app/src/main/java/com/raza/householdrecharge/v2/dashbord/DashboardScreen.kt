@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,9 +36,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.data.Member
+import com.raza.householdrecharge.v2.TitleBar
 
 @Composable
-fun DashboardScreen(viewModel: DashboardViewModel) {
+fun DashboardScreen(
+    viewModel: DashboardViewModel,
+    onClick: () -> Unit,
+    onAddMember: () -> Unit
+) {
     LaunchedEffect(Unit) {
         viewModel.loadMembers(
             onSuccess = {
@@ -52,55 +58,41 @@ fun DashboardScreen(viewModel: DashboardViewModel) {
         )
     }
 
-    DashboardContent(viewModel)
+    DashboardContent(
+        viewModel = viewModel,
+        onClick = {
+            onClick()
+        },
+        onAddMember = {
+            onAddMember()
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DashboardContent(viewModel: DashboardViewModel) {
+fun DashboardContent(
+    viewModel: DashboardViewModel,
+    onClick: () -> Unit,
+    onAddMember: () -> Unit
+) {
     Scaffold(
         topBar = {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-            ) {
-                TopAppBar(
-                    title = {
-                        Text(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(MaterialTheme.colorScheme.background),
-                            text = "Household Members",
-                            fontSize = 30.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                )
-            }
+            TitleBar()
         },
 
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    viewModel.onAddMember(
-                        onSuccess = {
-
-                        },
-
-                        onFailure = {
-
-                        }
+            if (true) {
+                FloatingActionButton(
+                    onClick = {
+                        onAddMember()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "add member"
                     )
                 }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "add member"
-                )
             }
         }
     ) { paddingValues ->
@@ -122,7 +114,12 @@ fun DashboardContent(viewModel: DashboardViewModel) {
                     }
                 } else {
                     items(viewModel.items) { item ->
-                        DashboardListItem(item)
+                        DashboardListItem(
+                            item = item,
+                            onClick = {
+                                onClick()
+                            }
+                        )
                     }
                 }
             }
@@ -144,18 +141,28 @@ fun DashboardScreenLightPreview() {
 
 @Composable
 fun content() {
-    DashboardScreen(viewModel = viewModel())
+    DashboardScreen(
+        viewModel = viewModel(),
+        onClick = {},
+        onAddMember = {}
+    )
 }
 
 @Composable
-fun DashboardListItem(item: Member) {
+fun DashboardListItem(
+    item: Member,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
                 horizontal = 16.dp,
                 vertical = 8.dp
-            ),
+            )
+            .clickable {
+                onClick()
+            },
         elevation = CardDefaults
             .cardElevation(
                 defaultElevation = 4.dp
@@ -169,7 +176,7 @@ fun DashboardListItem(item: Member) {
         ) {
 
             Text(
-                text = "Number: ${item.mobileNumber}",
+                text = "Mobile: ${item.mobileNumber}",
                 style = MaterialTheme.typography.titleLarge
             )
 

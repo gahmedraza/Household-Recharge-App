@@ -10,32 +10,6 @@ import com.raza.householdrecharge.v2.BaseViewModel
 class DashboardViewModel : BaseViewModel() {
     var items by mutableStateOf<List<Member>>(emptyList())
 
-    val householdId = "11001"
-
-    fun onAddMember(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
-        val member = Member(
-            id = 1002,
-            name = "test2",
-            mobileNumber = "9886198861",
-            planDurationDays = 31,
-            planExpiryDate = null,
-            lastRechargeDate = null
-        )
-
-        FirebaseFirestore
-            .getInstance()
-            .collection("households")
-            .document(householdId)
-            .collection("members")
-            .add(member)
-            .addOnSuccessListener {
-                onSuccess()
-            }
-            .addOnFailureListener {
-                onFailure(it.message)
-            }
-    }
-
     fun loadMembers(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
 
         FirebaseFirestore
