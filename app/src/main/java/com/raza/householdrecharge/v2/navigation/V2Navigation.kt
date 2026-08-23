@@ -73,9 +73,9 @@ fun V2Navigation() {
         composable("Dashboard") {
             DashboardScreen(
                 viewModel = viewModel(),
-                onClick = {
+                onClick = { memberId, mobileNumber ->
 
-                    navController.navigate("RechargeHistory")
+                    navController.navigate("RechargeHistory/$memberId/$mobileNumber")
                 },
                 onAddMember = {
                     navController.navigate("AddRechargeHistory")
@@ -95,20 +95,40 @@ fun V2Navigation() {
             )
         }
 
-        composable("RechargeHistory") {
+        composable(
+            route = "RechargeHistory/{memberId}/{mobileNumber}"
+        ) { backStackEntry ->
+
+            val memberId = backStackEntry.arguments?.getString("memberId")?.toLongOrNull() ?: 0L
+            val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
+
             RechargeHistoryScreen(
+                memberId = memberId,
+                mobileNumber = mobileNumber,
                 viewModel = viewModel(),
                 onSuccess = {
                     navController.navigate("Dashboard")
                 },
                 onFailure = {
 
+                },
+                onAddRecharge = {
+                    navController.navigate("AddRechargeHistory/$memberId/$mobileNumber")
                 }
             )
         }
 
-        composable("AddRechargeHistory") {
+        composable(
+            route = "AddRechargeHistory/{memberId}/{mobileNumber}"
+        ) { backStackEntry ->
+
+            val memberId = backStackEntry.arguments?.getString("memberId")?.toLongOrNull() ?: 0L
+            val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
+
             AddRechargeHistoryScreen(
+                memberId = memberId,
+                mobileNumber = mobileNumber,
+
                 viewModel = viewModel(),
                 onSuccess = {
 

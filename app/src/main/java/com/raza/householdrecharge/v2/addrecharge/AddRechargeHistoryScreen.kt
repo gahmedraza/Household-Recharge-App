@@ -27,13 +27,15 @@ import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryViewModel
 
 @Composable
 fun AddRechargeHistoryScreen(
+    memberId: Long,
+    mobileNumber: String,
     viewModel: AddRechargeHistoryViewModel,
     onSuccess: () -> Unit,
     onFailure: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            TitleBar("Recharge History")
+            TitleBar("Add Recharge History")
         }
     ) { paddingValues ->
 
@@ -42,6 +44,8 @@ fun AddRechargeHistoryScreen(
             .padding(paddingValues)
 
         Body(
+            memberId = memberId,
+            mobileNumber = mobileNumber,
             viewModel = viewModel,
             modifier = modifier,
             onSuccess = {
@@ -56,6 +60,8 @@ fun AddRechargeHistoryScreen(
 
 @Composable
 fun Body(
+    memberId: Long,
+    mobileNumber: String,
     viewModel: AddRechargeHistoryViewModel,
     modifier: Modifier,
     onSuccess: () -> Unit,
@@ -117,6 +123,8 @@ fun Body(
 
             onClick = {
                 viewModel.addRechargeHistory(
+                    memberId = memberId,
+                    mobileNumber = mobileNumber,
                     onSuccess = {
                         onSuccess()
                     },
@@ -134,6 +142,8 @@ fun Body(
 @Composable
 fun Content(viewModel: AddRechargeHistoryViewModel) {
     AddRechargeHistoryScreen(
+        memberId = 0L,
+        mobileNumber = "",
         viewModel = viewModel,
         onSuccess = {},
         onFailure = {}

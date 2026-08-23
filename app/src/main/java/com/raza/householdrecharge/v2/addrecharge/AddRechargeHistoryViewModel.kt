@@ -12,7 +12,12 @@ class AddRechargeHistoryViewModel : BaseViewModel() {
     var date by mutableStateOf("")
     var rechargedBy by mutableStateOf("")
 
-    fun addRechargeHistory(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+    fun addRechargeHistory(
+        memberId: Long,
+        mobileNumber: String,
+        onSuccess: () -> Unit,
+        onFailure: (String?) -> Unit
+    ) {
         val rechargeHistory = RechargeHistory(
             amount = amount,
             date = date,
@@ -24,7 +29,9 @@ class AddRechargeHistoryViewModel : BaseViewModel() {
             .collection("households")
             .document(householdId)
             .collection("members")
-            .document("1002")
+            .document(memberId.toString())
+            .collection("phoneNumbers")
+            .document(mobileNumber)
             .collection("recharges")
             .add(rechargeHistory)
             .addOnSuccessListener {

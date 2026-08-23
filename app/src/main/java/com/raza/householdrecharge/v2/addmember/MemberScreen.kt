@@ -30,7 +30,7 @@ fun MemberScreen(
 
     Scaffold(
         topBar = {
-            TitleBar()
+            TitleBar("Add Household Member")
         },
 
         ) { paddingValues ->

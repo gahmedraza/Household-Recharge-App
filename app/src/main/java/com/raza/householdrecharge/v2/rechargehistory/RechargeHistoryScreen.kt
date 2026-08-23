@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,12 +33,18 @@ import com.raza.householdrecharge.v2.TitleBar
 
 @Composable
 fun RechargeHistoryScreen(
+    memberId: Long,
+    mobileNumber: String,
     viewModel: RechargeHistoryViewModel,
     onSuccess: () -> Unit,
-    onFailure: () -> Unit
+    onFailure: () -> Unit,
+    onAddRecharge: () -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.loadRechargeHistory(
+            memberId = memberId,
+            mobileNumber = mobileNumber,
+
             onSuccess = {
 
             },
@@ -46,7 +56,20 @@ fun RechargeHistoryScreen(
 
     Scaffold(
         topBar = {
-            TitleBar()
+            TitleBar("Recharge History Listing")
+        },
+
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    onAddRecharge()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "add recharge"
+                )
+            }
         }
     ) { paddingValues ->
 
@@ -59,7 +82,7 @@ fun Body(
     viewModel: RechargeHistoryViewModel,
     modifier: Modifier
 ) {
-    if (viewModel.items.isEmpty()) {
+    if (viewModel.mobileRechargeHistory.isEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -74,8 +97,8 @@ fun Body(
             )
         }
     } else {
-        LazyColumn() {
-            items(viewModel.items) { item ->
+        LazyColumn(modifier = modifier) {
+            items(viewModel.mobileRechargeHistory) { item ->
                 RechargeHistoryCard(
                     item = item,
                     onClick = {
@@ -107,9 +130,12 @@ fun RechargeHistoryScreenLightPreview() {
 @Composable
 fun Content(item: RechargeHistory?) {
     RechargeHistoryScreen(
+        memberId = 0L,
+        mobileNumber = "",
         viewModel = viewModel(),
         onSuccess = {},
-        onFailure = {}
+        onFailure = {},
+        onAddRecharge = {}
     )
 }
 

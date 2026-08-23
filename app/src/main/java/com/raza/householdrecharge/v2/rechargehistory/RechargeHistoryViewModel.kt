@@ -3,21 +3,27 @@ package com.raza.householdrecharge.v2.rechargehistory
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toString
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
 
 class RechargeHistoryViewModel : BaseViewModel() {
 
-    var items by mutableStateOf<List<RechargeHistory>>(emptyList())
+    var mobileRechargeHistory by mutableStateOf<List<RechargeHistory>>(emptyList())
 
-    fun loadRechargeHistory(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+    fun loadRechargeHistory(
+        onSuccess: () -> Unit,
+        onFailure: (String?) -> Unit,
+        memberId: Long,
+        mobileNumber: String
+    ) {
 
         FirebaseFirestore
             .getInstance()
             .collection("households")
             .document(householdId)
             .collection("members")
-            .document(memberId)
+            .document(memberId.toString())
             .collection("recharges")
             .get()
             .addOnSuccessListener { result ->
@@ -25,7 +31,7 @@ class RechargeHistoryViewModel : BaseViewModel() {
                     document.toObject(RechargeHistory::class.java)
                 }
 
-                items = members
+                mobileRechargeHistory = members
                 onSuccess()
             }
             .addOnFailureListener {

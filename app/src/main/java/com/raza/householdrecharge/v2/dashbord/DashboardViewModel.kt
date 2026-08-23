@@ -8,7 +8,7 @@ import com.raza.householdrecharge.data.Member
 import com.raza.householdrecharge.v2.BaseViewModel
 
 class DashboardViewModel : BaseViewModel() {
-    var items by mutableStateOf<List<Member>>(emptyList())
+    var members by mutableStateOf<List<Member>>(emptyList())
 
     fun loadMembers(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
 
@@ -23,7 +23,8 @@ class DashboardViewModel : BaseViewModel() {
                     document.toObject(Member::class.java)
                 }
 
-                items = members
+                this.members = members
+
                 onSuccess()
             }
             .addOnFailureListener {

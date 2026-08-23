@@ -2,8 +2,6 @@ package com.raza.householdrecharge.v2.dashbord
 
 import android.content.res.Configuration
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +23,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -33,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.data.Member
 import com.raza.householdrecharge.v2.TitleBar
@@ -41,7 +37,7 @@ import com.raza.householdrecharge.v2.TitleBar
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
-    onClick: () -> Unit,
+    onClick: (Long, String) -> Unit,
     onAddMember: () -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -60,8 +56,8 @@ fun DashboardScreen(
 
     DashboardContent(
         viewModel = viewModel,
-        onClick = {
-            onClick()
+        onClick = { memberId, mobileNumber ->
+            onClick(memberId, mobileNumber)
         },
         onAddMember = {
             onAddMember()
@@ -73,12 +69,12 @@ fun DashboardScreen(
 @Composable
 fun DashboardContent(
     viewModel: DashboardViewModel,
-    onClick: () -> Unit,
+    onClick: (Long, String) -> Unit,
     onAddMember: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            TitleBar()
+            TitleBar("Dashboard")
         },
 
         floatingActionButton = {
@@ -104,7 +100,7 @@ fun DashboardContent(
             contentAlignment = Alignment.Center
         ) {
             LazyColumn {
-                if (viewModel.items.isEmpty()) {
+                if (viewModel.members.isEmpty()) {
                     item {
                         Text(
                             text = "No items available",
@@ -113,11 +109,11 @@ fun DashboardContent(
                         )
                     }
                 } else {
-                    items(viewModel.items) { item ->
+                    items(viewModel.members) { item ->
                         DashboardListItem(
                             item = item,
                             onClick = {
-                                onClick()
+                                onClick(item.id, item.mobileNumber)
                             }
                         )
                     }
@@ -143,8 +139,12 @@ fun DashboardScreenLightPreview() {
 fun content() {
     DashboardScreen(
         viewModel = viewModel(),
-        onClick = {},
-        onAddMember = {}
+        onClick = { memberId, mobileNumber ->
+
+        },
+        onAddMember = {
+
+        }
     )
 }
 
