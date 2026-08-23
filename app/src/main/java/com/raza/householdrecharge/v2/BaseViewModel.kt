@@ -30,4 +30,6 @@ open class BaseViewModel : ViewModel() {
     var daysToExpiry by mutableStateOf("")
 
     var rechargeRequested by mutableStateOf("")
+
+    var household by mutableStateOf<Household>(Household())
 }

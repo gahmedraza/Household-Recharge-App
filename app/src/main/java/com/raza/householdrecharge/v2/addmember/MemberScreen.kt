@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -37,7 +39,15 @@ fun MemberScreen(
 
         Body(
             viewModel = viewModel,
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddingValues)
+                .padding(
+                    start = 10.dp,
+                    end = 10.dp,
+                    top = 10.dp,
+                    bottom = 10.dp
+                )
         )
     }
 }
@@ -47,12 +57,12 @@ fun Body(
     viewModel: MemberViewModel,
     modifier: Modifier
 ) {
+    val scrollState = rememberScrollState()
 
-
-    modifier.fillMaxWidth()
-
-    Column() {
-
+    Column(
+        modifier = modifier
+            .verticalScroll(scrollState)
+    ) {
         OutlinedTextField(
             modifier = modifier,
             label = {
@@ -77,8 +87,6 @@ fun Body(
             value = viewModel.mobileNumber
         )
 
-        Spacer(modifier = Modifier.padding(12.dp))
-
         OutlinedTextField(
             modifier = modifier,
             label = {
@@ -89,8 +97,6 @@ fun Body(
             },
             value = viewModel.lastRechargeDate.toString()
         )
-
-        Spacer(modifier = Modifier.padding(12.dp))
 
         OutlinedTextField(
             modifier = modifier,
@@ -103,8 +109,6 @@ fun Body(
             value = viewModel.planAmount
         )
 
-        Spacer(modifier = Modifier.padding(12.dp))
-
         OutlinedTextField(
             modifier = modifier,
             label = {
@@ -115,8 +119,6 @@ fun Body(
             },
             value = viewModel.planExpiryDate.toString()
         )
-
-        Spacer(modifier = Modifier.padding(12.dp))
 
         OutlinedTextField(
             modifier = modifier,
@@ -129,8 +131,6 @@ fun Body(
             value = viewModel.planDurationDays.toString()
         )
 
-        Spacer(modifier = Modifier.padding(12.dp))
-
         OutlinedTextField(
             modifier = modifier,
             label = {
@@ -142,8 +142,6 @@ fun Body(
             value = viewModel.daysToExpiry
         )
 
-        Spacer(modifier = Modifier.padding(12.dp))
-
         OutlinedTextField(
             modifier = modifier,
             label = {
@@ -154,8 +152,6 @@ fun Body(
             },
             value = viewModel.rechargeRequested
         )
-
-        Spacer(modifier = Modifier.padding(12.dp))
 
         Button(
             modifier = modifier,
@@ -174,7 +170,6 @@ fun Body(
         ) {
             Text("Update")
         }
-
     }
 }
 

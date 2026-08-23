@@ -2,11 +2,14 @@ package com.raza.householdrecharge.v2.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -18,7 +21,10 @@ import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.v2.TitleBar
 
 @Composable
-fun SettingScreen() {
+fun SettingScreen(
+    onAddMember: () -> Unit,
+    onAddHousehold: () -> Unit
+) {
 
     Scaffold(
         topBar = {
@@ -26,21 +32,36 @@ fun SettingScreen() {
         }
     ) { paddingValues ->
 
-        Body(Modifier.padding(paddingValues))
+        Body(
+            modifier = Modifier.padding(paddingValues),
+            onAddMember = {
+                onAddMember()
+            },
+            onAddHousehold = {
+                onAddHousehold()
+            }
+        )
     }
 }
 
 @Composable
-fun Body(modifier: Modifier) {
+fun Body(
+    modifier: Modifier,
+    onAddMember: () -> Unit,
+    onAddHousehold: () -> Unit
+) {
 
-    Column(modifier = modifier.padding(20.dp)) {
+    Column(modifier = modifier) {
+        val cellPadding = PaddingValues(
+            start = 30.dp,
+            end = 30.dp,
+            top = 30.dp,
+            bottom = 30.dp
+        )
 
         val cellModifier = Modifier
             .fillMaxWidth()
-            .background(
-                color = MaterialTheme.colorScheme.background
-            )
-            .padding(10.dp)
+            .padding(cellPadding)
 
         Text(
             text = "Account",
@@ -50,8 +71,6 @@ fun Body(modifier: Modifier) {
 
         HorizontalDivider(modifier = Modifier.height(1.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
-
         Text(
             text = "Household",
             modifier = cellModifier,
@@ -60,28 +79,34 @@ fun Body(modifier: Modifier) {
 
         HorizontalDivider(modifier = Modifier.height(1.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
-
         Column(modifier = Modifier.padding(start = 10.dp)) {
             Text(
-                text = "Household Details",
-                modifier = cellModifier,
+                text = "Add Household",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onAddHousehold()
+                    }
+                    .padding(cellPadding),
+
                 style = MaterialTheme.typography.titleLarge
             )
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
-
-            Spacer(modifier = Modifier.height(20.dp))
 
             Text(
                 text = "Add Member",
-                modifier = cellModifier,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onAddMember()
+                    }
+                    .padding(cellPadding),
+
                 style = MaterialTheme.typography.titleLarge
             )
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
-
-            Spacer(modifier = Modifier.height(20.dp))
         }
 
         Text(
@@ -91,14 +116,15 @@ fun Body(modifier: Modifier) {
         )
 
         HorizontalDivider(modifier = Modifier.height(1.dp))
-
-        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
 @Composable
 fun Content() {
-    SettingScreen()
+    SettingScreen(
+        onAddMember = {},
+        onAddHousehold = {}
+    )
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

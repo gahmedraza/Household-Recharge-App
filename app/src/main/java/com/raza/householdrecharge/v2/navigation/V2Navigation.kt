@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.raza.householdrecharge.v2.addhousehold.AddHouseholdScreen
 import com.raza.householdrecharge.v2.addmember.MemberScreen
 import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryScreen
 import com.raza.householdrecharge.v2.auth.SignInScreen
@@ -35,7 +36,9 @@ fun V2Navigation() {
 
                 onLoggedIn = {
                     navController.navigate("Dashboard")
-                }
+                },
+
+                viewModel = viewModel()
             )
         }
 
@@ -151,7 +154,27 @@ fun V2Navigation() {
         }
 
         composable("SettingScreen") {
-            SettingScreen()
+            SettingScreen(
+                onAddMember = {
+                    navController.navigate("Member")
+                },
+                onAddHousehold = {
+                    navController.navigate("AddHousehold")
+                }
+            )
+        }
+
+        composable("AddHousehold") {
+            AddHouseholdScreen(
+                viewModel = viewModel(),
+                onSuccess = {
+
+                    navController.navigate("SettingScreen")
+                },
+                onFailure = {
+
+                }
+            )
         }
     }
 }

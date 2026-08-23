@@ -19,7 +19,7 @@ class MemberViewModel: BaseViewModel() {
         FirebaseFirestore
             .getInstance()
             .collection("households")
-            .document(householdId)
+            .document(household.id ?: householdId)
             .collection("members")
             .add(member)
             .addOnSuccessListener {
