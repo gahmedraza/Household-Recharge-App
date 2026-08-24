@@ -82,10 +82,6 @@ fun V2Navigation() {
                     factory = genericFactory
                 ),
 
-                addMemberViewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onSignup = {
                     Log.d("TAG", "OnSignup")
                     navController.navigate("SignIn")
