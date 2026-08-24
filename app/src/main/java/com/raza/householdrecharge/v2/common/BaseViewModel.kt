@@ -20,13 +20,13 @@ open class BaseViewModel : ViewModel() {
 
     var name by mutableStateOf("")
 
-    var lastRechargeDate by mutableLongStateOf(0)
+    var lastRechargeDate by mutableStateOf("")
 
     var planAmount by mutableStateOf("")
 
-    var planExpiryDate by mutableLongStateOf(0)
+    var planExpiryDate by mutableStateOf("")
 
-    var planDurationDays by mutableIntStateOf(0)
+    var planDurationDays by mutableStateOf("")
 
     var daysToExpiry by mutableStateOf("")
 

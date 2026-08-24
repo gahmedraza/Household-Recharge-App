@@ -94,7 +94,7 @@ fun Body(
             label = "Last Recharge Date",
 
             onDateSelected = {
-                viewModel.lastRechargeDate = it
+                viewModel.lastRechargeDate = it.toString()
             },
 
             value = viewModel.lastRechargeDate,
@@ -117,7 +117,7 @@ fun Body(
             label = "Plan Expiry Date",
 
             onDateSelected = {
-                viewModel.planExpiryDate = it
+                viewModel.planExpiryDate = it.toString()
             },
 
             value = viewModel.planExpiryDate,
@@ -129,9 +129,9 @@ fun Body(
                 Text("Plan Duration Days")
             },
             onValueChange = {
-                viewModel.planDurationDays = it.toIntOrNull() ?: 0
+                viewModel.planDurationDays = it
             },
-            value = viewModel.planDurationDays.toString()
+            value = viewModel.planDurationDays
         )
 
         OutlinedTextField(
@@ -143,17 +143,6 @@ fun Body(
                 viewModel.daysToExpiry = it
             },
             value = viewModel.daysToExpiry
-        )
-
-        OutlinedTextField(
-            modifier = modifier,
-            label = {
-                Text("Recharge Requested")
-            },
-            onValueChange = {
-                viewModel.rechargeRequested = it
-            },
-            value = viewModel.rechargeRequested
         )
 
         Button(

@@ -3,7 +3,7 @@ package com.raza.householdrecharge.v2.addmember
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
-import com.raza.householdrecharge.v2.MemberDto
+import com.raza.householdrecharge.v2.common.MemberDto
 import com.raza.householdrecharge.v2.SessionManager
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

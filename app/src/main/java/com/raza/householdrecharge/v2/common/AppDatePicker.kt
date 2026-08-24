@@ -29,7 +29,7 @@ import java.util.Locale
 @Composable
 fun AppDatePicker(
     modifier: Modifier,
-    value: Long?,
+    value: String?,
     onDateSelected: (Long) -> Unit,
     label: String
 ) {
@@ -39,7 +39,7 @@ fun AppDatePicker(
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
 
-        value = getPritableDate(value ?: 0L),
+        value = getPrintableDate(value),
 
         onValueChange = {},
 
@@ -117,7 +117,19 @@ fun getTodayInMillis() = LocalDate
     .toInstant()
     .toEpochMilli()
 
-fun getPritableDate(dateInMillis: Long) = SimpleDateFormat(
-    "dd/MM/yyyy",
-    Locale.getDefault()
-).format(Date(dateInMillis))
+fun getPrintableDate(dateStringInMillis: String?): String {
+    var dateInMillis = 0L
+    val isDateStringEmpty = dateStringInMillis?.isEmpty() ?: false
+
+    if (isDateStringEmpty) {
+        return ""
+
+    } else {
+        dateInMillis = dateStringInMillis?.toLong() ?: 0L
+    }
+
+    return SimpleDateFormat(
+        "dd/MM/yyyy",
+        Locale.getDefault()
+    ).format(Date(dateInMillis))
+}
