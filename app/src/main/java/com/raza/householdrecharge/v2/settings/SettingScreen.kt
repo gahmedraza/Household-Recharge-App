@@ -18,12 +18,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.TitleBar
 
 @Composable
 fun SettingScreen(
+    viewModel: SettingViewModel,
     onAddMember: () -> Unit,
-    onAddHousehold: () -> Unit
+    onAddHousehold: () -> Unit,
+    onSignOut: () -> Unit
 ) {
 
     Scaffold(
@@ -33,22 +36,26 @@ fun SettingScreen(
     ) { paddingValues ->
 
         Body(
+            viewModel = viewModel,
             modifier = Modifier.padding(paddingValues),
             onAddMember = {
                 onAddMember()
             },
             onAddHousehold = {
                 onAddHousehold()
-            }
+            },
+            onSignOut = onSignOut
         )
     }
 }
 
 @Composable
 fun Body(
+    viewModel: SettingViewModel,
     modifier: Modifier,
     onAddMember: () -> Unit,
-    onAddHousehold: () -> Unit
+    onAddHousehold: () -> Unit,
+    onSignOut: () -> Unit
 ) {
 
     Column(modifier = modifier) {
@@ -110,8 +117,20 @@ fun Body(
         }
 
         Text(
-            text = "Other",
-            modifier = cellModifier,
+            text = "SignOut",
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    viewModel.signOut(
+                        onSuccess = {
+                            onSignOut()
+                        },
+                        onFailure = {
+
+                        }
+                    )
+                }
+                .padding(cellPadding),
             style = MaterialTheme.typography.titleLarge
         )
 
@@ -122,8 +141,10 @@ fun Body(
 @Composable
 fun Content() {
     SettingScreen(
+        viewModel = viewModel(),
         onAddMember = {},
-        onAddHousehold = {}
+        onAddHousehold = {},
+        onSignOut = {}
     )
 }
 

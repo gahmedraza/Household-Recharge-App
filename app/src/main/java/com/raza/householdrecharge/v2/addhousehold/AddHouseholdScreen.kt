@@ -83,6 +83,10 @@ fun Body(
             onClick = {
 
                 viewModel.onAddHousehold(
+                    userId = "0",
+
+                    householdName = "",
+
                     onSuccess = {
                         onSuccess()
                     },

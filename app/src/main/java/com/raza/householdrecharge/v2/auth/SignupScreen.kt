@@ -8,109 +8,198 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.raza.householdrecharge.v2.addhousehold.AddHouseholdViewModel
+import com.raza.householdrecharge.v2.common.AppSnackbar
+import com.raza.householdrecharge.v2.common.SnackbarUtil
+import kotlinx.coroutines.launch
 
 @Composable
 fun SignupScreen(
     viewModel: SignupViewModel,
+    householdViewModel: AddHouseholdViewModel,
     onSignup: () -> Unit,
     onSignIn: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(6.dp),
-        contentAlignment = Alignment.Center
-    ) {
 
-        Column {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
-            Spacer(modifier = Modifier.padding(20.dp))
+    Scaffold(
+        snackbarHost = {
+            AppSnackbar(hostState = snackbarHostState)
+        }
+    ) { paddingValues ->
 
-            OutlinedTextField(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(6.dp),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Column(
                 modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                onValueChange = {
-                    viewModel.mobileNumber = it
-                },
+                Spacer(modifier = Modifier.padding(20.dp))
 
-                label = {
-                    Text("Mobile Number")
-                },
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
 
-                value = viewModel.mobileNumber
-            )
+                    onValueChange = {
+                        viewModel.mobileNumber = it
+                    },
 
-            Spacer(modifier = Modifier.padding(20.dp))
+                    label = {
+                        Text("Mobile Number")
+                    },
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+                    value = viewModel.mobileNumber
+                )
 
-                onValueChange = {
-                    viewModel.password = it
-                },
+                Spacer(modifier = Modifier.padding(20.dp))
 
-                label = {
-                    Text("Password")
-                },
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
 
-                value = viewModel.password
-            )
+                    onValueChange = {
+                        viewModel.password = it
+                    },
 
-            Spacer(modifier = Modifier.padding(20.dp))
+                    label = {
+                        Text("Password")
+                    },
 
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+                    value = viewModel.password
+                )
 
-                onValueChange = {
-                    viewModel.password = it
-                },
+                Spacer(modifier = Modifier.padding(20.dp))
 
-                label = {
-                    Text("Confirm Password")
-                },
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
 
-                value = viewModel.password
-            )
+                    onValueChange = {
+                        viewModel.password = it
+                    },
 
-            Spacer(modifier = Modifier.padding(120.dp))
+                    label = {
+                        Text("Confirm Password")
+                    },
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
+                    value = viewModel.password
+                )
 
-                onClick = {
+                Spacer(modifier = Modifier.padding(20.dp))
 
-                    viewModel.signup(
-                        onSuccess = {
-                            onSignup()
-                        },
-                        onFailure = {
-                            Log.d("TAG", "Sign In Failed")
-                        }
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    onValueChange = {
+                        viewModel.household = viewModel.household.copy(
+                            name = it
+                        )
+                    },
+
+                    label = {
+                        Text("Household Name")
+                    },
+
+                    value = viewModel.household.name ?: ""
+                )
+
+                Spacer(modifier = Modifier.padding(60.dp))
+
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp)
                     )
                 }
-            ) {
-                Text("Signup")
-            }
 
-            Spacer(modifier = Modifier.padding(20.dp))
+                Spacer(modifier = Modifier.padding(60.dp))
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
 
-                onClick = {
-                    onSignIn()
+                    onClick = {
+
+                        viewModel.signup(
+                            onSuccess = { userId ->
+
+                                householdViewModel.onAddHousehold(
+                                    userId = userId,
+
+                                    householdName = viewModel.household.name ?: "",
+
+                                    onSuccess = { householdId ->
+
+                                        scope.launch {
+                                            SnackbarUtil.show(
+                                                snackbarHostState = snackbarHostState,
+                                                message = "User Created with id= $householdId"
+                                            )
+                                        }
+
+                                        onSignup()
+                                    },
+                                    onFailure = { message ->
+                                        scope.launch {
+                                            SnackbarUtil.show(
+                                                snackbarHostState = snackbarHostState,
+                                                message = "response= $message"
+                                            )
+                                        }
+
+                                        Log.d("TAG", "Sign In Failed")
+                                    }
+                                )
+                            },
+                            onFailure = { message ->
+                                scope.launch {
+                                    SnackbarUtil.show(
+                                        snackbarHostState = snackbarHostState,
+                                        message = "response= $message"
+                                    )
+                                }
+
+                                Log.d("TAG", "Sign In Failed")
+                            }
+                        )
+                    }
+                ) {
+                    Text("Signup")
                 }
-            ) {
-                Text("SignIn")
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    onClick = {
+                        onSignIn()
+                    }
+                ) {
+                    Text("SignIn")
+                }
             }
         }
     }
@@ -138,6 +227,7 @@ fun lightPreviewSignup() {
 fun SignupContent() {
     SignupScreen(
         viewModel = viewModel(),
+        householdViewModel = viewModel(),
         onSignup = {
 
         },

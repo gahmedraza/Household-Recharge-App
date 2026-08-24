@@ -17,6 +17,8 @@ open class BaseViewModel : ViewModel() {
 
     val memberId = "1011"
 
+    var userId by mutableStateOf("")
+
     var name by mutableStateOf("")
 
     var lastRechargeDate by mutableLongStateOf(0)
@@ -32,4 +34,7 @@ open class BaseViewModel : ViewModel() {
     var rechargeRequested by mutableStateOf("")
 
     var household by mutableStateOf<Household>(Household())
+
+    var isLoading by mutableStateOf(false)
+
 }

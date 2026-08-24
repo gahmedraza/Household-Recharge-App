@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
+import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
 
-class AddRechargeHistoryViewModel : BaseViewModel() {
+class AddRechargeHistoryViewModel(
+    private val sessionManager: SessionManager
+) : BaseViewModel() {
     var amount by mutableStateOf("")
     var date by mutableStateOf("")
     var rechargedBy by mutableStateOf("")
@@ -23,6 +26,18 @@ class AddRechargeHistoryViewModel : BaseViewModel() {
             date = date,
             rechargedBy = rechargedBy
         )
+
+        val memberNotFound = memberId==0L
+
+        if(memberNotFound) {
+            onFailure("No member found")
+        }
+
+        val mobileNumberNotFound = mobileNumber.isEmpty()
+
+        if(mobileNumberNotFound) {
+            onFailure("No mobile number found")
+        }
 
         FirebaseFirestore
             .getInstance()

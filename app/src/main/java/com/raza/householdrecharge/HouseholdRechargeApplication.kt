@@ -8,6 +8,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import com.raza.householdrecharge.data.UserPreferences
 import com.raza.householdrecharge.notification.AppNotificationManager
+import com.raza.householdrecharge.v2.SessionManager
 
 class HouseholdRechargeApplication : Application() {
     val database by lazy {
@@ -36,6 +37,10 @@ class HouseholdRechargeApplication : Application() {
             rechargeRequestDao = database.rechargeRequestDao(),
             userPreferences = userPreferences
         )
+    }
+
+    val sessionManager by lazy {
+        SessionManager(this)
     }
 
     override fun onCreate() {

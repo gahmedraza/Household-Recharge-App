@@ -15,7 +15,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
@@ -24,8 +23,8 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SplashScreen(
-    onLoggedIn: () -> Unit,
-    onNotLoggedIn: () -> Unit,
+    onUserFound: () -> Unit,
+    onUserNotFound: () -> Unit,
     viewModel: SplashViewModel
 ) {
 
@@ -33,11 +32,11 @@ fun SplashScreen(
         delay(2000.milliseconds)
 
         if (FirebaseAuth.getInstance().currentUser == null) {
-            onNotLoggedIn()
+            onUserNotFound()
         } else {
             viewModel.loadHousehold(
                 onSuccess = {
-                    onLoggedIn()
+                    onUserFound()
                 },
                 onFailure = {
 
@@ -87,8 +86,8 @@ fun SplashScreenLightPreview() {
 @Composable
 fun SplashContent() {
     SplashScreen(
-        onLoggedIn = {},
-        onNotLoggedIn = {},
+        onUserFound = {},
+        onUserNotFound = {},
         viewModel = viewModel()
     )
 }
