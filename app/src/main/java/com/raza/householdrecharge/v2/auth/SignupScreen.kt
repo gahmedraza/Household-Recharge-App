@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdViewModel
+import com.raza.householdrecharge.v2.addmember.AddMemberViewModel
 import com.raza.householdrecharge.v2.common.AppSnackbar
 import com.raza.householdrecharge.v2.common.SnackbarUtil
 import kotlinx.coroutines.launch
@@ -34,6 +35,7 @@ import kotlinx.coroutines.launch
 fun SignupScreen(
     viewModel: SignupViewModel,
     householdViewModel: AddHouseholdViewModel,
+    addMemberViewModel: AddMemberViewModel,
     onSignup: () -> Unit,
     onSignIn: () -> Unit
 ) {
@@ -152,14 +154,29 @@ fun SignupScreen(
 
                                     onSuccess = { householdId ->
 
-                                        scope.launch {
-                                            SnackbarUtil.show(
-                                                snackbarHostState = snackbarHostState,
-                                                message = "User Created with id= $householdId"
-                                            )
-                                        }
+                                        addMemberViewModel.onAddMember(
+                                            onSuccess = {
 
-                                        onSignup()
+                                                scope.launch {
+                                                    SnackbarUtil.show(
+                                                        snackbarHostState = snackbarHostState,
+                                                        message = "User Created with id= $householdId"
+                                                    )
+                                                }
+
+                                                onSignup()
+                                            },
+
+                                            onFailure = { error ->
+
+                                                scope.launch {
+                                                    SnackbarUtil.show(
+                                                        snackbarHostState = snackbarHostState,
+                                                        message = "error= $error"
+                                                    )
+                                                }
+                                            }
+                                        )
                                     },
                                     onFailure = { message ->
                                         scope.launch {
@@ -228,6 +245,7 @@ fun SignupContent() {
     SignupScreen(
         viewModel = viewModel(),
         householdViewModel = viewModel(),
+        addMemberViewModel = viewModel(),
         onSignup = {
 
         },

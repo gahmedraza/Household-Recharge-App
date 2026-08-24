@@ -59,13 +59,40 @@ class DashboardViewModel(
 
                         val member = Member(
                             id = document.id,
+
                             name = memberDto?.name ?: "",
+
                             mobileNumber = memberDto?.mobileNumber ?: "",
-                            planDurationDays = memberDto?.planDurationDays?.toInt() ?: 0,
-                            lastRechargeDate = getDateInMillis(memberDto?.lastRechargeDate),
-                            planExpiryDate = getDateInMillis(memberDto?.planExpiryDate),
+
+                            planDurationDays =
+                                if (memberDto?.planDurationDays?.isEmpty() ?: false) {
+                                    0
+                                } else {
+                                    memberDto?.planDurationDays?.toInt() ?: 0
+                                },
+
+                            lastRechargeDate =
+                                if (memberDto?.lastRechargeDate?.isEmpty() ?: false) {
+                                    0
+                                } else {
+                                    getDateInMillis(memberDto?.lastRechargeDate)
+                                },
+
+                            planExpiryDate =
+                                if (memberDto?.planExpiryDate?.isEmpty() ?: false) {
+                                    0
+                                } else {
+                                    getDateInMillis(memberDto?.planExpiryDate)
+                                },
+
                             rechargeRequested = false,
-                            planAmount = memberDto?.planAmount?.toInt() ?: 0
+
+                            planAmount =
+                                if (memberDto?.planAmount?.isEmpty() ?: false) {
+                                    0
+                                } else {
+                                    memberDto?.planAmount?.toInt() ?: 0
+                                }
                         )
 
                         memberList.add(member)

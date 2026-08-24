@@ -15,6 +15,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -58,20 +63,97 @@ fun Body(
     onSignOut: () -> Unit
 ) {
 
+    var name by remember { mutableStateOf("") }
+    var household by remember { mutableStateOf("") }
+    var mobileNumber by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        viewModel.getName(
+            onSuccess = { userName ->
+                name = userName
+            },
+            onFailure = {
+
+            }
+        )
+        viewModel.getHouseholdName(
+            onSuccess = { householdName ->
+                household = householdName
+            },
+            onFailure = {
+
+            }
+        )
+        viewModel.getMobileNumber(
+            onSuccess = { phoneNumber ->
+                mobileNumber = phoneNumber
+            },
+            onFailure = {
+
+            }
+        )
+    }
+
     Column(modifier = modifier) {
         val cellPadding = PaddingValues(
             start = 30.dp,
             end = 30.dp,
-            top = 30.dp,
-            bottom = 30.dp
+            top = 20.dp,
+            bottom = 20.dp
         )
 
         val cellModifier = Modifier
             .fillMaxWidth()
             .padding(cellPadding)
 
+        HorizontalDivider(modifier = Modifier.height(1.dp))
+
+        //
         Text(
-            text = "Account",
+            text = "Name: $name",
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    //onAddHousehold()
+                }
+                .padding(cellPadding),
+
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        HorizontalDivider(modifier = Modifier.height(1.dp))
+
+        Text(
+            text = "Mobile Number: $mobileNumber",
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    //onAddMember()
+                }
+                .padding(cellPadding),
+
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        HorizontalDivider(modifier = Modifier.height(1.dp))
+
+        Text(
+            text = "Role",
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    //onAddMember()
+                }
+                .padding(cellPadding),
+
+            style = MaterialTheme.typography.titleLarge
+        )
+
+        HorizontalDivider(modifier = Modifier.height(1.dp))
+        //
+
+        Text(
+            text = "Household: $household",
             modifier = cellModifier,
             style = MaterialTheme.typography.titleLarge
         )
@@ -79,7 +161,7 @@ fun Body(
         HorizontalDivider(modifier = Modifier.height(1.dp))
 
         Text(
-            text = "Household",
+            text = "Admin",
             modifier = cellModifier,
             style = MaterialTheme.typography.titleLarge
         )

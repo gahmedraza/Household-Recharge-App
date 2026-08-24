@@ -43,9 +43,9 @@ class AddHouseholdViewModel(
                     viewModelScope.launch {
                         sessionManager.saveHouseholdName(householdName)
                         sessionManager.saveHouseholdId(householdId)
-                    }
 
-                    onSuccess(householdId)
+                        onSuccess(householdId)
+                    }
                 }
                 .addOnFailureListener {
                     onFailure(it.message)

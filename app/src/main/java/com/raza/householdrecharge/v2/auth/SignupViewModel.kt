@@ -19,6 +19,7 @@ class SignupViewModel(
                 val userId = documentReference.user?.uid ?: ""
                 viewModelScope.launch {
                     sessionManager.saveUserId(userId)
+                    sessionManager.saveMobileNumber(mobileNumber)
                 }
 
                 this.userId = userId
