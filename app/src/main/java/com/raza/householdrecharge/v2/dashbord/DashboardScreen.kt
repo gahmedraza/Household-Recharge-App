@@ -43,6 +43,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.data.Member
 import com.raza.householdrecharge.v2.TitleBar
 import com.raza.householdrecharge.v2.common.MemberDto
+import com.raza.householdrecharge.v2.common.getPrintableDate
 
 @Composable
 fun DashboardScreen(
@@ -285,7 +286,7 @@ fun DashboardListItem(
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
-                text = "Last Recharge: ${item.lastRechargeDate ?: "Not available"}",
+                text = "Last Recharge Date: ${getPrintableDate(item.lastRechargeDate.toString())}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

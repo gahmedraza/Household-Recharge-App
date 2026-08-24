@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.TitleBar
+import com.raza.householdrecharge.v2.common.AppDatePicker
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryViewModel
 
@@ -86,18 +87,16 @@ fun Body(
 
         Spacer(Modifier.height(4.dp))
 
-        OutlinedTextField(
+        AppDatePicker(
             modifier = modifier,
 
-            label = {
-                Text("Date")
+            label = "Recharge Date",
+
+            onDateSelected = {
+                viewModel.date = it.toString()
             },
 
-            onValueChange = {
-                viewModel.date = it
-            },
-
-            value = viewModel.date
+            value = viewModel.date,
         )
 
         Spacer(Modifier.height(4.dp))
