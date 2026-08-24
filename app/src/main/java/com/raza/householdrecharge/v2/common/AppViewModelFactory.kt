@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.UserViewModel
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdViewModel
-import com.raza.householdrecharge.v2.addmember.MemberViewModel
+import com.raza.householdrecharge.v2.addmember.AddMemberViewModel
 import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryViewModel
 import com.raza.householdrecharge.v2.auth.SignInViewModel
 import com.raza.householdrecharge.v2.auth.SignupViewModel
@@ -27,8 +27,8 @@ class AppViewModelFactory(
             return AddHouseholdViewModel(sessionManager) as T
         }
 
-        if (modelClass.isAssignableFrom(MemberViewModel::class.java)) {
-            return MemberViewModel(sessionManager) as T
+        if (modelClass.isAssignableFrom(AddMemberViewModel::class.java)) {
+            return AddMemberViewModel(sessionManager) as T
         }
 
         if (modelClass.isAssignableFrom(AddRechargeHistoryViewModel::class.java)) {

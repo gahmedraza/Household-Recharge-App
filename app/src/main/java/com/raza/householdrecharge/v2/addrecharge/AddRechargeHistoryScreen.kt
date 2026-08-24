@@ -27,7 +27,7 @@ import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryViewModel
 
 @Composable
 fun AddRechargeHistoryScreen(
-    memberId: Long,
+    memberId: String,
     mobileNumber: String,
     viewModel: AddRechargeHistoryViewModel,
     onSuccess: () -> Unit,
@@ -60,7 +60,7 @@ fun AddRechargeHistoryScreen(
 
 @Composable
 fun Body(
-    memberId: Long,
+    memberId: String,
     mobileNumber: String,
     viewModel: AddRechargeHistoryViewModel,
     modifier: Modifier,
@@ -142,7 +142,7 @@ fun Body(
 @Composable
 fun Content(viewModel: AddRechargeHistoryViewModel) {
     AddRechargeHistoryScreen(
-        memberId = 0L,
+        memberId = "",
         mobileNumber = "",
         viewModel = viewModel,
         onSuccess = {},

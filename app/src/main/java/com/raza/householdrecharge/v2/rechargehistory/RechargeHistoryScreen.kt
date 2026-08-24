@@ -33,12 +33,12 @@ import com.raza.householdrecharge.v2.TitleBar
 
 @Composable
 fun RechargeHistoryScreen(
-    memberId: Long,
+    memberId: String,
     mobileNumber: String,
     viewModel: RechargeHistoryViewModel,
     onSuccess: () -> Unit,
     onFailure: () -> Unit,
-    onAddRecharge: () -> Unit
+    onAddRecharge: (String, String) -> Unit
 ) {
     LaunchedEffect(Unit) {
         viewModel.loadRechargeHistory(
@@ -62,7 +62,9 @@ fun RechargeHistoryScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    onAddRecharge()
+                    onAddRecharge(
+                        memberId, mobileNumber
+                    )
                 }
             ) {
                 Icon(
@@ -130,12 +132,14 @@ fun RechargeHistoryScreenLightPreview() {
 @Composable
 fun Content(item: RechargeHistory?) {
     RechargeHistoryScreen(
-        memberId = 0L,
+        memberId = "",
         mobileNumber = "",
         viewModel = viewModel(),
         onSuccess = {},
         onFailure = {},
-        onAddRecharge = {}
+        onAddRecharge = { memberId, mobileNumber ->
+
+        }
     )
 }
 

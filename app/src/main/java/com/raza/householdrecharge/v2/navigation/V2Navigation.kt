@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.raza.householdrecharge.HouseholdRechargeApplication
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdScreen
-import com.raza.householdrecharge.v2.addmember.MemberScreen
+import com.raza.householdrecharge.v2.addmember.AddMemberScreen
 import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryScreen
 import com.raza.householdrecharge.v2.auth.SignInScreen
 import com.raza.householdrecharge.v2.auth.SignupScreen
@@ -119,8 +119,8 @@ fun V2Navigation() {
             )
         }
 
-        composable("Member") {
-            MemberScreen(
+        composable("AddMember") {
+            AddMemberScreen(
                 viewModel = viewModel(
                     factory = genericFactory
                 ),
@@ -140,7 +140,7 @@ fun V2Navigation() {
             route = "RechargeHistory/{memberId}/{mobileNumber}"
         ) { backStackEntry ->
 
-            val memberId = backStackEntry.arguments?.getString("memberId")?.toLongOrNull() ?: 0L
+            val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
             val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
 
             RechargeHistoryScreen(
@@ -160,7 +160,7 @@ fun V2Navigation() {
 
                 },
 
-                onAddRecharge = {
+                onAddRecharge = { memberId, mobileNumber ->
                     navController.navigate("AddRechargeHistory/$memberId/$mobileNumber")
                 }
             )
@@ -170,7 +170,7 @@ fun V2Navigation() {
             route = "AddRechargeHistory/{memberId}/{mobileNumber}"
         ) { backStackEntry ->
 
-            val memberId = backStackEntry.arguments?.getString("memberId")?.toLongOrNull() ?: 0L
+            val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
             val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
 
             AddRechargeHistoryScreen(
@@ -200,7 +200,7 @@ fun V2Navigation() {
                 ),
 
                 onAddMember = {
-                    navController.navigate("Member")
+                    navController.navigate("AddMember")
                 },
 
                 onAddHousehold = {

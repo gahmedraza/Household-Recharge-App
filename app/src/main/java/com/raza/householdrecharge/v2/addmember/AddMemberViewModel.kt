@@ -9,7 +9,7 @@ import com.raza.householdrecharge.v2.common.getPrintableDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class MemberViewModel(
+class AddMemberViewModel(
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
 

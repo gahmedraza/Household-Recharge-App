@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.data
 
 data class Member(
-    val id: Long = 0L,
+    val id: String = "",
     val name: String = "",
     val mobileNumber: String = "",
     val planDurationDays: Int = 0,

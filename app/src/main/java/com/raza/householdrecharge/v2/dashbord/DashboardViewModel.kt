@@ -10,13 +10,14 @@ import com.raza.householdrecharge.data.Member
 import com.raza.householdrecharge.v2.BaseViewModel
 import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.common.MemberDto
+import com.raza.householdrecharge.v2.common.getDateInMillis
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
-    var members by mutableStateOf<List<MemberDto>>(emptyList())
+    var members by mutableStateOf<List<Member>>(emptyList())
 
     fun loadMembers(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
@@ -31,7 +32,7 @@ class DashboardViewModel(
 
             val userId = sessionManager.userId.first()
 
-            if(userId.isEmpty()) {
+            if (userId.isEmpty()) {
                 onFailure("No user found")
                 return@launch
             }
@@ -51,11 +52,26 @@ class DashboardViewModel(
                 .get()
 
                 .addOnSuccessListener { result ->
-                    val members = result.documents.mapNotNull { document ->
-                        document.toObject(MemberDto::class.java)
+                    val memberList = mutableListOf<Member>()
+
+                    result.documents.mapNotNull { document ->
+                        val memberDto = document.toObject(MemberDto::class.java)
+
+                        val member = Member(
+                            id = document.id,
+                            name = memberDto?.name ?: "",
+                            mobileNumber = memberDto?.mobileNumber ?: "",
+                            planDurationDays = memberDto?.planDurationDays?.toInt() ?: 0,
+                            lastRechargeDate = getDateInMillis(memberDto?.lastRechargeDate),
+                            planExpiryDate = getDateInMillis(memberDto?.planExpiryDate),
+                            rechargeRequested = false,
+                            planAmount = memberDto?.planAmount?.toInt() ?: 0
+                        )
+
+                        memberList.add(member)
                     }
 
-                    this@DashboardViewModel.members = members
+                    this@DashboardViewModel.members = memberList
 
                     onSuccess()
                 }

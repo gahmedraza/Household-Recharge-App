@@ -15,12 +15,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toString
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,8 +30,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun MemberScreen(
-    viewModel: MemberViewModel,
+fun AddMemberScreen(
+    viewModel: AddMemberViewModel,
     onSuccess: () -> Unit,
     onFailure: () -> Unit
 ) {
@@ -80,7 +76,7 @@ fun MemberScreen(
 fun Body(
     snackbarHostState: SnackbarHostState,
     scope: CoroutineScope,
-    viewModel: MemberViewModel,
+    viewModel: AddMemberViewModel,
     modifier: Modifier,
     onSuccess: () -> Unit,
     onFailure: () -> Unit
@@ -239,7 +235,7 @@ fun lightPreviewSignIn() {
 
 @Composable
 fun Content() {
-    MemberScreen(
+    AddMemberScreen(
         viewModel = viewModel(),
         onSuccess = {},
         onFailure = {}

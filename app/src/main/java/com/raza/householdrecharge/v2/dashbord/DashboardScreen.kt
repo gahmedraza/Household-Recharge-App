@@ -47,7 +47,7 @@ import com.raza.householdrecharge.v2.common.MemberDto
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
-    onClick: (Long, String) -> Unit,
+    onClick: (String, String) -> Unit,
     onAddMember: () -> Unit,
     onDashboardClick: () -> Unit,
     onRechargeHistoryClick: () -> Unit,
@@ -92,7 +92,7 @@ fun DashboardScreen(
 @Composable
 fun DashboardContent(
     viewModel: DashboardViewModel,
-    onClick: (Long, String) -> Unit,
+    onClick: (String, String) -> Unit,
     onAddMember: () -> Unit,
     onDashboardClick: () -> Unit,
     onRechargeHistoryClick: () -> Unit,
@@ -245,7 +245,7 @@ fun content() {
 
 @Composable
 fun DashboardListItem(
-    item: MemberDto,
+    item: Member,
     onClick: () -> Unit
 ) {
     Card(

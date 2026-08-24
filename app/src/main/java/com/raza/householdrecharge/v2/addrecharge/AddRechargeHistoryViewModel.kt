@@ -20,7 +20,7 @@ class AddRechargeHistoryViewModel(
     var rechargedBy by mutableStateOf("")
 
     fun addRechargeHistory(
-        memberId: Long,
+        memberId: String,
         mobileNumber: String,
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
@@ -46,9 +46,7 @@ class AddRechargeHistoryViewModel(
                 return@launch
             }
 
-            val memberNotFound = memberId==0L
-
-            if(memberNotFound) {
+            if(memberId.isNullOrEmpty()) {
                 onFailure("No member found")
             }
 

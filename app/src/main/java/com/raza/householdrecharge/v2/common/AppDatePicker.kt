@@ -133,3 +133,15 @@ fun getPrintableDate(dateStringInMillis: String?): String {
         Locale.getDefault()
     ).format(Date(dateInMillis))
 }
+
+fun getDateInMillis(dateString: String?): Long {
+    if (dateString.isNullOrEmpty()) {
+        return 0L
+    }
+
+    val dateInMillis = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        .parse(dateString)
+        ?.time ?: 0
+
+    return dateInMillis
+}
