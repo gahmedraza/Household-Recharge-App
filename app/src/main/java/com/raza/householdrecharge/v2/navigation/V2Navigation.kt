@@ -127,6 +127,7 @@ fun V2Navigation() {
 
                 onSuccess = {
 
+                    navController.navigate("SettingScreen")
                 },
 
                 onFailure = {

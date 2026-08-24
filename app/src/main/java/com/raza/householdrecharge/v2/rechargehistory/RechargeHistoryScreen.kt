@@ -56,7 +56,7 @@ fun RechargeHistoryScreen(
 
     Scaffold(
         topBar = {
-            TitleBar("Recharge History Listing")
+            TitleBar("Recharge History")
         },
 
         floatingActionButton = {
@@ -92,7 +92,7 @@ fun Body(
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                text = "No members available",
+                text = "no recharges found",
                 style = MaterialTheme.typography.displayLarge
             )
         }

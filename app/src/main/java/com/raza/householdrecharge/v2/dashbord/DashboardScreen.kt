@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.data.Member
 import com.raza.householdrecharge.v2.TitleBar
+import com.raza.householdrecharge.v2.common.MemberDto
 
 @Composable
 fun DashboardScreen(
@@ -244,7 +245,7 @@ fun content() {
 
 @Composable
 fun DashboardListItem(
-    item: Member,
+    item: MemberDto,
     onClick: () -> Unit
 ) {
     Card(

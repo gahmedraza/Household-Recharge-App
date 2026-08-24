@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
 import com.raza.householdrecharge.v2.common.MemberDto
 import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.common.getPrintableDate
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -12,24 +13,38 @@ class MemberViewModel(
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
 
-    fun onAddMember(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+    fun onAddMember(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
+        isLoading = true
+
         viewModelScope.launch {
             val member = MemberDto(
                 name = name,
                 mobileNumber = mobileNumber,
                 planDurationDays = planDurationDays,
-                planExpiryDate = planExpiryDate,
-                lastRechargeDate = lastRechargeDate
+                planExpiryDate = getPrintableDate(planExpiryDate),
+                lastRechargeDate = getPrintableDate(lastRechargeDate),
+                planAmount = planAmount
             )
+
+            val userId = sessionManager.userId.first()
+
+            if(userId.isEmpty()) {
+                isLoading = false
+                onFailure("user not found")
+            }
 
             val householdId = sessionManager.householdId.first()
 
             if (householdId.isEmpty()) {
+                isLoading = false
                 onFailure("household not found")
             }
 
             FirebaseFirestore
                 .getInstance()
+
+                .collection("users")
+                .document(userId)
 
                 .collection("households")
                 .document(householdId)
@@ -43,11 +58,13 @@ class MemberViewModel(
                         sessionManager.saveMemberId(memberId)
                     }
 
-                    onSuccess()
+                    isLoading = false
+                    onSuccess("member create: $memberId")
                 }
 
                 .addOnFailureListener {
 
+                    isLoading = false
                     onFailure(it.message)
                 }
         }
