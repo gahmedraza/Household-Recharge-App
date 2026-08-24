@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.TitleBar
+import com.raza.householdrecharge.v2.common.AppDatePicker
 
 @Composable
 fun MemberScreen(
@@ -87,15 +88,16 @@ fun Body(
             value = viewModel.mobileNumber
         )
 
-        OutlinedTextField(
+        AppDatePicker(
             modifier = modifier,
-            label = {
-                Text("Last Recharge Date")
+
+            label = "Last Recharge Date",
+
+            onDateSelected = {
+                viewModel.lastRechargeDate = it
             },
-            onValueChange = {
-                viewModel.lastRechargeDate = it.toLongOrNull() ?: 0
-            },
-            value = viewModel.lastRechargeDate.toString()
+
+            value = viewModel.lastRechargeDate,
         )
 
         OutlinedTextField(
@@ -109,15 +111,16 @@ fun Body(
             value = viewModel.planAmount
         )
 
-        OutlinedTextField(
+        AppDatePicker(
             modifier = modifier,
-            label = {
-                Text("Plan Expiry Date")
+
+            label = "Plan Expiry Date",
+
+            onDateSelected = {
+                viewModel.planExpiryDate = it
             },
-            onValueChange = {
-                viewModel.planExpiryDate = it.toLongOrNull() ?: 0
-            },
-            value = viewModel.planExpiryDate.toString()
+
+            value = viewModel.planExpiryDate,
         )
 
         OutlinedTextField(
@@ -168,7 +171,7 @@ fun Body(
                 )
             }
         ) {
-            Text("Update")
+            Text("Add Member")
         }
     }
 }
