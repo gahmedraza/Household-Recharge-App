@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.raza.householdrecharge.v2.TitleBar
+import com.raza.householdrecharge.v2.common.TitleBar
 import com.raza.householdrecharge.v2.common.AppDatePicker
 import com.raza.householdrecharge.v2.common.AppSnackbar
 import com.raza.householdrecharge.v2.common.SnackbarUtil
@@ -179,7 +179,7 @@ fun Body(
             )
         }
 
-        Button(
+        OutlinedButton(
             modifier = modifier,
 
             onClick = {

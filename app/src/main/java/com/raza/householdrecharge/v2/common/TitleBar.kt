@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.v2
+package com.raza.householdrecharge.v2.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
