@@ -3,11 +3,11 @@ package com.raza.householdrecharge.v2.rechargehistory
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toString
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
 import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.repository.AppUserDto
+import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -60,34 +60,27 @@ class RechargeHistoryViewModel(
                 return@launch
             }
 
-            FirebaseFirestore
-                .getInstance()
+            val appUserDto = AppUserDto(
+                userId = userId,
+                householdId = householdId,
+                memberId = currentMemberId,
+                mobileNumber = currentMobileNumber
+            )
 
-                .collection("users")
-                .document(userId)
+            FirestoreRepository.fetchRechargeHistory(
+                appUserDto = appUserDto,
 
-                .collection("households")
-                .document(householdId)
+                onSuccess = { rechargeHistoryList ->
 
-                .collection("members")
-                .document(currentMemberId)
-
-                .collection("mobileNumbers")
-                .document(currentMobileNumber)
-
-                .collection("recharges")
-                .get()
-                .addOnSuccessListener { result ->
-                    val members = result.documents.mapNotNull { document ->
-                        document.toObject(RechargeHistory::class.java)
-                    }
-
-                    mobileRechargeHistory = members
+                    mobileRechargeHistory = rechargeHistoryList
                     onSuccess()
+                },
+
+                onFailure = { error ->
+
+                    onFailure(error)
                 }
-                .addOnFailureListener {
-                    onFailure(it.message)
-                }
+            )
         }
     }
 }

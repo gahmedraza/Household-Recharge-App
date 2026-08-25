@@ -1,8 +1,9 @@
 package com.raza.householdrecharge.v2.auth
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.repository.FirestoreRepository
+import com.raza.householdrecharge.v2.repository.AuthDto
 import kotlinx.coroutines.launch
 
 class SignupViewModel(
@@ -11,12 +12,15 @@ class SignupViewModel(
     fun signup(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         isLoading = true
 
-        FirebaseAuth
-            .getInstance()
-            .createUserWithEmailAndPassword("$mobileNumber@householdrecharge.local", password)
-            .addOnSuccessListener { documentReference ->
+        val authDto = AuthDto(
+            mobileNumber = "$mobileNumber@householdrecharge.local",
+            password = password
+        )
 
-                val userId = documentReference.user?.uid ?: ""
+        FirestoreRepository.signup(
+            authDto,
+
+            onSuccess = { userId ->
                 viewModelScope.launch {
                     sessionManager.saveUserId(userId)
                     sessionManager.saveMobileNumber(mobileNumber)
@@ -24,13 +28,13 @@ class SignupViewModel(
 
                 this.userId = userId
                 isLoading = false
-
                 onSuccess(userId)
-            }
-            .addOnFailureListener {
+            },
+
+            onFailure = { error ->
 
                 isLoading = false
-                onFailure(it.message)
-            }
+                onFailure(error)
+            })
     }
 }

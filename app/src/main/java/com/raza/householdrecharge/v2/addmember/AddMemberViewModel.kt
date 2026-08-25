@@ -1,11 +1,12 @@
 package com.raza.householdrecharge.v2.addmember
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
 import com.raza.householdrecharge.v2.common.MemberDto
 import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.common.getPrintableDate
+import com.raza.householdrecharge.v2.repository.AppUserDto
+import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -40,33 +41,32 @@ class AddMemberViewModel(
                 onFailure("household not found")
             }
 
-            FirebaseFirestore
-                .getInstance()
+            val appUserDto = AppUserDto(
+                userId = userId,
+                householdId = householdId
+            )
 
-                .collection("users")
-                .document(userId)
+            FirestoreRepository.addMember(
+                appUserDto = appUserDto,
 
-                .collection("households")
-                .document(householdId)
+                member = member,
 
-                .collection("members")
-                .add(member)
-
-                .addOnSuccessListener { documentReference ->
-                    val memberId = documentReference.id
+                onSuccess = { memberId ->
                     viewModelScope.launch {
                         sessionManager.saveMemberId(memberId)
                     }
 
                     isLoading = false
                     onSuccess("member create: $memberId")
-                }
 
-                .addOnFailureListener {
+                },
+
+                onFailure = { error ->
 
                     isLoading = false
-                    onFailure(it.message)
+                    onFailure(error)
                 }
+            )
         }
     }
 }

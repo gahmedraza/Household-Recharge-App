@@ -20,7 +20,7 @@ import com.raza.householdrecharge.v2.TitleBar
 
 @Composable
 fun JoinHouseholdScreen(
-    viewModel: SetupHouseholdViewModel,
+    viewModel: HouseholdViewModel,
     onSuccess: () -> Unit,
     onFailure: () -> Unit
 ) {
@@ -57,7 +57,7 @@ fun JoinHouseholdScreen(
 @Composable
 fun JoinHouseholdBody(
     modifier: Modifier,
-    viewModel: SetupHouseholdViewModel,
+    viewModel: HouseholdViewModel,
     onSuccess: () -> Unit,
     onFailure: () -> Unit
 ) {

@@ -5,10 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
 import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
+import com.raza.householdrecharge.v2.repository.AppUserDto
+import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -58,30 +59,28 @@ class AddRechargeHistoryViewModel(
                 onFailure("No mobile number found")
             }
 
-            FirebaseFirestore
-                .getInstance()
+            val appUserDto = AppUserDto(
+                userId = userId,
+                householdId = householdId,
+                memberId = memberId,
+                mobileNumber = mobileNumber
+            )
 
-                .collection("users")
-                .document(userId)
+            FirestoreRepository.addRechargeHistory(
+                rechargeHistory = rechargeHistory,
 
-                .collection("households")
-                .document(householdId)
+                appUserDto = appUserDto,
 
-                .collection("members")
-                .document(memberId.toString())
+                onSuccess = { rechargeHistoryId ->
 
-                .collection("mobileNumbers")
-                .document(mobileNumber)
-
-                .collection("recharges")
-                .add(rechargeHistory)
-
-                .addOnSuccessListener {
                     onSuccess()
+                },
+
+                onFailure = { error ->
+
+                    onFailure(error)
                 }
-                .addOnFailureListener {
-                    onFailure(it.message)
-                }
+            )
         }
     }
 

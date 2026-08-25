@@ -4,10 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,17 +17,17 @@ import com.raza.householdrecharge.v2.TitleBar
 
 @Composable
 fun SetupHouseholdScreen(
-    viewModel: SetupHouseholdViewModel,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
+    viewModel: HouseholdViewModel,
+    onCreateHousehold: () -> Unit,
+    onJoinHousehold: () -> Unit
 ) {
     Scaffold(
         topBar = {
-            TitleBar("Setup Household")
+            TitleBar("Household Setup")
         }
     ) { paddingValues ->
 
-        Body(
+        SetupHouseholdBody(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(paddingValues)
@@ -42,59 +40,30 @@ fun SetupHouseholdScreen(
 
             viewModel = viewModel,
 
-            onSuccess = {
-                onSuccess()
+            onCreateHousehold = {
+                onCreateHousehold()
             },
 
-            onFailure = {
-                onFailure()
+            onJoinHousehold = {
+                onJoinHousehold()
             }
         )
     }
 }
 
 @Composable
-fun Body(
+fun SetupHouseholdBody(
     modifier: Modifier,
-    viewModel: SetupHouseholdViewModel,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
+    viewModel: HouseholdViewModel,
+    onCreateHousehold: () -> Unit,
+    onJoinHousehold: () -> Unit
 ) {
     Column(
         modifier = modifier
     ) {
-        OutlinedTextField(
-            modifier = modifier,
 
-            label = {
-                Text("Join Household")
-            },
-
-            onValueChange = {
-                viewModel.household = viewModel.household.copy(
-                    name = it
-                )
-            },
-
-            value = viewModel.household.name ?: ""
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        OutlinedTextField(
-            modifier = modifier,
-
-            label = {
-                Text("Household Name")
-            },
-
-            onValueChange = {
-                viewModel.household = viewModel.household.copy(
-                    name = it
-                )
-            },
-
-            value = viewModel.household.name ?: ""
+        Text(
+            text = "How would you like to continue?"
         )
 
         Button(
@@ -102,35 +71,43 @@ fun Body(
 
             onClick = {
 
-                viewModel.onAddHousehold(
-                    userId = "0",
-
-                    householdName = "",
-
-                    onSuccess = {
-                        onSuccess()
-                    },
-                    onFailure = {
-                        onFailure()
-                    }
-                )
+                onCreateHousehold()
             }) {
 
-            Text("Add")
+            Text("Create Household")
         }
+
+        Spacer(modifier = Modifier.padding(10.dp))
+
+        Text(text = "Start a new household and \nbecome its manager.")
+
+        Button(
+            modifier = modifier,
+
+            onClick = {
+
+                onJoinHousehold()
+            }) {
+
+            Text("Join Household")
+        }
+
+        Spacer(modifier = Modifier.padding(10.dp))
+
+        Text(text = "Join a household using an \ninvitation code")
     }
 }
 
 @Composable
-fun Content() {
+fun SetupHouseholdContent() {
     SetupHouseholdScreen(
         viewModel = viewModel(),
 
-        onSuccess = {
+        onCreateHousehold = {
 
         },
 
-        onFailure = {
+        onJoinHousehold = {
 
         }
     )
@@ -139,11 +116,11 @@ fun Content() {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun SetupHouseholdScreenDarkPreview() {
-    Content()
+    SetupHouseholdContent()
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun SetupHouseholdScreenLightPreview() {
-    Content()
+    SetupHouseholdContent()
 }

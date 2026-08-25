@@ -11,6 +11,9 @@ import com.raza.householdrecharge.HouseholdRechargeApplication
 import com.raza.householdrecharge.v2.auth.SignInScreen
 import com.raza.householdrecharge.v2.auth.SignupScreen
 import com.raza.householdrecharge.v2.common.AppViewModelFactory
+import com.raza.householdrecharge.v2.setuphousehold.CreateHouseholdScreen
+import com.raza.householdrecharge.v2.setuphousehold.JoinHouseholdScreen
+import com.raza.householdrecharge.v2.setuphousehold.SetupHouseholdScreen
 import com.raza.householdrecharge.v2.splash.SplashScreen
 
 @Composable
@@ -85,6 +88,48 @@ fun V2Navigation() {
                     Log.d("TAG", "OnSignIn")
                     navController.navigate(AppPages.SignIn.description)
                 })
+        }
+
+        composable(AppPages.SetupHousehold.description) {
+            SetupHouseholdScreen(
+                viewModel = viewModel(
+                    factory = genericFactory
+                ),
+
+                onJoinHousehold = {
+
+                    navController.navigate(AppPages.JoinHousehold.description)
+                },
+
+                onCreateHousehold = {
+
+                    navController.navigate(AppPages.CreateHousehold.description)
+                }
+            )
+        }
+
+        composable(AppPages.JoinHousehold.description) {
+            JoinHouseholdScreen(
+                viewModel = viewModel(
+                    factory = genericFactory
+                ),
+
+                onSuccess = {},
+
+                onFailure = {}
+            )
+        }
+
+        composable(AppPages.CreateHousehold.description) {
+            CreateHouseholdScreen(
+                viewModel = viewModel(
+                    factory = genericFactory
+                ),
+
+                onSuccess = {},
+
+                onFailure = {}
+            )
         }
 
         composable(AppPages.Main.description) {
