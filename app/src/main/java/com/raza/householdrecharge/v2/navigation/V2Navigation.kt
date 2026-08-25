@@ -41,7 +41,8 @@ fun V2Navigation() {
                 },
 
                 onUserFound = {
-                    navController.navigate(AppPages.Main.description)
+                    //navController.navigate(AppPages.Main.description)
+                    navController.navigate(AppPages.SetupHousehold.description)
                 },
 
                 viewModel = viewModel(
@@ -79,9 +80,9 @@ fun V2Navigation() {
                     factory = genericFactory
                 ),
 
-                onSignup = {
-                    Log.d("TAG", "OnSignup")
-                    navController.navigate(AppPages.SignIn.description)
+                onSuccess = {
+                    Log.d("TAG", "On Signup Success")
+                    navController.navigate(AppPages.SetupHousehold.description)
                 },
 
                 onSignIn = {

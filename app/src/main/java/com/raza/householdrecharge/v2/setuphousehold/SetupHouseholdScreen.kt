@@ -1,15 +1,26 @@
 package com.raza.householdrecharge.v2.setuphousehold
 
 import android.content.res.Configuration
+import android.graphics.drawable.shapes.Shape
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -59,42 +70,113 @@ fun SetupHouseholdBody(
     onJoinHousehold: () -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier.padding(horizontal = 20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(
-            text = "How would you like to continue?"
+            text = "Set up your household",
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
 
-        Button(
-            modifier = modifier,
+        Spacer(modifier = Modifier.height(8.dp))
 
-            onClick = {
+        Text(
+            text = "Create a new household or join an existing one.",
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
 
-                onCreateHousehold()
-            }) {
+        Spacer(modifier = Modifier.height(32.dp))
 
-            Text("Create Household")
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
+        ) {
+            Column(
+                modifier = Modifier.padding(20.dp)
+            ) {
+
+                Text(
+                    text = "Create a household",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "Start a new household and become its manager.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    onClick = {
+                        onCreateHousehold()
+                    }) {
+
+                    Text(
+                        text = "Create Household",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.padding(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Start a new household and \nbecome its manager.")
 
-        Button(
-            modifier = modifier,
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
+        ) {
 
-            onClick = {
+            Column(
+                modifier = Modifier.padding(20.dp)
+            ) {
+                Text(
+                    text = "Join a household",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
 
-                onJoinHousehold()
-            }) {
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Text("Join Household")
+                Text(
+                    text = "Join an existing household using an invitation code.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    onClick = {
+
+                        onJoinHousehold()
+                    }) {
+
+                    Text(
+                        text = "Join Household",
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
         }
-
-        Spacer(modifier = Modifier.padding(10.dp))
-
-        Text(text = "Join a household using an \ninvitation code")
     }
 }
 

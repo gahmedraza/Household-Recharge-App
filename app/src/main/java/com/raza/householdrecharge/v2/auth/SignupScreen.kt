@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -35,7 +36,7 @@ import kotlinx.coroutines.launch
 fun SignupScreen(
     viewModel: SignupViewModel,
     householdViewModel: AddHouseholdViewModel,
-    onSignup: () -> Unit,
+    onSuccess: () -> Unit,
     onSignIn: () -> Unit
 ) {
 
@@ -128,35 +129,17 @@ fun SignupScreen(
                         viewModel.signup(
                             onSuccess = { userId ->
 
-                                householdViewModel.onAddHousehold(
-                                    userId = userId,
+                                scope.launch {
+                                    SnackbarUtil.show(
+                                        snackbarHostState = snackbarHostState,
+                                        message = "User Created with id= $userId"
+                                    )
+                                }
 
-                                    householdName = viewModel.household.name ?: "",
-
-                                    onSuccess = { householdId ->
-
-                                        scope.launch {
-                                            SnackbarUtil.show(
-                                                snackbarHostState = snackbarHostState,
-                                                message = "User Created with id= $householdId"
-                                            )
-                                        }
-
-                                        onSignup()
-                                    },
-                                    onFailure = { message ->
-                                        scope.launch {
-                                            SnackbarUtil.show(
-                                                snackbarHostState = snackbarHostState,
-                                                message = "response= $message"
-                                            )
-                                        }
-
-                                        Log.d("TAG", "Sign In Failed")
-                                    }
-                                )
+                                onSuccess()
                             },
                             onFailure = { message ->
+
                                 scope.launch {
                                     SnackbarUtil.show(
                                         snackbarHostState = snackbarHostState,
@@ -176,10 +159,9 @@ fun SignupScreen(
 
                 Text(
                     text = "Already have an account? Log In",
-                    modifier = Modifier.fillMaxWidth()
-                        .clickable {
-                            onSignIn()
-                        }
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable { onSignIn() }
                 )
             }
         }
@@ -209,7 +191,7 @@ fun SignupContent() {
     SignupScreen(
         viewModel = viewModel(),
         householdViewModel = viewModel(),
-        onSignup = {
+        onSuccess = {
 
         },
         onSignIn = {

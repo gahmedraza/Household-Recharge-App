@@ -137,11 +137,9 @@ fun SignInScreen(
 
                 Text(
                     text = "Don't have an account? Create New",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onSignup()
-                        }
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.clickable { onSignup() }
                 )
             }
         }
