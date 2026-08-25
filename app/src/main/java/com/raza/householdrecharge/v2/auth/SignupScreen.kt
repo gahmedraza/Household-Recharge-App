@@ -2,6 +2,7 @@ package com.raza.householdrecharge.v2.auth
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -110,24 +111,6 @@ fun SignupScreen(
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-
-                    onValueChange = {
-                        viewModel.household = viewModel.household.copy(
-                            name = it
-                        )
-                    },
-
-                    label = {
-                        Text("Household Name")
-                    },
-
-                    value = viewModel.household.name ?: ""
-                )
-
-                Spacer(modifier = Modifier.padding(60.dp))
-
                 if (viewModel.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
@@ -186,20 +169,18 @@ fun SignupScreen(
                         )
                     }
                 ) {
-                    Text("Signup")
+                    Text("Create")
                 }
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-
-                    onClick = {
-                        onSignIn()
-                    }
-                ) {
-                    Text("SignIn")
-                }
+                Text(
+                    text = "Already have an account? Log In",
+                    modifier = Modifier.fillMaxWidth()
+                        .clickable {
+                            onSignIn()
+                        }
+                )
             }
         }
     }

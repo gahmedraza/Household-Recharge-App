@@ -3,6 +3,7 @@ package com.raza.householdrecharge.v2.auth
 import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -129,20 +130,19 @@ fun SignInScreen(
                             })
                     }
                 ) {
-                    Text("Sign In")
+                    Text("Log In")
                 }
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-
-                    onClick = {
-                        onSignup()
-                    }
-                ) {
-                    Text("Signup")
-                }
+                Text(
+                    text = "Don't have an account? Create New",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onSignup()
+                        }
+                )
             }
         }
     }

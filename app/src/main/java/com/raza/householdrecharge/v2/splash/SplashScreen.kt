@@ -33,15 +33,9 @@ fun SplashScreen(
 
         if (FirebaseAuth.getInstance().currentUser == null) {
             onUserNotFound()
-        } else {
-            viewModel.loadHousehold(
-                onSuccess = {
-                    onUserFound()
-                },
-                onFailure = {
 
-                }
-            )
+        } else {
+            onUserFound()
         }
     }
 
