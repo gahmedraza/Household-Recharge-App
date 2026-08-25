@@ -125,58 +125,6 @@ fun DashboardContent(
                     )
                 }
             }
-        },
-
-        bottomBar = {
-            NavigationBar{
-                NavigationBarItem(
-                    selected = true,
-                    onClick = {
-                        onDashboardClick()
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.Home,
-                            contentDescription = "Dashboard"
-                        )
-                    },
-                    label = {
-                        Text("Dashboard")
-                    }
-                )
-
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {
-                        onRechargeHistoryClick()
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.History,
-                            contentDescription = "Recharge History"
-                        )
-                    },
-                    label = {
-                        Text("History")
-                    }
-                )
-
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {
-                        onSettingClick()
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Default.Settings,
-                            contentDescription = "Setting"
-                        )
-                    },
-                    label = {
-                        Text("Setting")
-                    }
-                )
-            }
         }
     ) { paddingValues ->
 

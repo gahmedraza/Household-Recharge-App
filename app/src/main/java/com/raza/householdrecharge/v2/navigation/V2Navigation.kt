@@ -8,15 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.raza.householdrecharge.HouseholdRechargeApplication
-import com.raza.householdrecharge.v2.addhousehold.AddHouseholdScreen
-import com.raza.householdrecharge.v2.addmember.AddMemberScreen
-import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryScreen
 import com.raza.householdrecharge.v2.auth.SignInScreen
 import com.raza.householdrecharge.v2.auth.SignupScreen
 import com.raza.householdrecharge.v2.common.AppViewModelFactory
-import com.raza.householdrecharge.v2.dashbord.DashboardScreen
-import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryScreen
-import com.raza.householdrecharge.v2.settings.SettingScreen
 import com.raza.householdrecharge.v2.splash.SplashScreen
 
 @Composable
@@ -32,19 +26,19 @@ fun V2Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = "Splash"
+        startDestination = AppPages.Splash.description
     ) {
 
-        composable("Splash") {
+        composable(AppPages.Splash.description) {
 
             SplashScreen(
                 onUserNotFound = {
                     Log.d("TAG", "OnSplashFinished")
-                    navController.navigate("SignIn")
+                    navController.navigate(AppPages.SignIn.description)
                 },
 
                 onUserFound = {
-                    navController.navigate("Dashboard")
+                    navController.navigate(AppPages.Main.description)
                 },
 
                 viewModel = viewModel(
@@ -53,7 +47,7 @@ fun V2Navigation() {
             )
         }
 
-        composable("SignIn") {
+        composable(AppPages.SignIn.description) {
 
             SignInScreen(
                 viewModel = viewModel(
@@ -62,16 +56,16 @@ fun V2Navigation() {
 
                 onSignup = {
                     Log.d("TAG", "OnSignup")
-                    navController.navigate("Signup")
+                    navController.navigate(AppPages.Signup.description)
                 },
 
                 onSignIn = {
                     Log.d("TAG", "OnSignIn")
-                    navController.navigate("Dashboard")
+                    navController.navigate(AppPages.Main.description)
                 })
         }
 
-        composable("Signup") {
+        composable(AppPages.Signup.description) {
 
             SignupScreen(
                 viewModel = viewModel(
@@ -84,150 +78,17 @@ fun V2Navigation() {
 
                 onSignup = {
                     Log.d("TAG", "OnSignup")
-                    navController.navigate("SignIn")
+                    navController.navigate(AppPages.SignIn.description)
                 },
 
                 onSignIn = {
                     Log.d("TAG", "OnSignIn")
-                    navController.navigate("SignIn")
+                    navController.navigate(AppPages.SignIn.description)
                 })
         }
 
-        composable("Dashboard") {
-            DashboardScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
-                onClick = { memberId, mobileNumber ->
-
-                    navController.navigate("RechargeHistory/$memberId/$mobileNumber")
-                },
-
-                onAddMember = {
-                    navController.navigate("AddRechargeHistory")
-                },
-                onDashboardClick = {
-                    navController.navigate("Dashboard")
-                },
-                onRechargeHistoryClick = {
-
-                },
-                onSettingClick = {
-                    navController.navigate("SettingScreen")
-                }
-            )
-        }
-
-        composable("AddMember") {
-            AddMemberScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
-                onSuccess = {
-
-                    navController.navigate("SettingScreen")
-                },
-
-                onFailure = {
-
-                }
-            )
-        }
-
-        composable(
-            route = "RechargeHistory/{memberId}/{mobileNumber}"
-        ) { backStackEntry ->
-
-            val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
-            val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
-
-            RechargeHistoryScreen(
-                memberId = memberId,
-
-                mobileNumber = mobileNumber,
-
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
-                onSuccess = {
-                    navController.navigate("Dashboard")
-                },
-
-                onFailure = {
-
-                },
-
-                onAddRecharge = { memberId, mobileNumber ->
-                    navController.navigate("AddRechargeHistory/$memberId/$mobileNumber")
-                }
-            )
-        }
-
-        composable(
-            route = "AddRechargeHistory/{memberId}/{mobileNumber}"
-        ) { backStackEntry ->
-
-            val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
-            val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
-
-            AddRechargeHistoryScreen(
-                memberId = memberId,
-
-                mobileNumber = mobileNumber,
-
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
-                onSuccess = {
-
-                    navController.navigate("Dashboard")
-                },
-
-                onFailure = {
-
-                }
-            )
-        }
-
-        composable("SettingScreen") {
-            SettingScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
-                onAddMember = {
-                    navController.navigate("AddMember")
-                },
-
-                onAddHousehold = {
-                    navController.navigate("AddHousehold")
-                },
-
-                onSignOut = {
-                    navController.navigate("SignIn")
-                }
-            )
-        }
-
-        composable("AddHousehold") {
-            AddHouseholdScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
-                onSuccess = {
-
-                    navController.navigate("SettingScreen")
-                },
-
-                onFailure = {
-
-                }
-            )
+        composable(AppPages.Main.description) {
+            DashboardNavigation()
         }
     }
 }

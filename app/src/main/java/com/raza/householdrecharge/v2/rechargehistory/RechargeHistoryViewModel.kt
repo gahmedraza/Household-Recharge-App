@@ -38,12 +38,24 @@ class RechargeHistoryViewModel(
                 return@launch
             }
 
-            if (memberId.isNullOrEmpty()) {
+            var currentMemberId = memberId
+
+            if (currentMemberId.isNullOrEmpty()) {
+                currentMemberId = sessionManager.memberId.first()
+            }
+
+            if(currentMemberId.isNullOrEmpty()) {
                 onFailure("member not found")
                 return@launch
             }
 
-            if(mobileNumber.isNullOrEmpty()) {
+            var currentMobileNumber = mobileNumber
+
+            if(currentMobileNumber.isNullOrEmpty()) {
+                currentMobileNumber = sessionManager.mobileNumber.first()
+            }
+
+            if(currentMobileNumber.isNullOrEmpty()) {
                 onFailure("mobile number not found")
                 return@launch
             }
@@ -58,10 +70,10 @@ class RechargeHistoryViewModel(
                 .document(householdId)
 
                 .collection("members")
-                .document(memberId)
+                .document(currentMemberId)
 
                 .collection("mobileNumbers")
-                .document(mobileNumber)
+                .document(currentMobileNumber)
 
                 .collection("recharges")
                 .get()
