@@ -1,8 +1,10 @@
 package com.raza.householdrecharge.v2.setuphousehold
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,33 +28,37 @@ fun SetupHouseholdScreen(
     onCreateHousehold: () -> Unit,
     onJoinHousehold: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TitleBar("Household Setup")
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
 
-        SetupHouseholdBody(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(paddingValues)
-                .padding(
-                    top = 10.dp,
-                    bottom = 10.dp,
-                    start = 10.dp,
-                    end = 10.dp
-                ),
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
 
-            viewModel = viewModel,
+        ) {
+            SetupHouseholdBody(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues)
+                    .padding(
+                        top = 10.dp,
+                        bottom = 10.dp,
+                        start = 10.dp,
+                        end = 10.dp
+                    ),
 
-            onCreateHousehold = {
-                onCreateHousehold()
-            },
+                viewModel = viewModel,
 
-            onJoinHousehold = {
-                onJoinHousehold()
-            }
-        )
+                onCreateHousehold = {
+                    onCreateHousehold()
+                },
+
+                onJoinHousehold = {
+                    onJoinHousehold()
+                }
+            )
+        }
     }
 }
 
@@ -84,7 +90,7 @@ fun SetupHouseholdBody(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(42.dp))
 
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -93,7 +99,8 @@ fun SetupHouseholdBody(
             )
         ) {
             Column(
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
                 Text(
@@ -124,10 +131,12 @@ fun SetupHouseholdBody(
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
+
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
 
         Card(
@@ -138,7 +147,8 @@ fun SetupHouseholdBody(
         ) {
 
             Column(
-                modifier = Modifier.padding(20.dp)
+                modifier = Modifier.padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = "Join a household",
@@ -169,6 +179,8 @@ fun SetupHouseholdBody(
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
+
+                Spacer(modifier = Modifier.height(10.dp))
             }
         }
     }

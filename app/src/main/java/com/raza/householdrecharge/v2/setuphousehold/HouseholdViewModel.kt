@@ -26,6 +26,8 @@ class HouseholdViewModel(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
+            isLoading = true
+
             val userNotFound = userId?.isEmpty() ?: false
 
             if (userNotFound) {
@@ -53,12 +55,14 @@ class HouseholdViewModel(
                         sessionManager.saveHouseholdName(householdName)
                         sessionManager.saveHouseholdId(householdId)
 
+                        isLoading = false
                         onSuccess(householdId)
                     }
                 },
 
                 onFailure = { error ->
 
+                    isLoading = false
                     onFailure(error)
                 }
             )

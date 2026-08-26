@@ -41,8 +41,8 @@ fun V2Navigation() {
                 },
 
                 onUserFound = {
-                    //navController.navigate(AppPages.Main.description)
-                    navController.navigate(AppPages.SetupHousehold.description)
+                    navController.navigate(AppPages.Main.description)
+                    //navController.navigate(AppPages.SetupHousehold.description)
                 },
 
                 viewModel = viewModel(
@@ -127,7 +127,9 @@ fun V2Navigation() {
                     factory = genericFactory
                 ),
 
-                onSuccess = {},
+                onSuccess = {
+                    navController.navigate(AppPages.Main.description)
+                },
 
                 onFailure = {}
             )

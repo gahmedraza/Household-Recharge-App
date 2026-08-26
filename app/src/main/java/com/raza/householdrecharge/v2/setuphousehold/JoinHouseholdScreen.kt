@@ -1,16 +1,22 @@
 package com.raza.householdrecharge.v2.setuphousehold
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,33 +30,37 @@ fun JoinHouseholdScreen(
     onSuccess: () -> Unit,
     onFailure: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TitleBar("Join Household")
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
 
-        JoinHouseholdBody(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(paddingValues)
-                .padding(
-                    top = 10.dp,
-                    bottom = 10.dp,
-                    start = 10.dp,
-                    end = 10.dp
-                ),
+                .padding(start = 20.dp, end = 20.dp)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
 
-            viewModel = viewModel,
+        ) {
 
-            onSuccess = {
-                onSuccess()
-            },
+            JoinHouseholdBody(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues)
+                    .padding(
+                        start = 10.dp,
+                        end = 10.dp
+                    ),
 
-            onFailure = {
-                onFailure()
-            }
-        )
+                viewModel = viewModel,
+
+                onSuccess = {
+                    onSuccess()
+                },
+
+                onFailure = {
+                    onFailure()
+                }
+            )
+        }
     }
 }
 
@@ -61,53 +71,76 @@ fun JoinHouseholdBody(
     onSuccess: () -> Unit,
     onFailure: () -> Unit
 ) {
-    Column(
-        modifier = modifier
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        )
     ) {
-        Text(
-            text = "Enter your invitation code",
-            fontSize = 30.sp
-        )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Column(
+            modifier = modifier
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
 
-        OutlinedTextField(
-            modifier = modifier,
+            Text(
+                modifier = modifier,
+                text = "Let's get you added to the household",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground
+            )
 
-            label = {
-                Text("Invitation Code")
-            },
+            Spacer(modifier = Modifier.height(32.dp))
 
-            onValueChange = {
-                viewModel.invitationCode = it
+            Text(
+                modifier = modifier,
+                text = "Enter your invitation code",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
 
-            },
+            Spacer(modifier = Modifier.height(8.dp))
 
-            value = viewModel.invitationCode
-        )
+            OutlinedTextField(
+                modifier = modifier,
 
-        Spacer(modifier = Modifier.height(30.dp))
+                label = {
+                    Text("Invitation Code")
+                },
 
-        OutlinedButton(
-            modifier = modifier,
+                onValueChange = {
+                    viewModel.invitationCode = it
 
-            onClick = {
+                },
 
-                viewModel.onAddHousehold(
-                    userId = "0",
+                value = viewModel.invitationCode
+            )
 
-                    householdName = "",
+            Spacer(modifier = Modifier.height(42.dp))
 
-                    onSuccess = {
-                        onSuccess()
-                    },
-                    onFailure = {
-                        onFailure()
-                    }
-                )
-            }) {
+            OutlinedButton(
+                modifier = modifier,
 
-            Text("Join Household")
+                onClick = {
+
+                    viewModel.onAddHousehold(
+                        userId = "0",
+
+                        householdName = "",
+
+                        onSuccess = {
+                            onSuccess()
+                        },
+                        onFailure = {
+                            onFailure()
+                        }
+                    )
+                }) {
+
+                Text("Join Household")
+            }
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
