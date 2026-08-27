@@ -1,35 +1,37 @@
 package com.raza.householdrecharge.v2.auth
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.raza.householdrecharge.v2.common.AppSnackbar
-import com.raza.householdrecharge.v2.common.SnackbarUtil
-import kotlinx.coroutines.launch
+import com.raza.householdrecharge.v2.common.log
 
 @Composable
 fun SignInScreen(
@@ -37,20 +39,26 @@ fun SignInScreen(
     onSignup: () -> Unit,
     onSignIn: () -> Unit
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
-    Scaffold(
-        snackbarHost = {
-            AppSnackbar(hostState = snackbarHostState)
-        }
-    ) { paddingValues ->
+    var shouldProceed by remember { mutableStateOf(false) }
+    var signinStatus by remember { mutableStateOf("") }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        )
+    ) {
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(6.dp),
+                .padding(20.dp),
             contentAlignment = Alignment.Center
         ) {
 
@@ -59,7 +67,13 @@ fun SignInScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                Spacer(modifier = Modifier.padding(20.dp))
+                Text(
+                    text = "Let's get you logged in",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(modifier = Modifier.height(40.dp))
 
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
@@ -97,44 +111,51 @@ fun SignInScreen(
 
                 Spacer(modifier = Modifier.padding(60.dp))
 
-                if (viewModel.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(24.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.padding(60.dp))
-
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
                     onClick = {
                         viewModel.signIn(
-                            onSuccess = {
-                                scope.launch {
-                                    SnackbarUtil.show(
-                                        snackbarHostState = snackbarHostState,
-                                        message = "SignIn Success"
-                                    )
-                                }
+                            onSuccess = { userId ->
 
-                                onSignIn()
+                                signinStatus = "login success"
+                                shouldProceed = true
+
+                                log("user logged in with id= $userId")
                             },
-                            onFailure = {
-                                Log.d("TAG", "Sign In Failed")
-                                Log.d("TAG", "error: $it")
+                            onFailure = { message ->
 
-                                scope.launch {
-                                    SnackbarUtil.show(
-                                        snackbarHostState = snackbarHostState,
-                                        message = "error= $it"
-                                    )
-                                }
+                                signinStatus = "login failure\n$message"
+                                shouldProceed = false
+
+                                log("response= $message")
                             })
                     }
                 ) {
                     Text("Log In")
+                }
+
+                Spacer(modifier = Modifier.padding(10.dp))
+
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    enabled = shouldProceed,
+
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if(shouldProceed) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant
+                        }
+                    ),
+
+                    onClick = {
+
+                        onSignIn()
+                    }
+                ) {
+                    Text("Proceed")
                 }
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -144,6 +165,28 @@ fun SignInScreen(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable { onSignup() }
+                )
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                Text(
+                    text = signinStatus,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (shouldProceed) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    },
+                    textAlign = TextAlign.Center
                 )
             }
         }

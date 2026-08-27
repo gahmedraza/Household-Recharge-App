@@ -40,7 +40,7 @@ fun SignupScreen(
     onSignIn: () -> Unit
 ) {
     var shouldProceed by remember { mutableStateOf(false) }
-    var apiResponse by remember { mutableStateOf("") }
+    var signupStatus by remember { mutableStateOf("") }
 
     Card(
         modifier = Modifier
@@ -134,14 +134,14 @@ fun SignupScreen(
                         viewModel.signupAndAccount(
                             onSuccess = { userId ->
 
-                                apiResponse = "Account creation passed"
+                                signupStatus = "account creation success"
                                 shouldProceed = true
 
                                 log("user created with id= $userId")
                             },
                             onFailure = { message ->
 
-                                apiResponse = "Account creation failed\n$message"
+                                signupStatus = "account creation failure\n$message"
                                 shouldProceed = false
 
                                 log("response= $message")
@@ -196,7 +196,7 @@ fun SignupScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = apiResponse,
+                    text = signupStatus,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (shouldProceed) {
                         MaterialTheme.colorScheme.primary

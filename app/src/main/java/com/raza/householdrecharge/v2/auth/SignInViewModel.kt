@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 class SignInViewModel(
     private val sessionManager: SessionManager
 ) : AuthViewModel() {
-    fun signIn(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
+    fun signIn(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         isLoading = true
 
         val authDto = AuthDto(
@@ -29,7 +29,7 @@ class SignInViewModel(
                 this.userId = userId
 
                 isLoading = false
-                onSuccess()
+                onSuccess(userId)
             },
 
             onFailure = { error ->
