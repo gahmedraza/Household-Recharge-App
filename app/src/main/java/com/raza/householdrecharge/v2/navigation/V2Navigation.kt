@@ -76,10 +76,6 @@ fun V2Navigation() {
                     factory = genericFactory
                 ),
 
-                householdViewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onSuccess = {
                     Log.d("TAG", "On Signup Success")
                     navController.navigate(AppPages.SetupHousehold.description)
