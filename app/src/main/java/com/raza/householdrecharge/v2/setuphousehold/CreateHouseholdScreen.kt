@@ -1,6 +1,7 @@
 package com.raza.householdrecharge.v2.setuphousehold
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.repository.cleanString
 
 @Composable
 fun CreateHouseholdScreen(
@@ -103,14 +105,14 @@ fun CreateHouseholdBody(
             onClick = {
 
                 viewModel.onAddHousehold(
-                    userId = "0",
+                    householdName = viewModel.household.name.cleanString(),
 
-                    householdName = "",
-
-                    onSuccess = {
+                    onSuccess = { householdId ->
+                        Log.d("TAG", "success: $householdId")
                         onSuccess()
                     },
-                    onFailure = {
+                    onFailure = { error ->
+                        Log.d("TAG", "failure: $error")
                         onFailure()
                     }
                 )

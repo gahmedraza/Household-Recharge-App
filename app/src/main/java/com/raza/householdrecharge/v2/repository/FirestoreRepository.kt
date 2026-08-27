@@ -3,10 +3,12 @@ package com.raza.householdrecharge.v2.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.data.Member
-import com.raza.householdrecharge.v2.HouseholdDto
+import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.common.MemberDto
 import com.raza.householdrecharge.v2.common.getDateInMillis
+import com.raza.householdrecharge.v2.common.log
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
+import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
 
@@ -16,12 +18,15 @@ object FirestoreRepository {
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
+
+        householdDto.userId = appUserDto.userId
+
         FirebaseFirestore
             .getInstance()
-            .collection("users")
-            .document(appUserDto.userId)
+
             .collection("households")
             .add(householdDto)
+
             .addOnSuccessListener { documentReference ->
                 val householdId = documentReference.id
                 onSuccess(householdId)
@@ -128,23 +133,127 @@ object FirestoreRepository {
             }
     }
 
-    fun signup(
+    private suspend fun signup(
+        authDto: AuthDto
+    ): Result<String> {
+
+        return try {
+            val result = FirebaseAuth
+                .getInstance()
+                .createUserWithEmailAndPassword(
+                    authDto.mobileNumber,
+                    authDto.password
+                )
+                .await()
+
+            val userId = result.user?.uid.cleanString()
+
+            if (userId.isEmpty()) {
+                Result.Failure<String>("user id was not created during signup")
+            }
+
+            Result.Success<String>(userId)
+
+        } catch (e: Exception) {
+            Result.Failure<String>(e.message.cleanString())
+        }
+    }
+
+    suspend fun signupAndAddAccount(
         authDto: AuthDto,
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
-        FirebaseAuth
-            .getInstance()
-            .createUserWithEmailAndPassword(authDto.mobileNumber, authDto.password)
-            .addOnSuccessListener { documentReference ->
+        try {
 
-                val userId = documentReference.user?.uid
-                onSuccess(userId.cleanString())
-            }
-            .addOnFailureListener { error ->
+            log("a1")
 
-                onFailure(error.message.cleanString())
+            var accountDto: AccountDto? = null
+
+            val signupResult = signup(authDto = authDto)
+
+            var userId = ""
+
+            when(signupResult) {
+                is Result.Success -> {
+                    log("a2")
+
+                    userId = signupResult.s.cleanString()
+
+                    accountDto = AccountDto(
+                        username = authDto.username,
+                        userId = signupResult.s.cleanString()
+                    )
+                }
+
+                is Result.Failure -> {
+                    log("a3")
+
+                    onFailure(signupResult.s.cleanString())
+                    return
+                    //onFailure("user id was not generated in user collection")
+                }
             }
+
+            if(accountDto == null) {
+                onFailure("account cannot be added since account dto is empty")
+                log("b1")
+                return
+            }
+
+            log("b2")
+
+            val addUserResult = addUser(accountDto = accountDto)
+
+            if(addUserResult is Result.Success) {
+                log("b3")
+                onSuccess(userId)
+            } else {
+                log("b4")
+                onFailure("account id was not generated in accounts collection")
+                return
+            }
+
+            log("c")
+            return
+
+        } catch (e: Exception) {
+
+            log("d")
+
+            onFailure(e.message.cleanString())
+            return
+        }
+    }
+
+    private suspend fun addUser(
+        accountDto: AccountDto?
+    ): Result<String> {
+        return try{
+
+            if (accountDto == null) {
+                return Result.Failure("account collection cannot be updated with empty account dto")
+            }
+
+            val documentReference = FirebaseFirestore
+                .getInstance()
+
+                .collection("accounts")
+                .add(accountDto)
+
+                .await()
+
+            val accountId = documentReference.id.cleanString()
+
+            if(accountId.isEmpty()) {
+                Result.Failure("account id was not generated in accounts collection")
+            }
+
+            Result.Success(accountId)
+        } catch (e: Exception) {
+
+            Result.Failure(e.message.cleanString())
+        }
     }
 
     fun signIn(
@@ -286,7 +395,7 @@ object FirestoreRepository {
         FirebaseFirestore
             .getInstance()
 
-            .collection("users")
+            .collection("accounts")
             .document(appUserDto.userId)
 
             .collection("households")
@@ -310,6 +419,7 @@ object FirestoreRepository {
 }
 
 data class AuthDto(
+    val username: String?= null,
     val mobileNumber: String,
     val password: String
 )
@@ -323,4 +433,15 @@ data class AppUserDto(
 
 fun String?.cleanString(): String {
     return this ?: ""
+}
+
+data class AccountDto(
+    val userId: String? = null,
+    val username: String? = null,
+    val householdId: String? = null
+)
+
+sealed class Result<T> {
+    data class Success<T>(val s: T) : Result<T>()
+    data class Failure<T>(val s: T) : Result<T>()
 }

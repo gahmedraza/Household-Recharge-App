@@ -8,8 +8,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -18,16 +23,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdViewModel
 import com.raza.householdrecharge.v2.common.AppSnackbar
 import com.raza.householdrecharge.v2.common.SnackbarUtil
+import com.raza.householdrecharge.v2.common.log
 import kotlinx.coroutines.launch
 
 @Composable
@@ -40,6 +51,8 @@ fun SignupScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    var enabledProceedButton by remember { mutableStateOf(false) }
+    var uiUpdateMessage by remember { mutableStateOf("") }
 
     Scaffold(
         snackbarHost = {
@@ -47,120 +60,171 @@ fun SignupScreen(
         }
     ) { paddingValues ->
 
-        Box(
+        Card(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(6.dp),
-            contentAlignment = Alignment.Center
+                .fillMaxWidth()
+                .padding(20.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 8.dp
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainer
+            )
         ) {
 
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(20.dp),
+                contentAlignment = Alignment.Center
             ) {
 
-                Spacer(modifier = Modifier.padding(20.dp))
-
-                OutlinedTextField(
+                Column(
                     modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
-                    onValueChange = {
-                        viewModel.mobileNumber = it
-                    },
-
-                    label = {
-                        Text("Mobile Number")
-                    },
-
-                    value = viewModel.mobileNumber
-                )
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-
-                    onValueChange = {
-                        viewModel.password = it
-                    },
-
-                    label = {
-                        Text("Password")
-                    },
-
-                    value = viewModel.password
-                )
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-                OutlinedTextField(
-                    modifier = Modifier.fillMaxWidth(),
-
-                    onValueChange = {
-                        viewModel.password = it
-                    },
-
-                    label = {
-                        Text("Confirm Password")
-                    },
-
-                    value = viewModel.password
-                )
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-                if (viewModel.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(24.dp)
+                    Text(
+                        text = "Let's create a new account for you",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground
                     )
-                }
 
-                Spacer(modifier = Modifier.padding(60.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
 
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
 
-                    onClick = {
+                        onValueChange = {
+                            viewModel.name = it
+                        },
 
-                        viewModel.signup(
-                            onSuccess = { userId ->
+                        label = {
+                            Text("Name")
+                        },
 
-                                scope.launch {
-                                    SnackbarUtil.show(
-                                        snackbarHostState = snackbarHostState,
-                                        message = "User Created with id= $userId"
-                                    )
+                        value = viewModel.name
+                    )
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ),
+
+                        onValueChange = {
+                            viewModel.mobileNumber = it
+                        },
+
+                        label = {
+                            Text("Mobile Number")
+                        },
+
+                        value = viewModel.mobileNumber
+                    )
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(),
+
+                        onValueChange = {
+                            viewModel.password = it
+                        },
+
+                        label = {
+                            Text("Password")
+                        },
+
+                        value = viewModel.password
+                    )
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+
+                        onClick = {
+
+                            viewModel.signupAndAccount(
+                                onSuccess = { userId ->
+
+                                    uiUpdateMessage = "Account creation passed"
+                                    enabledProceedButton = true
+
+                                    log("user created with id= $userId")
+                                },
+                                onFailure = { message ->
+
+                                    uiUpdateMessage = "Account creation failed\n$message"
+                                    enabledProceedButton = false
+
+                                    log("response= $message")
                                 }
+                            )
+                        }
+                    ) {
+                        Text("Create")
+                    }
 
-                                onSuccess()
-                            },
-                            onFailure = { message ->
+                    Spacer(modifier = Modifier.padding(10.dp))
 
-                                scope.launch {
-                                    SnackbarUtil.show(
-                                        snackbarHostState = snackbarHostState,
-                                        message = "response= $message"
-                                    )
-                                }
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
 
-                                Log.d("TAG", "Sign In Failed")
+                        enabled = enabledProceedButton,
+
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if(enabledProceedButton) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.surfaceVariant
                             }
+                        ),
+
+                        onClick = {
+
+                            onSuccess()
+                        }
+                    ) {
+                        Text("Proceed")
+                    }
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    Text(
+                        text = "Already have an account? Log In",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.clickable { onSignIn() }
+                    )
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    if (viewModel.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(24.dp)
                         )
                     }
-                ) {
-                    Text("Create")
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    Text(
+                        text = uiUpdateMessage,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (enabledProceedButton) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        },
+                        textAlign = TextAlign.Center
+                    )
                 }
-
-                Spacer(modifier = Modifier.padding(20.dp))
-
-                Text(
-                    text = "Already have an account? Log In",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { onSignIn() }
-                )
             }
         }
     }

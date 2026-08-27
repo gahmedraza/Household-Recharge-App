@@ -6,11 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.v2.BaseViewModel
-import com.raza.householdrecharge.v2.HouseholdDto
+import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.repository.AppUserDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import com.raza.householdrecharge.v2.repository.cleanString
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HouseholdViewModel(
@@ -20,7 +21,6 @@ class HouseholdViewModel(
     var invitationCode by mutableStateOf("")
 
     fun onAddHousehold(
-        userId: String?,
         householdName: String,
         onSuccess: (String?) -> Unit,
         onFailure: (String?) -> Unit
@@ -28,9 +28,12 @@ class HouseholdViewModel(
         viewModelScope.launch {
             isLoading = true
 
-            val userNotFound = userId?.isEmpty() ?: false
+            val userId = sessionManager.userId.first()
+
+            val userNotFound = userId.isEmpty()
 
             if (userNotFound) {
+                isLoading = false
                 onFailure("user not found")
                 return@launch
             }

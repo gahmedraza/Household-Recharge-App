@@ -9,32 +9,35 @@ import kotlinx.coroutines.launch
 class SignupViewModel(
     private val sessionManager: SessionManager
 ) : AuthViewModel() {
-    fun signup(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
-        isLoading = true
+    fun signupAndAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
+        viewModelScope.launch {
+            isLoading = true
 
-        val authDto = AuthDto(
-            mobileNumber = "$mobileNumber@householdrecharge.local",
-            password = password
-        )
+            val authDto = AuthDto(
+                username = name,
+                mobileNumber = "$mobileNumber@householdrecharge.local",
+                password = password
+            )
 
-        FirestoreRepository.signup(
-            authDto,
+            FirestoreRepository.signupAndAddAccount(
+                authDto,
 
-            onSuccess = { userId ->
-                viewModelScope.launch {
-                    sessionManager.saveUserId(userId)
-                    sessionManager.saveMobileNumber(mobileNumber)
-                }
+                onSuccess = { uId ->
+                    viewModelScope.launch {
+                        sessionManager.saveUserId(uId)
+                        sessionManager.saveMobileNumber(mobileNumber)
+                    }
 
-                this.userId = userId
-                isLoading = false
-                onSuccess(userId)
-            },
+                    userId = uId
+                    isLoading = false
+                    onSuccess(uId)
+                },
 
-            onFailure = { error ->
+                onFailure = { error ->
 
-                isLoading = false
-                onFailure(error)
-            })
+                    isLoading = false
+                    onFailure(error)
+                })
+        }
     }
 }

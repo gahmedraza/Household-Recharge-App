@@ -124,8 +124,6 @@ fun JoinHouseholdBody(
                 onClick = {
 
                     viewModel.onAddHousehold(
-                        userId = "0",
-
                         householdName = "",
 
                         onSuccess = {

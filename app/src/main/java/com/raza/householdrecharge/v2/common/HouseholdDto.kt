@@ -1,5 +1,6 @@
-package com.raza.householdrecharge.v2
+package com.raza.householdrecharge.v2.common
 
 data class HouseholdDto(
-    var name: String? = ""
+    var name: String? = "",
+    var userId: String? = ""
 )
