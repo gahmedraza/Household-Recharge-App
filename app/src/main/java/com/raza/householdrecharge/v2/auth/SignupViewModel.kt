@@ -15,7 +15,7 @@ class SignupViewModel(
             isLoading = true
 
             val authDto = AuthDto(
-                username = name,
+                accountName = accountName,
                 mobileNumber = "$mobileNumber@householdrecharge.local",
                 password = password
             )
@@ -25,14 +25,14 @@ class SignupViewModel(
 
                 onSuccess = { onBoardingDto ->
                     viewModelScope.launch {
-                        sessionManager.saveUserId(onBoardingDto.userId.cleanString())
+                        sessionManager.saveUserId(onBoardingDto.authId.cleanString())
                         sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
                         sessionManager.saveMobileNumber(mobileNumber)
                     }
 
-                    userId = onBoardingDto.userId.cleanString()
+                    authId = onBoardingDto.authId.cleanString()
                     isLoading = false
-                    onSuccess(onBoardingDto.userId.cleanString())
+                    onSuccess(onBoardingDto.authId.cleanString())
                 },
 
                 onFailure = { error ->

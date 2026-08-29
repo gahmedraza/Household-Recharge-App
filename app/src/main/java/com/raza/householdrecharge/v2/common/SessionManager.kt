@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.map
 val Context.datastore by preferencesDataStore("session")
 
 class SessionManager(private val context: Context) {
-    val userId = context.datastore.data.map {
-        it[stringPreferencesKey("userId")] ?: ""
+    val authId = context.datastore.data.map {
+        it[stringPreferencesKey("authId")] ?: ""
     }
 
     val accountId = context.datastore.data.map {
@@ -44,7 +44,7 @@ class SessionManager(private val context: Context) {
 
     suspend fun saveUserId(userId: String) {
         context.datastore.edit {
-            it[stringPreferencesKey("userId")] = userId
+            it[stringPreferencesKey("authId")] = userId
         }
     }
 

@@ -19,7 +19,7 @@ class AddMemberViewModel(
 
         viewModelScope.launch {
             val member = MemberDto(
-                name = name,
+                name = accountName,
                 mobileNumber = mobileNumber,
                 planDurationDays = planDurationDays,
                 planExpiryDate = getPrintableDate(planExpiryDate),
@@ -27,7 +27,7 @@ class AddMemberViewModel(
                 planAmount = planAmount
             )
 
-            val userId = sessionManager.userId.first()
+            val userId = sessionManager.authId.first()
 
             if(userId.isEmpty()) {
                 isLoading = false
@@ -42,7 +42,7 @@ class AddMemberViewModel(
             }
 
             val appUserDto = AppUserDto(
-                userId = userId,
+                authId = userId,
                 householdId = householdId
             )
 

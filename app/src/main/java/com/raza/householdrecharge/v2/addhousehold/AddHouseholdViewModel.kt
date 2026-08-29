@@ -30,11 +30,11 @@ class AddHouseholdViewModel(
             }
 
             val householdDto = HouseholdDto(
-                name = householdName
+                householdName = householdName
             )
 
             val appUserDto = AppUserDto(
-                userId = userId.cleanString(),
+                authId = userId.cleanString(),
                 accountId = accountId.cleanString(),
                 householdId = ""
             )

@@ -28,7 +28,7 @@ class HouseholdViewModel(
         viewModelScope.launch {
             isLoading = true
 
-            val userId = sessionManager.userId.first()
+            val userId = sessionManager.authId.first()
             val accountId = sessionManager.accountId.first()
 
             val userNotFound = userId.isEmpty()
@@ -40,11 +40,11 @@ class HouseholdViewModel(
             }
 
             val householdDto = HouseholdDto(
-                name = householdName
+                householdName = householdName
             )
 
             val appUserDto = AppUserDto(
-                userId = userId.cleanString(),
+                authId = userId.cleanString(),
                 accountId = accountId.cleanString(),
                 householdId = ""
             )

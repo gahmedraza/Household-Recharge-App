@@ -1,7 +1,6 @@
 package com.raza.householdrecharge.v2.auth
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.repository.AuthDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
@@ -26,7 +25,7 @@ class SignInViewModel(
                     sessionManager.saveUserId(userId)
                 }
 
-                this.userId = userId
+                this.authId = userId
 
                 isLoading = false
                 onSuccess(userId)

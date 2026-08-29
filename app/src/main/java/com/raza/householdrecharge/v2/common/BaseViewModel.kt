@@ -1,8 +1,6 @@
 package com.raza.householdrecharge.v2
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -12,13 +10,9 @@ open class BaseViewModel : ViewModel() {
 
     var password by mutableStateOf("")
 
-    val householdId = "11001"
+    var authId by mutableStateOf("")
 
-    val memberId = "1011"
-
-    var userId by mutableStateOf("")
-
-    var name by mutableStateOf("")
+    var accountName by mutableStateOf("")
 
     var lastRechargeDate by mutableStateOf("")
 

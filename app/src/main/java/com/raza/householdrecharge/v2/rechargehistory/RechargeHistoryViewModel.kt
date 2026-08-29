@@ -24,7 +24,7 @@ class RechargeHistoryViewModel(
         mobileNumber: String
     ) {
         viewModelScope.launch {
-            val userId = sessionManager.userId.first()
+            val userId = sessionManager.authId.first()
 
             if(userId.isNullOrEmpty()) {
                 onFailure("user not found")
@@ -61,7 +61,7 @@ class RechargeHistoryViewModel(
             }
 
             val appUserDto = AppUserDto(
-                userId = userId,
+                authId = userId,
                 householdId = householdId,
                 memberId = currentMemberId,
                 mobileNumber = currentMobileNumber

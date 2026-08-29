@@ -29,7 +29,7 @@ class DashboardViewModel(
                 return@launch
             }
 
-            val userId = sessionManager.userId.first()
+            val userId = sessionManager.authId.first()
 
             if (userId.isEmpty()) {
                 onFailure("No user found")
@@ -39,7 +39,7 @@ class DashboardViewModel(
             Log.d("TAG", "householdId= $householdId")
 
             val appUserDto = AppUserDto(
-                userId = userId,
+                authId = userId,
                 householdId = householdId
             )
 

@@ -95,9 +95,9 @@ fun Body(
                 Text("Name")
             },
             onValueChange = {
-                viewModel.name = it
+                viewModel.accountName = it
             },
-            value = viewModel.name
+            value = viewModel.accountName
         )
 
         Spacer(modifier = Modifier.padding(12.dp))

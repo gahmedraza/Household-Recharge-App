@@ -18,7 +18,7 @@ object FirestoreRepository {
     ): Result<String> {
 
         return try {
-            householdDto.userId = appUserDto.userId
+            householdDto.authId = appUserDto.authId
 
             val documentReference = FirebaseFirestore
                 .getInstance()
@@ -66,7 +66,7 @@ object FirestoreRepository {
             }
 
             //update user with householdId
-            updateAccountWithHouseholdId(appUserDto.accountId, householdId)
+            updateAccount(appUserDto.accountId, householdId)
 
             onSuccess("user collection updated with householdId")
 
@@ -86,7 +86,7 @@ object FirestoreRepository {
             .getInstance()
 
             .collection("users")
-            .document(appUserDto.userId)
+            .document(appUserDto.authId)
 
             .collection("households")
             .document(appUserDto.householdId)
@@ -120,7 +120,7 @@ object FirestoreRepository {
             .getInstance()
 
             .collection("users")
-            .document(appUserDto.userId)
+            .document(appUserDto.authId)
 
             .collection("households")
             .document(appUserDto.householdId)
@@ -196,8 +196,8 @@ object FirestoreRepository {
                     userId = signupResult.s.cleanString()
 
                     accountDto = AccountDto(
-                        username = authDto.username,
-                        userId = signupResult.s.cleanString()
+                        accountName = authDto.accountName,
+                        accountId = signupResult.s.cleanString()
                     )
                 }
 
@@ -223,7 +223,7 @@ object FirestoreRepository {
             if (addAccountResult is Result.Success) {
                 log("b3")
                 onBoardingDto = OnBoardingDto(
-                    userId = userId,
+                    authId = userId,
                     accountId = addAccountResult.s.cleanString()
                 )
                 onSuccess(onBoardingDto)
@@ -275,7 +275,7 @@ object FirestoreRepository {
         }
     }
 
-    private suspend fun updateAccountWithHouseholdId(
+    private suspend fun updateAccount(
         accountId: String, householdId: String
     ): Result<String> {
         return try {
@@ -364,7 +364,7 @@ object FirestoreRepository {
             .getInstance()
 
             .collection("users")
-            .document(appUserDto.userId)
+            .document(appUserDto.authId)
 
             .collection("households")
             .document(appUserDto.householdId)
@@ -437,7 +437,7 @@ object FirestoreRepository {
             .getInstance()
 
             .collection("accounts")
-            .document(appUserDto.userId)
+            .document(appUserDto.authId)
 
             .collection("households")
             .document(appUserDto.householdId)
@@ -460,13 +460,13 @@ object FirestoreRepository {
 }
 
 data class AuthDto(
-    val username: String? = null,
+    val accountName: String? = null,
     val mobileNumber: String,
     val password: String
 )
 
 data class AppUserDto(
-    val userId: String,
+    val authId: String,
     val accountId: String = "",
     val householdId: String,
     val memberId: String = "",
@@ -478,8 +478,8 @@ fun String?.cleanString(): String {
 }
 
 data class AccountDto(
-    val userId: String? = null,
-    val username: String? = null,
+    val accountId: String? = null,
+    val accountName: String? = null,
     val householdId: String? = null
 )
 
@@ -489,6 +489,6 @@ sealed class Result<T> {
 }
 
 data class OnBoardingDto(
-    val userId: String? = null,
+    val authId: String? = null,
     val accountId: String? = null
 )

@@ -78,14 +78,14 @@ fun SignupScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        viewModel.name = it
+                        viewModel.accountName = it
                     },
 
                     label = {
                         Text("Name")
                     },
 
-                    value = viewModel.name
+                    value = viewModel.accountName
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
