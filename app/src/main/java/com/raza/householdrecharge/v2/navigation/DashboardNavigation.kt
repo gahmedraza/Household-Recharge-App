@@ -20,7 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.raza.householdrecharge.HouseholdRechargeApplication
+import com.raza.householdrecharge.v1.HouseholdRechargeApplication
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdScreen
 import com.raza.householdrecharge.v2.addmember.AddMemberScreen
 import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryScreen

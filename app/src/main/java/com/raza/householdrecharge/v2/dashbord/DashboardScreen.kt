@@ -35,7 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.raza.householdrecharge.data.Member
+import com.raza.householdrecharge.v1.data.Member
 import com.raza.householdrecharge.v2.common.TitleBar
 import com.raza.householdrecharge.v2.common.getPrintableDate
 

@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.data.Member
+import com.raza.householdrecharge.v1.data.Member
 import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.repository.AppUserDto

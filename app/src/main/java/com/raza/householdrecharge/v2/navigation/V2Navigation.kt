@@ -7,7 +7,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.raza.householdrecharge.HouseholdRechargeApplication
+import com.raza.householdrecharge.v1.HouseholdRechargeApplication
 import com.raza.householdrecharge.v2.auth.SignInScreen
 import com.raza.householdrecharge.v2.auth.SignupScreen
 import com.raza.householdrecharge.v2.common.AppViewModelFactory

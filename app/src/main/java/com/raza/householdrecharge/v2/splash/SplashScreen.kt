@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.R
-import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
+import com.raza.householdrecharge.v1.ui.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 

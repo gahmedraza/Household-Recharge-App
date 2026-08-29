@@ -2,7 +2,7 @@ package com.raza.householdrecharge.v2.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.data.Member
+import com.raza.householdrecharge.v1.data.Member
 import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.common.MemberDto
 import com.raza.householdrecharge.v2.common.getDateInMillis
