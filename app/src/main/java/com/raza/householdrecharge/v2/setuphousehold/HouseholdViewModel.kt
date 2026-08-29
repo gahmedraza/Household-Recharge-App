@@ -29,6 +29,7 @@ class HouseholdViewModel(
             isLoading = true
 
             val userId = sessionManager.userId.first()
+            val accountId = sessionManager.accountId.first()
 
             val userNotFound = userId.isEmpty()
 
@@ -44,10 +45,11 @@ class HouseholdViewModel(
 
             val appUserDto = AppUserDto(
                 userId = userId.cleanString(),
+                accountId = accountId.cleanString(),
                 householdId = ""
             )
 
-            FirestoreRepository.addHousehold2(
+            FirestoreRepository.addHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
 
                 householdDto = householdDto,

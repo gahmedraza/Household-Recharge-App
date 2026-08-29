@@ -7,6 +7,7 @@ import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.repository.AppUserDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import com.raza.householdrecharge.v2.repository.cleanString
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class AddHouseholdViewModel(
@@ -21,6 +22,7 @@ class AddHouseholdViewModel(
     ) {
         viewModelScope.launch {
             val userNotFound = userId?.isEmpty() ?: false
+            val accountId = sessionManager.accountId.first()
 
             if (userNotFound) {
                 onFailure("user not found")
@@ -33,10 +35,11 @@ class AddHouseholdViewModel(
 
             val appUserDto = AppUserDto(
                 userId = userId.cleanString(),
+                accountId = accountId.cleanString(),
                 householdId = ""
             )
 
-            FirestoreRepository.addHousehold(
+            FirestoreRepository.addHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
 
                 householdDto = householdDto,

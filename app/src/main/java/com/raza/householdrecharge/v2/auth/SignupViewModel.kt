@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.v2.SessionManager
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import com.raza.householdrecharge.v2.repository.AuthDto
+import com.raza.householdrecharge.v2.repository.cleanString
 import kotlinx.coroutines.launch
 
 class SignupViewModel(
@@ -22,15 +23,16 @@ class SignupViewModel(
             FirestoreRepository.signupAndAddAccount(
                 authDto,
 
-                onSuccess = { uId ->
+                onSuccess = { onBoardingDto ->
                     viewModelScope.launch {
-                        sessionManager.saveUserId(uId)
+                        sessionManager.saveUserId(onBoardingDto.userId.cleanString())
+                        sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
                         sessionManager.saveMobileNumber(mobileNumber)
                     }
 
-                    userId = uId
+                    userId = onBoardingDto.userId.cleanString()
                     isLoading = false
-                    onSuccess(uId)
+                    onSuccess(onBoardingDto.userId.cleanString())
                 },
 
                 onFailure = { error ->

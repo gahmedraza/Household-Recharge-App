@@ -12,31 +12,68 @@ import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
 
-    fun addHousehold2(
+    suspend fun addHousehold(
+        appUserDto: AppUserDto,
+        householdDto: HouseholdDto
+    ): Result<String> {
+
+        return try {
+            householdDto.userId = appUserDto.userId
+
+            val documentReference = FirebaseFirestore
+                .getInstance()
+
+                .collection("households")
+                .add(householdDto)
+                .await()
+
+            val householdId = documentReference.id.cleanString()
+
+            if (householdId.isEmpty()) {
+                Result.Failure("household id was not generated in households collection")
+            }
+
+            Result.Success(householdId)
+        } catch (e: Exception) {
+
+            Result.Failure(e.message.cleanString())
+        }
+    }
+
+    suspend fun addHouseholdAndUpdateAccount(
         appUserDto: AppUserDto,
         householdDto: HouseholdDto,
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
+        try {
 
-        householdDto.userId = appUserDto.userId
+            //add household and receive householdId
+            val addHouseholdResult = addHousehold(appUserDto, householdDto)
+            val householdId: String
 
-        FirebaseFirestore
-            .getInstance()
+            when (addHouseholdResult) {
+                is Result.Success -> {
 
-            .collection("households")
-            .add(householdDto)
+                    householdId = addHouseholdResult.s.cleanString()
+                }
 
-            .addOnSuccessListener { documentReference ->
-                val householdId = documentReference.id
-                onSuccess(householdId)
+                is Result.Failure -> {
 
+                    onFailure("household id was not generated in household collection")
+                    return
+                }
             }
 
-            .addOnFailureListener {
+            //update user with householdId
+            updateAccountWithHouseholdId(appUserDto.accountId, householdId)
 
-                onFailure(it.message.cleanString())
-            }
+            onSuccess("user collection updated with householdId")
+
+        } catch (e: Exception) {
+
+            onFailure(e.message.cleanString())
+        }
     }
 
     fun addRechargeHistory(
@@ -109,30 +146,6 @@ object FirestoreRepository {
             }
     }
 
-    fun addHousehold(
-        appUserDto: AppUserDto,
-        householdDto: HouseholdDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        FirebaseFirestore
-            .getInstance()
-            .collection("users")
-            .document(appUserDto.userId)
-            .collection("households")
-            .add(householdDto)
-            .addOnSuccessListener { documentReference ->
-                val householdId = documentReference.id
-                onSuccess(householdId)
-
-            }
-
-            .addOnFailureListener {
-
-                onFailure(it.message.cleanString())
-            }
-    }
-
     private suspend fun signup(
         authDto: AuthDto
     ): Result<String> {
@@ -161,10 +174,12 @@ object FirestoreRepository {
 
     suspend fun signupAndAddAccount(
         authDto: AuthDto,
-        onSuccess: (String) -> Unit,
+        onSuccess: (OnBoardingDto) -> Unit,
         onFailure: (String) -> Unit
     ) {
         try {
+
+            val onBoardingDto: OnBoardingDto
 
             log("a1")
 
@@ -174,7 +189,7 @@ object FirestoreRepository {
 
             var userId = ""
 
-            when(signupResult) {
+            when (signupResult) {
                 is Result.Success -> {
                     log("a2")
 
@@ -195,7 +210,7 @@ object FirestoreRepository {
                 }
             }
 
-            if(accountDto == null) {
+            if (accountDto == null) {
                 onFailure("account cannot be added since account dto is empty")
                 log("b1")
                 return
@@ -203,11 +218,15 @@ object FirestoreRepository {
 
             log("b2")
 
-            val addUserResult = addUser(accountDto = accountDto)
+            val addAccountResult = addAccount(accountDto = accountDto)
 
-            if(addUserResult is Result.Success) {
+            if (addAccountResult is Result.Success) {
                 log("b3")
-                onSuccess(userId)
+                onBoardingDto = OnBoardingDto(
+                    userId = userId,
+                    accountId = addAccountResult.s.cleanString()
+                )
+                onSuccess(onBoardingDto)
             } else {
                 log("b4")
                 onFailure("account id was not generated in accounts collection")
@@ -226,10 +245,10 @@ object FirestoreRepository {
         }
     }
 
-    private suspend fun addUser(
+    private suspend fun addAccount(
         accountDto: AccountDto?
     ): Result<String> {
-        return try{
+        return try {
 
             if (accountDto == null) {
                 return Result.Failure("account collection cannot be updated with empty account dto")
@@ -245,9 +264,31 @@ object FirestoreRepository {
 
             val accountId = documentReference.id.cleanString()
 
-            if(accountId.isEmpty()) {
+            if (accountId.isEmpty()) {
                 Result.Failure("account id was not generated in accounts collection")
             }
+
+            Result.Success(accountId)
+        } catch (e: Exception) {
+
+            Result.Failure(e.message.cleanString())
+        }
+    }
+
+    private suspend fun updateAccountWithHouseholdId(
+        accountId: String, householdId: String
+    ): Result<String> {
+        return try {
+
+            FirebaseFirestore
+                .getInstance()
+
+                .collection("accounts")
+                .document(accountId)
+
+                .update("householdId", householdId)
+
+                .await()
 
             Result.Success(accountId)
         } catch (e: Exception) {
@@ -419,13 +460,14 @@ object FirestoreRepository {
 }
 
 data class AuthDto(
-    val username: String?= null,
+    val username: String? = null,
     val mobileNumber: String,
     val password: String
 )
 
 data class AppUserDto(
     val userId: String,
+    val accountId: String = "",
     val householdId: String,
     val memberId: String = "",
     val mobileNumber: String = ""
@@ -445,3 +487,8 @@ sealed class Result<T> {
     data class Success<T>(val s: T) : Result<T>()
     data class Failure<T>(val s: T) : Result<T>()
 }
+
+data class OnBoardingDto(
+    val userId: String? = null,
+    val accountId: String? = null
+)

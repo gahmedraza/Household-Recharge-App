@@ -14,6 +14,10 @@ class SessionManager(private val context: Context) {
         it[stringPreferencesKey("userId")] ?: ""
     }
 
+    val accountId = context.datastore.data.map {
+        it[stringPreferencesKey("accountId")] ?: ""
+    }
+
     val householdId = context.datastore.data.map {
         it[stringPreferencesKey("householdId")] ?: ""
     }
@@ -41,6 +45,12 @@ class SessionManager(private val context: Context) {
     suspend fun saveUserId(userId: String) {
         context.datastore.edit {
             it[stringPreferencesKey("userId")] = userId
+        }
+    }
+
+    suspend fun saveAccountId(accountId: String) {
+        context.datastore.edit {
+            it[stringPreferencesKey("accountId")] = accountId
         }
     }
 
