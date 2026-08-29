@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.v2
+package com.raza.householdrecharge.v2.common
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

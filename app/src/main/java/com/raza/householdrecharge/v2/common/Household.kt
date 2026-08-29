@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.v2
+package com.raza.householdrecharge.v2.common
 
 data class Household(
     var id: String? = "",

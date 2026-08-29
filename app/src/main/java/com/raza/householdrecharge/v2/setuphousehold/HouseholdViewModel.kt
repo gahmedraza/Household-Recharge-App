@@ -5,9 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.v2.BaseViewModel
+import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.HouseholdDto
-import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.repository.AppUserDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import com.raza.householdrecharge.v2.repository.cleanString

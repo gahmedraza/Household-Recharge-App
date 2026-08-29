@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.v2.auth
 
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import com.raza.householdrecharge.v2.repository.AuthDto
 import com.raza.householdrecharge.v2.repository.cleanString

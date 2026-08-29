@@ -1,14 +1,12 @@
 package com.raza.householdrecharge.v2.settings
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.raza.householdrecharge.v2.BaseViewModel
-import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.common.BaseViewModel
+import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.common.ThemeMode
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

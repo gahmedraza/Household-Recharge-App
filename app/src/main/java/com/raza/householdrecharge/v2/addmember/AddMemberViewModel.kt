@@ -1,9 +1,9 @@
 package com.raza.householdrecharge.v2.addmember
 
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.v2.BaseViewModel
+import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.MemberDto
-import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.common.getPrintableDate
 import com.raza.householdrecharge.v2.repository.AppUserDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository

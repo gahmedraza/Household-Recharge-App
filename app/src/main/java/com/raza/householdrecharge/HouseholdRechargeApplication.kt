@@ -8,7 +8,7 @@ import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import androidx.sqlite.execSQL
 import com.raza.householdrecharge.data.UserPreferences
 import com.raza.householdrecharge.notification.AppNotificationManager
-import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.common.SessionManager
 
 class HouseholdRechargeApplication : Application() {
     val database by lazy {

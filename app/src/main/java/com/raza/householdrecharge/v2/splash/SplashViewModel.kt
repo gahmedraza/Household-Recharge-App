@@ -1,10 +1,8 @@
 package com.raza.householdrecharge.v2.splash
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.v2.BaseViewModel
-import com.raza.householdrecharge.v2.SessionManager
+import com.raza.householdrecharge.v2.common.BaseViewModel
+import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import kotlinx.coroutines.launch
 

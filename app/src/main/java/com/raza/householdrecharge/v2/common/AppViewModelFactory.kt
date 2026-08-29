@@ -2,8 +2,6 @@ package com.raza.householdrecharge.v2.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.raza.householdrecharge.v2.SessionManager
-import com.raza.householdrecharge.v2.UserViewModel
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdViewModel
 import com.raza.householdrecharge.v2.addmember.AddMemberViewModel
 import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryViewModel

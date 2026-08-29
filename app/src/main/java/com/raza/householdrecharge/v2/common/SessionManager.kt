@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.v2
+package com.raza.householdrecharge.v2.common
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
