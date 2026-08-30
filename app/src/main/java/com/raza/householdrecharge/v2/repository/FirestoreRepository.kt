@@ -259,11 +259,12 @@ object FirestoreRepository {
                 .getInstance()
 
                 .collection("accounts")
-                .add(accountDto)
+                .document(accountDto.accountId.cleanString())
+                .set(accountDto)
 
                 .await()
 
-            val accountId = documentReference.id.cleanString()
+            val accountId = accountDto.accountId.cleanString()
 
             if (accountId.isEmpty()) {
                 Result.Failure("account id was not generated in accounts collection")
@@ -466,7 +467,7 @@ object FirestoreRepository {
 
             val documentReference = FirebaseFirestore
                 .getInstance()
-                .collection("invitation")
+                .collection("invitations")
                 .document(invitation.code)
                 .set(invitation)
                 .await()
@@ -519,7 +520,7 @@ fun String?.cleanString(): String {
 data class AccountDto(
     val accountId: String? = null,
     val accountName: String? = null,
-    val householdId: String? = null
+    val householdId: String? = null,
 )
 
 sealed class Result<T> {
