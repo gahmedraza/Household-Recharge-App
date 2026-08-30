@@ -15,6 +15,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.LargeBodyText
+import com.raza.householdrecharge.v2.common.LargeDisplayText
+import com.raza.householdrecharge.v2.common.LargeHeadlineText
 import com.raza.householdrecharge.v2.common.LargeTitleText
 import com.raza.householdrecharge.v2.common.TitleBar
 
@@ -72,24 +75,15 @@ fun AddInvitationBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        start = 20.dp,
-                        end = 20.dp,
+                        start = 30.dp,
+                        end = 30.dp,
                         top = 20.dp,
                         bottom = 20.dp
                     )
             ) {
-                LargeTitleText(
+                LargeHeadlineText(
                     modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                     text = "Create Invitation"
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .height(100.dp)
-                )
-
-                LargeBodyText(
-                    text = "Generate a one-time invitation code for a household member."
                 )
 
                 Spacer(
@@ -97,23 +91,47 @@ fun AddInvitationBody(
                         .height(50.dp)
                 )
 
-                LargeBodyText(
-                    text = "The code will expire after 24 hours."
+                LargeTitleText(
+                    text = "Generate a one-time invitation code for a household member.",
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Spacer(
                     modifier = Modifier
-                        .height(100.dp)
+                        .height(50.dp)
                 )
 
-                LargeBodyText(
-                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                    text = "invitation code: ${viewModel.invitationCode}"
+                LargeTitleText(
+                    text = "The code will expire after 24 hours.",
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Spacer(
                     modifier = Modifier
-                        .height(100.dp)
+                        .height(50.dp)
+                )
+
+                Row {
+
+                    LargeTitleText(
+                        modifier = Modifier.align(Alignment.CenterVertically),
+                        text = "invitation code:",
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    Spacer(Modifier.weight(1f))
+
+                    LargeDisplayText(
+                        modifier = Modifier.padding(
+                            end = 20.dp
+                        ),
+                        text = viewModel.invitationCode
+                    )
+                }
+
+                Spacer(
+                    modifier = Modifier
+                        .height(50.dp)
                 )
 
                 if (viewModel.isLoading) {
@@ -133,7 +151,7 @@ fun AddInvitationBody(
 
                 Spacer(
                     modifier = Modifier
-                        .height(100.dp)
+                        .height(50.dp)
                 )
 
                 Row(
