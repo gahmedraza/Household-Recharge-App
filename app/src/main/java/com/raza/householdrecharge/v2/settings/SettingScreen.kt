@@ -23,7 +23,8 @@ fun SettingScreen(
     viewModel: SettingViewModel,
     onAddMember: () -> Unit,
     onAddHousehold: () -> Unit,
-    onSignOut: () -> Unit
+    onSignOut: () -> Unit,
+    onInvitation: () -> Unit
 ) {
 
     Scaffold(
@@ -41,7 +42,8 @@ fun SettingScreen(
             onAddHousehold = {
                 onAddHousehold()
             },
-            onSignOut = onSignOut
+            onSignOut = onSignOut,
+            onInvitation = onInvitation
         )
     }
 }
@@ -52,7 +54,8 @@ fun Body(
     modifier: Modifier,
     onAddMember: () -> Unit,
     onAddHousehold: () -> Unit,
-    onSignOut: () -> Unit
+    onSignOut: () -> Unit,
+    onInvitation: () -> Unit
 ) {
 
     Column(modifier = modifier) {
@@ -90,6 +93,20 @@ fun Body(
                     .fillMaxWidth()
                     .clickable {
                         onAddHousehold()
+                    }
+                    .padding(cellPadding),
+
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            HorizontalDivider(modifier = Modifier.height(1.dp))
+
+            Text(
+                text = "Invitations",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onInvitation()
                     }
                     .padding(cellPadding),
 
@@ -141,7 +158,8 @@ fun Content() {
         viewModel = viewModel(),
         onAddMember = {},
         onAddHousehold = {},
-        onSignOut = {}
+        onSignOut = {},
+        onInvitation = {}
     )
 }
 

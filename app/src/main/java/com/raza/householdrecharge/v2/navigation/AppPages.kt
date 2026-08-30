@@ -8,6 +8,9 @@ enum class AppPages(val description: String) {
     Setting("Setting"),
 
     AddHousehold("AddHousehold"),
+
+    Invitation("Invitation"),
+    AddInvitation("addInvitation"),
     AddMember("AddMember"),
     AddRechargeHistory("AddRechargeHistory"),
     RechargeHistory("RechargeHistory"),

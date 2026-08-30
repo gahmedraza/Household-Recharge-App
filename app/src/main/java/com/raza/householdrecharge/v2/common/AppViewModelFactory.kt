@@ -8,6 +8,7 @@ import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryViewModel
 import com.raza.householdrecharge.v2.auth.SignInViewModel
 import com.raza.householdrecharge.v2.auth.SignupViewModel
 import com.raza.householdrecharge.v2.dashbord.DashboardViewModel
+import com.raza.householdrecharge.v2.invitation.InvitationViewModel
 import com.raza.householdrecharge.v2.notification.NotificationViewModel
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryViewModel
 import com.raza.householdrecharge.v2.settings.SettingViewModel
@@ -68,6 +69,10 @@ class AppViewModelFactory(
 
         if(modelClass.isAssignableFrom(HouseholdViewModel::class.java)) {
             return HouseholdViewModel(sessionManager) as T
+        }
+
+        if(modelClass.isAssignableFrom(InvitationViewModel::class.java)) {
+            return InvitationViewModel(sessionManager) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel")

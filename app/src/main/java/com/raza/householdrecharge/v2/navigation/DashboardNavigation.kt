@@ -26,6 +26,8 @@ import com.raza.householdrecharge.v2.addmember.AddMemberScreen
 import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryScreen
 import com.raza.householdrecharge.v2.common.AppViewModelFactory
 import com.raza.householdrecharge.v2.dashbord.DashboardScreen
+import com.raza.householdrecharge.v2.invitation.AddInvitationScreen
+import com.raza.householdrecharge.v2.invitation.InvitationListingScreen
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryScreen
 import com.raza.householdrecharge.v2.settings.SettingScreen
 
@@ -132,7 +134,27 @@ fun DashboardNavigation() {
 
                     onSignOut = {
                         navController.navigate(AppPages.SignIn.description)
+                    },
+                    onInvitation = {
+                        navController.navigate(AppPages.Invitation.description)
                     }
+                )
+            }
+
+            composable(AppPages.Invitation.description) {
+
+                InvitationListingScreen(
+                    onAddInvitation = {
+                        navController.navigate(AppPages.AddInvitation.description)
+                    }
+                )
+            }
+
+            composable(AppPages.AddInvitation.description) {
+                AddInvitationScreen(
+                    viewModel = viewModel(
+                        factory = genericFactory
+                    )
                 )
             }
 
