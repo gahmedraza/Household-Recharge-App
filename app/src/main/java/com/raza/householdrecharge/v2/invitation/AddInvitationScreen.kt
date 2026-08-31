@@ -37,20 +37,23 @@ import com.raza.householdrecharge.v2.common.TitleBar
 
 @Composable
 fun AddInvitationScreen(
-    viewModel: InvitationViewModel
+    viewModel: InvitationViewModel,
+    onInvitationVerified: (String) -> Unit
 ) {
 
     AddInvitationBody(
         modifier = Modifier
             .fillMaxSize(),
-        viewModel = viewModel
+        viewModel = viewModel,
+        onInvitationVerified = onInvitationVerified
     )
 }
 
 @Composable
 fun AddInvitationBody(
     modifier: Modifier,
-    viewModel: InvitationViewModel
+    viewModel: InvitationViewModel,
+    onInvitationVerified: (String) -> Unit
 ) {
 
     Card(
@@ -185,6 +188,7 @@ fun AddInvitationBody(
                                 onSuccess = { data ->
 
                                     status = data
+                                    onInvitationVerified(viewModel.invitationCode)
                                 },
                                 onFailure = { error ->
 
@@ -211,7 +215,8 @@ fun AddInvitationDarkPreview() {
     AddInvitationBody(
         modifier = Modifier
             .fillMaxWidth(),
-        viewModel = viewModel()
+        viewModel = viewModel(),
+        onInvitationVerified = {}
     )
 }
 
@@ -224,6 +229,7 @@ fun AddInvitationLightPreview() {
     AddInvitationBody(
         modifier = Modifier
             .fillMaxWidth(),
-        viewModel = viewModel()
+        viewModel = viewModel(),
+        onInvitationVerified = {}
     )
 }

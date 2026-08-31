@@ -11,6 +11,7 @@ import com.raza.householdrecharge.v1.HouseholdRechargeApplication
 import com.raza.householdrecharge.v2.auth.SignInScreen
 import com.raza.householdrecharge.v2.auth.SignupScreen
 import com.raza.householdrecharge.v2.common.AppViewModelFactory
+import com.raza.householdrecharge.v2.invitation.ConfirmInvitationScreen
 import com.raza.householdrecharge.v2.setuphousehold.CreateHouseholdScreen
 import com.raza.householdrecharge.v2.setuphousehold.JoinHouseholdScreen
 import com.raza.householdrecharge.v2.setuphousehold.SetupHouseholdScreen
@@ -103,10 +104,6 @@ fun V2Navigation() {
                     navController.navigate(AppPages.CreateHousehold.description)
                 }
             )
-        }
-
-        composable(AppPages.ConfirmHousehold.description) {
-
         }
 
         composable(AppPages.JoinHousehold.description) {

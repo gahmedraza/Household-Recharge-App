@@ -4,16 +4,22 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.raza.householdrecharge.v2.common.LargeDisplayText
 import com.raza.householdrecharge.v2.common.LargeHeadlineText
 import com.raza.householdrecharge.v2.common.LargeTitleText
 import com.raza.householdrecharge.v2.repository.cleanString
@@ -26,30 +32,53 @@ fun ConfirmInvitationScreen(viewModel: InvitationViewModel) {
 @Composable
 fun ConfirmInvitationBody(viewModel: InvitationViewModel) {
     Card(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+                top = 40.dp,
+                bottom = 40.dp
+            ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp
         ),
         shape = RoundedCornerShape(4.dp)
     ) {
         Column(
-
+            modifier = Modifier.padding(20.dp)
         ) {
 
             LargeHeadlineText(
-                text = "Join Household"
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                text = "Join Household",
+                color = MaterialTheme.colorScheme.primary
             )
 
-            LargeTitleText(
-                text = "You'are invited to join"
-            )
+            Spacer(Modifier.height(100.dp))
 
             LargeTitleText(
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                text = "You are invited to join",
+                color = MaterialTheme.colorScheme.primary
+            )
+
+            Spacer(Modifier.height(60.dp))
+
+            LargeDisplayText(
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                 text = "Teegars"
             )
 
+            Spacer(Modifier.height(60.dp))
+
             LargeTitleText(
-                text= "Do you want to join this household?"
+                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                text= "Do you want to join this household?",
+                color = MaterialTheme.colorScheme.primary
             )
+
+            Spacer(Modifier.height(200.dp))
 
             Row(modifier = Modifier.fillMaxWidth()) {
 
