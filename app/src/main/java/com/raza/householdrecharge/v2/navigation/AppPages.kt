@@ -17,6 +17,7 @@ enum class AppPages(val description: String) {
     Main("Main"),
     SetupHousehold("SetupHousehold"),
     CreateHousehold("CreateHousehold"),
-    JoinHousehold("JoinHousehold")
+    JoinHousehold("JoinHousehold"),
+    ConfirmHousehold("ConfirmHousehold")
 }
 

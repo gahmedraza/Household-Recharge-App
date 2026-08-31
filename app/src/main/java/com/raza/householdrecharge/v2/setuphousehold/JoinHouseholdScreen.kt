@@ -23,11 +23,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.repository.cleanString
 
 @Composable
 fun JoinHouseholdScreen(
     viewModel: HouseholdViewModel,
-    onSuccess: () -> Unit,
+    onSuccess: (String) -> Unit,
     onFailure: () -> Unit
 ) {
     Scaffold { paddingValues ->
@@ -52,8 +53,8 @@ fun JoinHouseholdScreen(
 
                 viewModel = viewModel,
 
-                onSuccess = {
-                    onSuccess()
+                onSuccess = { householdName ->
+                    onSuccess(householdName)
                 },
 
                 onFailure = {
@@ -68,7 +69,7 @@ fun JoinHouseholdScreen(
 fun JoinHouseholdBody(
     modifier: Modifier,
     viewModel: HouseholdViewModel,
-    onSuccess: () -> Unit,
+    onSuccess: (String) -> Unit,
     onFailure: () -> Unit
 ) {
     Card(
@@ -123,11 +124,11 @@ fun JoinHouseholdBody(
 
                 onClick = {
 
-                    viewModel.onAddHousehold(
-                        householdName = "",
+                    viewModel.validateInvitationCode(
+                        invitationCode = viewModel.invitationCode,
 
-                        onSuccess = {
-                            onSuccess()
+                        onSuccess = { household ->
+                            onSuccess(household?.householdName.cleanString())
                         },
                         onFailure = {
                             onFailure()

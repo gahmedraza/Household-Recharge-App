@@ -105,13 +105,19 @@ fun V2Navigation() {
             )
         }
 
+        composable(AppPages.ConfirmHousehold.description) {
+
+        }
+
         composable(AppPages.JoinHousehold.description) {
             JoinHouseholdScreen(
                 viewModel = viewModel(
                     factory = genericFactory
                 ),
 
-                onSuccess = {},
+                onSuccess = {
+
+                },
 
                 onFailure = {}
             )

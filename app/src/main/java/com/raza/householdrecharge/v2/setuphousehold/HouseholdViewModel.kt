@@ -5,14 +5,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.toObject
 import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.repository.AppUserDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
+import com.raza.householdrecharge.v2.repository.InvitationDto
 import com.raza.householdrecharge.v2.repository.cleanString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class HouseholdViewModel(
     private val sessionManager: SessionManager
@@ -74,28 +77,74 @@ class HouseholdViewModel(
         }
     }
 
+    suspend fun getInvitation(code: String): InvitationDto? {
+        try {
+
+            val snapshot = FirebaseFirestore
+                .getInstance()
+                .collection("invitations")
+                .document(code.uppercase())
+                .get()
+                .await()
+
+            if(!snapshot.exists()) {
+                return null
+            }
+
+            return snapshot.toObject(InvitationDto::class.java)
+        } catch (e: Exception) {
+
+            return null
+        }
+    }
+
+    suspend fun getHousehold(householdId: String): HouseholdDto? {
+
+        val snapshot = FirebaseFirestore
+            .getInstance()
+            .collection("households")
+            .document(householdId)
+            .get()
+            .await()
+
+        if(!snapshot.exists()) {
+            return null
+        }
+
+        return snapshot.toObject(HouseholdDto::class.java)
+    }
+
     fun validateInvitationCode(
         invitationCode: String,
-        onSuccess: (InvitationResultDto) -> Unit,
+        onSuccess: (HouseholdDto?) -> Unit,
         onFailure: (String?) -> Unit
     ) {
 
-        var invitationResultDto: InvitationResultDto
+        viewModelScope.launch {
+            val invitation = getInvitation(invitationCode)
 
-        FirebaseFirestore
-            .getInstance()
-
-            .collection("invitations")
-            .document(invitationCode)
-
-            .get()
-            .addOnSuccessListener { document ->
-                if(!document.exists()) {
-                    onFailure("invalid invitation code")
-                    return@addOnSuccessListener
-                }
+            if(invitation == null) {
+                onFailure("error")
             }
 
+            if(invitation?.status != "pending") {
+                onFailure("error")
+            }
+
+            val invitationExpiry = invitation?.expiresAt?.toLong() ?: 0L
+
+            if(invitationExpiry < System.currentTimeMillis()) {
+                onFailure("error")
+            }
+
+            val household = getHousehold(invitation?.householdId.cleanString())
+
+            if(household == null) {
+                onFailure("error")
+            }
+
+            onSuccess(household)
+        }
     }
 }
 

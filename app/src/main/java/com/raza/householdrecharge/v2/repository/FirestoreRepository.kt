@@ -13,6 +13,68 @@ import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
 
+    suspend fun joinHousehold(
+        userId: String,
+        householdId: String,
+        invitationCode: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        val firestore = FirebaseFirestore.getInstance()
+
+        firestore.runTransaction { transaction ->
+
+            val invitationReference = firestore
+                .collection("invitations")
+                .document(invitationCode.uppercase())
+
+            val accountReference = firestore
+                .collection("accounts")
+                .document(userId)
+
+            val invitationSnapshot = transaction.get(invitationReference)
+
+            if(!invitationSnapshot.exists()) {
+                onFailure("invitation does not exist")
+            }
+
+            val status = invitationSnapshot.getString("status")
+
+            if(status != "pending") {
+                onFailure("invitation has already been used")
+            }
+
+            val invitationHouseholdId = invitationSnapshot.getString("householdId")
+
+            if(invitationHouseholdId != householdId) {
+                onFailure("invalid invitation")
+            }
+
+            val expiresAt = invitationSnapshot.getLong("expiresAt")
+
+            if(expiresAt != null && expiresAt < System.currentTimeMillis()) {
+                onFailure("invitation has expired")
+            }
+
+            transaction.update(
+                accountReference,
+                "householdId",
+                householdId
+            )
+
+            transaction.update(
+                invitationReference,
+                mapOf(
+                    "status" to "used",
+                    "usedBy" to userId,
+                    "usedAt" to System.currentTimeMillis()
+                )
+            )
+        }.await()
+
+        onSuccess("success")
+    }
+
     suspend fun addHousehold(
         appUserDto: AppUserDto,
         householdDto: HouseholdDto
@@ -538,5 +600,6 @@ data class InvitationDto(
     val householdId: String = "",
     val createdBy: String = "",
     val createdAt: String = "",
+    val expiresAt: String = "",
     val status: String = ""
 )
