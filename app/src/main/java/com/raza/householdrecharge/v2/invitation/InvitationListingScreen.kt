@@ -26,16 +26,23 @@ import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.v2.common.LargeBodyText
 import com.raza.householdrecharge.v2.common.LargeTitleText
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.common.getViewModel
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 @Composable
 fun InvitationListingScreen(
+    viewModel: InvitationViewModel,
     onAddInvitation: () -> Unit
 ) {
-    Body(onAddInvitation)
+    Body(
+        viewModel = viewModel,
+        onAddInvitation = onAddInvitation
+    )
 }
 
 @Composable
 fun Body(
+    viewModel: InvitationViewModel,
     onAddInvitation: () -> Unit
 ) {
     Scaffold(
@@ -183,7 +190,7 @@ fun invitationCard(
 )
 @Composable
 fun invitationScreenDarkPreview() {
-    Body(onAddInvitation = {})
+    InvitationScreenContent()
 }
 
 @Preview(
@@ -192,7 +199,17 @@ fun invitationScreenDarkPreview() {
 )
 @Composable
 fun invitationScreenLightPreview() {
-    Body(onAddInvitation = {})
+    InvitationScreenContent()
+}
+
+@Composable
+fun InvitationScreenContent() {
+    val viewModel = getViewModel(InvitationViewModel::class.java)
+
+    Body(
+        viewModel = viewModel,
+        onAddInvitation = {}
+    )
 }
 
 data class Invitation(

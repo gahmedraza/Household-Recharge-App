@@ -38,6 +38,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v1.data.Member
 import com.raza.householdrecharge.v2.common.TitleBar
 import com.raza.householdrecharge.v2.common.getPrintableDate
+import com.raza.householdrecharge.v2.common.getViewModel
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 @Composable
 fun DashboardScreen(
@@ -166,8 +168,10 @@ fun DashboardScreenLightPreview() {
 
 @Composable
 fun content() {
+    val viewModel = getViewModel(DashboardViewModel::class.java)
+
     DashboardScreen(
-        viewModel = viewModel(),
+        viewModel = viewModel,
         onClick = { memberId, mobileNumber ->
 
         },

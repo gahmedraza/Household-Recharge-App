@@ -26,6 +26,8 @@ import com.raza.householdrecharge.v2.common.TitleBar
 import com.raza.householdrecharge.v2.common.AppDatePicker
 import com.raza.householdrecharge.v2.common.AppSnackbar
 import com.raza.householdrecharge.v2.common.SnackbarUtil
+import com.raza.householdrecharge.v2.common.getViewModel
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -235,8 +237,10 @@ fun lightPreviewSignIn() {
 
 @Composable
 fun Content() {
+    val viewModel = getViewModel(AddMemberViewModel::class.java)
+
     AddMemberScreen(
-        viewModel = viewModel(),
+        viewModel = viewModel,
         onSuccess = {},
         onFailure = {}
     )

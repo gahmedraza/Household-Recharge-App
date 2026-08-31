@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
 import com.raza.householdrecharge.v2.common.BaseViewModel
@@ -144,6 +145,46 @@ class HouseholdViewModel(
             }
 
             onSuccess(household)
+        }
+    }
+
+    fun onJoinHousehold(
+        householdId: String,
+        invitationCode: String,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            isLoading = true
+
+            try {
+
+                val userId = FirebaseAuth
+                    .getInstance()
+                    .currentUser
+                    ?.uid
+                    .cleanString()
+
+                FirestoreRepository.joinHousehold(
+                    userId = userId,
+                    householdId = householdId,
+                    invitationCode = invitationCode,
+                    onSuccess = {
+                        isLoading = true
+                    },
+                    onFailure = {
+                        isLoading = true
+                    }
+                )
+
+            } catch (e: Exception) {
+
+                onFailure("unable to join household")
+
+            } finally {
+
+                isLoading = false
+            }
         }
     }
 }

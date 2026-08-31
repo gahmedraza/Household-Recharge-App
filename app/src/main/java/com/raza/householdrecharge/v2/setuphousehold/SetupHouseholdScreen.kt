@@ -21,6 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.common.getViewModel
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 @Composable
 fun SetupHouseholdScreen(
@@ -188,8 +190,10 @@ fun SetupHouseholdBody(
 
 @Composable
 fun SetupHouseholdContent() {
+    val viewModel = getViewModel(HouseholdViewModel::class.java)
+
     SetupHouseholdScreen(
-        viewModel = viewModel(),
+        viewModel = viewModel,
 
         onCreateHousehold = {
 

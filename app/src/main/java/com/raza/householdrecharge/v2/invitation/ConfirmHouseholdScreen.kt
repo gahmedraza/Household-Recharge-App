@@ -22,15 +22,18 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.LargeDisplayText
 import com.raza.householdrecharge.v2.common.LargeHeadlineText
 import com.raza.householdrecharge.v2.common.LargeTitleText
+import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.repository.cleanString
+import com.raza.householdrecharge.v2.setuphousehold.HouseholdViewModel
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 @Composable
-fun ConfirmInvitationScreen(viewModel: InvitationViewModel) {
-    ConfirmInvitationBody(viewModel = viewModel)
+fun ConfirmHouseholdScreen(viewModel: HouseholdViewModel) {
+    ConfirmHouseholdBody(viewModel = viewModel)
 }
 
 @Composable
-fun ConfirmInvitationBody(viewModel: InvitationViewModel) {
+fun ConfirmHouseholdBody(viewModel: HouseholdViewModel) {
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -126,8 +129,8 @@ fun ConfirmInvitationBody(viewModel: InvitationViewModel) {
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun ConfirmInvitationDarkPreview() {
-    ConfirmInvitationBody(viewModel = viewModel())
+fun ConfirmHouseholdDarkPreview() {
+    ConfirmHouseholdContent()
 }
 
 @Preview(
@@ -135,6 +138,13 @@ fun ConfirmInvitationDarkPreview() {
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun ConfirmInvitationLightPreview() {
-    ConfirmInvitationBody(viewModel = viewModel())
+fun ConfirmHouseholdLightPreview() {
+    ConfirmHouseholdContent()
+}
+
+@Composable
+fun ConfirmHouseholdContent() {
+    val viewModel = getViewModel(HouseholdViewModel::class.java)
+
+    ConfirmHouseholdBody(viewModel = viewModel)
 }

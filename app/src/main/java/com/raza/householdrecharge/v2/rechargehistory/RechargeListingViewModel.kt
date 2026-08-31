@@ -1,78 +1,78 @@
-package com.raza.householdrecharge.v2.addrecharge
+package com.raza.householdrecharge.v2.rechargehistory
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.SessionManager
-import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
 import com.raza.householdrecharge.v2.repository.AppUserDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
-class AddRechargeHistoryViewModel(
+class RechargeListingViewModel(
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
-    var amount by mutableStateOf("")
-    var date by mutableStateOf("")
-    var rechargedBy by mutableStateOf("")
 
-    fun addRechargeHistory(
-        memberId: String,
-        mobileNumber: String,
+    var mobileRechargeHistory by mutableStateOf<List<RechargeHistory>>(emptyList())
+
+    fun loadRechargeHistory(
         onSuccess: () -> Unit,
-        onFailure: (String?) -> Unit
+        onFailure: (String?) -> Unit,
+        memberId: String,
+        mobileNumber: String
     ) {
         viewModelScope.launch {
-            val rechargeHistory = RechargeHistory(
-                amount = amount,
-                date = date,
-                rechargedBy = rechargedBy
-            )
-
             val userId = sessionManager.authId.first()
 
-            if(userId.isEmpty()) {
+            if(userId.isNullOrEmpty()) {
                 onFailure("user not found")
                 return@launch
             }
 
             val householdId = sessionManager.householdId.first()
 
-            if(householdId.isEmpty()) {
+            if(householdId.isNullOrEmpty()) {
                 onFailure("household not found")
                 return@launch
             }
 
-            if(memberId.isNullOrEmpty()) {
-                onFailure("No member found")
+            var currentMemberId = memberId
+
+            if (currentMemberId.isNullOrEmpty()) {
+                currentMemberId = sessionManager.memberId.first()
             }
 
-            Log.d("TAG", "memberId: $memberId")
+            if(currentMemberId.isNullOrEmpty()) {
+                onFailure("member not found")
+                return@launch
+            }
 
-            val mobileNumberNotFound = mobileNumber.isEmpty()
+            var currentMobileNumber = mobileNumber
 
-            if(mobileNumberNotFound) {
-                onFailure("No mobile number found")
+            if(currentMobileNumber.isNullOrEmpty()) {
+                currentMobileNumber = sessionManager.mobileNumber.first()
+            }
+
+            if(currentMobileNumber.isNullOrEmpty()) {
+                onFailure("mobile number not found")
+                return@launch
             }
 
             val appUserDto = AppUserDto(
                 authId = userId,
                 householdId = householdId,
-                memberId = memberId,
-                mobileNumber = mobileNumber
+                memberId = currentMemberId,
+                mobileNumber = currentMobileNumber
             )
 
-            FirestoreRepository.addRechargeHistory(
-                rechargeHistory = rechargeHistory,
-
+            FirestoreRepository.fetchRechargeHistory(
                 appUserDto = appUserDto,
 
-                onSuccess = { rechargeHistoryId ->
+                onSuccess = { rechargeHistoryList ->
 
+                    mobileRechargeHistory = rechargeHistoryList
                     onSuccess()
                 },
 
@@ -83,5 +83,4 @@ class AddRechargeHistoryViewModel(
             )
         }
     }
-
 }

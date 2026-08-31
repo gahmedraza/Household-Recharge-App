@@ -17,13 +17,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.AppDatePicker
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.common.getViewModel
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 
 @Composable
-fun AddRechargeHistoryScreen(
+fun AddRechargeScreen(
     memberId: String,
     mobileNumber: String,
-    viewModel: AddRechargeHistoryViewModel,
+    viewModel: AddRechargeViewModel,
     onSuccess: () -> Unit,
     onFailure: () -> Unit
 ) {
@@ -56,7 +58,7 @@ fun AddRechargeHistoryScreen(
 fun Body(
     memberId: String,
     mobileNumber: String,
-    viewModel: AddRechargeHistoryViewModel,
+    viewModel: AddRechargeViewModel,
     modifier: Modifier,
     onSuccess: () -> Unit,
     onFailure: () -> Unit
@@ -114,7 +116,7 @@ fun Body(
             modifier = modifier,
 
             onClick = {
-                viewModel.addRechargeHistory(
+                viewModel.addRecharge(
                     memberId = memberId,
                     mobileNumber = mobileNumber,
                     onSuccess = {
@@ -132,8 +134,10 @@ fun Body(
 }
 
 @Composable
-fun Content(viewModel: AddRechargeHistoryViewModel) {
-    AddRechargeHistoryScreen(
+fun Content(viewModel: AddRechargeViewModel) {
+    val viewModel = getViewModel(AddRechargeViewModel::class.java)
+
+    AddRechargeScreen(
         memberId = "",
         mobileNumber = "",
         viewModel = viewModel,

@@ -54,46 +54,6 @@ class InvitationViewModel(
         }
     }
 
-    fun onJoinHousehold(
-        householdId: String,
-        invitationCode: String,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        viewModelScope.launch {
-            isLoading = true
-
-            try {
-
-                val userId = FirebaseAuth
-                    .getInstance()
-                    .currentUser
-                    ?.uid
-                    .cleanString()
-
-                FirestoreRepository.joinHousehold(
-                    userId = userId,
-                    householdId = householdId,
-                    invitationCode = invitationCode,
-                    onSuccess = {
-                        isLoading = true
-                    },
-                    onFailure = {
-                        isLoading = true
-                    }
-                )
-
-            } catch (e: Exception) {
-
-                onFailure("unable to join household")
-
-            } finally {
-
-                isLoading = false
-            }
-        }
-    }
-
     fun generateInvitationCode(length: Int = 6): String {
         val characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         val random = SecureRandom()

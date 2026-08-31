@@ -37,15 +37,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.TitleBar
 import com.raza.householdrecharge.v2.common.getPrintableDate
+import com.raza.householdrecharge.v2.common.getViewModel
 
 @Composable
-fun RechargeHistoryScreen(
+fun RechargeListingScreen(
     memberId: String,
     mobileNumber: String,
-    viewModel: RechargeHistoryViewModel,
+    viewModel: RechargeListingViewModel,
     onSuccess: () -> Unit,
     onFailure: () -> Unit,
     onAddRecharge: (String, String) -> Unit
@@ -91,7 +91,7 @@ fun RechargeHistoryScreen(
 
 @Composable
 fun Body(
-    viewModel: RechargeHistoryViewModel,
+    viewModel: RechargeListingViewModel,
     modifier: Modifier
 ) {
     if (viewModel.mobileRechargeHistory.isEmpty()) {
@@ -141,10 +141,12 @@ fun RechargeHistoryScreenLightPreview() {
 
 @Composable
 fun Content(item: RechargeHistory?) {
-    RechargeHistoryScreen(
+    val viewModel = getViewModel(RechargeListingViewModel::class.java)
+
+    RechargeListingScreen(
         memberId = "",
         mobileNumber = "",
-        viewModel = viewModel(),
+        viewModel = viewModel,
         onSuccess = {},
         onFailure = {},
         onAddRecharge = { memberId, mobileNumber ->

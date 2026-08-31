@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdViewModel
 import com.raza.householdrecharge.v2.addmember.AddMemberViewModel
-import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryViewModel
+import com.raza.householdrecharge.v2.addrecharge.AddRechargeViewModel
 import com.raza.householdrecharge.v2.auth.SignInViewModel
 import com.raza.householdrecharge.v2.auth.SignupViewModel
 import com.raza.householdrecharge.v2.dashbord.DashboardViewModel
 import com.raza.householdrecharge.v2.invitation.InvitationViewModel
 import com.raza.householdrecharge.v2.notification.NotificationViewModel
-import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryViewModel
+import com.raza.householdrecharge.v2.rechargehistory.RechargeListingViewModel
 import com.raza.householdrecharge.v2.settings.SettingViewModel
 import com.raza.householdrecharge.v2.setuphousehold.HouseholdViewModel
 import com.raza.householdrecharge.v2.splash.SplashViewModel
@@ -31,8 +31,8 @@ class AppViewModelFactory(
             return AddMemberViewModel(sessionManager) as T
         }
 
-        if (modelClass.isAssignableFrom(AddRechargeHistoryViewModel::class.java)) {
-            return AddRechargeHistoryViewModel(sessionManager) as T
+        if (modelClass.isAssignableFrom(AddRechargeViewModel::class.java)) {
+            return AddRechargeViewModel(sessionManager) as T
         }
 
         if (modelClass.isAssignableFrom(SignInViewModel::class.java)) {
@@ -51,8 +51,8 @@ class AppViewModelFactory(
             return NotificationViewModel(sessionManager) as T
         }
 
-        if (modelClass.isAssignableFrom(RechargeHistoryViewModel::class.java)) {
-            return RechargeHistoryViewModel(sessionManager) as T
+        if (modelClass.isAssignableFrom(RechargeListingViewModel::class.java)) {
+            return RechargeListingViewModel(sessionManager) as T
         }
 
         if (modelClass.isAssignableFrom(SettingViewModel::class.java)) {

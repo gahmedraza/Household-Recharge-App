@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.v1.ui.theme.HouseholdRechargeTheme
+import com.raza.householdrecharge.v2.common.getViewModel
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -79,9 +80,11 @@ fun SplashScreenLightPreview() {
 
 @Composable
 fun SplashContent() {
+    val viewModel = getViewModel(SplashViewModel::class.java)
+
     SplashScreen(
         onUserFound = {},
         onUserNotFound = {},
-        viewModel = viewModel()
+        viewModel = viewModel
     )
 }

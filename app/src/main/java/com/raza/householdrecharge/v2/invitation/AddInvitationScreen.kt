@@ -34,6 +34,8 @@ import com.raza.householdrecharge.v2.common.LargeDisplayText
 import com.raza.householdrecharge.v2.common.LargeHeadlineText
 import com.raza.householdrecharge.v2.common.LargeTitleText
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.common.getViewModel
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 @Composable
 fun AddInvitationScreen(
@@ -44,16 +46,14 @@ fun AddInvitationScreen(
     AddInvitationBody(
         modifier = Modifier
             .fillMaxSize(),
-        viewModel = viewModel,
-        onInvitationVerified = onInvitationVerified
+        viewModel = viewModel
     )
 }
 
 @Composable
 fun AddInvitationBody(
     modifier: Modifier,
-    viewModel: InvitationViewModel,
-    onInvitationVerified: (String) -> Unit
+    viewModel: InvitationViewModel
 ) {
 
     Card(
@@ -188,7 +188,7 @@ fun AddInvitationBody(
                                 onSuccess = { data ->
 
                                     status = data
-                                    onInvitationVerified(viewModel.invitationCode)
+
                                 },
                                 onFailure = { error ->
 
@@ -212,11 +212,12 @@ fun AddInvitationBody(
 )
 @Composable
 fun AddInvitationDarkPreview() {
+    val viewModel = getViewModel(InvitationViewModel::class.java)
+
     AddInvitationBody(
         modifier = Modifier
             .fillMaxWidth(),
-        viewModel = viewModel(),
-        onInvitationVerified = {}
+        viewModel = viewModel
     )
 }
 
@@ -229,7 +230,6 @@ fun AddInvitationLightPreview() {
     AddInvitationBody(
         modifier = Modifier
             .fillMaxWidth(),
-        viewModel = viewModel(),
-        onInvitationVerified = {}
+        viewModel = viewModel()
     )
 }

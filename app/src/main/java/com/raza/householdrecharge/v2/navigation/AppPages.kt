@@ -18,6 +18,6 @@ enum class AppPages(val description: String) {
     SetupHousehold("SetupHousehold"),
     CreateHousehold("CreateHousehold"),
     JoinHousehold("JoinHousehold"),
-    ConfirmInvitation("ConfirmInvitation")
+    ConfirmHousehold("ConfirmHousehold")
 }
 

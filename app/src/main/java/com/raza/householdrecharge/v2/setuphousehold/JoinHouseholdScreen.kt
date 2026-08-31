@@ -23,7 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.repository.cleanString
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 @Composable
 fun JoinHouseholdScreen(
@@ -146,8 +148,10 @@ fun JoinHouseholdBody(
 
 @Composable
 fun JoinHouseholdContent() {
+    val viewModel = getViewModel(HouseholdViewModel::class.java)
+
     JoinHouseholdScreen(
-        viewModel = viewModel(),
+        viewModel = viewModel,
 
         onSuccess = {
 

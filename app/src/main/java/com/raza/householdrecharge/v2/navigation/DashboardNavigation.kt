@@ -23,13 +23,12 @@ import androidx.navigation.compose.rememberNavController
 import com.raza.householdrecharge.v1.HouseholdRechargeApplication
 import com.raza.householdrecharge.v2.addhousehold.AddHouseholdScreen
 import com.raza.householdrecharge.v2.addmember.AddMemberScreen
-import com.raza.householdrecharge.v2.addrecharge.AddRechargeHistoryScreen
+import com.raza.householdrecharge.v2.addrecharge.AddRechargeScreen
 import com.raza.householdrecharge.v2.common.AppViewModelFactory
 import com.raza.householdrecharge.v2.dashbord.DashboardScreen
 import com.raza.householdrecharge.v2.invitation.AddInvitationScreen
-import com.raza.householdrecharge.v2.invitation.ConfirmInvitationScreen
 import com.raza.householdrecharge.v2.invitation.InvitationListingScreen
-import com.raza.householdrecharge.v2.rechargehistory.RechargeHistoryScreen
+import com.raza.householdrecharge.v2.rechargehistory.RechargeListingScreen
 import com.raza.householdrecharge.v2.settings.SettingScreen
 
 @Composable
@@ -96,7 +95,7 @@ fun DashboardNavigation() {
                 val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
                 val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
 
-                RechargeHistoryScreen(
+                RechargeListingScreen(
                     memberId = memberId,
 
                     mobileNumber = mobileNumber,
@@ -145,6 +144,10 @@ fun DashboardNavigation() {
             composable(AppPages.Invitation.description) {
 
                 InvitationListingScreen(
+                    viewModel = viewModel(
+                        factory = genericFactory
+                    ),
+
                     onAddInvitation = {
                         navController.navigate(AppPages.AddInvitation.description)
                     }
@@ -158,17 +161,8 @@ fun DashboardNavigation() {
                     ),
                     onInvitationVerified = { invitationCode ->
 
-                        navController.navigate(AppPages.ConfirmInvitation.description)
+                        navController.navigate(AppPages.ConfirmHousehold.description)
                     }
-                )
-            }
-
-            composable(AppPages.ConfirmInvitation.description) {
-
-                ConfirmInvitationScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    )
                 )
             }
 
@@ -196,7 +190,7 @@ fun DashboardNavigation() {
                 val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
                 val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
 
-                AddRechargeHistoryScreen(
+                AddRechargeScreen(
                     memberId = memberId,
 
                     mobileNumber = mobileNumber,

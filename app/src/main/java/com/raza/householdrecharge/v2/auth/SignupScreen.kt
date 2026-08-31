@@ -31,7 +31,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.common.log
+import com.raza.householdrecharge.v2.splash.SplashViewModel
 
 @Composable
 fun SignupScreen(
@@ -128,6 +130,8 @@ fun SignupScreen(
 
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
+
+                    enabled = shouldProceed,
 
                     onClick = {
 
@@ -230,8 +234,10 @@ fun lightPreviewSignup() {
 
 @Composable
 fun SignupContent() {
+    val viewModel = getViewModel(SignupViewModel::class.java)
+
     SignupScreen(
-        viewModel = viewModel(),
+        viewModel = viewModel,
         onSuccess = {
 
         },
