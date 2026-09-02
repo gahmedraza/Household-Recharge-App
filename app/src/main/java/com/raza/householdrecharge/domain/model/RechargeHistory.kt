@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.ui.rechargehistory
+package com.raza.householdrecharge.domain.model
 
 data class RechargeHistory(
     val id: Long = 0,

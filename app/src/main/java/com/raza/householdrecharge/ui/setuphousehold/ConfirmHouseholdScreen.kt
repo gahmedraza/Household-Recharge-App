@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.ui.invitation
+package com.raza.householdrecharge.ui.setuphousehold
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,6 @@ import com.raza.householdrecharge.common.LargeDisplayText
 import com.raza.householdrecharge.common.LargeHeadlineText
 import com.raza.householdrecharge.common.LargeTitleText
 import com.raza.householdrecharge.common.getViewModel
-import com.raza.householdrecharge.ui.setuphousehold.HouseholdViewModel
 import com.raza.householdrecharge.util.cleanString
 
 @Composable

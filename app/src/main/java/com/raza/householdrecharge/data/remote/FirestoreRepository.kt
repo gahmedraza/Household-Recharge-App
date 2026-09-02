@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.repository
+package com.raza.householdrecharge.data.remote
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -6,16 +6,16 @@ import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.common.MemberDto
 import com.raza.householdrecharge.common.getDateInMillis
 import com.raza.householdrecharge.common.log
-import com.raza.householdrecharge.util.cleanString
-import com.raza.householdrecharge.data.remote.dto.Member
+import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.remote.dto.OnBoardingDto
-import com.raza.householdrecharge.data.remote.dto.Result
+import com.raza.householdrecharge.domain.model.Member
+import com.raza.householdrecharge.domain.model.RechargeHistory
 import com.raza.householdrecharge.ui.invitation.Invitation
-import com.raza.householdrecharge.ui.rechargehistory.RechargeHistory
+import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
@@ -110,7 +110,7 @@ object FirestoreRepository {
 
     suspend fun addHousehold(
         appUserDto: AppUserDto,
-        householdDto: com.raza.householdrecharge.common.HouseholdDto
+        householdDto: HouseholdDto
     ): Result<String> {
 
         return try {

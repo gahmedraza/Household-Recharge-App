@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.ui.splash
+package com.raza.householdrecharge.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
