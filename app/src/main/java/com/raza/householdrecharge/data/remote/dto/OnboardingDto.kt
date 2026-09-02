@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.data.remote.dto
 
-data class OnBoardingDto(
+data class OnboardingDto(
     val authId: String? = null,
     val accountId: String? = null
 )

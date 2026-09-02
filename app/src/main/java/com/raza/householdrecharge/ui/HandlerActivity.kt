@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.raza.householdrecharge.navigation.V2Navigation
+import com.raza.householdrecharge.navigation.OnboardingNavigation
 import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
 
 class HandlerActivity : ComponentActivity() {
@@ -16,7 +16,7 @@ class HandlerActivity : ComponentActivity() {
         setContent {
             HouseholdRechargeTheme(dynamicColor = false) {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    V2Navigation()
+                    OnboardingNavigation()
                 }
             }
         }

@@ -58,11 +58,11 @@ fun DashboardNavigationRoot() {
 
         NavHost(
             navController = navController,
-            startDestination = AppPages.Dashboard.description,
+            startDestination = ComposeScreen.Dashboard.description,
             modifier = Modifier.padding(paddingValues)
         ) {
 
-            composable(AppPages.Dashboard.description) {
+            composable(ComposeScreen.Dashboard.description) {
                 DashboardScreen(
                     viewModel = viewModel(
                         factory = genericFactory
@@ -70,26 +70,26 @@ fun DashboardNavigationRoot() {
 
                     onClick = { memberId, mobileNumber ->
 
-                        navController.navigate("${AppPages.RechargeHistory.description}/$memberId/$mobileNumber")
+                        navController.navigate("${ComposeScreen.RechargeHistory.description}/$memberId/$mobileNumber")
                     },
 
                     onAddMember = {
-                        navController.navigate(AppPages.AddRechargeHistory.description)
+                        navController.navigate(ComposeScreen.AddRechargeHistory.description)
                     },
                     onDashboardClick = {
-                        navController.navigate(AppPages.Dashboard.description)
+                        navController.navigate(ComposeScreen.Dashboard.description)
                     },
                     onRechargeHistoryClick = {
 
                     },
                     onSettingClick = {
-                        navController.navigate(AppPages.Setting.description)
+                        navController.navigate(ComposeScreen.Setting.description)
                     }
                 )
             }
 
             composable(
-                route = "${AppPages.RechargeHistory.description}/{memberId}/{mobileNumber}"
+                route = "${ComposeScreen.RechargeHistory.description}/{memberId}/{mobileNumber}"
             ) { backStackEntry ->
 
                 val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
@@ -105,7 +105,7 @@ fun DashboardNavigationRoot() {
                     ),
 
                     onSuccess = {
-                        navController.navigate(AppPages.Dashboard.description)
+                        navController.navigate(ComposeScreen.Dashboard.description)
                     },
 
                     onFailure = {
@@ -113,39 +113,39 @@ fun DashboardNavigationRoot() {
                     },
 
                     onAddRecharge = { memberId, mobileNumber ->
-                        navController.navigate("${AppPages.AddRechargeHistory}/$memberId/$mobileNumber")
+                        navController.navigate("${ComposeScreen.AddRechargeHistory}/$memberId/$mobileNumber")
                     }
                 )
             }
 
-            composable(AppPages.Setting.description) {
+            composable(ComposeScreen.Setting.description) {
                 SettingScreen(
                     viewModel = viewModel(
                         factory = genericFactory
                     ),
 
                     onAddMember = {
-                        navController.navigate(AppPages.AddMember.description)
+                        navController.navigate(ComposeScreen.AddMember.description)
                     },
 
                     onAddHousehold = {
-                        navController.navigate(AppPages.AddHousehold.description)
+                        navController.navigate(ComposeScreen.AddHousehold.description)
                     },
 
                     onSignOut = {
-                        navController.navigate(AppPages.V2Navigation.description)
+                        navController.navigate(ComposeScreen.OnboardingNavigation.description)
                     },
                     onInvitation = {
-                        navController.navigate(AppPages.Invitation.description)
+                        navController.navigate(ComposeScreen.Invitation.description)
                     }
                 )
             }
 
-            composable(AppPages.V2Navigation.description) {
-                V2Navigation()
+            composable(ComposeScreen.OnboardingNavigation.description) {
+                OnboardingNavigation()
             }
 
-            composable(AppPages.Invitation.description) {
+            composable(ComposeScreen.Invitation.description) {
 
                 InvitationListingScreen(
                     viewModel = viewModel(
@@ -153,24 +153,24 @@ fun DashboardNavigationRoot() {
                     ),
 
                     onAddInvitation = {
-                        navController.navigate(AppPages.AddInvitation.description)
+                        navController.navigate(ComposeScreen.AddInvitation.description)
                     }
                 )
             }
 
-            composable(AppPages.AddInvitation.description) {
+            composable(ComposeScreen.AddInvitation.description) {
                 AddInvitationScreen(
                     viewModel = viewModel(
                         factory = genericFactory
                     ),
                     onInvitationVerified = { invitationCode ->
 
-                        navController.navigate(AppPages.ConfirmHousehold.description)
+                        navController.navigate(ComposeScreen.ConfirmHousehold.description)
                     }
                 )
             }
 
-            composable(AppPages.AddMember.description) {
+            composable(ComposeScreen.AddMember.description) {
                 AddMemberScreen(
                     viewModel = viewModel(
                         factory = genericFactory
@@ -178,7 +178,7 @@ fun DashboardNavigationRoot() {
 
                     onSuccess = {
 
-                        navController.navigate(AppPages.Setting.description)
+                        navController.navigate(ComposeScreen.Setting.description)
                     },
 
                     onFailure = {
@@ -188,7 +188,7 @@ fun DashboardNavigationRoot() {
             }
 
             composable(
-                route = "${AppPages.AddRechargeHistory.description}/{memberId}/{mobileNumber}"
+                route = "${ComposeScreen.AddRechargeHistory.description}/{memberId}/{mobileNumber}"
             ) { backStackEntry ->
 
                 val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
@@ -205,7 +205,7 @@ fun DashboardNavigationRoot() {
 
                     onSuccess = {
 
-                        navController.navigate(AppPages.DashboardNavigationRoot.description)
+                        navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
                     },
 
                     onFailure = {
@@ -214,7 +214,7 @@ fun DashboardNavigationRoot() {
                 )
             }
 
-            composable(AppPages.AddHousehold.description) {
+            composable(ComposeScreen.AddHousehold.description) {
                 AddHouseholdScreen(
                     viewModel = viewModel(
                         factory = genericFactory
@@ -222,7 +222,7 @@ fun DashboardNavigationRoot() {
 
                     onSuccess = {
 
-                        navController.navigate(AppPages.Setting.description)
+                        navController.navigate(ComposeScreen.Setting.description)
                     },
 
                     onFailure = {
@@ -243,55 +243,55 @@ fun BottomNavigationBar(
         NavigationBarItem(
             selected = false,
             onClick = {
-                navController.navigate(AppPages.Dashboard.description)
+                navController.navigate(ComposeScreen.Dashboard.description)
             },
             icon = {
                 Icon(
                     Icons.Default.Home,
-                    contentDescription = AppPages.Dashboard.description
+                    contentDescription = ComposeScreen.Dashboard.description
                 )
             },
             label = {
-                Text(AppPages.Dashboard.description)
+                Text(ComposeScreen.Dashboard.description)
             }
         )
 
         NavigationBarItem(
             selected = false,
             onClick = {
-                navController.navigate("${AppPages.RechargeHistory.description}//")
+                navController.navigate("${ComposeScreen.RechargeHistory.description}//")
             },
             icon = {
                 Icon(
                     Icons.Default.History,
-                    contentDescription = AppPages.RechargeHistory.description
+                    contentDescription = ComposeScreen.RechargeHistory.description
                 )
             },
             label = {
-                Text(AppPages.RechargeHistory.description)
+                Text(ComposeScreen.RechargeHistory.description)
             }
         )
 
         NavigationBarItem(
             selected = false,
             onClick = {
-                navController.navigate(AppPages.Setting.description)
+                navController.navigate(ComposeScreen.Setting.description)
             },
             icon = {
                 Icon(
                     Icons.Default.Settings,
-                    contentDescription = AppPages.Setting.description
+                    contentDescription = ComposeScreen.Setting.description
                 )
             },
             label = {
-                Text(AppPages.Setting.description)
+                Text(ComposeScreen.Setting.description)
             }
         )
     }
 }
 
 val bottomBarRoutes = listOf(
-    AppPages.Dashboard.description,
-    "${AppPages.RechargeHistory.description}/{memberId}/{mobileNumber}",
-    AppPages.Setting.description
+    ComposeScreen.Dashboard.description,
+    "${ComposeScreen.RechargeHistory.description}/{memberId}/{mobileNumber}",
+    ComposeScreen.Setting.description
 )

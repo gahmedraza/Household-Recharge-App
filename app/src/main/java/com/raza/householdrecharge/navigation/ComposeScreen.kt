@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.navigation
 
-enum class AppPages(val description: String) {
+enum class ComposeScreen(val description: String) {
     Splash("Splash"),
     SignIn("SignIn"),
     Signup("Signup"),
@@ -19,6 +19,6 @@ enum class AppPages(val description: String) {
     CreateHousehold("CreateHousehold"),
     JoinHousehold("JoinHousehold"),
     ConfirmHousehold("ConfirmHousehold"),
-    V2Navigation("V2Navigation")
+    OnboardingNavigation("V2Navigation")
 }
 

@@ -18,7 +18,7 @@ import com.raza.householdrecharge.ui.setuphousehold.SetupHouseholdScreen
 import com.raza.householdrecharge.ui.splash.SplashScreen
 
 @Composable
-fun V2Navigation() {
+fun OnboardingNavigation() {
     val navController = rememberNavController()
 
     val application = LocalContext.current.applicationContext
@@ -30,19 +30,19 @@ fun V2Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = AppPages.Splash.description
+        startDestination = ComposeScreen.Splash.description
     ) {
 
-        composable(AppPages.Splash.description) {
+        composable(ComposeScreen.Splash.description) {
 
             SplashScreen(
                 onUserNotFound = {
                     Log.d("TAG", "OnSplashFinished")
-                    navController.navigate(AppPages.SignIn.description)
+                    navController.navigate(ComposeScreen.SignIn.description)
                 },
 
                 onUserFound = {
-                    navController.navigate(AppPages.DashboardNavigationRoot.description)
+                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
                     //navController.navigate(AppPages.SetupHousehold.description)
                 },
 
@@ -52,7 +52,7 @@ fun V2Navigation() {
             )
         }
 
-        composable(AppPages.SignIn.description) {
+        composable(ComposeScreen.SignIn.description) {
 
             LoginScreen(
                 viewModel = viewModel(
@@ -61,22 +61,22 @@ fun V2Navigation() {
 
                 onSignup = {
                     Log.d("TAG", "OnSignup")
-                    navController.navigate(AppPages.Signup.description)
+                    navController.navigate(ComposeScreen.Signup.description)
                 },
 
                 onSignInCompletion = {
                     Log.d("TAG", "OnSignIn")
-                    navController.navigate(AppPages.DashboardNavigationRoot.description)
+                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
                 },
 
                 onBoardingNotComplete = {
                     Log.d("TAG", "Household Not Found")
-                    navController.navigate(AppPages.SetupHousehold.description)
+                    navController.navigate(ComposeScreen.SetupHousehold.description)
                 }
             )
         }
 
-        composable(AppPages.Signup.description) {
+        composable(ComposeScreen.Signup.description) {
 
             RegisterScreen(
                 viewModel = viewModel(
@@ -85,16 +85,16 @@ fun V2Navigation() {
 
                 onSuccess = {
                     Log.d("TAG", "On Signup Success")
-                    navController.navigate(AppPages.SetupHousehold.description)
+                    navController.navigate(ComposeScreen.SetupHousehold.description)
                 },
 
                 onSignIn = {
                     Log.d("TAG", "OnSignIn")
-                    navController.navigate(AppPages.SignIn.description)
+                    navController.navigate(ComposeScreen.SignIn.description)
                 })
         }
 
-        composable(AppPages.SetupHousehold.description) {
+        composable(ComposeScreen.SetupHousehold.description) {
             SetupHouseholdScreen(
                 viewModel = viewModel(
                     factory = genericFactory
@@ -102,17 +102,17 @@ fun V2Navigation() {
 
                 onJoinHousehold = {
 
-                    navController.navigate(AppPages.JoinHousehold.description)
+                    navController.navigate(ComposeScreen.JoinHousehold.description)
                 },
 
                 onCreateHousehold = {
 
-                    navController.navigate(AppPages.CreateHousehold.description)
+                    navController.navigate(ComposeScreen.CreateHousehold.description)
                 }
             )
         }
 
-        composable(AppPages.JoinHousehold.description) {
+        composable(ComposeScreen.JoinHousehold.description) {
             JoinHouseholdScreen(
                 viewModel = viewModel(
                     factory = genericFactory
@@ -120,14 +120,14 @@ fun V2Navigation() {
 
                 onSuccess = {
 
-                    navController.navigate(AppPages.ConfirmHousehold.description)
+                    navController.navigate(ComposeScreen.ConfirmHousehold.description)
                 },
 
                 onFailure = {}
             )
         }
 
-        composable(AppPages.ConfirmHousehold.description) {
+        composable(ComposeScreen.ConfirmHousehold.description) {
 
             ConfirmHouseholdScreen(
                 viewModel = viewModel(
@@ -136,21 +136,21 @@ fun V2Navigation() {
             )
         }
 
-        composable(AppPages.CreateHousehold.description) {
+        composable(ComposeScreen.CreateHousehold.description) {
             CreateHouseholdScreen(
                 viewModel = viewModel(
                     factory = genericFactory
                 ),
 
                 onSuccess = {
-                    navController.navigate(AppPages.DashboardNavigationRoot.description)
+                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
                 },
 
                 onFailure = {}
             )
         }
 
-        composable(AppPages.DashboardNavigationRoot.description) {
+        composable(ComposeScreen.DashboardNavigationRoot.description) {
             DashboardNavigationRoot()
         }
     }

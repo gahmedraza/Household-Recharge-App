@@ -11,7 +11,7 @@ import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.data.remote.dto.OnBoardingDto
+import com.raza.householdrecharge.data.remote.dto.OnboardingDto
 import com.raza.householdrecharge.domain.model.Member
 import com.raza.householdrecharge.domain.model.RechargeHistory
 import com.raza.householdrecharge.ui.invitation.Invitation
@@ -270,12 +270,12 @@ object FirestoreRepository {
 
     suspend fun registerAndAddAccount(
         authDto: AuthDto,
-        onSuccess: (OnBoardingDto) -> Unit,
+        onSuccess: (OnboardingDto) -> Unit,
         onFailure: (String) -> Unit
     ) {
         try {
 
-            val onBoardingDto: OnBoardingDto
+            val onBoardingDto: OnboardingDto
 
             log("a1")
 
@@ -319,7 +319,7 @@ object FirestoreRepository {
             if (addAccountResult is Result.Success) {
                 log("b3")
                 onBoardingDto =
-                    OnBoardingDto(
+                    OnboardingDto(
                         authId = userId,
                         accountId = addAccountResult.s.cleanString()
                     )

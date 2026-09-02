@@ -76,7 +76,7 @@ fun LoginScreen(
             ) {
 
                 Text(
-                    text = stringResource(R.string.add),
+                    text = stringResource(R.string.login_header),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -95,7 +95,7 @@ fun LoginScreen(
                     },
 
                     label = {
-                        Text("Mobile Number")
+                        Text(stringResource(R.string.mobile_number))
                     },
 
                     value = viewModel.mobileNumber
@@ -111,7 +111,7 @@ fun LoginScreen(
                     },
 
                     label = {
-                        Text("Password")
+                        Text(stringResource(R.string.password))
                     },
 
                     value = viewModel.password
@@ -179,13 +179,13 @@ fun LoginScreen(
                         }
                     }
                 ) {
-                    Text("Proceed")
+                    Text(stringResource(R.string.proceed))
                 }
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = "Don't have an account? Create New",
+                    text = stringResource(R.string.create_account),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable { onSignup() }
