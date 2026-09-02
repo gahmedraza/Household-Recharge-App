@@ -14,10 +14,11 @@ enum class AppPages(val description: String) {
     AddMember("AddMember"),
     AddRechargeHistory("AddRechargeHistory"),
     RechargeHistory("RechargeHistory"),
-    Main("Main"),
+    DashboardNavigationRoot("Dashboard"),
     SetupHousehold("SetupHousehold"),
     CreateHousehold("CreateHousehold"),
     JoinHousehold("JoinHousehold"),
-    ConfirmHousehold("ConfirmHousehold")
+    ConfirmHousehold("ConfirmHousehold"),
+    V2Navigation("V2Navigation")
 }
 

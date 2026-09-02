@@ -13,6 +13,10 @@ import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
 
+    suspend fun signinAndFetchAccount() {
+
+    }
+
     suspend fun fetchInvitationList(
         onSuccess: (List<Invitation>) -> Unit,
         onFailure: (String) -> Unit

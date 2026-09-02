@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 
 class SignInViewModel(
     private val sessionManager: SessionManager
-) : AuthViewModel() {
+) : AuthViewModel(sessionManager) {
     fun signIn(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         isLoading = true
 
@@ -37,5 +37,14 @@ class SignInViewModel(
                 onFailure(error)
             }
         )
+    }
+
+    fun signinAndFetchAccount() {
+        //user provides mobile number and password
+        //signin using firebase auth
+        //when signin is done you receive authid from firebase auth collection
+        //fetch account using fire store
+        //save the details in the session manager
+        //allow user to proceed
     }
 }

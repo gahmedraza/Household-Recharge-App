@@ -36,6 +36,7 @@ class InvitationViewModel(
                 householdId = sessionManager.householdId.first(),
                 createdBy = sessionManager.authId.first(),
                 createdAt = System.currentTimeMillis().toString(),
+                expiresAt = (System.currentTimeMillis() + (7 * 24 * 60 * 60 * 1000L)).toString(),
                 status = "pending"
             )
 

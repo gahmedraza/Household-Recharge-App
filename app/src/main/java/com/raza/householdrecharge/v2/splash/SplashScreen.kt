@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.v1.ui.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.v2.common.getViewModel
@@ -31,7 +30,7 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(2000.milliseconds)
 
-        if(viewModel.getAuthFlowStatus()) {
+        if(viewModel.getOnboardingStatus()) {
             onUserFound()
 
         } else {

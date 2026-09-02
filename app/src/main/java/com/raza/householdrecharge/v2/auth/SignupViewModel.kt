@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 
 class SignupViewModel(
     private val sessionManager: SessionManager
-) : AuthViewModel() {
+) : AuthViewModel(sessionManager) {
     fun signupAndAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
             isLoading = true

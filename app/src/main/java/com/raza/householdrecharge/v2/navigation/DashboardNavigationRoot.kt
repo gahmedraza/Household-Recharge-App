@@ -32,7 +32,7 @@ import com.raza.householdrecharge.v2.rechargehistory.RechargeListingScreen
 import com.raza.householdrecharge.v2.settings.SettingScreen
 
 @Composable
-fun DashboardNavigation() {
+fun DashboardNavigationRoot() {
     val navController = rememberNavController()
 
     val application = LocalContext.current.applicationContext
@@ -133,12 +133,16 @@ fun DashboardNavigation() {
                     },
 
                     onSignOut = {
-                        navController.navigate(AppPages.SignIn.description)
+                        navController.navigate(AppPages.V2Navigation.description)
                     },
                     onInvitation = {
                         navController.navigate(AppPages.Invitation.description)
                     }
                 )
+            }
+
+            composable(AppPages.V2Navigation.description) {
+                V2Navigation()
             }
 
             composable(AppPages.Invitation.description) {
@@ -201,7 +205,7 @@ fun DashboardNavigation() {
 
                     onSuccess = {
 
-                        navController.navigate(AppPages.Main.description)
+                        navController.navigate(AppPages.DashboardNavigationRoot.description)
                     },
 
                     onFailure = {

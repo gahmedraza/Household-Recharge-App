@@ -38,7 +38,8 @@ import com.raza.householdrecharge.v2.common.log
 fun SignInScreen(
     viewModel: SignInViewModel,
     onSignup: () -> Unit,
-    onSignIn: () -> Unit
+    onSignInCompletion: () -> Unit,
+    onBoardingNotComplete: () -> Unit
 ) {
 
     var shouldProceed by remember { mutableStateOf(false) }
@@ -155,7 +156,13 @@ fun SignInScreen(
 
                     onClick = {
 
-                        onSignIn()
+                        if(viewModel.isOnboardingComplete()) {
+
+                            onSignInCompletion()
+                        } else {
+
+                            onBoardingNotComplete()
+                        }
                     }
                 ) {
                     Text("Proceed")
@@ -222,7 +229,8 @@ fun Content() {
         SignInScreen(
             viewModel = viewModel,
             onSignup = {},
-            onSignIn = {}
+            onSignInCompletion = {},
+            onBoardingNotComplete = {}
         )
     }
 }

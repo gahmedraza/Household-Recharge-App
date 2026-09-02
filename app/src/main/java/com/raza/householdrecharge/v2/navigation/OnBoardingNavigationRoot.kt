@@ -42,7 +42,7 @@ fun V2Navigation() {
                 },
 
                 onUserFound = {
-                    navController.navigate(AppPages.Main.description)
+                    navController.navigate(AppPages.DashboardNavigationRoot.description)
                     //navController.navigate(AppPages.SetupHousehold.description)
                 },
 
@@ -64,10 +64,16 @@ fun V2Navigation() {
                     navController.navigate(AppPages.Signup.description)
                 },
 
-                onSignIn = {
+                onSignInCompletion = {
                     Log.d("TAG", "OnSignIn")
-                    navController.navigate(AppPages.Main.description)
-                })
+                    navController.navigate(AppPages.DashboardNavigationRoot.description)
+                },
+
+                onBoardingNotComplete = {
+                    Log.d("TAG", "Household Not Found")
+                    navController.navigate(AppPages.SetupHousehold.description)
+                }
+            )
         }
 
         composable(AppPages.Signup.description) {
@@ -137,15 +143,15 @@ fun V2Navigation() {
                 ),
 
                 onSuccess = {
-                    navController.navigate(AppPages.Main.description)
+                    navController.navigate(AppPages.DashboardNavigationRoot.description)
                 },
 
                 onFailure = {}
             )
         }
 
-        composable(AppPages.Main.description) {
-            DashboardNavigation()
+        composable(AppPages.DashboardNavigationRoot.description) {
+            DashboardNavigationRoot()
         }
     }
 }

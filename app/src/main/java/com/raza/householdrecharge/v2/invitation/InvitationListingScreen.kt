@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.v2.common.LargeBodyText
 import com.raza.householdrecharge.v2.common.LargeTitleText
 import com.raza.householdrecharge.v2.common.TitleBar
+import com.raza.householdrecharge.v2.common.getPrintableDate
 import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.splash.SplashViewModel
 
@@ -176,7 +177,7 @@ fun invitationCard(
                 Spacer(modifier = Modifier.weight(1f))
 
                 LargeBodyText(
-                    text = invitation.dateExpires
+                    text = getPrintableDate(invitation.dateExpiresMillis.toString())
                 )
             }
 

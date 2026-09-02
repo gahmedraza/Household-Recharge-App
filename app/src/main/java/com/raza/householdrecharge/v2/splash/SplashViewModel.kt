@@ -1,6 +1,7 @@
 package com.raza.householdrecharge.v2.splash
 
 import androidx.lifecycle.viewModelScope
+import com.raza.householdrecharge.v2.auth.AuthViewModel
 import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
@@ -9,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val sessionManager: SessionManager
-) : BaseViewModel() {
+) : AuthViewModel(sessionManager) {
 
     fun loadHousehold(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
 
@@ -29,21 +30,5 @@ class SplashViewModel(
                 onFailure(error)
             }
         )
-    }
-
-    fun getAuthFlowStatus(): Boolean {
-        var authFlowStatus: Boolean = false
-
-        viewModelScope.launch {
-            authFlowStatus = sessionManager.isAuthFlowComplete.first()
-        }
-
-        return authFlowStatus
-    }
-
-    fun setAuthFlowStatus(authFlowStatus: Boolean) {
-        viewModelScope.launch {
-            sessionManager.saveIsAuthFlowComplete(authFlowStatus)
-        }
     }
 }
