@@ -1,6 +1,7 @@
 package com.raza.householdrecharge.v2.invitation
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -96,6 +97,10 @@ fun InvitationList(
 ) {
 
     LazyColumn(modifier = modifier) {
+        item {
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+
         items(viewModel.invitationList) { invitation ->
 
             invitationCard(modifier, invitation)
@@ -110,25 +115,28 @@ fun invitationCard(
 ) {
 
     Card(
-        modifier = modifier
+        modifier = Modifier
             .padding(
+                top = 8.dp,
+                bottom = 8.dp,
                 start = 20.dp,
                 end = 20.dp
             ),
         elevation = CardDefaults
             .cardElevation(
-                defaultElevation = 4.dp
+                defaultElevation = 2.dp
             ),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(2.dp)
     ) {
 
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(
+                    top = 10.dp,
                     start = 20.dp,
                     end = 20.dp,
-                    bottom = 20.dp
+                    bottom = 10.dp
                 )
 
         ) {
