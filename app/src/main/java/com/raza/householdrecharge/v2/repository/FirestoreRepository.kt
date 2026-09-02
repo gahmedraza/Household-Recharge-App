@@ -7,10 +7,33 @@ import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.common.MemberDto
 import com.raza.householdrecharge.v2.common.getDateInMillis
 import com.raza.householdrecharge.v2.common.log
+import com.raza.householdrecharge.v2.invitation.Invitation
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
 import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
+
+    suspend fun fetchInvitationList(
+        onSuccess: (List<Invitation>) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+
+        FirebaseFirestore
+            .getInstance()
+            .collection("invitations")
+            .get()
+            .addOnSuccessListener { result ->
+                val invitationList = result.documents.mapNotNull { document ->
+                    document.toObject(Invitation::class.java)
+                }
+
+                onSuccess(invitationList)
+            }
+            .addOnFailureListener { error ->
+
+                onFailure(error.message.cleanString())
+            }
+    }
 
     suspend fun joinHousehold(
         userId: String,

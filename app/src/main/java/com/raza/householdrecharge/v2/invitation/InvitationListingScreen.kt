@@ -20,6 +20,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +39,18 @@ fun InvitationListingScreen(
     viewModel: InvitationViewModel,
     onAddInvitation: () -> Unit
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchInvitationList(
+            onSuccess = { invitationList ->
+                viewModel.invitationList = invitationList
+            },
+            onFailure = {
+
+            }
+        )
+    }
+
     Body(
         viewModel = viewModel,
         onAddInvitation = onAddInvitation
@@ -66,25 +83,20 @@ fun Body(
     ) { paddingValues ->
 
         InvitationList(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
+            viewModel = viewModel
         )
     }
 }
 
 @Composable
-fun InvitationList(modifier: Modifier) {
-    val invitationList: MutableList<Invitation> = mutableListOf()
-    invitationList.add(
-        Invitation(
-            code = "K7X92P",
-            dateCreated = "Aug 30, 9:14 AM",
-            dateExpires = "Aug 31, 9:14 AM",
-            status = "Active"
-        )
-    )
+fun InvitationList(
+    modifier: Modifier,
+    viewModel: InvitationViewModel
+) {
 
     LazyColumn(modifier = modifier) {
-        items(invitationList) { invitation ->
+        items(viewModel.invitationList) { invitation ->
 
             invitationCard(modifier, invitation)
         }

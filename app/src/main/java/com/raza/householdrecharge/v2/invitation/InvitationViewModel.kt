@@ -21,6 +21,7 @@ class InvitationViewModel(
 ): BaseViewModel() {
 
     var invitationCode by mutableStateOf("")
+    var invitationList by mutableStateOf(listOf<Invitation>())
 
     fun createInvitation(
         code: String,
@@ -62,6 +63,28 @@ class InvitationViewModel(
             repeat(length) {
                 append(characters[random.nextInt(characters.length)])
             }
+        }
+    }
+
+    fun fetchInvitationList(
+        onSuccess: (List<Invitation>) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+
+        viewModelScope.launch {
+            FirestoreRepository.fetchInvitationList(
+
+                onSuccess = { invitationList ->
+                    this@InvitationViewModel.invitationList = invitationList
+
+                    onSuccess(invitationList)
+                },
+
+                onFailure = { error ->
+
+                    onFailure(error)
+                }
+            )
         }
     }
 }
