@@ -124,6 +124,8 @@ fun JoinHouseholdBody(
             OutlinedButton(
                 modifier = modifier,
 
+                enabled = !viewModel.isLoading,
+
                 onClick = {
 
                     viewModel.validateInvitationCode(

@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.raza.householdrecharge.v1.ui.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.v2.common.TitleBar
 import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.splash.SplashViewModel
@@ -97,7 +98,10 @@ fun SetupHouseholdBody(
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainer
+                containerColor = MaterialTheme.colorScheme.surfaceContainer,
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 4.dp
             )
         ) {
             Column(
@@ -145,6 +149,9 @@ fun SetupHouseholdBody(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surfaceContainer
+            ),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 4.dp
             )
         ) {
 
@@ -192,27 +199,29 @@ fun SetupHouseholdBody(
 fun SetupHouseholdContent() {
     val viewModel = getViewModel(HouseholdViewModel::class.java)
 
-    SetupHouseholdScreen(
-        viewModel = viewModel,
+    HouseholdRechargeTheme(dynamicColor = false) {
+        SetupHouseholdScreen(
+            viewModel = viewModel,
 
-        onCreateHousehold = {
+            onCreateHousehold = {
 
-        },
+            },
 
-        onJoinHousehold = {
+            onJoinHousehold = {
 
-        }
-    )
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun SetupHouseholdScreenDarkPreview() {
-    SetupHouseholdContent()
+            }
+        )
+    }
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun SetupHouseholdScreenLightPreview() {
+    SetupHouseholdContent()
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun SetupHouseholdScreenDarkPreview() {
     SetupHouseholdContent()
 }

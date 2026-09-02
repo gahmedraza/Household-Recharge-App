@@ -122,28 +122,35 @@ class HouseholdViewModel(
     ) {
 
         viewModelScope.launch {
+            isLoading = true
+
             val invitation = getInvitation(invitationCode)
 
             if(invitation == null) {
+                isLoading = false
                 onFailure("error")
             }
 
             if(invitation?.status != "pending") {
+                isLoading = false
                 onFailure("error")
             }
 
             val invitationExpiry = invitation?.expiresAt?.toLong() ?: 0L
 
             if(invitationExpiry < System.currentTimeMillis()) {
+                isLoading = false
                 onFailure("error")
             }
 
             val household = getHousehold(invitation?.householdId.cleanString())
 
             if(household == null) {
+                isLoading = false
                 onFailure("error")
             }
 
+            isLoading = true
             onSuccess(household)
         }
     }
@@ -170,20 +177,18 @@ class HouseholdViewModel(
                     householdId = householdId,
                     invitationCode = invitationCode,
                     onSuccess = {
-                        isLoading = true
+                        isLoading = false
                     },
                     onFailure = {
-                        isLoading = true
+                        isLoading = false
                     }
                 )
 
             } catch (e: Exception) {
 
+                isLoading = false
                 onFailure("unable to join household")
 
-            } finally {
-
-                isLoading = false
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.SessionManager
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
@@ -28,5 +29,21 @@ class SplashViewModel(
                 onFailure(error)
             }
         )
+    }
+
+    fun getAuthFlowStatus(): Boolean {
+        var authFlowStatus: Boolean = false
+
+        viewModelScope.launch {
+            authFlowStatus = sessionManager.isAuthFlowComplete.first()
+        }
+
+        return authFlowStatus
+    }
+
+    fun setAuthFlowStatus(authFlowStatus: Boolean) {
+        viewModelScope.launch {
+            sessionManager.saveIsAuthFlowComplete(authFlowStatus)
+        }
     }
 }

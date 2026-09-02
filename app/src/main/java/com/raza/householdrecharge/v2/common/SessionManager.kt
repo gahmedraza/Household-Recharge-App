@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.map
 val Context.datastore by preferencesDataStore("session")
 
 class SessionManager(private val context: Context) {
+    val isAuthFlowComplete = context.datastore.data.map {
+        it[booleanPreferencesKey("isAuthFlowComplete")] ?: false
+    }
+
     val authId = context.datastore.data.map {
         it[stringPreferencesKey("authId")] ?: ""
     }
@@ -87,6 +91,12 @@ class SessionManager(private val context: Context) {
     suspend fun saveMobileNumber(mobileNumber: String) {
         context.datastore.edit {
             it[stringPreferencesKey("mobileNumber")] = mobileNumber
+        }
+    }
+
+    suspend fun saveIsAuthFlowComplete(isAuthFlowComplete: Boolean) {
+        context.datastore.edit {
+            it[booleanPreferencesKey("isAuthFlowComplete")] = isAuthFlowComplete
         }
     }
 

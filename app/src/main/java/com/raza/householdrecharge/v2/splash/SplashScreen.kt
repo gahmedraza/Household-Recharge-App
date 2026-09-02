@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.v1.ui.theme.HouseholdRechargeTheme
@@ -32,12 +31,20 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         delay(2000.milliseconds)
 
-        if (FirebaseAuth.getInstance().currentUser == null) {
+        if(viewModel.getAuthFlowStatus()) {
+            onUserFound()
+
+        } else {
+
+            onUserNotFound()
+        }
+
+        /*if (FirebaseAuth.getInstance().currentUser == null) {
             onUserNotFound()
 
         } else {
             onUserFound()
-        }
+        }*/
     }
 
     Box(
@@ -56,14 +63,16 @@ fun SplashScreen(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
 @Composable
-fun SplashScreenDarkPreview() {
+fun SplashContent() {
+    val viewModel = getViewModel(SplashViewModel::class.java)
+
     HouseholdRechargeTheme(dynamicColor = false) {
-        SplashContent()
+        SplashScreen(
+            onUserFound = {},
+            onUserNotFound = {},
+            viewModel = viewModel
+        )
     }
 }
 
@@ -73,18 +82,14 @@ fun SplashScreenDarkPreview() {
 )
 @Composable
 fun SplashScreenLightPreview() {
-    HouseholdRechargeTheme(dynamicColor = false) {
-        SplashContent()
-    }
+    SplashContent()
 }
 
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
-fun SplashContent() {
-    val viewModel = getViewModel(SplashViewModel::class.java)
-
-    SplashScreen(
-        onUserFound = {},
-        onUserNotFound = {},
-        viewModel = viewModel
-    )
+fun SplashScreenDarkPreview() {
+    SplashContent()
 }

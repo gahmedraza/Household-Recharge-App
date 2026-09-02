@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.raza.householdrecharge.v1.ui.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.common.log
 import com.raza.householdrecharge.v2.splash.SplashViewModel
@@ -131,7 +132,7 @@ fun SignupScreen(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
-                    enabled = shouldProceed,
+                    enabled = !shouldProceed,
 
                     onClick = {
 
@@ -216,15 +217,6 @@ fun SignupScreen(
 
 @Preview(
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Composable
-fun darkPreviewSignup() {
-    SignupContent()
-}
-
-@Preview(
-    showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
@@ -232,16 +224,27 @@ fun lightPreviewSignup() {
     SignupContent()
 }
 
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun darkPreviewSignup() {
+    SignupContent()
+}
+
 @Composable
 fun SignupContent() {
     val viewModel = getViewModel(SignupViewModel::class.java)
 
-    SignupScreen(
-        viewModel = viewModel,
-        onSuccess = {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        SignupScreen(
+            viewModel = viewModel,
+            onSuccess = {
 
-        },
-        onSignIn = {
+            },
+            onSignIn = {
 
-        })
+            })
+    }
 }
