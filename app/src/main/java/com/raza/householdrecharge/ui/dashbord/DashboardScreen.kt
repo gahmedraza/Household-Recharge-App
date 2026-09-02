@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.common.TitleBar
 import com.raza.householdrecharge.common.getPrintableDate
 import com.raza.householdrecharge.common.getViewModel
-import com.raza.householdrecharge.data.remote.dto.Member
+import com.raza.householdrecharge.domain.model.Member
 
 @Composable
 fun DashboardScreen(

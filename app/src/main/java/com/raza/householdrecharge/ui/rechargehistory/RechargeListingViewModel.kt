@@ -8,7 +8,7 @@ import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.domain.model.RechargeHistory
-import com.raza.householdrecharge.repository.FirestoreRepository
+import com.raza.householdrecharge.data.remote.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 

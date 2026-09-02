@@ -11,7 +11,7 @@ import com.raza.householdrecharge.HouseholdRechargeApplication
 import com.raza.householdrecharge.ui.auth.LoginScreen
 import com.raza.householdrecharge.ui.auth.RegisterScreen
 import com.raza.householdrecharge.common.AppViewModelFactory
-import com.raza.householdrecharge.ui.invitation.ConfirmHouseholdScreen
+import com.raza.householdrecharge.ui.setuphousehold.ConfirmHouseholdScreen
 import com.raza.householdrecharge.ui.setuphousehold.CreateHouseholdScreen
 import com.raza.householdrecharge.ui.setuphousehold.JoinHouseholdScreen
 import com.raza.householdrecharge.ui.setuphousehold.SetupHouseholdScreen

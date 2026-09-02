@@ -3,7 +3,7 @@ package com.raza.householdrecharge.ui.splash
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.ui.auth.AuthViewModel
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.repository.FirestoreRepository
+import com.raza.householdrecharge.data.remote.FirestoreRepository
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
