@@ -18,14 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.v2.common.LargeDisplayText
 import com.raza.householdrecharge.v2.common.LargeHeadlineText
 import com.raza.householdrecharge.v2.common.LargeTitleText
 import com.raza.householdrecharge.v2.common.getViewModel
-import com.raza.householdrecharge.v2.repository.cleanString
 import com.raza.householdrecharge.v2.setuphousehold.HouseholdViewModel
-import com.raza.householdrecharge.v2.splash.SplashViewModel
+import com.raza.householdrecharge.v2.util.cleanString
 
 @Composable
 fun ConfirmHouseholdScreen(viewModel: HouseholdViewModel) {

@@ -7,8 +7,10 @@ import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.common.MemberDto
 import com.raza.householdrecharge.v2.common.getDateInMillis
 import com.raza.householdrecharge.v2.common.log
+import com.raza.householdrecharge.v2.data.dto.*
 import com.raza.householdrecharge.v2.invitation.Invitation
 import com.raza.householdrecharge.v2.rechargehistory.RechargeHistory
+import com.raza.householdrecharge.v2.util.cleanString
 import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
@@ -586,46 +588,3 @@ object FirestoreRepository {
     }
 
 }
-
-data class AuthDto(
-    val accountName: String? = null,
-    val mobileNumber: String,
-    val password: String
-)
-
-data class AppUserDto(
-    val authId: String,
-    val accountId: String = "",
-    val householdId: String,
-    val memberId: String = "",
-    val mobileNumber: String = ""
-)
-
-fun String?.cleanString(): String {
-    return this ?: ""
-}
-
-data class AccountDto(
-    val accountId: String? = null,
-    val accountName: String? = null,
-    val householdId: String? = null,
-)
-
-sealed class Result<T> {
-    data class Success<T>(val s: T) : Result<T>()
-    data class Failure<T>(val s: T) : Result<T>()
-}
-
-data class OnBoardingDto(
-    val authId: String? = null,
-    val accountId: String? = null
-)
-
-data class InvitationDto(
-    val code: String = "",
-    val householdId: String = "",
-    val createdBy: String = "",
-    val createdAt: String = "",
-    val expiresAt: String = "",
-    val status: String = ""
-)

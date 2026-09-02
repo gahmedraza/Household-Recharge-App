@@ -8,8 +8,6 @@ import androidx.lifecycle.ViewModel
 open class BaseViewModel : ViewModel() {
     var mobileNumber by mutableStateOf("")
 
-    var password by mutableStateOf("")
-
     var accountName by mutableStateOf("")
 
     var lastRechargeDate by mutableStateOf("")

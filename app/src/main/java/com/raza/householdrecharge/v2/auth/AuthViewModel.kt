@@ -13,6 +13,8 @@ open class AuthViewModel(
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
 
+    var password by mutableStateOf("")
+
     var authId by mutableStateOf("")
 
     fun getOnboardingStatus(): Boolean {

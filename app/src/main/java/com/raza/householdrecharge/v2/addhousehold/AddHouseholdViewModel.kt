@@ -4,9 +4,9 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.common.SessionManager
-import com.raza.householdrecharge.v2.repository.AppUserDto
+import com.raza.householdrecharge.v2.data.dto.*
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
-import com.raza.householdrecharge.v2.repository.cleanString
+import com.raza.householdrecharge.v2.util.cleanString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 

@@ -6,14 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.toObject
 import com.raza.householdrecharge.v2.common.BaseViewModel
 import com.raza.householdrecharge.v2.common.HouseholdDto
 import com.raza.householdrecharge.v2.common.SessionManager
-import com.raza.householdrecharge.v2.repository.AppUserDto
+import com.raza.householdrecharge.v2.data.dto.*
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
-import com.raza.householdrecharge.v2.repository.InvitationDto
-import com.raza.householdrecharge.v2.repository.cleanString
+import com.raza.householdrecharge.v2.util.cleanString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await

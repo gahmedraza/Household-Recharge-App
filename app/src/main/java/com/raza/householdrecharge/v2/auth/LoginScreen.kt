@@ -23,16 +23,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.raza.householdrecharge.R
 import com.raza.householdrecharge.v1.ui.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.common.log
+import com.raza.householdrecharge.v2.data.dto.AuthDto
 
 @Composable
 fun LoginScreen(
@@ -41,6 +45,8 @@ fun LoginScreen(
     onSignInCompletion: () -> Unit,
     onBoardingNotComplete: () -> Unit
 ) {
+    var mobileNumber by rememberSaveable { mutableStateOf("") }
+    var password by rememberSaveable { mutableStateOf("") }
 
     var shouldProceed by remember { mutableStateOf(false) }
     var signinStatus by remember { mutableStateOf("") }
@@ -70,7 +76,7 @@ fun LoginScreen(
             ) {
 
                 Text(
-                    text = "Let's get you logged in",
+                    text = stringResource(R.string.add),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
@@ -119,7 +125,11 @@ fun LoginScreen(
                     enabled = !shouldProceed,
 
                     onClick = {
+
                         viewModel.login(
+                            //todo modify
+                            authDto = AuthDto("","",""),
+
                             onSuccess = { userId ->
 
                                 signinStatus = "login success"

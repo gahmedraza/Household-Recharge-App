@@ -2,19 +2,23 @@ package com.raza.householdrecharge.v2.auth
 
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.v2.common.SessionManager
-import com.raza.householdrecharge.v2.repository.AuthDto
+import com.raza.householdrecharge.v2.data.dto.*
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val sessionManager: SessionManager
 ) : AuthViewModel(sessionManager) {
-    fun login(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
+    fun login(
+        authDto: AuthDto,
+        onSuccess: (String?) -> Unit,
+        onFailure: (String?) -> Unit
+    ) {
         isLoading = true
 
         val authDto = AuthDto(
-            mobileNumber = "$mobileNumber@householdrecharge.local",
-            password = password
+            mobileNumber = "${authDto.mobileNumber}@householdrecharge.local",
+            password = authDto.password
         )
 
         FirestoreRepository.login(
@@ -25,7 +29,7 @@ class LoginViewModel(
                     sessionManager.saveUserId(userId)
                 }
 
-                this.authId = userId
+                //this.authId = userId todo delete
 
                 isLoading = false
                 onSuccess(userId)
