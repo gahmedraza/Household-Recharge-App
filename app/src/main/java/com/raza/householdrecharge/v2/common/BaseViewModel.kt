@@ -10,8 +10,6 @@ open class BaseViewModel : ViewModel() {
 
     var password by mutableStateOf("")
 
-    var authId by mutableStateOf("")
-
     var accountName by mutableStateOf("")
 
     var lastRechargeDate by mutableStateOf("")
@@ -23,8 +21,6 @@ open class BaseViewModel : ViewModel() {
     var planDurationDays by mutableStateOf("")
 
     var daysToExpiry by mutableStateOf("")
-
-    var rechargeRequested by mutableStateOf("")
 
     var household by mutableStateOf<Household>(Household())
 

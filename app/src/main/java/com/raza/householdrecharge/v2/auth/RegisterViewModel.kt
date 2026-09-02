@@ -7,10 +7,10 @@ import com.raza.householdrecharge.v2.repository.AuthDto
 import com.raza.householdrecharge.v2.repository.cleanString
 import kotlinx.coroutines.launch
 
-class SignupViewModel(
+class RegisterViewModel(
     private val sessionManager: SessionManager
 ) : AuthViewModel(sessionManager) {
-    fun signupAndAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
+    fun registerAndAddAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
             isLoading = true
 
@@ -20,7 +20,7 @@ class SignupViewModel(
                 password = password
             )
 
-            FirestoreRepository.signupAndAddAccount(
+            FirestoreRepository.registerAndAddAccount(
                 authDto,
 
                 onSuccess = { onBoardingDto ->

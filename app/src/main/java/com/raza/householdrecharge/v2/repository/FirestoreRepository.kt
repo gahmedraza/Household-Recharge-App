@@ -200,7 +200,7 @@ object FirestoreRepository {
             }
     }
 
-    fun fetchRechargeHistory(
+    fun fetchRechargeHistoryList(
         appUserDto: AppUserDto,
         onSuccess: (List<RechargeHistory>) -> Unit,
         onFailure: (String) -> Unit
@@ -235,7 +235,7 @@ object FirestoreRepository {
             }
     }
 
-    private suspend fun signup(
+    private suspend fun register(
         authDto: AuthDto
     ): Result<String> {
 
@@ -261,7 +261,7 @@ object FirestoreRepository {
         }
     }
 
-    suspend fun signupAndAddAccount(
+    suspend fun registerAndAddAccount(
         authDto: AuthDto,
         onSuccess: (OnBoardingDto) -> Unit,
         onFailure: (String) -> Unit
@@ -274,7 +274,7 @@ object FirestoreRepository {
 
             var accountDto: AccountDto? = null
 
-            val signupResult = signup(authDto = authDto)
+            val signupResult = register(authDto = authDto)
 
             var userId = ""
 
@@ -387,7 +387,7 @@ object FirestoreRepository {
         }
     }
 
-    fun signIn(
+    fun login(
         authDto: AuthDto,
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit

@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.raza.householdrecharge.v1.HouseholdRechargeApplication
-import com.raza.householdrecharge.v2.auth.SignInScreen
-import com.raza.householdrecharge.v2.auth.SignupScreen
+import com.raza.householdrecharge.v2.auth.LoginScreen
+import com.raza.householdrecharge.v2.auth.RegisterScreen
 import com.raza.householdrecharge.v2.common.AppViewModelFactory
 import com.raza.householdrecharge.v2.invitation.ConfirmHouseholdScreen
 import com.raza.householdrecharge.v2.setuphousehold.CreateHouseholdScreen
@@ -54,7 +54,7 @@ fun V2Navigation() {
 
         composable(AppPages.SignIn.description) {
 
-            SignInScreen(
+            LoginScreen(
                 viewModel = viewModel(
                     factory = genericFactory
                 ),
@@ -78,7 +78,7 @@ fun V2Navigation() {
 
         composable(AppPages.Signup.description) {
 
-            SignupScreen(
+            RegisterScreen(
                 viewModel = viewModel(
                     factory = genericFactory
                 ),

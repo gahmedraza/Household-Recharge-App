@@ -35,8 +35,8 @@ import com.raza.householdrecharge.v2.common.getViewModel
 import com.raza.householdrecharge.v2.common.log
 
 @Composable
-fun SignInScreen(
-    viewModel: SignInViewModel,
+fun LoginScreen(
+    viewModel: LoginViewModel,
     onSignup: () -> Unit,
     onSignInCompletion: () -> Unit,
     onBoardingNotComplete: () -> Unit
@@ -119,7 +119,7 @@ fun SignInScreen(
                     enabled = !shouldProceed,
 
                     onClick = {
-                        viewModel.signIn(
+                        viewModel.login(
                             onSuccess = { userId ->
 
                                 signinStatus = "login success"
@@ -223,10 +223,10 @@ fun darkPreviewSignIn() {
 
 @Composable
 fun Content() {
-    val viewModel = getViewModel(SignInViewModel::class.java)
+    val viewModel = getViewModel(LoginViewModel::class.java)
 
     HouseholdRechargeTheme(dynamicColor = false) {
-        SignInScreen(
+        LoginScreen(
             viewModel = viewModel,
             onSignup = {},
             onSignInCompletion = {},

@@ -6,10 +6,10 @@ import com.raza.householdrecharge.v2.repository.AuthDto
 import com.raza.householdrecharge.v2.repository.FirestoreRepository
 import kotlinx.coroutines.launch
 
-class SignInViewModel(
+class LoginViewModel(
     private val sessionManager: SessionManager
 ) : AuthViewModel(sessionManager) {
-    fun signIn(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
+    fun login(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         isLoading = true
 
         val authDto = AuthDto(
@@ -17,7 +17,7 @@ class SignInViewModel(
             password = password
         )
 
-        FirestoreRepository.signIn(
+        FirestoreRepository.login(
             authDto = authDto,
 
             onSuccess = { userId ->

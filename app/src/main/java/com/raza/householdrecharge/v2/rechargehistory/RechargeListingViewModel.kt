@@ -67,7 +67,7 @@ class RechargeListingViewModel(
                 mobileNumber = currentMobileNumber
             )
 
-            FirestoreRepository.fetchRechargeHistory(
+            FirestoreRepository.fetchRechargeHistoryList(
                 appUserDto = appUserDto,
 
                 onSuccess = { rechargeHistoryList ->
