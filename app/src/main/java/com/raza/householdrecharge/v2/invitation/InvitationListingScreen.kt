@@ -136,7 +136,7 @@ fun invitationCard(
                     top = 10.dp,
                     start = 20.dp,
                     end = 20.dp,
-                    bottom = 10.dp
+                    bottom = 5.dp
                 )
 
         ) {
@@ -180,7 +180,7 @@ fun invitationCard(
                 )
             }
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Row(modifier = Modifier.fillMaxWidth()) {
 
