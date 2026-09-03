@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.raza.householdrecharge.common.AppCard
 import com.raza.householdrecharge.common.getViewModel
 import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
 
@@ -92,14 +93,9 @@ fun SetupHouseholdBody(
 
         Spacer(modifier = Modifier.height(42.dp))
 
-        Card(
+        AppCard(
             modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            ),
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 4.dp
-            )
+            elevation = 4.dp
         ) {
             Column(
                 modifier = Modifier.padding(20.dp),

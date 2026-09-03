@@ -2,15 +2,12 @@ package com.raza.householdrecharge.ui.setuphousehold
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
@@ -18,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.raza.householdrecharge.common.AppCard
 import com.raza.householdrecharge.common.LargeDisplayText
 import com.raza.householdrecharge.common.LargeHeadlineText
 import com.raza.householdrecharge.common.LargeTitleText
@@ -31,20 +29,20 @@ fun ConfirmHouseholdScreen(viewModel: HouseholdViewModel) {
 
 @Composable
 fun ConfirmHouseholdBody(viewModel: HouseholdViewModel) {
-    Card(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(
-                start = 20.dp,
-                end = 20.dp,
-                top = 40.dp,
-                bottom = 40.dp
-            ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        ),
-        shape = RoundedCornerShape(4.dp)
+
+    val paddingValues = PaddingValues(
+        start = 20.dp,
+        end = 20.dp,
+        top = 40.dp,
+        bottom = 40.dp
+    )
+
+    AppCard(
+        paddingValues = paddingValues,
+        elevation = 4.dp,
+        cornerSize = 4.dp
     ) {
+
         Column(
             modifier = Modifier.padding(20.dp)
         ) {
