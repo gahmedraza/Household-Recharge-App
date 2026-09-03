@@ -1,5 +1,8 @@
 package com.raza.householdrecharge.ui.auth
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.data.remote.dto.AuthDto
@@ -9,6 +12,35 @@ import kotlinx.coroutines.launch
 class LoginViewModel(
     private val sessionManager: SessionManager
 ) : AuthViewModel(sessionManager) {
+
+    var uiState by mutableStateOf(LoginUIState())
+        private set
+
+    private fun setPhoneNumber(value: String) {
+        uiState = uiState.copy(
+            mobileNumber = value
+        )
+    }
+
+    @Override
+    private fun setPasswordKey(value: String) {
+        uiState = uiState.copy(
+            password = value
+        )
+    }
+
+    private fun setMobileNumberError(value: String) {
+        uiState = uiState.copy(
+            mobileNumberError = value
+        )
+    }
+
+    private fun setPasswordError(value: String) {
+        uiState = uiState.copy(
+            passwordError = value
+        )
+    }
+
     fun login(
         authDto: AuthDto,
         onSuccess: (String?) -> Unit,
@@ -52,3 +84,11 @@ class LoginViewModel(
         //allow user to proceed
     }
 }
+
+data class LoginUIState(
+    val mobileNumber: String = "",
+    val password: String = "",
+    val mobileNumberError: String? = null,
+    val passwordError: String? = null,
+    val isLoading: Boolean = false
+)

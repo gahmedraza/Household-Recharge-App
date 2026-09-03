@@ -11,4 +11,8 @@
 
     <string name="create_account">Don\'t have an account? Create New</string>
 
+    <string name="login">Login</string>
+
+    <string name="password_error_1">Password must contain at least 8 characters</string>
+
 </resources>

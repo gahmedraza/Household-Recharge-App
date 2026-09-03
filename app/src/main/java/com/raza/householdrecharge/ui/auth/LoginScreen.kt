@@ -47,9 +47,10 @@ fun LoginScreen(
 ) {
     var mobileNumber by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
-
-    var shouldProceed by remember { mutableStateOf(false) }
-    var signinStatus by remember { mutableStateOf("") }
+    var mobileNumberError by rememberSaveable { mutableStateOf("") }
+    var passwordError by rememberSaveable { mutableStateOf("") }
+    var shouldProceed by rememberSaveable { mutableStateOf(false) }
+    var signinStatus by rememberSaveable { mutableStateOf("") }
 
     Card(
         modifier = Modifier
@@ -91,14 +92,23 @@ fun LoginScreen(
                     ),
 
                     onValueChange = {
-                        viewModel.mobileNumber = it
+                        mobileNumber = it
+                        mobileNumberError = ""
                     },
 
                     label = {
                         Text(stringResource(R.string.mobile_number))
                     },
 
-                    value = viewModel.mobileNumber
+                    value = mobileNumber,
+
+                    isError = mobileNumberError.isNotEmpty(),
+
+                    supportingText = {
+                        if(mobileNumberError.isNotEmpty()) {
+                            Text(mobileNumberError)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -107,14 +117,23 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        viewModel.password = it
+                        password = it
+                        passwordError = ""
                     },
 
                     label = {
                         Text(stringResource(R.string.password))
                     },
 
-                    value = viewModel.password
+                    value = password,
+
+                    isError = passwordError.isNotEmpty(),
+
+                    supportingText = {
+                        if(passwordError.isNotEmpty()) {
+                            Text(passwordError)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.padding(60.dp))
@@ -126,12 +145,25 @@ fun LoginScreen(
 
                     onClick = {
 
+                        //validate the input fields
+                        if(mobileNumber.length != 10) {
+                            mobileNumberError = "Enter a valid mobile number"
+                        }
+
+                        if(password.length < 8) {
+                            passwordError = "Password must contain at least 8 characters"
+                        }
+
+                        if(mobileNumberError.isNotEmpty()||passwordError.isNotEmpty()) {
+                            return@OutlinedButton
+                        }
+
+                        //make the api call
                         viewModel.login(
-                            //todo modify
                             authDto = AuthDto(
-                                "",
-                                "",
-                                ""
+                                accountName = null,
+                                mobileNumber = mobileNumber,
+                                password = password
                             ),
 
                             onSuccess = { userId ->
@@ -150,7 +182,7 @@ fun LoginScreen(
                             })
                     }
                 ) {
-                    Text("Log In")
+                    Text(stringResource(R.string.login))
                 }
 
                 Spacer(modifier = Modifier.padding(10.dp))
@@ -237,8 +269,7 @@ fun darkPreviewSignIn() {
 
 @Composable
 fun Content() {
-    val viewModel =
-        getViewModel(LoginViewModel::class.java)
+    val viewModel = getViewModel(LoginViewModel::class.java)
 
     HouseholdRechargeTheme(dynamicColor = false) {
         LoginScreen(
