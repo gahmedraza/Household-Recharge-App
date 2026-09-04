@@ -41,6 +41,18 @@ fun LargeBodyText(modifier: Modifier = Modifier,
 }
 
 @Composable
+fun SmallHeadlineText(modifier: Modifier = Modifier,
+                      text: String,
+                      color: Color = Color.Unspecified) {
+    CommonText(
+        modifier = modifier,
+        text = text,
+        style = MaterialTheme.typography.headlineSmall,
+        color = color
+    )
+}
+
+@Composable
 fun LargeHeadlineText(modifier: Modifier = Modifier,
                       text: String,
                       color: Color = Color.Unspecified) {

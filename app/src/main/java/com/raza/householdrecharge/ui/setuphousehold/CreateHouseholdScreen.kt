@@ -95,7 +95,7 @@ fun CreateHouseholdBody(
 
             onValueChange = {
                 viewModel.household = viewModel.household.copy(
-                    name = it
+                    name = it.trim()
                 )
             },
 
@@ -144,7 +144,7 @@ fun CreateHouseholdContent() {
     val viewModel =
         getViewModel(HouseholdViewModel::class.java)
 
-    HouseholdRechargeTheme {
+    HouseholdRechargeTheme(dynamicColor = false) {
         CreateHouseholdScreen (
             viewModel = viewModel,
 

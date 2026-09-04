@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.core.result
 
-sealed class Result<T> {
-    data class Success<T>(val s: T) : Result<T>()
-    data class Failure<T>(val s: T) : Result<T>()
+sealed class Result<out T, out E> {
+    data class Success<T>(val s: T) : Result<T, Nothing>()
+    data class Failure<E>(val s: E) : Result<Nothing, E>()
 }

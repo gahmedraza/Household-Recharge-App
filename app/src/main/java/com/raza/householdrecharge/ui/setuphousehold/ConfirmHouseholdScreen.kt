@@ -1,25 +1,37 @@
 package com.raza.householdrecharge.ui.setuphousehold
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.common.AppCard
+import com.raza.householdrecharge.common.LargeBodyText
 import com.raza.householdrecharge.common.LargeDisplayText
-import com.raza.householdrecharge.common.LargeHeadlineText
-import com.raza.householdrecharge.common.LargeTitleText
+import com.raza.householdrecharge.common.SmallHeadlineText
 import com.raza.householdrecharge.common.getViewModel
+import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
@@ -51,71 +63,74 @@ fun ConfirmHouseholdBody(
     onFailure:() -> Unit
 ) {
 
-    val paddingValues = PaddingValues(
-        start = 20.dp,
-        end = 20.dp,
-        top = 40.dp,
-        bottom = 40.dp
-    )
+    var shouldProceed by rememberSaveable { mutableStateOf(false) }
+    var signinStatus by rememberSaveable { mutableStateOf("") }
 
-    AppCard(
-        paddingValues = paddingValues,
-        elevation = 4.dp,
-        cornerSize = 4.dp
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+
     ) {
 
-        Column(
-            modifier = Modifier.padding(20.dp)
+        val paddingValues = PaddingValues(
+            start = 20.dp,
+            end = 20.dp,
+            top = 40.dp,
+            bottom = 40.dp
+        )
+
+        AppCard(
+            paddingValues = paddingValues,
+            elevation = 4.dp,
+            cornerSize = 4.dp
         ) {
 
-            LargeHeadlineText(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                text = "Join Household",
-                color = MaterialTheme.colorScheme.primary
-            )
+            Column(
+                modifier = Modifier.padding(20.dp)
+            ) {
 
-            Spacer(Modifier.height(100.dp))
-
-            LargeTitleText(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                text = "You are invited to join",
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(Modifier.height(60.dp))
-
-            LargeDisplayText(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                text = householdName.cleanString()
-            )
-
-            Spacer(Modifier.height(60.dp))
-
-            LargeTitleText(
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                text = "Do you want to join this household?",
-                color = MaterialTheme.colorScheme.primary
-            )
-
-            Spacer(Modifier.height(200.dp))
-
-            Row(modifier = Modifier.fillMaxWidth()) {
-
-                OutlinedButton(
-                    onClick = {
-
-                    }
-                ) {
-                    LargeTitleText(
-                        text = "Cancel"
-                    )
-                }
-
-                Spacer(
-                    modifier = Modifier.weight(1f)
+                SmallHeadlineText(
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                    text = "Join Household",
+                    color = MaterialTheme.colorScheme.onBackground
                 )
 
+                Spacer(Modifier.height(40.dp))
+
+                LargeBodyText(
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                    text = "You are invited to join",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(Modifier.height(60.dp))
+
+                LargeDisplayText(
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                    text = householdName.cleanString(),
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Spacer(Modifier.height(60.dp))
+
+                LargeBodyText(
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                    text = "Do you want to join this household?",
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+
+                Spacer(Modifier.height(60.dp))
+
                 OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 20.dp,
+                            end = 20.dp),
+
+                    enabled = !shouldProceed,
+
                     onClick = {
 
                         viewModel.onJoinHousehold(
@@ -123,21 +138,81 @@ fun ConfirmHouseholdBody(
                             householdId = householdId.cleanString(),
                             onSuccess = {
 
-                                onSuccess()
+                                signinStatus = "You have been added to the household"
+                                shouldProceed = true
                             },
                             onFailure = {
+
+                                signinStatus = "Failure"
+                                shouldProceed = false
 
                                 onFailure()
                             }
                         )
                     }
                 ) {
-                    LargeTitleText(
+                    Text(
                         text = "Join"
                     )
                 }
-            }
+//
+                Spacer(Modifier.height(10.dp))
 
+                OutlinedButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 20.dp,
+                            end = 20.dp),
+
+                    enabled = shouldProceed,
+
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if(shouldProceed) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant
+                        }
+                    ),
+
+                    onClick = {
+
+                        onSuccess()
+                    }
+                ) {
+                    Text("Proceed")
+                }
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally),
+                    text = signinStatus,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (shouldProceed) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    },
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.padding(20.dp))
+                //
+            }
         }
     }
 }
@@ -165,12 +240,14 @@ fun ConfirmHouseholdContent() {
     val viewModel =
         getViewModel(HouseholdViewModel::class.java)
 
-    ConfirmHouseholdBody(
-        householdName = "",
-        householdId = "",
-        invitationCode = "",
-        viewModel = viewModel,
-        onSuccess = {},
-        onFailure = {}
-    )
+    HouseholdRechargeTheme(dynamicColor = false) {
+        ConfirmHouseholdBody(
+            householdName = "",
+            householdId = "",
+            invitationCode = "",
+            viewModel = viewModel,
+            onSuccess = {},
+            onFailure = {}
+        )
+    }
 }

@@ -130,19 +130,22 @@ class HouseholdViewModel(
 
             if(invitation == null) {
                 isLoading = false
-                onFailure("error")
+                onFailure("invitation code not found")
+                return@launch
             }
 
             if(invitation?.status != "pending") {
                 isLoading = false
-                onFailure("error")
+                onFailure("invitation code already used")
+                return@launch
             }
 
             val invitationExpiry = invitation?.expiresAt?.toLong() ?: 0L
 
             if(invitationExpiry < System.currentTimeMillis()) {
                 isLoading = false
-                onFailure("error")
+                onFailure("invitation code has expired")
+                return@launch
             }
 
             val household = getHousehold(invitation?.householdId.cleanString())
@@ -150,10 +153,11 @@ class HouseholdViewModel(
 
             if(household == null) {
                 isLoading = false
-                onFailure("error")
+                onFailure("failure")
+                return@launch
             }
 
-            isLoading = true
+            isLoading = false
             onSuccess(household)
         }
     }
@@ -181,9 +185,13 @@ class HouseholdViewModel(
                     invitationCode = invitationCode,
                     onSuccess = {
                         isLoading = false
+
+                        onSuccess("you have been added to the household")
                     },
                     onFailure = {
                         isLoading = false
+
+                        onFailure("unable to add you to the household")
                     }
                 )
 

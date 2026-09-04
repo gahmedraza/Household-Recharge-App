@@ -80,7 +80,7 @@ fun LoginScreen(
                     ),
 
                     onValueChange = {
-                        mobileNumber = it
+                        mobileNumber = it.trim()
                         mobileNumberError = ""
                     },
 
@@ -105,7 +105,7 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        password = it
+                        password = it.trim()
                         passwordError = ""
                     },
 

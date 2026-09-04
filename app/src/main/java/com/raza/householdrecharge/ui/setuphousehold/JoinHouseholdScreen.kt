@@ -8,19 +8,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.common.AppCard
 import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.common.getViewModel
+import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
@@ -70,6 +79,9 @@ fun JoinHouseholdBody(
     onSuccess: (HouseholdDto?) -> Unit,
     onFailure: () -> Unit
 ) {
+    var shouldProceed by rememberSaveable { mutableStateOf(false) }
+    var signinStatus by rememberSaveable { mutableStateOf("") }
+    var householdDto: HouseholdDto? = null
 
     AppCard(Modifier.fillMaxWidth()) {
 
@@ -104,7 +116,7 @@ fun JoinHouseholdBody(
                 },
 
                 onValueChange = {
-                    viewModel.invitationCode = it
+                    viewModel.invitationCode = it.trim()
 
                 },
 
@@ -124,9 +136,15 @@ fun JoinHouseholdBody(
                         invitationCode = viewModel.invitationCode,
 
                         onSuccess = { household ->
-                            onSuccess(household)
+                            householdDto = household
+
+                            shouldProceed = true
+                            signinStatus = "invitation code found"
                         },
-                        onFailure = {
+                        onFailure = { message ->
+                            shouldProceed = false
+                            signinStatus = message.cleanString()
+
                             onFailure()
                         }
                     )
@@ -135,7 +153,60 @@ fun JoinHouseholdBody(
                 Text("Join Household")
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+
+            //
+
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+
+                enabled = shouldProceed,
+
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if(shouldProceed) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.surfaceVariant
+                    }
+                ),
+
+                onClick = {
+
+                    onSuccess(householdDto)
+                }
+            ) {
+                Text("Proceed")
+            }
+
+            Spacer(modifier = Modifier.padding(20.dp))
+
+            if (viewModel.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(20.dp))
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally),
+                text = signinStatus,
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (shouldProceed) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.error
+                },
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.padding(20.dp))
+            //
         }
     }
 }
@@ -145,17 +216,19 @@ fun JoinHouseholdContent() {
     val viewModel =
         getViewModel(HouseholdViewModel::class.java)
 
-    JoinHouseholdScreen(
-        viewModel = viewModel,
+    HouseholdRechargeTheme(dynamicColor = false) {
+        JoinHouseholdScreen(
+            viewModel = viewModel,
 
-        onSuccess = {
+            onSuccess = {
 
-        },
+            },
 
-        onFailure = {
+            onFailure = {
 
-        }
-    )
+            }
+        )
+    }
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

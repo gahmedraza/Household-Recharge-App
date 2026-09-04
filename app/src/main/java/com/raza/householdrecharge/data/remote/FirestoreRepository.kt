@@ -111,7 +111,7 @@ object FirestoreRepository {
     suspend fun addHousehold(
         appUserDto: AppUserDto,
         householdDto: HouseholdDto
-    ): Result<String> {
+    ): Result<String, String> {
 
         return try {
             householdDto.authId = appUserDto.authId
@@ -245,7 +245,7 @@ object FirestoreRepository {
 
     private suspend fun register(
         authDto: AuthDto
-    ): Result<String> {
+    ): Result<String, String> {
 
         return try {
             val result = FirebaseAuth
@@ -317,7 +317,7 @@ object FirestoreRepository {
 
             val addAccountResult = addAccount(accountDto = accountDto)
 
-            if (addAccountResult is Result.Success) {
+            if (addAccountResult is Result.Success<String>) {
                 log("b3")
                 onBoardingDto =
                     OnboardingDto(
@@ -345,7 +345,7 @@ object FirestoreRepository {
 
     private suspend fun addAccount(
         accountDto: AccountDto?
-    ): Result<String> {
+    ): Result<String, String> {
         return try {
 
             if (accountDto == null) {
@@ -376,7 +376,7 @@ object FirestoreRepository {
 
     private suspend fun updateAccount(
         accountId: String, householdId: String
-    ): Result<String> {
+    ): Result<String, String> {
         return try {
 
             FirebaseFirestore
@@ -390,6 +390,41 @@ object FirestoreRepository {
                 .await()
 
             Result.Success(accountId)
+        } catch (e: Exception) {
+
+            Result.Failure(e.message.cleanString())
+        }
+    }
+
+    private suspend fun fetchAccount(
+        accountDto: AccountDto?
+    ): Result<AccountDto?, String> {
+        return try {
+
+            if (accountDto == null) {
+                return Result.Failure("account collection cannot be fetched with empty account dto")
+            }
+
+            val accountId = accountDto.accountId.cleanString()
+
+            if (accountId.isEmpty()) {
+                Result.Failure("account collection cannot be fetched with empty account id")
+            }
+
+            val document = FirebaseFirestore
+                .getInstance()
+
+                .collection("accounts")
+                .document(accountDto.accountId.cleanString())
+                .get()
+
+                .await()
+
+
+
+            val accountDto = document.toObject(AccountDto::class.java)
+
+            Result.Success(accountDto)
         } catch (e: Exception) {
 
             Result.Failure(e.message.cleanString())
@@ -562,7 +597,7 @@ object FirestoreRepository {
 
     suspend fun createInvitation(
         invitation: InvitationDto
-    ): Result<String> {
+    ): Result<String, String> {
 
         return try {
 
