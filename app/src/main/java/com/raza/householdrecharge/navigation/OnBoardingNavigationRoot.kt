@@ -142,7 +142,13 @@ fun OnboardingNavigation() {
 
                 viewModel = viewModel(
                     factory = genericFactory
-                )
+                ),
+
+                onSuccess = {
+                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                },
+
+                onFailure = {}
             )
         }
 

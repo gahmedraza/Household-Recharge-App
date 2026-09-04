@@ -27,13 +27,17 @@ fun ConfirmHouseholdScreen(
     householdName: String?,
     householdId: String?,
     invitationCode: String?,
-    viewModel: HouseholdViewModel
+    viewModel: HouseholdViewModel,
+    onSuccess:() -> Unit,
+    onFailure:() -> Unit
 ) {
     ConfirmHouseholdBody(
         householdName = householdName,
         householdId = householdId,
         invitationCode = invitationCode,
-        viewModel = viewModel
+        viewModel = viewModel,
+        onSuccess = onSuccess,
+        onFailure = onFailure
     )
 }
 
@@ -42,7 +46,9 @@ fun ConfirmHouseholdBody(
     householdName: String?,
     householdId: String?,
     invitationCode: String?,
-    viewModel: HouseholdViewModel
+    viewModel: HouseholdViewModel,
+    onSuccess:() -> Unit,
+    onFailure:() -> Unit
 ) {
 
     val paddingValues = PaddingValues(
@@ -117,9 +123,11 @@ fun ConfirmHouseholdBody(
                             householdId = householdId.cleanString(),
                             onSuccess = {
 
+                                onSuccess()
                             },
                             onFailure = {
 
+                                onFailure()
                             }
                         )
                     }
@@ -161,6 +169,8 @@ fun ConfirmHouseholdContent() {
         householdName = "",
         householdId = "",
         invitationCode = "",
-        viewModel = viewModel
+        viewModel = viewModel,
+        onSuccess = {},
+        onFailure = {}
     )
 }
