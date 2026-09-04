@@ -2,8 +2,8 @@ package com.raza.householdrecharge.ui.auth
 
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.data.remote.AuthUseCase
 import com.raza.householdrecharge.data.remote.dto.AuthDto
+import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.launch
 

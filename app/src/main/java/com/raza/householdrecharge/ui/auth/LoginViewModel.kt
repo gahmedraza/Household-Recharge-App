@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.data.remote.AuthRepository
 import com.raza.householdrecharge.data.remote.dto.AuthDto
+import com.raza.householdrecharge.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(

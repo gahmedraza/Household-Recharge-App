@@ -7,8 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.data.remote.MemberRepository
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
+import com.raza.householdrecharge.data.repository.MemberRepository
 import com.raza.householdrecharge.domain.model.Member
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

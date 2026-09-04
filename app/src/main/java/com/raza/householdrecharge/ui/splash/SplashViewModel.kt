@@ -2,7 +2,7 @@ package com.raza.householdrecharge.ui.splash
 
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.data.remote.HouseholdRepository
+import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.ui.auth.AuthViewModel
 import kotlinx.coroutines.launch
 

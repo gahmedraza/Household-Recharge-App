@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.data.remote.InvitationRepository
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
+import com.raza.householdrecharge.data.repository.InvitationRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
