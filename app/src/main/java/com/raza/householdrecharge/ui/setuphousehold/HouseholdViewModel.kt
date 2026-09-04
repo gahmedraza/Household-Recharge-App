@@ -9,17 +9,20 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.util.cleanString
+import com.raza.householdrecharge.data.remote.HouseholdRepository
+import com.raza.householdrecharge.data.remote.HouseholdUseCase
+import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.data.remote.FirestoreRepository
-import com.raza.householdrecharge.data.remote.dto.AccountDto
+import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class HouseholdViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val householdUseCase: HouseholdUseCase,
+    private val householdRepository: HouseholdRepository
 ) : BaseViewModel() {
 
     var invitationCode by mutableStateOf("")
@@ -53,7 +56,7 @@ class HouseholdViewModel(
                 householdId = ""
             )
 
-            FirestoreRepository.addHouseholdAndUpdateAccount(
+            householdUseCase.addHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
 
                 householdDto = householdDto,
@@ -129,7 +132,7 @@ class HouseholdViewModel(
 
             val authId = sessionManager.authId.first()
 
-            FirestoreRepository.validateAccountAndJoinHousehold(
+            householdUseCase.validateAccountAndJoinHousehold(
                 accountDto = AccountDto(accountId = authId),
 
                 onSuccess = {
@@ -219,7 +222,7 @@ class HouseholdViewModel(
                     ?.uid
                     .cleanString()
 
-                FirestoreRepository.joinHousehold(
+                householdRepository.joinHousehold(
                     userId = userId,
                     householdId = householdId,
                     invitationCode = invitationCode,

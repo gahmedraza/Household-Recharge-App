@@ -6,14 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
+import com.raza.householdrecharge.data.remote.RechargeRepository
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.domain.model.RechargeHistory
-import com.raza.householdrecharge.data.remote.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class RechargeListingViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val rechargeRepository: RechargeRepository
 ) : BaseViewModel() {
 
     var mobileRechargeHistory by mutableStateOf<List<RechargeHistory>>(emptyList())
@@ -68,7 +69,7 @@ class RechargeListingViewModel(
                 mobileNumber = currentMobileNumber
             )
 
-            FirestoreRepository.fetchRechargeHistoryList(
+            rechargeRepository.fetchRechargeHistoryList(
                 appUserDto = appUserDto,
 
                 onSuccess = { rechargeHistoryList ->

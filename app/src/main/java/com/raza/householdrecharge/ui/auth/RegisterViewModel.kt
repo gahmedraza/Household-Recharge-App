@@ -2,13 +2,14 @@ package com.raza.householdrecharge.ui.auth
 
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.util.cleanString
+import com.raza.householdrecharge.data.remote.AuthUseCase
 import com.raza.householdrecharge.data.remote.dto.AuthDto
-import com.raza.householdrecharge.data.remote.FirestoreRepository
+import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.launch
 
 class RegisterViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val authUseCase: AuthUseCase
 ) : AuthViewModel(sessionManager) {
     fun registerAndAddAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
@@ -20,7 +21,7 @@ class RegisterViewModel(
                 password = password
             )
 
-            FirestoreRepository.registerAndAddAccount(
+            authUseCase.registerAndAddAccount(
                 authDto,
 
                 onSuccess = { onBoardingDto ->

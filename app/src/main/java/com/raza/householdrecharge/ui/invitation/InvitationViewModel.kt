@@ -6,14 +6,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
+import com.raza.householdrecharge.data.remote.InvitationRepository
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.data.remote.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
 
 class InvitationViewModel(
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    private val invitationRepository: InvitationRepository
 ): BaseViewModel() {
 
     var invitationCode by mutableStateOf("")
@@ -36,7 +37,7 @@ class InvitationViewModel(
                 status = "pending"
             )
 
-            FirestoreRepository.createInvitationFacade(
+            invitationRepository.createInvitationFacade(
                 invitation = invitation,
                 onSuccess = { data ->
                     isLoading = false
@@ -69,7 +70,7 @@ class InvitationViewModel(
     ) {
 
         viewModelScope.launch {
-            FirestoreRepository.fetchInvitationList(
+            invitationRepository.fetchInvitationList(
 
                 onSuccess = { invitationList ->
                     this@InvitationViewModel.invitationList = invitationList

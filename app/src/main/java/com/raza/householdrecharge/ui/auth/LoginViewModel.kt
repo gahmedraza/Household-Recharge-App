@@ -5,12 +5,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
+import com.raza.householdrecharge.data.remote.AuthRepository
 import com.raza.householdrecharge.data.remote.dto.AuthDto
-import com.raza.householdrecharge.data.remote.FirestoreRepository
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val authRepository: AuthRepository
 ) : AuthViewModel(sessionManager) {
 
     var uiState by mutableStateOf(LoginUIState())
@@ -53,7 +54,7 @@ class LoginViewModel(
             password = authDto.password
         )
 
-        FirestoreRepository.login(
+        authRepository.login(
             authDto = authDto,
 
             onSuccess = { userId ->

@@ -7,14 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
+import com.raza.householdrecharge.data.remote.RechargeRepository
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.domain.model.RechargeHistory
-import com.raza.householdrecharge.data.remote.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class AddRechargeViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val rechargeRepository: RechargeRepository
 ) : BaseViewModel() {
     var amount by mutableStateOf("")
     var date by mutableStateOf("")
@@ -67,7 +68,7 @@ class AddRechargeViewModel(
                 mobileNumber = mobileNumber
             )
 
-            FirestoreRepository.addRecharge(
+            rechargeRepository.addRecharge(
                 rechargeHistory = rechargeHistory,
 
                 appUserDto = appUserDto,

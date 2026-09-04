@@ -5,13 +5,14 @@ import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.MemberDto
 import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.common.getPrintableDate
+import com.raza.householdrecharge.data.remote.MemberRepository
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
-import com.raza.householdrecharge.data.remote.FirestoreRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class AddMemberViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val memberRepository: MemberRepository
 ) : BaseViewModel() {
 
     fun onAddMember(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
@@ -50,7 +51,7 @@ class AddMemberViewModel(
                 householdId = householdId
             )
 
-            FirestoreRepository.addMember(
+            memberRepository.addMember(
                 appUserDto = appUserDto,
 
                 member = member,

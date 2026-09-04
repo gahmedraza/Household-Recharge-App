@@ -7,14 +7,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.domain.model.Member
+import com.raza.householdrecharge.data.remote.MemberRepository
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
-import com.raza.householdrecharge.data.remote.FirestoreRepository
+import com.raza.householdrecharge.domain.model.Member
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class DashboardViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val memberRepository: MemberRepository
 ) : BaseViewModel() {
     var members by mutableStateOf<List<Member>>(emptyList())
 
@@ -43,7 +44,7 @@ class DashboardViewModel(
                 householdId = householdId
             )
 
-            FirestoreRepository.fetchMembers(
+            memberRepository.fetchMembers(
                 appUserDto = appUserDto,
 
                 onSuccess = { memberList ->

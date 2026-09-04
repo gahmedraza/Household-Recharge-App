@@ -4,14 +4,15 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.util.cleanString
+import com.raza.householdrecharge.data.remote.HouseholdUseCase
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
-import com.raza.householdrecharge.data.remote.FirestoreRepository
+import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class AddHouseholdViewModel(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val householdUseCase: HouseholdUseCase
 ) : BaseViewModel() {
 
     fun onAddHousehold(
@@ -39,7 +40,7 @@ class AddHouseholdViewModel(
                 householdId = ""
             )
 
-            FirestoreRepository.addHouseholdAndUpdateAccount(
+            householdUseCase.addHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
 
                 householdDto = householdDto,
