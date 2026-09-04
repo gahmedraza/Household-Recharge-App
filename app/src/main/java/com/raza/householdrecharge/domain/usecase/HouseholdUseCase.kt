@@ -77,4 +77,8 @@ class HouseholdUseCase(
             }
         }
     }
+
+    suspend fun `join_household_if_not_already`() {
+
+    }
 }

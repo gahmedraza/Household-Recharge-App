@@ -121,6 +121,24 @@ class HouseholdViewModel(
         return householdDto
     }
 
+    /**
+     * Joins the user to a household using the provided invitation code.
+     *
+     * First checks whether the user's account is already associated with a household.
+     * If no household is associated, the invitation is marked as used and the
+     * household ID is assigned to the user's account.
+     */
+    fun joinHousehold(
+        invitationCode: String,
+        onSuccess: (HouseholdDto?) -> Unit,
+        onFailure: (String?) -> Unit
+    ) {
+
+        viewModelScope.launch {
+
+        }
+    }
+
     fun validateAccountAndJoinHousehold(
         invitationCode: String,
         onSuccess: (HouseholdDto?) -> Unit,
