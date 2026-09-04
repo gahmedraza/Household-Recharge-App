@@ -20,6 +20,34 @@ import kotlinx.coroutines.tasks.await
 
 object FirestoreRepository {
 
+    suspend fun validateAccountAndJoinHousehold(
+        accountDto: AccountDto?,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        val fetchAccountResult = fetchAccount(accountDto = accountDto)
+
+        when(fetchAccountResult) {
+
+            is Result.Success<*> -> {
+                val accountDto = fetchAccountResult.s as AccountDto
+
+                if(accountDto.householdId?.isEmpty() ?: false) {
+
+                    onSuccess("success")
+                } else {
+
+                    onFailure("You are already member of another household")
+                }
+            }
+
+
+            is Result.Failure<String> -> {
+                onFailure("error in fetching account")
+            }
+        }
+    }
+
     suspend fun signinAndFetchAccount() {
 
     }

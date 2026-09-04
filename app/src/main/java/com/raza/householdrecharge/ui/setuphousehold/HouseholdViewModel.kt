@@ -13,6 +13,7 @@ import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.remote.FirestoreRepository
+import com.raza.householdrecharge.data.remote.dto.AccountDto
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -115,6 +116,45 @@ class HouseholdViewModel(
         householdDto?.householdId=householdId
 
         return householdDto
+    }
+
+    fun validateAccountAndJoinHousehold(
+        invitationCode: String,
+        onSuccess: (HouseholdDto?) -> Unit,
+        onFailure: (String?) -> Unit
+    ) {
+        viewModelScope.launch {
+
+            //validateaccount
+
+            val authId = sessionManager.authId.first()
+
+            FirestoreRepository.validateAccountAndJoinHousehold(
+                accountDto = AccountDto(accountId = authId),
+
+                onSuccess = {
+
+                    validateInvitationCode(
+                        invitationCode = invitationCode,
+
+                        onSuccess = { householdDto ->
+
+                            onSuccess(householdDto)
+                        },
+
+                        onFailure = { error ->
+
+                            onFailure(error)
+                        }
+                    )
+                },
+
+                onFailure = {
+
+                }
+            )
+            //join household
+        }
     }
 
     fun validateInvitationCode(

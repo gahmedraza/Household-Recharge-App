@@ -132,7 +132,7 @@ fun JoinHouseholdBody(
 
                 onClick = {
 
-                    viewModel.validateInvitationCode(
+                    viewModel.validateAccountAndJoinHousehold(
                         invitationCode = viewModel.invitationCode,
 
                         onSuccess = { household ->
