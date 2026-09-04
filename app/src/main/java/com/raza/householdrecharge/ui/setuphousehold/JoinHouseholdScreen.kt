@@ -19,13 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.common.AppCard
+import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.common.getViewModel
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun JoinHouseholdScreen(
     viewModel: HouseholdViewModel,
-    onSuccess: (String) -> Unit,
+    onSuccess: (HouseholdDto?) -> Unit,
     onFailure: () -> Unit
 ) {
     Scaffold { paddingValues ->
@@ -50,8 +51,8 @@ fun JoinHouseholdScreen(
 
                 viewModel = viewModel,
 
-                onSuccess = { householdName ->
-                    onSuccess(householdName)
+                onSuccess = { householdDto ->
+                    onSuccess(householdDto)
                 },
 
                 onFailure = {
@@ -66,7 +67,7 @@ fun JoinHouseholdScreen(
 fun JoinHouseholdBody(
     modifier: Modifier,
     viewModel: HouseholdViewModel,
-    onSuccess: (String) -> Unit,
+    onSuccess: (HouseholdDto?) -> Unit,
     onFailure: () -> Unit
 ) {
 
@@ -123,7 +124,7 @@ fun JoinHouseholdBody(
                         invitationCode = viewModel.invitationCode,
 
                         onSuccess = { household ->
-                            onSuccess(household?.householdName.cleanString())
+                            onSuccess(household)
                         },
                         onFailure = {
                             onFailure()

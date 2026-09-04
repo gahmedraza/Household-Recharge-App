@@ -83,7 +83,7 @@ object FirestoreRepository {
                 onFailure("invalid invitation")
             }
 
-            val expiresAt = invitationSnapshot.getLong("expiresAt")
+            val expiresAt = invitationSnapshot.getString("expiresAt")?.toLong()
 
             if(expiresAt != null && expiresAt < System.currentTimeMillis()) {
                 onFailure("invitation has expired")
@@ -164,7 +164,8 @@ object FirestoreRepository {
             //update user with householdId
             updateAccount(appUserDto.accountId, householdId)
 
-            onSuccess("user collection updated with householdId")
+            log("user collection updated with householdId")
+            onSuccess(householdId)
 
         } catch (e: Exception) {
 

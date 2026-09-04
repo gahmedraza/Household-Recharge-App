@@ -111,7 +111,10 @@ class HouseholdViewModel(
             return null
         }
 
-        return snapshot.toObject(HouseholdDto::class.java)
+        val householdDto = snapshot.toObject(HouseholdDto::class.java)
+        householdDto?.householdId=householdId
+
+        return householdDto
     }
 
     fun validateInvitationCode(
@@ -143,6 +146,7 @@ class HouseholdViewModel(
             }
 
             val household = getHousehold(invitation?.householdId.cleanString())
+            household?.invitationCode=invitationCode
 
             if(household == null) {
                 isLoading = false

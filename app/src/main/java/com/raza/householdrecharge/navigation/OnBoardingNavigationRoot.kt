@@ -118,18 +118,28 @@ fun OnboardingNavigation() {
                     factory = genericFactory
                 ),
 
-                onSuccess = {
+                onSuccess = { householdDto ->
 
-                    navController.navigate(ComposeScreen.ConfirmHousehold.description)
+                    navController.navigate("${ComposeScreen.ConfirmHousehold.description}/${householdDto?.householdName}/${householdDto?.householdId}/${householdDto?.invitationCode}")
                 },
 
                 onFailure = {}
             )
         }
 
-        composable(ComposeScreen.ConfirmHousehold.description) {
+        composable("${ComposeScreen.ConfirmHousehold.description}/{householdName}/{householdId}/{invitationCode}") { backstackEntry ->
+
+            val householdName = backstackEntry.arguments?.getString("householdName") ?: ""
+            val householdId = backstackEntry.arguments?.getString("householdId") ?: ""
+            val invitationCode = backstackEntry.arguments?.getString("invitationCode") ?: ""
 
             ConfirmHouseholdScreen(
+                householdName = householdName,
+
+                householdId = householdId,
+
+                invitationCode = invitationCode,
+
                 viewModel = viewModel(
                     factory = genericFactory
                 )

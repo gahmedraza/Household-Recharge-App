@@ -23,12 +23,27 @@ import com.raza.householdrecharge.common.getViewModel
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
-fun ConfirmHouseholdScreen(viewModel: HouseholdViewModel) {
-    ConfirmHouseholdBody(viewModel = viewModel)
+fun ConfirmHouseholdScreen(
+    householdName: String?,
+    householdId: String?,
+    invitationCode: String?,
+    viewModel: HouseholdViewModel
+) {
+    ConfirmHouseholdBody(
+        householdName = householdName,
+        householdId = householdId,
+        invitationCode = invitationCode,
+        viewModel = viewModel
+    )
 }
 
 @Composable
-fun ConfirmHouseholdBody(viewModel: HouseholdViewModel) {
+fun ConfirmHouseholdBody(
+    householdName: String?,
+    householdId: String?,
+    invitationCode: String?,
+    viewModel: HouseholdViewModel
+) {
 
     val paddingValues = PaddingValues(
         start = 20.dp,
@@ -65,7 +80,7 @@ fun ConfirmHouseholdBody(viewModel: HouseholdViewModel) {
 
             LargeDisplayText(
                 modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                text = "Teegars"
+                text = householdName.cleanString()
             )
 
             Spacer(Modifier.height(60.dp))
@@ -98,8 +113,8 @@ fun ConfirmHouseholdBody(viewModel: HouseholdViewModel) {
                     onClick = {
 
                         viewModel.onJoinHousehold(
-                            viewModel.invitationCode,
-                            viewModel.household.id.cleanString(),
+                            invitationCode = invitationCode.cleanString(),
+                            householdId = householdId.cleanString(),
                             onSuccess = {
 
                             },
@@ -142,5 +157,10 @@ fun ConfirmHouseholdContent() {
     val viewModel =
         getViewModel(HouseholdViewModel::class.java)
 
-    ConfirmHouseholdBody(viewModel = viewModel)
+    ConfirmHouseholdBody(
+        householdName = "",
+        householdId = "",
+        invitationCode = "",
+        viewModel = viewModel
+    )
 }
