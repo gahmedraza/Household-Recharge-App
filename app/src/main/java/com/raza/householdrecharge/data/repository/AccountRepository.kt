@@ -1,99 +1,108 @@
 package com.raza.householdrecharge.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.raza.householdrecharge.common.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.AccountDto
+import com.raza.householdrecharge.data.repository.account.AccountError
+import com.raza.householdrecharge.data.repository.account.HouseHoldID
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
-class AccountRepository() {
+class AccountRepository(
+    private val firestore: FirebaseFirestore
+) {
 
-    suspend fun addAccount(
-        accountDto: AccountDto?
-    ): Result<String, String> {
-        return try {
+    /**
+     * Create an account record
+     * with provided collection ID
+     */
+    suspend fun createAccount(
+        collectionId: String,
+        accountDto: AccountDto
 
-            if (accountDto == null) {
-                return Result.Failure("account collection cannot be updated with empty account dto")
-            }
+    ): Result<Unit, String> {
 
-            val documentReference = FirebaseFirestore
-                .getInstance()
+        try {
+
+            firestore
 
                 .collection(HouseholdCollection.Accounts.description)
-                .document(accountDto.accountId.cleanString())
+                .document(collectionId)
                 .set(accountDto)
 
                 .await()
 
-            val accountId = accountDto.accountId.cleanString()
+            return Result.Success(Unit)
 
-            if (accountId.isEmpty()) {
-                Result.Failure("account id was not generated in accounts collection")
-            }
-
-            Result.Success(accountId)
         } catch (e: Exception) {
 
-            Result.Failure(e.message.cleanString())
+            return Result.Failure(e.message.cleanString())
         }
     }
 
+    /**
+     * update household ID
+     * in the account record
+     */
     suspend fun updateAccount(
-        accountId: String, householdId: String
-    ): Result<String, String> {
+        collectionId: String,
+        householdId: String
+
+    ): Result<Unit, String> {
         return try {
 
-            FirebaseFirestore
-                .getInstance()
+            firestore
 
                 .collection(HouseholdCollection.Accounts.description)
-                .document(accountId)
-
-                .update("householdId", householdId)
+                .document(collectionId)
+                .update(HouseHoldID, householdId)
 
                 .await()
 
-            Result.Success(accountId)
+            Result.Success(Unit)
+
         } catch (e: Exception) {
 
             Result.Failure(e.message.cleanString())
         }
     }
 
+    /**
+     * Fetch the account record
+     * with the record ID
+     */
     suspend fun fetchAccount(
-        accountDto: AccountDto?
-    ): Result<AccountDto?, String> {
-        return try {
+        collectionId: String
 
-            if (accountDto == null) {
-                return Result.Failure("account collection cannot be fetched with empty account dto")
-            }
+    ): Result<AccountDto, AccountError> {
+        try {
 
-            val accountId = accountDto.accountId.cleanString()
+            val document =
 
-            if (accountId.isEmpty()) {
-                Result.Failure("account collection cannot be fetched with empty account id")
-            }
+                firestore
 
-            val document = FirebaseFirestore
-                .getInstance()
+                    .collection(HouseholdCollection.Accounts.description)
+                    .document(collectionId)
+                    .get()
 
-                .collection(HouseholdCollection.Accounts.description)
-                .document(accountDto.accountId.cleanString())
-                .get()
-
-                .await()
-
-
+                    .await()
 
             val accountDto = document.toObject(AccountDto::class.java)
 
-            Result.Success(accountDto)
-        } catch (e: Exception) {
+            return if(accountDto == null) {
+                Result.Failure(AccountError.AccountEmpty)
 
-            Result.Failure(e.message.cleanString())
+            } else {
+                Result.Success(accountDto)
+
+            }
+
+        } catch (e: Exception) {
+            log(e.message)
+            return Result.Failure(AccountError.Unknown)
+
         }
     }
 }

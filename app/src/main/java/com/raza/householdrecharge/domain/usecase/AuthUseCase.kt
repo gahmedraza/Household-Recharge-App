@@ -60,14 +60,18 @@ class AuthUseCase(
 
             log("b2")
 
-            val addAccountResult = accountRepository.addAccount(accountDto = accountDto)
+            val addAccountResult = accountRepository
+                .createAccount(
+                    collectionId = signupResult.s.cleanString(),
+                    accountDto = accountDto
+                )
 
-            if (addAccountResult is com.raza.householdrecharge.core.result.Result.Success<String>) {
+            if (addAccountResult is Result.Success<Unit>) {
                 log("b3")
                 onBoardingDto =
                     OnboardingDto(
                         authId = userId,
-                        accountId = addAccountResult.s.cleanString()
+                        accountId = signupResult.s.cleanString()
                     )
                 onSuccess(onBoardingDto)
             } else {

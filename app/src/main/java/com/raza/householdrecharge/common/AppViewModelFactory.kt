@@ -2,6 +2,7 @@ package com.raza.householdrecharge.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.data.repository.HouseholdRepository
@@ -24,8 +25,15 @@ import com.raza.householdrecharge.ui.setuphousehold.HouseholdViewModel
 import com.raza.householdrecharge.ui.splash.SplashViewModel
 
 class AppViewModelFactory(
-    private val sessionManager: SessionManager
+    private val sessionManager: SessionManager,
+    private val firestore: FirebaseFirestore
 ) : ViewModelProvider.Factory {
+
+    val accountRepository = AccountRepository(firestore)
+    val householdRepository = HouseholdRepository()
+    val invitationRepository = InvitationRepository()
+    val memberRepository = MemberRepository()
+    val rechargeRepository = RechargeRepository()
 
     override fun <T : ViewModel> create(
         modelClass: Class<T>
@@ -35,8 +43,8 @@ class AppViewModelFactory(
             return AddHouseholdViewModel(
                 sessionManager = sessionManager,
                 householdUseCase = HouseholdUseCase(
-                    householdRepository = HouseholdRepository(),
-                    accountRepository = AccountRepository()
+                    householdRepository = householdRepository,
+                    accountRepository = accountRepository
                 )
             ) as T
         }
@@ -44,14 +52,14 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(AddMemberViewModel::class.java)) {
             return AddMemberViewModel(
                 sessionManager = sessionManager,
-                memberRepository = MemberRepository()
+                memberRepository = memberRepository
             ) as T
         }
 
         if (modelClass.isAssignableFrom(AddRechargeViewModel::class.java)) {
             return AddRechargeViewModel(
                 sessionManager = sessionManager,
-                rechargeRepository = RechargeRepository()
+                rechargeRepository = rechargeRepository
             ) as T
         }
 
@@ -67,7 +75,7 @@ class AppViewModelFactory(
                 sessionManager = sessionManager,
                 authUseCase = AuthUseCase(
                     authRepository = AuthRepository(),
-                    accountRepository = AccountRepository()
+                    accountRepository = accountRepository
                 )
             ) as T
         }
@@ -75,7 +83,7 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
             return DashboardViewModel(
                 sessionManager = sessionManager,
-                memberRepository = MemberRepository()
+                memberRepository = memberRepository
             ) as T
         }
 
@@ -88,7 +96,7 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(RechargeListingViewModel::class.java)) {
             return RechargeListingViewModel(
                 sessionManager = sessionManager,
-                rechargeRepository = RechargeRepository()
+                rechargeRepository = rechargeRepository
             ) as T
         }
 
@@ -101,7 +109,7 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(SplashViewModel::class.java)) {
             return SplashViewModel(
                 sessionManager = sessionManager,
-                householdRepository = HouseholdRepository()
+                householdRepository = householdRepository
             ) as T
         }
 
@@ -114,10 +122,10 @@ class AppViewModelFactory(
         if(modelClass.isAssignableFrom(HouseholdViewModel::class.java)) {
             return HouseholdViewModel(
                 sessionManager = sessionManager,
-                householdRepository = HouseholdRepository(),
+                householdRepository = householdRepository,
                 householdUseCase = HouseholdUseCase(
-                    householdRepository = HouseholdRepository(),
-                    accountRepository = AccountRepository()
+                    householdRepository = householdRepository,
+                    accountRepository = accountRepository
                 )
             ) as T
         }
@@ -125,7 +133,7 @@ class AppViewModelFactory(
         if(modelClass.isAssignableFrom(InvitationViewModel::class.java)) {
             return InvitationViewModel(
                 sessionManager = sessionManager,
-                invitationRepository = InvitationRepository()
+                invitationRepository = invitationRepository
             ) as T
         }
 

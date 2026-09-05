@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.HouseholdRechargeApplication
 import com.raza.householdrecharge.ui.addhousehold.AddHouseholdScreen
 import com.raza.householdrecharge.ui.addmember.AddMemberScreen
@@ -35,11 +36,14 @@ import com.raza.householdrecharge.ui.settings.SettingScreen
 fun DashboardNavigationRoot() {
     val navController = rememberNavController()
 
+    val firestore = FirebaseFirestore.getInstance()
+
     val application = LocalContext.current.applicationContext
             as HouseholdRechargeApplication
 
     val genericFactory = AppViewModelFactory(
-        application.sessionManager
+        sessionManager = application.sessionManager,
+        firestore = firestore
     )
 
     val backStackEntry by navController.currentBackStackEntryAsState()

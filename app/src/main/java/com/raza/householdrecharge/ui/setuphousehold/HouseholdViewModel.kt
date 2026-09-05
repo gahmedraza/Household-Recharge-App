@@ -151,7 +151,7 @@ class HouseholdViewModel(
             val authId = sessionManager.authId.first()
 
             householdUseCase.validateAccountAndJoinHousehold(
-                accountDto = AccountDto(accountId = authId),
+                accountId = authId,
 
                 onSuccess = {
 

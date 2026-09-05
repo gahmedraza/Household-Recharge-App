@@ -8,6 +8,7 @@ import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.HouseholdRepository
+import com.raza.householdrecharge.data.repository.account.AccountError
 
 class HouseholdUseCase(
     private val householdRepository: HouseholdRepository,
@@ -51,16 +52,19 @@ class HouseholdUseCase(
     }
 
     suspend fun validateAccountAndJoinHousehold(
-        accountDto: AccountDto?,
+        accountId: String,
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
-        val fetchAccountResult = accountRepository.fetchAccount(accountDto = accountDto)
+        val fetchAccountResult = accountRepository
+            .fetchAccount(
+                collectionId = accountId
+            )
 
         when(fetchAccountResult) {
 
-            is com.raza.householdrecharge.core.result.Result.Success<*> -> {
-                val accountDto = fetchAccountResult.s as AccountDto
+            is Result.Success<AccountDto> -> {
+                val accountDto = fetchAccountResult.s
 
                 if(accountDto.householdId?.isEmpty() ?: false) {
 
@@ -72,7 +76,7 @@ class HouseholdUseCase(
             }
 
 
-            is com.raza.householdrecharge.core.result.Result.Failure<String> -> {
+            is Result.Failure<AccountError> -> {
                 onFailure("error in fetching account")
             }
         }
