@@ -36,14 +36,11 @@ import com.raza.householdrecharge.ui.settings.SettingScreen
 fun DashboardNavigationRoot() {
     val navController = rememberNavController()
 
-    val firestore = FirebaseFirestore.getInstance()
-
     val application = LocalContext.current.applicationContext
             as HouseholdRechargeApplication
 
     val genericFactory = AppViewModelFactory(
-        sessionManager = application.sessionManager,
-        firestore = firestore
+        sessionManager = application.sessionManager
     )
 
     val backStackEntry by navController.currentBackStackEntryAsState()

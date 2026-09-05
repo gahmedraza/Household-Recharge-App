@@ -3,9 +3,12 @@ package com.raza.householdrecharge.ui.auth
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.data.remote.dto.AuthDto
+import com.raza.householdrecharge.data.remote.dto.OnboardingDto
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.repository.account.AccountError
 
 class RegisterViewModel(
     private val sessionManager: SessionManager,
@@ -21,10 +24,15 @@ class RegisterViewModel(
                 password = password
             )
 
-            authUseCase.registerAndAddAccount(
-                authDto,
+            val result = authUseCase.registerAndAddAccount(
+                authDto
+            )
 
-                onSuccess = { onBoardingDto ->
+            when(result) {
+                is Result.Success<OnboardingDto> -> {
+
+                    val onBoardingDto = result.data
+
                     viewModelScope.launch {
                         sessionManager.saveUserId(onBoardingDto.authId.cleanString())
                         sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
@@ -34,13 +42,14 @@ class RegisterViewModel(
                     authId = onBoardingDto.authId.cleanString()
                     isLoading = false
                     onSuccess(onBoardingDto.authId.cleanString())
-                },
+                }
 
-                onFailure = { error ->
+                is Result.Failure<AccountError> -> {
 
                     isLoading = false
-                    onFailure(error)
-                })
+                    onFailure(result.error.toString())//todo modify
+                }
+            }
         }
     }
 }

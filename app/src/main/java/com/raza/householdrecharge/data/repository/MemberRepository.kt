@@ -3,115 +3,87 @@ package com.raza.householdrecharge.data.repository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.common.MemberDto
 import com.raza.householdrecharge.common.getDateInMillis
+import com.raza.householdrecharge.common.map
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.domain.model.Member
 import com.raza.householdrecharge.util.cleanString
+import com.raza.householdrecharge.core.result.Result
+import kotlinx.coroutines.tasks.await
 
-class MemberRepository() {
+class MemberRepository(
+    private val firestore: FirebaseFirestore
+) {
 
-    fun fetchMembers(
-        appUserDto: AppUserDto,
-        onSuccess: (List<Member>) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        FirebaseFirestore
-            .getInstance()
+    suspend fun fetchMembers(
+        appUserDto: AppUserDto
+    ): Result<List<Member>, String> {
 
-            .collection("users")
-            .document(appUserDto.authId)
+        var result: Result<List<Member>, String>
 
-            .collection("households")
-            .document(appUserDto.householdId)
+        try {
 
-            .collection("members")
-            .get()
+            val documentSnapshot = firestore
 
-            .addOnSuccessListener { result ->
-                val memberList = mutableListOf<Member>()
+                .collection("users")
+                .document(appUserDto.authId)
 
-                result.documents.mapNotNull { document ->
-                    val memberDto = document.toObject(MemberDto::class.java)
+                .collection("households")
+                .document(appUserDto.householdId)
 
-                    val member = Member(
-                        id = document.id,
+                .collection("members")
+                .get()
+                .await()
 
-                        name = memberDto?.name ?: "",
+            val memberList = mutableListOf<Member>()
 
-                        mobileNumber = memberDto?.mobileNumber ?: "",
+            documentSnapshot.documents.mapNotNull { document ->
+                val memberDto = document.toObject(MemberDto::class.java)
 
-                        planDurationDays =
-                            if (memberDto?.planDurationDays?.isEmpty() ?: false) {
-                                0
-                            } else {
-                                memberDto?.planDurationDays?.toInt() ?: 0
-                            },
+                val member = map(document.id, memberDto)
 
-                        lastRechargeDate =
-                            if (memberDto?.lastRechargeDate?.isEmpty() ?: false) {
-                                0
-                            } else {
-                                getDateInMillis(
-                                    memberDto?.lastRechargeDate
-                                )
-                            },
-
-                        planExpiryDate =
-                            if (memberDto?.planExpiryDate?.isEmpty() ?: false) {
-                                0
-                            } else {
-                                getDateInMillis(
-                                    memberDto?.planExpiryDate
-                                )
-                            },
-
-                        rechargeRequested = false,
-
-                        planAmount =
-                            if (memberDto?.planAmount?.isEmpty() ?: false) {
-                                0
-                            } else {
-                                memberDto?.planAmount?.toInt() ?: 0
-                            }
-                    )
-
-                    memberList.add(member)
-                }
-
-                onSuccess(memberList)
+                memberList.add(member)
             }
-            .addOnFailureListener {
 
-                onFailure(it.message.cleanString())
-            }
+            result = Result.Success(memberList)
+
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
     }
 
-    fun addMember(
+    suspend fun addMember(
         appUserDto: AppUserDto,
-        member: MemberDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        FirebaseFirestore
-            .getInstance()
+        member: MemberDto
+    ) : Result<String, String> {
 
-            .collection("accounts")
-            .document(appUserDto.authId)
+        var result: Result<String, String>
 
-            .collection("households")
-            .document(appUserDto.householdId)
+        try {
 
-            .collection("members")
-            .add(member)
+            val documentReference = firestore
 
-            .addOnSuccessListener { documentReference ->
-                val memberId = documentReference.id
+                .collection("accounts")
+                .document(appUserDto.authId)
 
-                onSuccess(memberId)
-            }
+                .collection("households")
+                .document(appUserDto.householdId)
 
-            .addOnFailureListener {
+                .collection("members")
+                .add(member)
 
-                onFailure(it.message.cleanString())
-            }
+                .await()
+
+            val memberId = documentReference.id
+            result = Result.Success(memberId)
+
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
     }
 }

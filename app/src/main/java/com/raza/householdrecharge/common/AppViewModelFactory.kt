@@ -2,6 +2,7 @@ package com.raza.householdrecharge.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.AuthRepository
@@ -25,15 +26,18 @@ import com.raza.householdrecharge.ui.setuphousehold.HouseholdViewModel
 import com.raza.householdrecharge.ui.splash.SplashViewModel
 
 class AppViewModelFactory(
-    private val sessionManager: SessionManager,
-    private val firestore: FirebaseFirestore
+    private val sessionManager: SessionManager
 ) : ViewModelProvider.Factory {
 
+    val firestore = FirebaseFirestore.getInstance()
+    val firebaseAuth = FirebaseAuth.getInstance()
+
     val accountRepository = AccountRepository(firestore)
-    val householdRepository = HouseholdRepository()
-    val invitationRepository = InvitationRepository()
-    val memberRepository = MemberRepository()
-    val rechargeRepository = RechargeRepository()
+    val authRepository = AuthRepository(firebaseAuth)
+    val householdRepository = HouseholdRepository(firestore, firebaseAuth)
+    val invitationRepository = InvitationRepository(firestore)
+    val memberRepository = MemberRepository(firestore)
+    val rechargeRepository = RechargeRepository(firestore)
 
     override fun <T : ViewModel> create(
         modelClass: Class<T>
@@ -66,7 +70,7 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
                 sessionManager = sessionManager,
-                authRepository = AuthRepository()
+                authRepository = authRepository
             ) as T
         }
 
@@ -74,7 +78,7 @@ class AppViewModelFactory(
             return RegisterViewModel(
                 sessionManager = sessionManager,
                 authUseCase = AuthUseCase(
-                    authRepository = AuthRepository(),
+                    authRepository = authRepository,
                     accountRepository = accountRepository
                 )
             ) as T

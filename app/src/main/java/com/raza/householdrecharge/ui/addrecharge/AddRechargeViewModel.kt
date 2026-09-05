@@ -12,6 +12,7 @@ import com.raza.householdrecharge.data.repository.RechargeRepository
 import com.raza.householdrecharge.domain.model.RechargeHistory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
 
 class AddRechargeViewModel(
     private val sessionManager: SessionManager,
@@ -68,21 +69,24 @@ class AddRechargeViewModel(
                 mobileNumber = mobileNumber
             )
 
-            rechargeRepository.addRecharge(
+            val result = rechargeRepository.addRecharge(
                 rechargeHistory = rechargeHistory,
 
-                appUserDto = appUserDto,
+                appUserDto = appUserDto
+            )
 
-                onSuccess = { rechargeHistoryId ->
+            when(result) {
+
+                is Result.Success<String> -> {
 
                     onSuccess()
-                },
-
-                onFailure = { error ->
-
-                    onFailure(error)
                 }
-            )
+
+                is Result.Failure<String> -> {
+
+                    onFailure(result.error)
+                }
+            }
         }
     }
 

@@ -8,6 +8,7 @@ import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.repository.account.AccountError
 
 class AuthUseCase(
     private val authRepository: AuthRepository,
@@ -15,81 +16,66 @@ class AuthUseCase(
 ) {
 
     suspend fun registerAndAddAccount(
-        authDto: AuthDto,
-        onSuccess: (OnboardingDto) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
+        authDto: AuthDto
+    ): Result<OnboardingDto, AccountError> {
+
+        var result: Result<OnboardingDto, AccountError>
+
         try {
 
             val onBoardingDto: OnboardingDto
-
-            log("a1")
 
             var accountDto: AccountDto? = null
 
             val signupResult = authRepository.register(authDto = authDto)
 
-            var userId = ""
-
             when (signupResult) {
                 is Result.Success -> {
-                    log("a2")
-
-                    userId = signupResult.s.cleanString()
 
                     accountDto = AccountDto(
                         accountName = authDto.accountName,
-                        accountId = signupResult.s.cleanString()
+                        accountId = signupResult.data.cleanString()
                     )
+
+                    val addAccountResult = accountRepository
+
+                        .createAccount(
+                            collectionId = signupResult.data.cleanString(),
+                            accountDto = accountDto
+                        )
+
+                    if (addAccountResult is Result.Success<Unit>) {
+
+                        onBoardingDto =
+                            OnboardingDto(
+                                authId = signupResult.data.cleanString(),
+                                accountId = signupResult.data.cleanString()
+                            )
+
+                        result = Result.Success(onBoardingDto)
+
+                    } else {
+
+                        log("account id was not generated in accounts collection")
+                        result = Result.Failure(AccountError.AccountIdNotGenerated)
+
+                    }
                 }
 
                 is Result.Failure -> {
-                    log("a3")
 
-                    onFailure(signupResult.s.cleanString())
-                    return
-                    //onFailure("user id was not generated in user collection")
+                    log(signupResult.error.cleanString())
+                    result = Result.Failure(AccountError.Unknown)
                 }
             }
 
-            if (accountDto == null) {
-                onFailure("account cannot be added since account dto is empty")
-                log("b1")
-                return
-            }
-
-            log("b2")
-
-            val addAccountResult = accountRepository
-                .createAccount(
-                    collectionId = signupResult.s.cleanString(),
-                    accountDto = accountDto
-                )
-
-            if (addAccountResult is Result.Success<Unit>) {
-                log("b3")
-                onBoardingDto =
-                    OnboardingDto(
-                        authId = userId,
-                        accountId = signupResult.s.cleanString()
-                    )
-                onSuccess(onBoardingDto)
-            } else {
-                log("b4")
-                onFailure("account id was not generated in accounts collection")
-                return
-            }
-
-            log("c")
-            return
-
         } catch (e: Exception) {
 
-            log("d")
-
-            onFailure(e.message.cleanString())
-            return
+            log(e.message.cleanString())
+            result = Result.Failure(AccountError.Unknown)
         }
+
+        return result
     }
 
     suspend fun signinAndFetchAccount() {

@@ -4,76 +4,91 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.domain.model.RechargeHistory
 import com.raza.householdrecharge.util.cleanString
+import com.raza.householdrecharge.core.result.Result
+import kotlinx.coroutines.tasks.await
 
-class RechargeRepository() {
+class RechargeRepository(
+    private val firestore: FirebaseFirestore
+) {
 
-    fun addRecharge(
+    suspend fun addRecharge(
         rechargeHistory: RechargeHistory,
-        appUserDto: AppUserDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        FirebaseFirestore
-            .getInstance()
+        appUserDto: AppUserDto
+    ): Result<String, String> {
 
-            .collection("users")
-            .document(appUserDto.authId)
+        var result: Result<String, String>
 
-            .collection("households")
-            .document(appUserDto.householdId)
+        try {
 
-            .collection("members")
-            .document(appUserDto.memberId)
+            val documentReference = firestore
 
-            .collection("mobileNumbers")
-            .document(appUserDto.mobileNumber)
+                .collection("users")
+                .document(appUserDto.authId)
 
-            .collection("recharges")
-            .add(rechargeHistory)
+                .collection("households")
+                .document(appUserDto.householdId)
 
-            .addOnSuccessListener { documentReference ->
-                val rechargeHistoryId = documentReference.id
+                .collection("members")
+                .document(appUserDto.memberId)
 
-                onSuccess(rechargeHistoryId)
-            }
-            .addOnFailureListener {
+                .collection("mobileNumbers")
+                .document(appUserDto.mobileNumber)
 
-                onFailure(it.message.cleanString())
-            }
+                .collection("recharges")
+                .add(rechargeHistory)
+
+                .await()
+
+            val rechargeHistoryId = documentReference.id
+
+            result = Result.Success(rechargeHistoryId)
+
+
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
     }
 
-    fun fetchRechargeHistoryList(
-        appUserDto: AppUserDto,
-        onSuccess: (List<RechargeHistory>) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        FirebaseFirestore
-            .getInstance()
+    suspend fun fetchRechargeHistoryList(
+        appUserDto: AppUserDto
+    ): Result<List<RechargeHistory>, String> {
 
-            .collection("users")
-            .document(appUserDto.authId)
+        var result: Result<List<RechargeHistory>, String>
 
-            .collection("households")
-            .document(appUserDto.householdId)
+        try {
 
-            .collection("members")
-            .document(appUserDto.memberId)
+            val documentSnapshot = firestore
 
-            .collection("mobileNumbers")
-            .document(appUserDto.mobileNumber)
+                .collection("users")
+                .document(appUserDto.authId)
 
-            .collection("recharges")
-            .get()
-            .addOnSuccessListener { result ->
-                val rechargeHistoryList = result.documents.mapNotNull { document ->
-                    document.toObject(RechargeHistory::class.java)
-                }
+                .collection("households")
+                .document(appUserDto.householdId)
 
-                onSuccess(rechargeHistoryList)
+                .collection("members")
+                .document(appUserDto.memberId)
+
+                .collection("mobileNumbers")
+                .document(appUserDto.mobileNumber)
+
+                .collection("recharges")
+                .get()
+                .await()
+
+            val rechargeHistoryList = documentSnapshot.documents.mapNotNull { document ->
+                document.toObject(RechargeHistory::class.java)
             }
-            .addOnFailureListener {
 
-                onFailure(it.message.cleanString())
-            }
+            result = Result.Success(rechargeHistoryList)
+
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
     }
 }

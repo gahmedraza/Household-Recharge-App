@@ -8,6 +8,7 @@ import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.repository.AuthRepository
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
 
 class LoginViewModel(
     private val sessionManager: SessionManager,
@@ -47,33 +48,33 @@ class LoginViewModel(
         onSuccess: (String?) -> Unit,
         onFailure: (String?) -> Unit
     ) {
-        isLoading = true
+        viewModelScope.launch {
+            isLoading = true
 
-        val authDto = AuthDto(
-            mobileNumber = "${authDto.mobileNumber}@householdrecharge.local",
-            password = authDto.password
-        )
+            val authDto = AuthDto(
+                mobileNumber = "${authDto.mobileNumber}@householdrecharge.local",
+                password = authDto.password
+            )
 
-        authRepository.login(
-            authDto = authDto,
+            val result = authRepository.login(
+                authDto = authDto
+            )
 
-            onSuccess = { userId ->
-                viewModelScope.launch {
-                    sessionManager.saveUserId(userId)
+            when(result) {
+                is Result.Success<String> -> {
+
+                    sessionManager.saveUserId(result.data)
+                    isLoading = false
+                    onSuccess(result.data)
                 }
+                is Result.Failure<String> -> {
 
-                //this.authId = userId todo delete
-
-                isLoading = false
-                onSuccess(userId)
-            },
-
-            onFailure = { error ->
-
-                isLoading = false
-                onFailure(error)
+                    isLoading = false
+                    onFailure(result.error)
+                }
             }
-        )
+
+        }
     }
 
     fun signinAndFetchAccount() {

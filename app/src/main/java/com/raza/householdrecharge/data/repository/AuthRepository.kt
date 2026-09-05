@@ -6,50 +6,58 @@ import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
-class AuthRepository() {
+class AuthRepository(
+    private val firebaseAuth: FirebaseAuth
+) {
 
     suspend fun register(
         authDto: AuthDto
     ): Result<String, String> {
 
-        return try {
-            val result = FirebaseAuth
-                .getInstance()
+        var result: Result<String, String>
+
+        try {
+            val documentReference = firebaseAuth
                 .createUserWithEmailAndPassword(
                     authDto.mobileNumber,
                     authDto.password
                 )
                 .await()
 
-            val userId = result.user?.uid.cleanString()
+            val userId = documentReference.user?.uid.cleanString()
 
             if (userId.isEmpty()) {
-                Result.Failure<String>("user id was not created during signup")
+                result = Result.Failure<String>("user id was not created during signup")
             }
 
-            Result.Success<String>(userId)
+            result = Result.Success<String>(userId)
 
         } catch (e: Exception) {
-            Result.Failure<String>(e.message.cleanString())
+            result = Result.Failure<String>(e.message.cleanString())
         }
+
+        return result
     }
 
-    fun login(
-        authDto: AuthDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        FirebaseAuth
-            .getInstance()
-            .signInWithEmailAndPassword(authDto.mobileNumber, authDto.password)
-            .addOnSuccessListener { documentReference ->
+    suspend fun login(
+        authDto: AuthDto
+    ): Result<String, String> {
 
-                val userId = documentReference?.user?.uid.cleanString()
-                onSuccess(userId)
-            }
-            .addOnFailureListener {
+        var result: Result<String, String>
 
-                onFailure(it.message.cleanString())
-            }
+        try {
+            val documentReference = firebaseAuth
+                .signInWithEmailAndPassword(authDto.mobileNumber, authDto.password)
+                .await()
+
+            val userId = documentReference?.user?.uid.cleanString()
+            result = Result.Success(userId)
+
+
+        } catch(e: Exception) {
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
     }
 }

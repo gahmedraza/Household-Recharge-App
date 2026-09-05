@@ -11,6 +11,7 @@ import com.raza.householdrecharge.data.repository.InvitationRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
+import com.raza.householdrecharge.core.result.Result
 
 class InvitationViewModel(
     val sessionManager: SessionManager,
@@ -70,19 +71,19 @@ class InvitationViewModel(
     ) {
 
         viewModelScope.launch {
-            invitationRepository.fetchInvitationList(
+            val invitationResult = invitationRepository.getAllInvitations()
 
-                onSuccess = { invitationList ->
-                    this@InvitationViewModel.invitationList = invitationList
+            when(invitationResult) {
+                is Result.Success<List<Invitation>> -> {
+                    this@InvitationViewModel.invitationList = invitationResult.data
 
-                    onSuccess(invitationList)
-                },
-
-                onFailure = { error ->
-
-                    onFailure(error)
+                    onSuccess(invitationResult.data)
                 }
-            )
+                is Result.Failure<String> -> {
+
+                    onFailure(invitationResult.error)
+                }
+            }
         }
     }
 }

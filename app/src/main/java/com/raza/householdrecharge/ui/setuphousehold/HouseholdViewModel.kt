@@ -4,12 +4,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.data.remote.dto.AccountDto
+import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.HouseholdRepository
@@ -56,12 +58,17 @@ class HouseholdViewModel(
                 householdId = ""
             )
 
-            householdUseCase.addHouseholdAndUpdateAccount(
+            val result = householdUseCase.addHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
 
-                householdDto = householdDto,
+                householdDto = householdDto
+            )
 
-                onSuccess = { householdId ->
+            when(result) {
+
+                is Result.Success<String> -> {
+
+                    val householdId = result.data
 
                     viewModelScope.launch {
                         sessionManager.saveHouseholdName(householdName)
@@ -70,14 +77,14 @@ class HouseholdViewModel(
                         isLoading = false
                         onSuccess(householdId)
                     }
-                },
+                }
 
-                onFailure = { error ->
+                is Result.Failure<String> -> {
 
                     isLoading = false
-                    onFailure(error)
+                    onFailure(result.error)
                 }
-            )
+            }
         }
     }
 
@@ -143,17 +150,23 @@ class HouseholdViewModel(
         invitationCode: String,
         onSuccess: (HouseholdDto?) -> Unit,
         onFailure: (String?) -> Unit
-    ) {
+    ) : Task<Result<HouseholdDto?, String?>> {
+
+        val source = TaskCompletionSource<Result<HouseholdDto?, String?>>()
+
         viewModelScope.launch {
 
             //validateaccount
 
             val authId = sessionManager.authId.first()
 
-            householdUseCase.validateAccountAndJoinHousehold(
-                accountId = authId,
+            val result = householdUseCase.validateAccountAndJoinHousehold(
+                accountId = authId
+            )
 
-                onSuccess = {
+            when(result) {
+
+                is Result.Success<String> -> {
 
                     validateInvitationCode(
                         invitationCode = invitationCode,
@@ -168,14 +181,18 @@ class HouseholdViewModel(
                             onFailure(error)
                         }
                     )
-                },
-
-                onFailure = {
-
                 }
-            )
+
+                is Result.Failure<String> -> {
+
+                    onFailure("error")
+                }
+            }
+
             //join household
         }
+
+        return source.task
     }
 
     fun validateInvitationCode(
@@ -240,21 +257,28 @@ class HouseholdViewModel(
                     ?.uid
                     .cleanString()
 
-                householdRepository.joinHousehold(
+                val result = householdRepository.joinHousehold(
                     userId = userId,
                     householdId = householdId,
-                    invitationCode = invitationCode,
-                    onSuccess = {
+                    invitationCode = invitationCode
+                )
+
+                when(result) {
+
+                    is Result.Success<String> -> {
+
                         isLoading = false
 
                         onSuccess("you have been added to the household")
-                    },
-                    onFailure = {
+                    }
+
+                    is Result.Failure<String> -> {
+
                         isLoading = false
 
                         onFailure("unable to add you to the household")
                     }
-                )
+                }
 
             } catch (e: Exception) {
 

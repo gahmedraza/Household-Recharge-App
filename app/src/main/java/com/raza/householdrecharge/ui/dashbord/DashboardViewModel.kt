@@ -12,6 +12,7 @@ import com.raza.householdrecharge.data.repository.MemberRepository
 import com.raza.householdrecharge.domain.model.Member
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
 
 class DashboardViewModel(
     private val sessionManager: SessionManager,
@@ -44,19 +45,23 @@ class DashboardViewModel(
                 householdId = householdId
             )
 
-            memberRepository.fetchMembers(
-                appUserDto = appUserDto,
-
-                onSuccess = { memberList ->
-
-                    this@DashboardViewModel.members = memberList
-                    onSuccess()
-                },
-                onFailure = { error ->
-
-                    onFailure(error)
-                }
+            val result = memberRepository.fetchMembers(
+                appUserDto = appUserDto
             )
+
+            when(result) {
+
+                is Result.Success<List<Member>> -> {
+
+                    this@DashboardViewModel.members = result.data
+                    onSuccess()
+                }
+
+                is Result.Failure<String> -> {
+
+                    onFailure(result.error)
+                }
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.repository.MemberRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
 
 class AddMemberViewModel(
     private val sessionManager: SessionManager,
@@ -51,27 +52,29 @@ class AddMemberViewModel(
                 householdId = householdId
             )
 
-            memberRepository.addMember(
+            val result = memberRepository.addMember(
                 appUserDto = appUserDto,
 
-                member = member,
+                member = member
+            )
 
-                onSuccess = { memberId ->
+            when(result) {
+
+                is Result.Success<String> -> {
                     viewModelScope.launch {
-                        sessionManager.saveMemberId(memberId)
+                        sessionManager.saveMemberId(result.data)
                     }
 
                     isLoading = false
-                    onSuccess("member create: $memberId")
+                    onSuccess("member create: ${result.data}")
+                }
 
-                },
-
-                onFailure = { error ->
+                is Result.Failure<String> -> {
 
                     isLoading = false
-                    onFailure(error)
+                    onFailure(result.error)
                 }
-            )
+            }
         }
     }
 }

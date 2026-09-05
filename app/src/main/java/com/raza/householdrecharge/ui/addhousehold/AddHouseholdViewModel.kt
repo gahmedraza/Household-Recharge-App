@@ -9,6 +9,7 @@ import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
 
 class AddHouseholdViewModel(
     private val sessionManager: SessionManager,
@@ -40,26 +41,28 @@ class AddHouseholdViewModel(
                 householdId = ""
             )
 
-            householdUseCase.addHouseholdAndUpdateAccount(
+            val result = householdUseCase.addHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
 
-                householdDto = householdDto,
+                householdDto = householdDto
+            )
 
-                onSuccess = { householdId ->
+            when(result) {
+                is Result.Success<String> -> {
 
                     viewModelScope.launch {
                         sessionManager.saveHouseholdName(householdName)
-                        sessionManager.saveHouseholdId(householdId)
+                        sessionManager.saveHouseholdId(result.data)
 
-                        onSuccess(householdId)
+                        onSuccess(result.data)
                     }
-                },
-
-                onFailure = { error ->
-
-                    onFailure(error)
                 }
-            )
+
+                is Result.Failure<String> -> {
+
+                    onFailure(result.error)
+                }
+            }
         }
     }
 }

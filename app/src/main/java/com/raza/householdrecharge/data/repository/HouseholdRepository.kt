@@ -8,18 +8,22 @@ import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
-class HouseholdRepository() {
+class HouseholdRepository(
+    private val firestore: FirebaseFirestore,
+    private val firebaseAuth: FirebaseAuth
+) {
 
     suspend fun addHousehold(
         appUserDto: AppUserDto,
         householdDto: HouseholdDto
     ): Result<String, String> {
 
-        return try {
+        var result: Result<String, String>
+
+        try {
             householdDto.authId = appUserDto.authId
 
-            val documentReference = FirebaseFirestore
-                .getInstance()
+            val documentReference = firestore
 
                 .collection("households")
                 .add(householdDto)
@@ -28,114 +32,123 @@ class HouseholdRepository() {
             val householdId = documentReference.id.cleanString()
 
             if (householdId.isEmpty()) {
-                Result.Failure("household id was not generated in households collection")
+                result = Result.Failure("household id was not generated in households collection")
             }
 
-            Result.Success(householdId)
+            result = Result.Success(householdId)
         } catch (e: Exception) {
 
-            Result.Failure(e.message.cleanString())
+            result = Result.Failure(e.message.cleanString())
         }
+
+        return result
     }
 
-    fun fetchHousehold(
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val firebaseUser = FirebaseAuth
-            .getInstance()
+    suspend fun fetchHousehold(
+    ): Result<String, String> {
+
+        var result: Result<String, String>
+
+        val firebaseUser = firebaseAuth
             .currentUser
 
         val firebaseUserIdNotFound = firebaseUser?.uid?.isEmpty() ?: false
 
         if (firebaseUserIdNotFound) {
-            onFailure("Firebase user id does not exist")
-            return
+            result = Result.Failure("Firebase user id does not exist")
         }
 
+        try {
+            val documentSnapshot = firestore
 
-        FirebaseFirestore
-            .getInstance()
+                .collection("users")
+                .document(firebaseUser?.uid.cleanString())
 
-            .collection("users")
-            .document(firebaseUser?.uid.cleanString())
+                .get()
+                .await()
 
-            .get()
-
-            .addOnSuccessListener { document ->
-                if (!document.exists()) {
-                    onFailure("User data not found")
-                }
-
-                val householdId = document.getString("householdId")
-                onSuccess(householdId.cleanString())
+            if (!documentSnapshot.exists()) {
+                result = Result.Failure("User data not found")
             }
 
-            .addOnFailureListener {
+            val householdId = documentSnapshot.getString("householdId")
+            result = Result.Success(householdId.cleanString())
 
-                onFailure(it.message.cleanString())
-            }
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
     }
 
     suspend fun joinHousehold(
         userId: String,
         householdId: String,
-        invitationCode: String,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val firestore = FirebaseFirestore.getInstance()
+        invitationCode: String
+    ): Result<String, String> {
 
-        firestore.runTransaction { transaction ->
+        var result: Result<String, String>
 
-            val invitationReference = firestore
-                .collection("invitations")
-                .document(invitationCode.uppercase())
+        try {
 
-            val accountReference = firestore
-                .collection("accounts")
-                .document(userId)
+            firestore.runTransaction { transaction ->
 
-            val invitationSnapshot = transaction.get(invitationReference)
+                val invitationReference = firestore
+                    .collection("invitations")
+                    .document(invitationCode.uppercase())
 
-            if(!invitationSnapshot.exists()) {
-                onFailure("invitation does not exist")
-            }
+                val accountReference = firestore
+                    .collection("accounts")
+                    .document(userId)
 
-            val status = invitationSnapshot.getString("status")
+                val invitationSnapshot = transaction.get(invitationReference)
 
-            if(status != "pending") {
-                onFailure("invitation has already been used")
-            }
+                if(!invitationSnapshot.exists()) {
+                    result = Result.Failure("invitation does not exist")
+                }
 
-            val invitationHouseholdId = invitationSnapshot.getString("householdId")
+                val status = invitationSnapshot.getString("status")
 
-            if(invitationHouseholdId != householdId) {
-                onFailure("invalid invitation")
-            }
+                if(status != "pending") {
+                    result = Result.Failure("invitation has already been used")
+                }
 
-            val expiresAt = invitationSnapshot.getString("expiresAt")?.toLong()
+                val invitationHouseholdId = invitationSnapshot.getString("householdId")
 
-            if(expiresAt != null && expiresAt < System.currentTimeMillis()) {
-                onFailure("invitation has expired")
-            }
+                if(invitationHouseholdId != householdId) {
+                    result = Result.Failure("invalid invitation")
+                }
 
-            transaction.update(
-                accountReference,
-                "householdId",
-                householdId
-            )
+                val expiresAt = invitationSnapshot.getString("expiresAt")?.toLong()
 
-            transaction.update(
-                invitationReference,
-                mapOf(
-                    "status" to "used",
-                    "usedBy" to userId,
-                    "usedAt" to System.currentTimeMillis()
+                if(expiresAt != null && expiresAt < System.currentTimeMillis()) {
+                    result = Result.Failure("invitation has expired")
+                }
+
+                transaction.update(
+                    accountReference,
+                    "householdId",
+                    householdId
                 )
-            )
-        }.await()
 
-        onSuccess("success")
+                transaction.update(
+                    invitationReference,
+                    mapOf(
+                        "status" to "used",
+                        "usedBy" to userId,
+                        "usedAt" to System.currentTimeMillis()
+                    )
+                )
+            }.await()
+
+            result = Result.Success("success")
+
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
     }
 }

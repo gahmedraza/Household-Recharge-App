@@ -15,11 +15,8 @@ fun <T : ViewModel> getViewModel(
 
     val sessionManager = SessionManager(context)
 
-    val firestore = FirebaseFirestore.getInstance()
-
     val factory = AppViewModelFactory(
-        sessionManager = sessionManager,
-        firestore = firestore
+        sessionManager = sessionManager
     )
 
     return viewModel(

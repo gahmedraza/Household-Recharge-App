@@ -7,29 +7,37 @@ import com.raza.householdrecharge.ui.invitation.Invitation
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
-class InvitationRepository() {
+class InvitationRepository(
+    private val firestore: FirebaseFirestore
+) {
 
     suspend fun createInvitation(
         invitation: InvitationDto
     ): Result<String, String> {
 
-        return try {
+        var result: Result<String, String>
 
-            val documentReference = FirebaseFirestore
-                .getInstance()
+        try {
+
+            val documentReference = firestore
                 .collection("invitations")
                 .document(invitation.code)
                 .set(invitation)
                 .await()
 
-            Result.Success("success")
+            result = Result.Success("success")
 
         } catch (e: Exception) {
 
-            Result.Failure(e.message.cleanString())
+            result = Result.Failure(e.message.cleanString())
         }
+
+        return result
     }
 
+    /**
+     * TODO remove method
+     */
     suspend fun createInvitationFacade(
         invitation: InvitationDto,
         onSuccess: (String) -> Unit,
@@ -47,25 +55,29 @@ class InvitationRepository() {
         }
     }
 
-    suspend fun fetchInvitationList(
-        onSuccess: (List<Invitation>) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
+    suspend fun getAllInvitations(
+    ): Result<List<Invitation>, String> {
 
-        FirebaseFirestore
-            .getInstance()
-            .collection("invitations")
-            .get()
-            .addOnSuccessListener { result ->
-                val invitationList = result.documents.mapNotNull { document ->
-                    document.toObject(Invitation::class.java)
-                }
+        var result: Result<List<Invitation>, String>
 
-                onSuccess(invitationList)
+        try {
+            val documentSnapshot = firestore
+                .collection("invitations")
+                .get()
+                .await()
+
+            val invitationList = documentSnapshot.documents.mapNotNull { document ->
+                document.toObject(Invitation::class.java)
             }
-            .addOnFailureListener { error ->
 
-                onFailure(error.message.cleanString())
-            }
+            result = Result.Success(invitationList)
+
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+
+        return result
     }
 }

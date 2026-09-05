@@ -16,26 +16,25 @@ class HouseholdUseCase(
 ) {
     suspend fun addHouseholdAndUpdateAccount(
         appUserDto: AppUserDto,
-        householdDto: HouseholdDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
+        householdDto: HouseholdDto
+    ): Result<String, String> {
+        var result: Result<String, String>
+
         try {
 
             //add household and receive householdId
             val addHouseholdResult = householdRepository.addHousehold(appUserDto, householdDto)
-            val householdId: String
+            var householdId = ""
 
             when (addHouseholdResult) {
                 is Result.Success -> {
 
-                    householdId = addHouseholdResult.s.cleanString()
+                    householdId = addHouseholdResult.data.cleanString()
                 }
 
                 is Result.Failure -> {
 
-                    onFailure("household id was not generated in household collection")
-                    return
+                    result = Result.Failure("household id was not generated in household collection")
                 }
             }
 
@@ -43,43 +42,55 @@ class HouseholdUseCase(
             accountRepository.updateAccount(appUserDto.accountId, householdId)
 
             log("user collection updated with householdId")
-            onSuccess(householdId)
+            result = Result.Success(householdId)
 
         } catch (e: Exception) {
 
-            onFailure(e.message.cleanString())
+            result = Result.Failure(e.message.cleanString())
         }
+
+        return result
     }
 
     suspend fun validateAccountAndJoinHousehold(
-        accountId: String,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val fetchAccountResult = accountRepository
-            .fetchAccount(
-                collectionId = accountId
-            )
+        accountId: String
+    ): Result<String, String> {
 
-        when(fetchAccountResult) {
+        var result: Result<String, String>
 
-            is Result.Success<AccountDto> -> {
-                val accountDto = fetchAccountResult.s
+        try {
 
-                if(accountDto.householdId?.isEmpty() ?: false) {
+            val fetchAccountResult = accountRepository
+                .fetchAccount(
+                    collectionId = accountId
+                )
 
-                    onSuccess("success")
-                } else {
+            when(fetchAccountResult) {
 
-                    onFailure("You are already member of another household")
+                is Result.Success<AccountDto> -> {
+                    val accountDto = fetchAccountResult.data
+
+                    if(accountDto.householdId?.isEmpty() ?: false) {
+
+                        result = Result.Success("success")
+                    } else {
+
+                        result = Result.Failure("You are already member of another household")
+                    }
+                }
+
+
+                is Result.Failure<AccountError> -> {
+                    result = Result.Failure("error in fetching account")
                 }
             }
 
+        } catch (e: Exception) {
 
-            is Result.Failure<AccountError> -> {
-                onFailure("error in fetching account")
-            }
+            result = Result.Failure(e.message.cleanString())
         }
+
+        return result
     }
 
     suspend fun `join_household_if_not_already`() {

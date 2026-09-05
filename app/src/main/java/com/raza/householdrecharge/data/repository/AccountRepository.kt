@@ -24,6 +24,8 @@ class AccountRepository(
 
     ): Result<Unit, String> {
 
+        var result : Result<Unit, String>
+
         try {
 
             firestore
@@ -34,12 +36,14 @@ class AccountRepository(
 
                 .await()
 
-            return Result.Success(Unit)
+            result = Result.Success(Unit)
 
         } catch (e: Exception) {
 
-            return Result.Failure(e.message.cleanString())
+            result = Result.Failure(e.message.cleanString())
         }
+
+        return result
     }
 
     /**
@@ -50,8 +54,11 @@ class AccountRepository(
         collectionId: String,
         householdId: String
 
-    ): Result<Unit, String> {
-        return try {
+    ): Result<Unit, AccountError> {
+
+        var result : Result<Unit, AccountError>
+
+        try {
 
             firestore
 
@@ -61,12 +68,15 @@ class AccountRepository(
 
                 .await()
 
-            Result.Success(Unit)
+            result = Result.Success(Unit)
 
         } catch (e: Exception) {
 
-            Result.Failure(e.message.cleanString())
+            log(e.message)
+            result = Result.Failure(AccountError.Unknown)
         }
+
+        return result
     }
 
     /**
@@ -77,6 +87,9 @@ class AccountRepository(
         collectionId: String
 
     ): Result<AccountDto, AccountError> {
+
+        var result : Result<AccountDto, AccountError>
+
         try {
 
             val document =
@@ -91,18 +104,20 @@ class AccountRepository(
 
             val accountDto = document.toObject(AccountDto::class.java)
 
-            return if(accountDto == null) {
-                Result.Failure(AccountError.AccountEmpty)
+            if(accountDto == null) {
+                result = Result.Failure(AccountError.AccountEmpty)
 
             } else {
-                Result.Success(accountDto)
+                result = Result.Success(accountDto)
 
             }
 
         } catch (e: Exception) {
             log(e.message)
-            return Result.Failure(AccountError.Unknown)
+            result = Result.Failure(AccountError.Unknown)
 
         }
+
+        return result
     }
 }

@@ -5,6 +5,7 @@ import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.ui.auth.AuthViewModel
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
 
 class SplashViewModel(
     private val sessionManager: SessionManager,
@@ -13,21 +14,29 @@ class SplashViewModel(
 
     fun loadHousehold(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
 
-        householdRepository.fetchHousehold(
-            onSuccess = { householdId ->
+        viewModelScope.launch {
 
-                household.id = householdId
+            val result = householdRepository.fetchHousehold(
+            )
 
-                viewModelScope.launch {
-                    sessionManager.saveHouseholdId(householdId)
+            when(result){
+
+                is Result.Success<String> -> {
+
+                    household.id = result.data
+
+                    viewModelScope.launch {
+                        sessionManager.saveHouseholdId(result.data)
+                    }
+
+                    onSuccess()
                 }
 
-                onSuccess()
-            },
-            onFailure = { error ->
+                is Result.Failure<String> -> {
 
-                onFailure(error)
+                    onFailure(result.error)
+                }
             }
-        )
+        }
     }
 }
