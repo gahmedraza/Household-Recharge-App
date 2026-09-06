@@ -132,8 +132,8 @@ fun DashboardContent(
                 if (viewModel.members.isEmpty()) {
                     item {
                         Text(
-                            text = "No items available",
-                            style = MaterialTheme.typography.displayLarge,
+                            text = "No recharges available",
+                            style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center
                         )
                     }

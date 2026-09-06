@@ -23,74 +23,20 @@ class SplashViewModel(
 
         val user = (result51 as Result.Success).data
 
-        val result52 = findIfAccountHasALinkedHousehold(user.userId)
+        val result53 = householdUseCase.isAccountEligibleToJoinHousehold(
+            accountId = user.userId
+        )
 
-        if(result52 is Result.Failure) {
-            return SplashDestination.Login
-        }
-
-        val linkingStatus = (result52 as Result.Success).data
-
-        if(linkingStatus) {
+        if(result53 is Result.Failure) {
             return SplashDestination.Dashboard
-        } else {
+        }
+
+        val isEligible = (result53 as Result.Success).data
+
+        if(isEligible) {
             return SplashDestination.SetupHousehold
-        }
-    }
-
-    fun isUserLoggedIn(): Boolean {
-        val result = authRepository.getUser()
-
-        if(result is Result.Failure) {
-
-            return false
-        }
-
-        else if(
-            result is Result.Success &&
-            result.data == null) {
-
-            return false
-        }
-
-        else if(
-            result is Result.Success &&
-            result.data != null
-        ) {
-            return true
-        }
-
-        else {
-
-            return false
-        }
-    }
-
-    suspend fun findIfAccountHasALinkedHousehold(
-        accountId: String
-    ): Result<Boolean, String> {
-
-        var result: Result<Boolean, String>
-
-        val result52 = householdUseCase.isAccountEligibleToJoinHousehold(
-            accountId = accountId)
-
-        if(result52 is Result.Failure) {
-            result = Result.Success(false)
-
         } else {
-
-            val isEligible = (result52 as Result.Success).data
-
-            result = Result.Success(isEligible)
+            return SplashDestination.Dashboard
         }
-
-        return result
     }
-}
-
-sealed class SplashDestination {
-    data object Login: SplashDestination()
-    data object SetupHousehold: SplashDestination()
-    data object Dashboard: SplashDestination()
 }
