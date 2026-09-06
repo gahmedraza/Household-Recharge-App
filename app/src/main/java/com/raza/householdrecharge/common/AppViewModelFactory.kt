@@ -59,7 +59,11 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
                 sessionManager = sessionManager,
-                authRepository = authRepository
+                authRepository = authRepository,
+                authUseCase = AuthUseCase(
+                    authRepository = AuthRepository(firebaseAuth),
+                    accountRepository = AccountRepository(firestore)
+                )
             ) as T
         }
 

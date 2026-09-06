@@ -14,24 +14,14 @@ open class AuthViewModel(
 ) : BaseViewModel() {
 
     var password by mutableStateOf("")
-
     var authId by mutableStateOf("")
-
-    fun getHouseholdLinkStatus(): Boolean {
-        var onboardingStatus: Boolean = false
-
-        viewModelScope.launch {
-            onboardingStatus = sessionManager.isUserLinkedToAHousehold.first()
-        }
-
-        return onboardingStatus
-    }
 
     fun setHouseholdLinkStatus(authFlowStatus: Boolean) {
         viewModelScope.launch {
+
             sessionManager.saveHouseholdLinkStatus(authFlowStatus)
         }
     }
 
-    fun isOnboardingComplete() = getHouseholdLinkStatus()
+    suspend fun isOnboardingComplete() = sessionManager.isUserLinkedToAHousehold.first()
 }

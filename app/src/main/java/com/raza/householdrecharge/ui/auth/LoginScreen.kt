@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,6 +36,7 @@ import com.raza.householdrecharge.common.getViewModel
 import com.raza.householdrecharge.common.log
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
@@ -49,6 +51,7 @@ fun LoginScreen(
     var passwordError by rememberSaveable { mutableStateOf("") }
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
     AppCard {
 
@@ -145,7 +148,7 @@ fun LoginScreen(
                         }
 
                         //make the api call
-                        viewModel.login(
+                        viewModel.login2(
                             authDto = AuthDto(
                                 accountName = null,
                                 mobileNumber = mobileNumber,
@@ -187,13 +190,14 @@ fun LoginScreen(
                     ),
 
                     onClick = {
+                        scope.launch {
+                            if(viewModel.isOnboardingComplete()) {
 
-                        if(viewModel.isOnboardingComplete()) {
+                                onSignInCompletion()
+                            } else {
 
-                            onSignInCompletion()
-                        } else {
-
-                            onBoardingNotComplete()
+                                onBoardingNotComplete()
+                            }
                         }
                     }
                 ) {

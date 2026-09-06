@@ -5,6 +5,7 @@ import com.raza.householdrecharge.common.log
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.dto.AccountEligibilityDto
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.HouseholdRepository
@@ -59,9 +60,9 @@ class HouseholdUseCase(
 
     suspend fun isAccountEligibleToJoinHousehold(
         accountId: String
-    ): Result<Boolean, HouseholdError> {
+    ): Result<AccountEligibilityDto, HouseholdError> {
 
-        var result: Result<Boolean, HouseholdError>
+        var result: Result<AccountEligibilityDto, HouseholdError>
 
         try {
 
@@ -78,7 +79,10 @@ class HouseholdUseCase(
 
             if (accountDto.householdId.isNullOrEmpty()) {
 
-                result = Result.Success(true)
+                result = Result.Success(AccountEligibilityDto(
+                    isEligible = true,
+                    accountDto = accountDto
+                ))
 
             } else {
 

@@ -1,10 +1,12 @@
 package com.raza.householdrecharge.ui.splash
 
+import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.ui.auth.AuthViewModel
+import kotlinx.coroutines.launch
 
 class SplashViewModel(
     private val sessionManager: SessionManager,
@@ -31,9 +33,15 @@ class SplashViewModel(
             return SplashDestination.Dashboard
         }
 
-        val isEligible = (result53 as Result.Success).data
+        val accountEligibilityDto = (result53 as Result.Success).data
 
-        if(isEligible) {
+        viewModelScope.launch {
+            sessionManager.saveHouseholdLinkStatus(
+                accountEligibilityDto.isEligible
+            )
+        }
+
+        if(accountEligibilityDto.isEligible) {
             return SplashDestination.SetupHousehold
         } else {
             return SplashDestination.Dashboard

@@ -15,7 +15,7 @@ class AuthUseCase(
     private val accountRepository: AccountRepository
 ) {
 
-    suspend fun registerAndAddAccount(
+    suspend fun registerAndCreateAccount(
         authDto: AuthDto
     ): Result<OnboardingDto, AccountError> {
 
@@ -78,7 +78,29 @@ class AuthUseCase(
         return result
     }
 
-    suspend fun signinAndFetchAccount() {
+    suspend fun loginAndRetrieveAccount(
+        authDto: AuthDto
+    ): Result<AccountDto, String> {
+        //login to firebase
+        val result1 = authRepository.login(authDto)
 
+        if(result1 is Result.Failure) {
+            return Result.Failure("error")
+        }
+
+        val authenticationId = (result1 as Result.Success).data
+
+        //retrieve accountdto and return to caller
+        val result2 = accountRepository.fetchAccountByAccountId(
+            accountId = authenticationId
+        )
+
+        if(result2 is Result.Failure) {
+            return Result.Failure("error")
+        }
+
+        val accountDto = (result2 as Result.Success).data
+
+        return Result.Success(accountDto)
     }
 }

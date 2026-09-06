@@ -9,10 +9,14 @@ import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.dto.AccountDto
+import com.raza.householdrecharge.domain.usecase.AuthUseCase
+import com.raza.householdrecharge.util.cleanString
 
 class LoginViewModel(
     private val sessionManager: SessionManager,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val authUseCase: AuthUseCase
 ) : AuthViewModel(sessionManager) {
 
     var uiState by mutableStateOf(LoginUIState())
@@ -41,6 +45,46 @@ class LoginViewModel(
         uiState = uiState.copy(
             passwordError = value
         )
+    }
+
+    fun login2(
+        authDto: AuthDto,
+        onSuccess: (String?) -> Unit,
+        onFailure: (String?) -> Unit
+    ) {
+        viewModelScope.launch {
+            isLoading = true
+
+            val authDto = AuthDto(
+                mobileNumber = "${authDto.mobileNumber}@householdrecharge.local",
+                password = authDto.password
+            )
+
+            val result51 = authUseCase.loginAndRetrieveAccount(
+                authDto = authDto
+            )
+
+            when(result51) {
+                is Result.Success<AccountDto> -> {
+
+                    sessionManager.saveUserId(result51.data.accountId.cleanString())
+                    if(result51.data.householdId == null) {
+                        sessionManager.saveHouseholdLinkStatus(false)
+                    } else {
+                        sessionManager.saveHouseholdLinkStatus(true)
+                    }
+
+                    isLoading = false
+                    onSuccess(result51.data.accountId.cleanString())
+                }
+                is Result.Failure<String> -> {
+
+                    isLoading = false
+                    onFailure(result51.error)
+                }
+            }
+
+        }
     }
 
     fun login(

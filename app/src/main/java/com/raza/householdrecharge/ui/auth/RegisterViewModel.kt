@@ -24,7 +24,7 @@ class RegisterViewModel(
                 password = password
             )
 
-            val result = authUseCase.registerAndAddAccount(
+            val result = authUseCase.registerAndCreateAccount(
                 authDto
             )
 
