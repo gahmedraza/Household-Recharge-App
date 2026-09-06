@@ -2,8 +2,8 @@ package com.raza.householdrecharge.navigation
 
 enum class ComposeScreen(val description: String) {
     Splash("Splash"),
-    SignIn("SignIn"),
-    Signup("Signup"),
+    Login("Login"),
+    Register("Register"),
     Dashboard("Dashboard"),
     Setting("Setting"),
 
@@ -15,7 +15,7 @@ enum class ComposeScreen(val description: String) {
     DashboardNavigationRoot("Dashboard"),
     SetupHousehold("SetupHousehold"),
     CreateHousehold("CreateHousehold"),
-    JoinHousehold("JoinHousehold"),
+    FindHousehold("FindHousehold"),
     ConfirmHousehold("ConfirmHousehold"),
     OnboardingNavigation("V2Navigation")
 }

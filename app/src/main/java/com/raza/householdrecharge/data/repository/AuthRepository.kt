@@ -1,14 +1,44 @@
 package com.raza.householdrecharge.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
+import com.raza.householdrecharge.common.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
+import com.raza.householdrecharge.data.repository.account.AuthError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
 class AuthRepository(
     private val firebaseAuth: FirebaseAuth
 ) {
+
+    //todo convert to app dto
+    fun getUser(
+
+    ): Result<UserDto, AuthError>
+    //FirebaseUser?
+    {
+        var result: Result<UserDto, AuthError>
+
+        val firebaseUser = firebaseAuth.currentUser
+
+        if(firebaseUser == null) {
+
+            log("user is not logged in")
+            result = Result.Failure(AuthError.UserNotLoggedIn)
+
+        } else {
+
+            val userDto = UserDto()
+            userDto.userId = firebaseUser.uid
+            userDto.email = firebaseUser.email.cleanString()
+            userDto.photoUrl = firebaseUser.photoUrl.toString()
+
+            result = Result.Success(userDto)
+        }
+
+        return result
+    }
 
     suspend fun register(
         authDto: AuthDto
@@ -61,3 +91,9 @@ class AuthRepository(
         return result
     }
 }
+
+data class UserDto(
+    var userId: String = "",
+    var email: String = "",
+    var photoUrl: String = ""
+)

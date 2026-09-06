@@ -17,21 +17,21 @@ open class AuthViewModel(
 
     var authId by mutableStateOf("")
 
-    fun getOnboardingStatus(): Boolean {
+    fun getHouseholdLinkStatus(): Boolean {
         var onboardingStatus: Boolean = false
 
         viewModelScope.launch {
-            onboardingStatus = sessionManager.isOnboardingComplete.first()
+            onboardingStatus = sessionManager.isUserLinkedToAHousehold.first()
         }
 
         return onboardingStatus
     }
 
-    fun setOnboardingStatus(authFlowStatus: Boolean) {
+    fun setHouseholdLinkStatus(authFlowStatus: Boolean) {
         viewModelScope.launch {
-            sessionManager.saveOnBoardingStatus(authFlowStatus)
+            sessionManager.saveHouseholdLinkStatus(authFlowStatus)
         }
     }
 
-    fun isOnboardingComplete() = getOnboardingStatus()
+    fun isOnboardingComplete() = getHouseholdLinkStatus()
 }

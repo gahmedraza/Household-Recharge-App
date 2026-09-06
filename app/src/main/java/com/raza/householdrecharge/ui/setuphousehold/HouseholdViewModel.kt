@@ -12,6 +12,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
+import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.first
@@ -92,7 +93,7 @@ class HouseholdViewModel(
      * If no household is associated, the invitation is marked as used and the
      * household ID is assigned to the user's account.
      */
-    fun joinHousehold(
+    fun findHousehold(
         invitationCode: String,
         onSuccess: (HouseholdDto?) -> Unit,
         onFailure: (String?) -> Unit
@@ -104,23 +105,29 @@ class HouseholdViewModel(
 
             val authId = sessionManager.authId.first()
 
-            val result = householdUseCase.validateAccountAndJoinHousehold(
+            val result = householdUseCase.validateInvitationAndFindLinkedHousehold(
                 invitationCode = invitationCode,
                 authId = authId
             )
 
-            when(result) {
+            if(result is Result.Success) {
+                isLoading = false
+                onSuccess(result.data)
 
-                is Result.Success<HouseholdDto?> -> {
+            } else {
+                isLoading = false
+                val error = (result as Result.Failure).error
 
-                    isLoading = false
-                    onSuccess(result.data)
-                }
-
-                is Result.Failure<String?> -> {
-
-                    isLoading = false
-                    onFailure(result.error)
+                when(error) {
+                    is HouseholdUseCaseError.Invitation -> {
+                        onFailure(error.error.toString())
+                    }
+                    is HouseholdUseCaseError.Household -> {
+                        onFailure(error.error.toString())
+                    }
+                    is HouseholdUseCaseError.Unknown -> {
+                        onFailure(error.error)
+                    }
                 }
             }
         }

@@ -33,7 +33,7 @@ class AppViewModelFactory(
 
     val accountRepository = AccountRepository(firestore)
     val authRepository = AuthRepository(firebaseAuth)
-    val householdRepository = HouseholdRepository(firestore, firebaseAuth)
+    val householdRepository = HouseholdRepository(firestore)
     val invitationRepository = InvitationRepository(firestore)
     val memberRepository = MemberRepository(firestore)
     val rechargeRepository = RechargeRepository(firestore)
@@ -102,7 +102,12 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(SplashViewModel::class.java)) {
             return SplashViewModel(
                 sessionManager = sessionManager,
-                householdRepository = householdRepository
+                householdUseCase = HouseholdUseCase(
+                    householdRepository = HouseholdRepository(firestore),
+                    accountRepository = accountRepository,
+                    invitationRepository = invitationRepository
+                ),
+                authRepository = authRepository
             ) as T
         }
 

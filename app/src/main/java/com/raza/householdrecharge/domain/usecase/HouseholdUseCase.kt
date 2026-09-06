@@ -9,8 +9,10 @@ import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
+import com.raza.householdrecharge.data.repository.account.HouseholdError
 import com.raza.householdrecharge.data.repository.account.InvitationError
 import com.raza.householdrecharge.data.repository.account.PENDING
+import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 
 class HouseholdUseCase(
     private val householdRepository: HouseholdRepository,
@@ -55,11 +57,11 @@ class HouseholdUseCase(
         return result
     }
 
-    private suspend fun isAccountEligibleToJoinHousehold(
+    suspend fun isAccountEligibleToJoinHousehold(
         accountId: String
-    ): Result<Boolean, String> {
+    ): Result<Boolean, HouseholdError> {
 
-        var result: Result<Boolean, String>
+        var result: Result<Boolean, HouseholdError>
 
         try {
 
@@ -68,7 +70,8 @@ class HouseholdUseCase(
                 )
 
             if(accountResult is Result.Failure) {
-                return Result.Failure("error in fetching account")
+                log("error in fetching account")
+                return Result.Failure(HouseholdError.NoAccountFound)
             }
 
             val accountDto = (accountResult as Result.Success).data
@@ -80,12 +83,13 @@ class HouseholdUseCase(
             } else {
 
                 log("Account already member of another household")
-                result = Result.Success(false)
+                result = Result.Failure(HouseholdError.HouseholdAlreadyAssigned)
             }
 
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            log(e.message)
+            result = Result.Failure(HouseholdError.Unknown)
         }
 
         return result
@@ -96,30 +100,25 @@ class HouseholdUseCase(
     }
 
     //
-    suspend fun validateAccountAndJoinHousehold(
+    suspend fun validateInvitationAndFindLinkedHousehold(
         authId: String,
         invitationCode: String
-    ): Result<HouseholdDto?, String?> {
+    ): Result<HouseholdDto, HouseholdUseCaseError> {
 
-        var result: Result<HouseholdDto?, String?>
+        var result: Result<HouseholdDto, HouseholdUseCaseError>
 
         try {
-
-            //check if account is eligible to join
-            val result1 = isAccountEligibleToJoinHousehold(
-                accountId = authId
-            )
-
-            if(result1 is Result.Failure) {
-                return Result.Failure("error")
-            }
 
             val result2 = invitationRepository.getInvitationByInvitationCode(
                 invitationCode
             )
 
             if(result2 is Result.Failure) {
-                return Result.Failure("error") //upstream the error
+                return Result.Failure(
+                    HouseholdUseCaseError.Invitation(
+                        result2.error
+                    )
+                )
             }
 
             val invitation = (result2 as Result.Success).data
@@ -129,17 +128,23 @@ class HouseholdUseCase(
             )
 
             if(result3 is Result.Failure) {
-                return Result.Failure("error")//upstream error
+                return Result.Failure(
+                    HouseholdUseCaseError.Invitation(
+                        result3.error
+                    )
+                )
             }
-
-            //
 
             val householdId = invitation.householdId
 
             val result4 = householdRepository.getHouseholdByHouseholdId(householdId)
 
             if(result4 is Result.Failure) {
-                return Result.Failure("error") //upstream error
+                return Result.Failure(
+                    HouseholdUseCaseError.Household(
+                        result4.error
+                    )
+                )
             }
 
             val household = (result4 as Result.Success).data
@@ -147,13 +152,14 @@ class HouseholdUseCase(
             household.invitationCode = invitationCode
 
             result = Result.Success(household)
-            //
 
-
-            //join household
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            result = Result.Failure(
+                HouseholdUseCaseError.Unknown(
+                    e.message.cleanString()
+                )
+            )
         }
 
         return result

@@ -19,31 +19,36 @@ import com.raza.householdrecharge.common.getViewModel
 import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
+import com.raza.householdrecharge.core.result.Result
 
 @Composable
 fun SplashScreen(
-    onUserFound: () -> Unit,
-    onUserNotFound: () -> Unit,
+    openLogin: () -> Unit,
+    openSetupHousehold: () -> Unit,
+    openDashboard: () -> Unit,
+
     viewModel: SplashViewModel
 ) {
 
     LaunchedEffect(Unit) {
         delay(2000.milliseconds)
 
-        if(viewModel.getOnboardingStatus()) {
-            onUserFound()
+        val destination = viewModel.getStartDestination()
 
-        } else {
+        when(destination) {
 
-            onUserNotFound()
+            is SplashDestination.Login -> {
+                openLogin()
+            }
+
+            is SplashDestination.SetupHousehold -> {
+                openSetupHousehold()
+            }
+
+            is SplashDestination.Dashboard -> {
+                openDashboard()
+            }
         }
-
-        /*if (FirebaseAuth.getInstance().currentUser == null) {
-            onUserNotFound()
-
-        } else {
-            onUserFound()
-        }*/
     }
 
     Box(
@@ -69,8 +74,9 @@ fun SplashContent() {
 
     HouseholdRechargeTheme(dynamicColor = false) {
         SplashScreen(
-            onUserFound = {},
-            onUserNotFound = {},
+            openLogin = {},
+            openSetupHousehold = {},
+            openDashboard = {},
             viewModel = viewModel
         )
     }

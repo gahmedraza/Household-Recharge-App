@@ -13,7 +13,7 @@ import com.raza.householdrecharge.ui.auth.LoginScreen
 import com.raza.householdrecharge.ui.auth.RegisterScreen
 import com.raza.householdrecharge.ui.setuphousehold.ConfirmHouseholdScreen
 import com.raza.householdrecharge.ui.setuphousehold.CreateHouseholdScreen
-import com.raza.householdrecharge.ui.setuphousehold.JoinHouseholdScreen
+import com.raza.householdrecharge.ui.setuphousehold.FindHouseholdScreen
 import com.raza.householdrecharge.ui.setuphousehold.SetupHouseholdScreen
 import com.raza.householdrecharge.ui.splash.SplashScreen
 
@@ -36,14 +36,17 @@ fun OnboardingNavigation() {
         composable(ComposeScreen.Splash.description) {
 
             SplashScreen(
-                onUserNotFound = {
-                    Log.d("TAG", "OnSplashFinished")
-                    navController.navigate(ComposeScreen.SignIn.description)
+
+                openLogin = {
+                    navController.navigate(ComposeScreen.Login.description)
                 },
 
-                onUserFound = {
+                openSetupHousehold = {
+                    navController.navigate(ComposeScreen.SetupHousehold.description)
+                },
+
+                openDashboard = {
                     navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
-                    //navController.navigate(AppPages.SetupHousehold.description)
                 },
 
                 viewModel = viewModel(
@@ -52,7 +55,7 @@ fun OnboardingNavigation() {
             )
         }
 
-        composable(ComposeScreen.SignIn.description) {
+        composable(ComposeScreen.Login.description) {
 
             LoginScreen(
                 viewModel = viewModel(
@@ -61,7 +64,7 @@ fun OnboardingNavigation() {
 
                 onSignup = {
                     Log.d("TAG", "OnSignup")
-                    navController.navigate(ComposeScreen.Signup.description)
+                    navController.navigate(ComposeScreen.Register.description)
                 },
 
                 onSignInCompletion = {
@@ -76,7 +79,7 @@ fun OnboardingNavigation() {
             )
         }
 
-        composable(ComposeScreen.Signup.description) {
+        composable(ComposeScreen.Register.description) {
 
             RegisterScreen(
                 viewModel = viewModel(
@@ -90,7 +93,7 @@ fun OnboardingNavigation() {
 
                 onSignIn = {
                     Log.d("TAG", "OnSignIn")
-                    navController.navigate(ComposeScreen.SignIn.description)
+                    navController.navigate(ComposeScreen.Login.description)
                 })
         }
 
@@ -102,7 +105,7 @@ fun OnboardingNavigation() {
 
                 onJoinHousehold = {
 
-                    navController.navigate(ComposeScreen.JoinHousehold.description)
+                    navController.navigate(ComposeScreen.FindHousehold.description)
                 },
 
                 onCreateHousehold = {
@@ -112,8 +115,8 @@ fun OnboardingNavigation() {
             )
         }
 
-        composable(ComposeScreen.JoinHousehold.description) {
-            JoinHouseholdScreen(
+        composable(ComposeScreen.FindHousehold.description) {
+            FindHouseholdScreen(
                 viewModel = viewModel(
                     factory = genericFactory
                 ),

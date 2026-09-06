@@ -33,7 +33,7 @@ import com.raza.householdrecharge.ui.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
-fun JoinHouseholdScreen(
+fun FindHouseholdScreen(
     viewModel: HouseholdViewModel,
     onSuccess: (HouseholdDto?) -> Unit,
     onFailure: () -> Unit
@@ -49,7 +49,7 @@ fun JoinHouseholdScreen(
 
         ) {
 
-            JoinHouseholdBody(
+            FindHouseholdBody(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(paddingValues)
@@ -73,7 +73,7 @@ fun JoinHouseholdScreen(
 }
 
 @Composable
-fun JoinHouseholdBody(
+fun FindHouseholdBody(
     modifier: Modifier,
     viewModel: HouseholdViewModel,
     onSuccess: (HouseholdDto?) -> Unit,
@@ -132,7 +132,7 @@ fun JoinHouseholdBody(
 
                 onClick = {
 
-                    viewModel.joinHousehold(
+                    viewModel.findHousehold(
                         invitationCode = viewModel.invitationCode,
 
                         onSuccess = { household ->
@@ -150,7 +150,7 @@ fun JoinHouseholdBody(
                     )
                 }) {
 
-                Text("Join Household")
+                Text("Find Household")
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -212,12 +212,12 @@ fun JoinHouseholdBody(
 }
 
 @Composable
-fun JoinHouseholdContent() {
+fun FindHouseholdContent() {
     val viewModel =
         getViewModel(HouseholdViewModel::class.java)
 
     HouseholdRechargeTheme(dynamicColor = false) {
-        JoinHouseholdScreen(
+        FindHouseholdScreen(
             viewModel = viewModel,
 
             onSuccess = {
@@ -233,12 +233,12 @@ fun JoinHouseholdContent() {
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun JoinHouseholdScreenDarkPreview() {
-    JoinHouseholdContent()
+fun FindHouseholdScreenDarkPreview() {
+    FindHouseholdContent()
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun JoinHouseholdScreenLightPreview() {
-    JoinHouseholdContent()
+fun FindHouseholdScreenLightPreview() {
+    FindHouseholdContent()
 }

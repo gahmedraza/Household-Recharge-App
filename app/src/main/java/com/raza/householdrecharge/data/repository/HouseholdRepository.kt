@@ -10,8 +10,7 @@ import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
 class HouseholdRepository(
-    private val firestore: FirebaseFirestore,
-    private val firebaseAuth: FirebaseAuth
+    private val firestore: FirebaseFirestore
 ) {
 
     suspend fun addHousehold(
@@ -37,44 +36,6 @@ class HouseholdRepository(
             }
 
             result = Result.Success(householdId)
-        } catch (e: Exception) {
-
-            result = Result.Failure(e.message.cleanString())
-        }
-
-        return result
-    }
-
-    suspend fun fetchHousehold(
-    ): Result<String, String> {
-
-        var result: Result<String, String>
-
-        val firebaseUser = firebaseAuth
-            .currentUser
-
-        val firebaseUserIdNotFound = firebaseUser?.uid?.isEmpty() ?: false
-
-        if (firebaseUserIdNotFound) {
-            result = Result.Failure("Firebase user id does not exist")
-        }
-
-        try {
-            val documentSnapshot = firestore
-
-                .collection("users")
-                .document(firebaseUser?.uid.cleanString())
-
-                .get()
-                .await()
-
-            if (!documentSnapshot.exists()) {
-                result = Result.Failure("User data not found")
-            }
-
-            val householdId = documentSnapshot.getString("householdId")
-            result = Result.Success(householdId.cleanString())
-
         } catch (e: Exception) {
 
             result = Result.Failure(e.message.cleanString())

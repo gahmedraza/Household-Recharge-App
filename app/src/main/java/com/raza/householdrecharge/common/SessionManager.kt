@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.map
 val Context.datastore by preferencesDataStore("session")
 
 class SessionManager(private val context: Context) {
-    val isOnboardingComplete = context.datastore.data.map {
-        it[booleanPreferencesKey("isOnboardingComplete")] ?: false
+    val isUserLinkedToAHousehold = context.datastore.data.map {
+        it[booleanPreferencesKey("isUserLinkedToAHousehold")] ?: false
     }
 
     val authId = context.datastore.data.map {
@@ -94,9 +94,9 @@ class SessionManager(private val context: Context) {
         }
     }
 
-    suspend fun saveOnBoardingStatus(isOnboardingComplete: Boolean) {
+    suspend fun saveHouseholdLinkStatus(isOnboardingComplete: Boolean) {
         context.datastore.edit {
-            it[booleanPreferencesKey("isOnboardingComplete")] = isOnboardingComplete
+            it[booleanPreferencesKey("isUserLinkedToAHousehold")] = isOnboardingComplete
         }
     }
 
