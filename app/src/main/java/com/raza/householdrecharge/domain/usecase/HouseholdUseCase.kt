@@ -55,7 +55,7 @@ class HouseholdUseCase(
         return result
     }
 
-    suspend fun isAccountEligibleToJoinHousehold(
+    private suspend fun isAccountEligibleToJoinHousehold(
         accountId: String
     ): Result<Boolean, String> {
 
@@ -159,7 +159,7 @@ class HouseholdUseCase(
         return result
     }
 
-    fun validateInvitation(
+    private fun validateInvitation(
         invitation: InvitationDto?,
     ): Result<Unit, InvitationError> {
 
