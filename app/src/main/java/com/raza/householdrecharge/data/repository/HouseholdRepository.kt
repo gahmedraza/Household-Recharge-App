@@ -5,6 +5,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
+import com.raza.householdrecharge.data.repository.account.HouseholdError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
@@ -80,6 +81,31 @@ class HouseholdRepository(
         }
 
         return result
+    }
+
+    suspend fun getHouseholdByHouseholdId(
+        householdId: String
+    ): Result<HouseholdDto, HouseholdError>{
+
+        val snapshot = firestore
+            .collection("households")
+            .document(householdId)
+            .get()
+            .await()
+
+        if(!snapshot.exists()) {
+            return Result.Failure(HouseholdError.NoHouseholdFound)
+        }
+
+        val householdDto = snapshot.toObject(HouseholdDto::class.java)
+        householdDto?.householdId = householdId
+
+        if(householdDto == null) {
+            return Result.Failure(HouseholdError.HouseholdDataMappingError)
+
+        } else {
+            return Result.Success(householdDto)
+        }
     }
 
     suspend fun joinHousehold(

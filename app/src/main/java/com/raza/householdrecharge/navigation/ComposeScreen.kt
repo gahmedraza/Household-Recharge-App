@@ -7,8 +7,6 @@ enum class ComposeScreen(val description: String) {
     Dashboard("Dashboard"),
     Setting("Setting"),
 
-    AddHousehold("AddHousehold"),
-
     Invitation("Invitation"),
     AddInvitation("addInvitation"),
     AddMember("AddMember"),

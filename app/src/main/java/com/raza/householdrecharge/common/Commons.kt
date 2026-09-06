@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun <T : ViewModel> getViewModel(

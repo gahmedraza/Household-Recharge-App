@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.repository.account.AccountError
-import com.raza.householdrecharge.data.repository.account.HouseHoldID
+import com.raza.householdrecharge.data.repository.account.HouseholdID
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
@@ -64,7 +64,7 @@ class AccountRepository(
 
                 .collection(HouseholdCollection.Accounts.description)
                 .document(collectionId)
-                .update(HouseHoldID, householdId)
+                .update(HouseholdID, householdId)
 
                 .await()
 
@@ -83,8 +83,8 @@ class AccountRepository(
      * Fetch the account record
      * with the record ID
      */
-    suspend fun fetchAccount(
-        collectionId: String
+    suspend fun fetchAccountByAccountId(
+        accountId: String
 
     ): Result<AccountDto, AccountError> {
 
@@ -97,7 +97,7 @@ class AccountRepository(
                 firestore
 
                     .collection(HouseholdCollection.Accounts.description)
-                    .document(collectionId)
+                    .document(accountId)
                     .get()
 
                     .await()

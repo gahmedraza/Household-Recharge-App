@@ -7,12 +7,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.HouseholdRechargeApplication
+import com.raza.householdrecharge.common.AppViewModelFactory
 import com.raza.householdrecharge.ui.auth.LoginScreen
 import com.raza.householdrecharge.ui.auth.RegisterScreen
-import com.raza.householdrecharge.common.AppViewModelFactory
 import com.raza.householdrecharge.ui.setuphousehold.ConfirmHouseholdScreen
 import com.raza.householdrecharge.ui.setuphousehold.CreateHouseholdScreen
 import com.raza.householdrecharge.ui.setuphousehold.JoinHouseholdScreen

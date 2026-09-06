@@ -1,3 +1,3 @@
 package com.raza.householdrecharge.data.repository.account
 
-const val HouseHoldID = "householdId"
+const val HouseholdID = "householdId"

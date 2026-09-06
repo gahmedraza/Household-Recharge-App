@@ -1,5 +1,5 @@
-
 package com.raza.householdrecharge.navigation
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.History
@@ -20,12 +20,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.HouseholdRechargeApplication
-import com.raza.householdrecharge.ui.addhousehold.AddHouseholdScreen
+import com.raza.householdrecharge.common.AppViewModelFactory
 import com.raza.householdrecharge.ui.addmember.AddMemberScreen
 import com.raza.householdrecharge.ui.addrecharge.AddRechargeScreen
-import com.raza.householdrecharge.common.AppViewModelFactory
 import com.raza.householdrecharge.ui.dashbord.DashboardScreen
 import com.raza.householdrecharge.ui.invitation.AddInvitationScreen
 import com.raza.householdrecharge.ui.invitation.InvitationListingScreen
@@ -130,7 +128,7 @@ fun DashboardNavigationRoot() {
                     },
 
                     onAddHousehold = {
-                        navController.navigate(ComposeScreen.AddHousehold.description)
+                        navController.navigate(ComposeScreen.CreateHousehold.description)
                     },
 
                     onSignOut = {
@@ -207,23 +205,6 @@ fun DashboardNavigationRoot() {
                     onSuccess = {
 
                         navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
-                    },
-
-                    onFailure = {
-
-                    }
-                )
-            }
-
-            composable(ComposeScreen.AddHousehold.description) {
-                AddHouseholdScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
-                    onSuccess = {
-
-                        navController.navigate(ComposeScreen.Setting.description)
                     },
 
                     onFailure = {

@@ -12,7 +12,6 @@ import com.raza.householdrecharge.data.repository.MemberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
-import com.raza.householdrecharge.ui.addhousehold.AddHouseholdViewModel
 import com.raza.householdrecharge.ui.addmember.AddMemberViewModel
 import com.raza.householdrecharge.ui.addrecharge.AddRechargeViewModel
 import com.raza.householdrecharge.ui.auth.LoginViewModel
@@ -42,16 +41,6 @@ class AppViewModelFactory(
     override fun <T : ViewModel> create(
         modelClass: Class<T>
     ): T {
-
-        if (modelClass.isAssignableFrom(AddHouseholdViewModel::class.java)) {
-            return AddHouseholdViewModel(
-                sessionManager = sessionManager,
-                householdUseCase = HouseholdUseCase(
-                    householdRepository = householdRepository,
-                    accountRepository = accountRepository
-                )
-            ) as T
-        }
 
         if (modelClass.isAssignableFrom(AddMemberViewModel::class.java)) {
             return AddMemberViewModel(
@@ -129,8 +118,10 @@ class AppViewModelFactory(
                 householdRepository = householdRepository,
                 householdUseCase = HouseholdUseCase(
                     householdRepository = householdRepository,
-                    accountRepository = accountRepository
-                )
+                    accountRepository = accountRepository,
+                    invitationRepository = invitationRepository
+                ),
+                invitationRepository = invitationRepository
             ) as T
         }
 

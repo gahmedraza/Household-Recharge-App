@@ -4,27 +4,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.tasks.Task
-import com.google.android.gms.tasks.TaskCompletionSource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.common.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
-import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.HouseholdRepository
+import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class HouseholdViewModel(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase,
-    private val householdRepository: HouseholdRepository
+    private val householdRepository: HouseholdRepository,
+    private val invitationRepository: InvitationRepository
 ) : BaseViewModel() {
 
     var invitationCode by mutableStateOf("")
@@ -58,7 +55,7 @@ class HouseholdViewModel(
                 householdId = ""
             )
 
-            val result = householdUseCase.addHouseholdAndUpdateAccount(
+            val result = householdUseCase.createHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
 
                 householdDto = householdDto
@@ -88,46 +85,6 @@ class HouseholdViewModel(
         }
     }
 
-    suspend fun getInvitation(code: String): InvitationDto? {
-        try {
-
-            val snapshot = FirebaseFirestore
-                .getInstance()
-                .collection("invitations")
-                .document(code.uppercase())
-                .get()
-                .await()
-
-            if(!snapshot.exists()) {
-                return null
-            }
-
-            return snapshot.toObject(InvitationDto::class.java)
-        } catch (e: Exception) {
-
-            return null
-        }
-    }
-
-    suspend fun getHousehold(householdId: String): HouseholdDto? {
-
-        val snapshot = FirebaseFirestore
-            .getInstance()
-            .collection("households")
-            .document(householdId)
-            .get()
-            .await()
-
-        if(!snapshot.exists()) {
-            return null
-        }
-
-        val householdDto = snapshot.toObject(HouseholdDto::class.java)
-        householdDto?.householdId=householdId
-
-        return householdDto
-    }
-
     /**
      * Joins the user to a household using the provided invitation code.
      *
@@ -143,102 +100,33 @@ class HouseholdViewModel(
 
         viewModelScope.launch {
 
-        }
-    }
-
-    fun validateAccountAndJoinHousehold(
-        invitationCode: String,
-        onSuccess: (HouseholdDto?) -> Unit,
-        onFailure: (String?) -> Unit
-    ) : Task<Result<HouseholdDto?, String?>> {
-
-        val source = TaskCompletionSource<Result<HouseholdDto?, String?>>()
-
-        viewModelScope.launch {
-
-            //validateaccount
+            isLoading = true
 
             val authId = sessionManager.authId.first()
 
             val result = householdUseCase.validateAccountAndJoinHousehold(
-                accountId = authId
+                invitationCode = invitationCode,
+                authId = authId
             )
 
             when(result) {
 
-                is Result.Success<String> -> {
+                is Result.Success<HouseholdDto?> -> {
 
-                    validateInvitationCode(
-                        invitationCode = invitationCode,
-
-                        onSuccess = { householdDto ->
-
-                            onSuccess(householdDto)
-                        },
-
-                        onFailure = { error ->
-
-                            onFailure(error)
-                        }
-                    )
+                    isLoading = false
+                    onSuccess(result.data)
                 }
 
-                is Result.Failure<String> -> {
+                is Result.Failure<String?> -> {
 
-                    onFailure("error")
+                    isLoading = false
+                    onFailure(result.error)
                 }
             }
-
-            //join household
-        }
-
-        return source.task
-    }
-
-    fun validateInvitationCode(
-        invitationCode: String,
-        onSuccess: (HouseholdDto?) -> Unit,
-        onFailure: (String?) -> Unit
-    ) {
-
-        viewModelScope.launch {
-            isLoading = true
-
-            val invitation = getInvitation(invitationCode)
-
-            if(invitation == null) {
-                isLoading = false
-                onFailure("invitation code not found")
-                return@launch
-            }
-
-            if(invitation?.status != "pending") {
-                isLoading = false
-                onFailure("invitation code already used")
-                return@launch
-            }
-
-            val invitationExpiry = invitation?.expiresAt?.toLong() ?: 0L
-
-            if(invitationExpiry < System.currentTimeMillis()) {
-                isLoading = false
-                onFailure("invitation code has expired")
-                return@launch
-            }
-
-            val household = getHousehold(invitation?.householdId.cleanString())
-            household?.invitationCode=invitationCode
-
-            if(household == null) {
-                isLoading = false
-                onFailure("failure")
-                return@launch
-            }
-
-            isLoading = false
-            onSuccess(household)
         }
     }
+
+
 
     fun onJoinHousehold(
         householdId: String,

@@ -1,8 +1,10 @@
 package com.raza.householdrecharge.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.raza.householdrecharge.common.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
+import com.raza.householdrecharge.data.repository.account.InvitationError
 import com.raza.householdrecharge.ui.invitation.Invitation
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
@@ -77,6 +79,42 @@ class InvitationRepository(
             result = Result.Failure(e.message.cleanString())
         }
 
+
+        return result
+    }
+
+    suspend fun getInvitationByInvitationCode(
+        code: String
+    ): Result<InvitationDto, InvitationError> {
+
+        var result: Result<InvitationDto, InvitationError>
+
+        try {
+
+            val snapshot = firestore
+                .collection("invitations")
+                .document(code.uppercase())
+                .get()
+                .await()
+
+            if (!snapshot.exists()) {
+                return Result.Failure(InvitationError.InvitationCodeNotFound)
+            }
+
+            val invitationDto = snapshot.toObject(InvitationDto::class.java)
+
+            if(invitationDto == null) {
+                result = Result.Failure(InvitationError.InvitationDataMappingError)
+
+            } else {
+                result = Result.Success(invitationDto)
+            }
+
+        } catch (e: Exception) {
+
+            log(e.message)
+            result = Result.Failure(InvitationError.UnknownError)
+        }
 
         return result
     }
