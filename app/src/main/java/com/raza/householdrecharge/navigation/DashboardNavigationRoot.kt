@@ -27,6 +27,7 @@ import com.raza.householdrecharge.ui.addrecharge.AddRechargeScreen
 import com.raza.householdrecharge.ui.dashbord.DashboardScreen
 import com.raza.householdrecharge.ui.invitation.AddInvitationScreen
 import com.raza.householdrecharge.ui.invitation.InvitationListingScreen
+import com.raza.householdrecharge.ui.mobilenumber.AddMobileNumberScreen
 import com.raza.householdrecharge.ui.rechargehistory.RechargeListingScreen
 import com.raza.householdrecharge.ui.settings.SettingScreen
 
@@ -69,11 +70,13 @@ fun DashboardNavigationRoot() {
 
                     onClick = { memberId, mobileNumber ->
 
-                        navController.navigate("${ComposeScreen.RechargeHistory.description}/$memberId/$mobileNumber")
+                        //navController.navigate("${ComposeScreen.RechargeHistory.description}/$memberId/$mobileNumber")
+
+                        navController.navigate(ComposeScreen.AddMobileNumber.description)
                     },
 
                     onAddMember = {
-                        navController.navigate(ComposeScreen.AddRechargeHistory.description)
+                        navController.navigate("${ComposeScreen.AddRechargeHistory.description}")
                     },
                     onDashboardClick = {
                         navController.navigate(ComposeScreen.Dashboard.description)
@@ -212,6 +215,28 @@ fun DashboardNavigationRoot() {
                     }
                 )
             }
+
+            //
+            composable(
+                ComposeScreen.AddMobileNumber.description
+            ) {
+
+                AddMobileNumberScreen(
+                    viewModel = viewModel(
+                        factory = genericFactory
+                    ),
+
+                    onSuccess = {
+
+                        navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                    },
+
+                    onFailure = {
+
+                    }
+                )
+            }
+            //
         }
     }
 }

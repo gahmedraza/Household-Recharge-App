@@ -46,7 +46,7 @@ fun TitleBar(headerTitle: String = "Household Members") {
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.background),
                         text = headerTitle,
-                        fontSize = 30.sp,
+                        fontSize = 24.sp,
                         textAlign = TextAlign.Center
                     )
                 }

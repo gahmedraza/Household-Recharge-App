@@ -106,7 +106,7 @@ fun Body(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.Center,
                 text = "no recharges found",
-                style = MaterialTheme.typography.displayLarge
+                style = MaterialTheme.typography.titleLarge
             )
         }
     } else {

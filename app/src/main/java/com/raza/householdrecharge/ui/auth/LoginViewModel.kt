@@ -66,16 +66,19 @@ class LoginViewModel(
 
             when(result51) {
                 is Result.Success<AccountDto> -> {
+                    val accountDto = result51.data
 
-                    sessionManager.saveUserId(result51.data.accountId.cleanString())
-                    if(result51.data.householdId == null) {
+                    sessionManager.saveUserId(accountDto.accountId.cleanString())
+
+                    if(accountDto.householdId == null) {
                         sessionManager.saveHouseholdLinkStatus(false)
                     } else {
                         sessionManager.saveHouseholdLinkStatus(true)
+                        sessionManager.saveHouseholdId(accountDto.householdId.cleanString())
                     }
 
                     isLoading = false
-                    onSuccess(result51.data.accountId.cleanString())
+                    onSuccess(accountDto.accountId.cleanString())
                 }
                 is Result.Failure<String> -> {
 

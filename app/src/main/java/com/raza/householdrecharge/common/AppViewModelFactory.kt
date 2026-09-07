@@ -9,15 +9,19 @@ import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.data.repository.MemberRepository
+import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
+import com.raza.householdrecharge.domain.validator.AddRechargeValidator
+import com.raza.householdrecharge.domain.validator.MobileNumberValidator
 import com.raza.householdrecharge.ui.addmember.AddMemberViewModel
 import com.raza.householdrecharge.ui.addrecharge.AddRechargeViewModel
 import com.raza.householdrecharge.ui.auth.LoginViewModel
 import com.raza.householdrecharge.ui.auth.RegisterViewModel
 import com.raza.householdrecharge.ui.dashbord.DashboardViewModel
 import com.raza.householdrecharge.ui.invitation.InvitationViewModel
+import com.raza.householdrecharge.ui.mobilenumber.MobileNumberViewModel
 import com.raza.householdrecharge.ui.notification.NotificationViewModel
 import com.raza.householdrecharge.ui.rechargehistory.RechargeListingViewModel
 import com.raza.householdrecharge.ui.settings.SettingViewModel
@@ -28,6 +32,10 @@ class AppViewModelFactory(
     private val sessionManager: SessionManager
 ) : ViewModelProvider.Factory {
 
+    val addRechargeValidator = AddRechargeValidator()
+
+    val mobileNumberValidator = MobileNumberValidator()
+
     val firestore = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
 
@@ -37,6 +45,7 @@ class AppViewModelFactory(
     val invitationRepository = InvitationRepository(firestore)
     val memberRepository = MemberRepository(firestore)
     val rechargeRepository = RechargeRepository(firestore)
+    val mobileNumberRepository = MobileNumberRepository(firestore)
 
     override fun <T : ViewModel> create(
         modelClass: Class<T>
@@ -52,7 +61,16 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(AddRechargeViewModel::class.java)) {
             return AddRechargeViewModel(
                 sessionManager = sessionManager,
-                rechargeRepository = rechargeRepository
+                rechargeRepository = rechargeRepository,
+                validator = addRechargeValidator
+            ) as T
+        }
+
+        if (modelClass.isAssignableFrom(MobileNumberViewModel::class.java)) {
+            return MobileNumberViewModel(
+                sessionManager = sessionManager,
+                mobileNumberRepository = mobileNumberRepository,
+                validator = mobileNumberValidator
             ) as T
         }
 

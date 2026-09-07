@@ -5,6 +5,7 @@ import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.domain.model.RechargeHistory
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import kotlinx.coroutines.tasks.await
 
 class RechargeRepository(
@@ -12,7 +13,7 @@ class RechargeRepository(
 ) {
 
     suspend fun addRecharge(
-        rechargeHistory: RechargeHistory,
+        rechargeDto: RechargeDto,
         appUserDto: AppUserDto
     ): Result<String, String> {
 
@@ -22,20 +23,8 @@ class RechargeRepository(
 
             val documentReference = firestore
 
-                .collection("users")
-                .document(appUserDto.authId)
-
-                .collection("households")
-                .document(appUserDto.householdId)
-
-                .collection("members")
-                .document(appUserDto.memberId)
-
-                .collection("mobileNumbers")
-                .document(appUserDto.mobileNumber)
-
                 .collection("recharges")
-                .add(rechargeHistory)
+                .add(rechargeDto)
 
                 .await()
 

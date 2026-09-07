@@ -110,7 +110,7 @@ fun DashboardContent(
             if (true) {
                 FloatingActionButton(
                     onClick = {
-                        onAddMember()
+                        onClick("","")
                     }
                 ) {
                     Icon(
@@ -132,7 +132,7 @@ fun DashboardContent(
                 if (viewModel.members.isEmpty()) {
                     item {
                         Text(
-                            text = "No recharges available",
+                            text = "No mobile numbers added",
                             style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center
                         )
