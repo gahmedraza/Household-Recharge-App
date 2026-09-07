@@ -1,9 +1,13 @@
 package com.raza.householdrecharge.common
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -147,5 +151,17 @@ fun AppCard(
         shape = RoundedCornerShape(size = cornerSize),
 
         content = content
+    )
+}
+
+@Composable
+fun RechargeStatusIndicator(modifier: Modifier) {
+    Box(
+        modifier = modifier
+            .size(8.dp)
+            .background(
+                color = MaterialTheme.colorScheme.primary,
+                shape = CircleShape
+            )
     )
 }

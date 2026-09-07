@@ -98,7 +98,8 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(DashboardViewModel::class.java)) {
             return DashboardViewModel(
                 sessionManager = sessionManager,
-                memberRepository = memberRepository
+                memberRepository = memberRepository,
+                mobileNumberRepository = mobileNumberRepository
             ) as T
         }
 

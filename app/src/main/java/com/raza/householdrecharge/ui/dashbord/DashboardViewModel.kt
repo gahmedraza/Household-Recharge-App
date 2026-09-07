@@ -13,12 +13,38 @@ import com.raza.householdrecharge.domain.model.Member
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
+import com.raza.householdrecharge.data.repository.MobileNumberRepository
 
 class DashboardViewModel(
     private val sessionManager: SessionManager,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val mobileNumberRepository: MobileNumberRepository
 ) : BaseViewModel() {
     var members by mutableStateOf<List<Member>>(emptyList())
+    var mobileNumbers by mutableStateOf<List<MobileNumberDto>>(emptyList())
+
+    fun loadMobileNumbers(
+        onSuccess: (List<MobileNumberDto>) -> Unit,
+        onFailure: (String?) -> Unit
+    ) {
+        viewModelScope.launch {
+            val result = mobileNumberRepository.getAllMobileNumbers()
+
+            when(result) {
+                is Result.Success -> {
+                    mobileNumbers = result.data
+
+                    onSuccess(mobileNumbers)
+                }
+
+                is Result.Failure -> {
+
+                    onFailure("failure")
+                }
+            }
+        }
+    }
 
     fun loadMembers(onSuccess: () -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
