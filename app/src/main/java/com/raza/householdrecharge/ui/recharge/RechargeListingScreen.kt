@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.raza.householdrecharge.common.RechargeStatusIndicator
 import com.raza.householdrecharge.common.TitleBar
 import com.raza.householdrecharge.common.getPrintableDate
@@ -311,39 +312,31 @@ fun RechargeListItemCard2(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Text(
-                text = "Recharge Amount: ${item.rechargeAmount} INR",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            Row {
+                Icon(
+                    imageVector = Icons.Filled.PhoneAndroid,
+                    contentDescription = "Mobile Number",
+                    tint = MaterialTheme.colorScheme.primary
+                )
 
-            Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.width(2.dp))
 
-            Text(
-                text = "2GB per day for 84 days",
-                style = MaterialTheme.typography.bodyLarge
-            )
+                Text(
+                    text = "${item.mobileNumber}",
+                    letterSpacing = 1.sp,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.secondary
+                )
 
-            Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.weight(1f))
 
-            Text(
-                text = "Recharge Date: ${getPrintableDate(item.rechargeDate.toString())}",
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Text(
-                text = "Expiry Date: ${getPrintableDate(item.expiryDate.toString())}",
-                style = MaterialTheme.typography.bodyLarge
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-
-            Text(
-                text = "Recharged by: ${item.rechargedBy}",
-                style = MaterialTheme.typography.bodyLarge
-            )
+                Text(
+                    text = "2GB per day for 84 days".uppercase(),
+                    letterSpacing = 2.sp,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -351,33 +344,93 @@ fun RechargeListItemCard2(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row {
-                Column {
-                    Row {
-                        RechargeStatusIndicator(
-                            modifier = Modifier.align(
-                                alignment = Alignment.CenterVertically
-                            )
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = "Plan Active",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
-                    Text(
-                        text = "Expires in 24 days",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = "Recharge Amount :",
+                    style = MaterialTheme.typography.bodyLarge
+                )
 
                 Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = "  ${item.rechargeAmount}",
+                    style = MaterialTheme.typography.displayLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = " INR",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
             }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = "Recharge Date :",
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = " ${getPrintableDate(item.rechargeDate.toString())}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = "Expiry Date :",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = " ${getPrintableDate(item.expiryDate.toString())}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                    text = "Recharged by :",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Text(
+                    text = " ${item.rechargedBy}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }

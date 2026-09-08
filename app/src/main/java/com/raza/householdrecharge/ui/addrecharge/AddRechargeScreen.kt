@@ -92,6 +92,22 @@ fun Body(
                     modifier = modifier,
 
                     label = {
+                        Text("Description")
+                    },
+
+                    onValueChange = {
+                        viewModel.rechargeDescription = it
+                    },
+
+                    value = viewModel.rechargeDescription
+                )
+
+                Spacer(Modifier.height(20.dp))
+
+                OutlinedTextField(
+                    modifier = modifier,
+
+                    label = {
                         Text("Amount")
                     },
 
@@ -128,10 +144,10 @@ fun Body(
                     label = "Expiry Date",
 
                     onDateSelected = {
-                        viewModel.date = it.toString()
+                        viewModel.planExpiryDate = it.toString()
                     },
 
-                    value = viewModel.date,
+                    value = viewModel.planExpiryDate,
                 )
 
                 Spacer(Modifier.height(20.dp))

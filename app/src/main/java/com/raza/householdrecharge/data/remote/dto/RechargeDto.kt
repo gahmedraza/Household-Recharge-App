@@ -18,6 +18,8 @@ data class RechargeDto(
     var expiryDate: Long = 0L,
     //the value for this should be picked from a dropdown of household members only
     var rechargedBy: String = "",
+    //the value is not verified and is nullable
+    var rechargeDescription: String = "",
     //...
     //recharge details end
 

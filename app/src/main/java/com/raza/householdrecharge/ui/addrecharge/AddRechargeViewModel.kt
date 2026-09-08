@@ -18,6 +18,8 @@ class AddRechargeViewModel(
     private val rechargeRepository: RechargeRepository,
     private val validator: RechargeValidator
 ) : BaseViewModel() {
+
+    var rechargeDescription by mutableStateOf("")
     var amount by mutableStateOf("")
     var date by mutableStateOf("")
     var rechargedBy by mutableStateOf("")
@@ -36,7 +38,9 @@ class AddRechargeViewModel(
             ).create(
                 rechargeAmount = amount.toInt(),
                 rechargeDate = date.toLong(),
+                expiryDate = planExpiryDate.toLong(),
                 rechargedBy = rechargedBy,
+                rechargeDescription = rechargeDescription,
                 mobileNumber = mobileNumber.toLong()
             )
 

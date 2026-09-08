@@ -13,6 +13,7 @@ class RechargeDtoFactory(
         rechargeDate: Long = 0L,
         expiryDate: Long = 0L,
         rechargedBy: String = "",
+        rechargeDescription: String = "",
         mobileNumber: Long = 0
     ): RechargeDto {
 
@@ -21,6 +22,7 @@ class RechargeDtoFactory(
             rechargeDate = rechargeDate,
             expiryDate = expiryDate,
             rechargedBy = rechargedBy,
+            rechargeDescription = rechargeDescription,
             mobileNumber = mobileNumber,
             accountId = sessionManager.authId.first(),
             householdId = sessionManager.householdId.first(),
