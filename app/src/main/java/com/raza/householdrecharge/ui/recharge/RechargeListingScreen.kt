@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.ui.rechargehistory
+package com.raza.householdrecharge.ui.recharge
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -18,12 +18,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.common.TitleBar
 import com.raza.householdrecharge.common.getPrintableDate
 import com.raza.householdrecharge.common.getViewModel
-import com.raza.householdrecharge.domain.model.RechargeHistory
+import com.raza.householdrecharge.domain.model.Recharge
 
 @Composable
 fun RechargeListingScreen(
@@ -52,7 +50,7 @@ fun RechargeListingScreen(
     onAddRecharge: (String, String) -> Unit
 ) {
     LaunchedEffect(Unit) {
-        viewModel.loadRechargeHistory(
+        viewModel.loadAllRecharges(
             memberId = memberId,
             mobileNumber = mobileNumber,
 
@@ -70,7 +68,7 @@ fun RechargeListingScreen(
             TitleBar("Recharge History")
         },
 
-        floatingActionButton = {
+        /*floatingActionButton = {
             FloatingActionButton(
                 onClick = {
                     onAddRecharge(
@@ -83,7 +81,7 @@ fun RechargeListingScreen(
                     contentDescription = "add recharge"
                 )
             }
-        }
+        }*/
     ) { paddingValues ->
 
         Body(viewModel, Modifier.padding(paddingValues))
@@ -95,7 +93,7 @@ fun Body(
     viewModel: RechargeListingViewModel,
     modifier: Modifier
 ) {
-    if (viewModel.mobileRechargeHistory.isEmpty()) {
+    if (viewModel.rechargeList.isEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize(),
@@ -111,8 +109,8 @@ fun Body(
         }
     } else {
         LazyColumn(modifier = modifier) {
-            items(viewModel.mobileRechargeHistory) { item ->
-                RechargeHistoryCard(
+            items(viewModel.rechargeList) { item ->
+                RechargeListItemCard(
                     item = item,
                     onClick = {
 
@@ -126,7 +124,7 @@ fun Body(
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun RechargeHistoryScreenDarkPreview() {
+fun RechargeListingScreenDarkPreview() {
     Content(
         item = null
     )
@@ -134,14 +132,14 @@ fun RechargeHistoryScreenDarkPreview() {
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun RechargeHistoryScreenLightPreview() {
+fun RechargeListingScreenLightPreview() {
     Content(
         item = null
     )
 }
 
 @Composable
-fun Content(item: RechargeHistory?) {
+fun Content(item: Recharge?) {
     val viewModel =
         getViewModel(RechargeListingViewModel::class.java)
 
@@ -158,8 +156,8 @@ fun Content(item: RechargeHistory?) {
 }
 
 @Composable
-fun RechargeHistoryCard(
-    item: RechargeHistory,
+fun RechargeListItemCard(
+    item: Recharge,
     onClick: () -> Unit
 ) {
     Card(

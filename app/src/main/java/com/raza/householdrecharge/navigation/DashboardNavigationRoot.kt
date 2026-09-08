@@ -28,7 +28,7 @@ import com.raza.householdrecharge.ui.dashbord.DashboardScreen
 import com.raza.householdrecharge.ui.invitation.AddInvitationScreen
 import com.raza.householdrecharge.ui.invitation.InvitationListingScreen
 import com.raza.householdrecharge.ui.mobilenumber.AddMobileNumberScreen
-import com.raza.householdrecharge.ui.rechargehistory.RechargeListingScreen
+import com.raza.householdrecharge.ui.recharge.RechargeListingScreen
 import com.raza.householdrecharge.ui.settings.SettingScreen
 
 @Composable
@@ -68,30 +68,19 @@ fun DashboardNavigationRoot() {
                         factory = genericFactory
                     ),
 
-                    onClick = { memberId, mobileNumber ->
+                    onDashboardCardClick = { memberId, mobileNumber ->
 
-                        //navController.navigate("${ComposeScreen.RechargeHistory.description}/$memberId/$mobileNumber")
+                        navController.navigate("${ComposeScreen.AddRecharge}/$memberId/$mobileNumber")
+                    },
 
+                    onAddMobileNumber = {
                         navController.navigate(ComposeScreen.AddMobileNumber.description)
-                    },
-
-                    onAddMember = {
-                        navController.navigate("${ComposeScreen.AddRechargeHistory.description}")
-                    },
-                    onDashboardClick = {
-                        navController.navigate(ComposeScreen.Dashboard.description)
-                    },
-                    onRechargeHistoryClick = {
-
-                    },
-                    onSettingClick = {
-                        navController.navigate(ComposeScreen.Setting.description)
                     }
                 )
             }
 
             composable(
-                route = "${ComposeScreen.RechargeHistory.description}/{memberId}/{mobileNumber}"
+                route = "${ComposeScreen.RechargeListing.description}/{memberId}/{mobileNumber}"
             ) { backStackEntry ->
 
                 val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
@@ -115,7 +104,7 @@ fun DashboardNavigationRoot() {
                     },
 
                     onAddRecharge = { memberId, mobileNumber ->
-                        navController.navigate("${ComposeScreen.AddRechargeHistory}/$memberId/$mobileNumber")
+                        navController.navigate("${ComposeScreen.AddRecharge}/$memberId/$mobileNumber")
                     }
                 )
             }
@@ -190,7 +179,7 @@ fun DashboardNavigationRoot() {
             }
 
             composable(
-                route = "${ComposeScreen.AddRechargeHistory.description}/{memberId}/{mobileNumber}"
+                route = "${ComposeScreen.AddRecharge.description}/{memberId}/{mobileNumber}"
             ) { backStackEntry ->
 
                 val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
@@ -266,16 +255,16 @@ fun BottomNavigationBar(
         NavigationBarItem(
             selected = false,
             onClick = {
-                navController.navigate("${ComposeScreen.RechargeHistory.description}//")
+                navController.navigate("${ComposeScreen.RechargeListing.description}//")
             },
             icon = {
                 Icon(
                     Icons.Default.History,
-                    contentDescription = ComposeScreen.RechargeHistory.description
+                    contentDescription = ComposeScreen.RechargeListing.description
                 )
             },
             label = {
-                Text(ComposeScreen.RechargeHistory.description)
+                Text(ComposeScreen.RechargeListing.description)
             }
         )
 
@@ -299,6 +288,6 @@ fun BottomNavigationBar(
 
 val bottomBarRoutes = listOf(
     ComposeScreen.Dashboard.description,
-    "${ComposeScreen.RechargeHistory.description}/{memberId}/{mobileNumber}",
+    "${ComposeScreen.RechargeListing.description}/{memberId}/{mobileNumber}",
     ComposeScreen.Setting.description
 )

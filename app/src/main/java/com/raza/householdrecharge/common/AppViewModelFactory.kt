@@ -13,7 +13,7 @@ import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
-import com.raza.householdrecharge.domain.validator.AddRechargeValidator
+import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.domain.validator.MobileNumberValidator
 import com.raza.householdrecharge.ui.addmember.AddMemberViewModel
 import com.raza.householdrecharge.ui.addrecharge.AddRechargeViewModel
@@ -23,7 +23,7 @@ import com.raza.householdrecharge.ui.dashbord.DashboardViewModel
 import com.raza.householdrecharge.ui.invitation.InvitationViewModel
 import com.raza.householdrecharge.ui.mobilenumber.MobileNumberViewModel
 import com.raza.householdrecharge.ui.notification.NotificationViewModel
-import com.raza.householdrecharge.ui.rechargehistory.RechargeListingViewModel
+import com.raza.householdrecharge.ui.recharge.RechargeListingViewModel
 import com.raza.householdrecharge.ui.settings.SettingViewModel
 import com.raza.householdrecharge.ui.setuphousehold.HouseholdViewModel
 import com.raza.householdrecharge.ui.splash.SplashViewModel
@@ -32,7 +32,7 @@ class AppViewModelFactory(
     private val sessionManager: SessionManager
 ) : ViewModelProvider.Factory {
 
-    val addRechargeValidator = AddRechargeValidator()
+    val rechargeValidator = RechargeValidator()
 
     val mobileNumberValidator = MobileNumberValidator()
 
@@ -62,7 +62,7 @@ class AppViewModelFactory(
             return AddRechargeViewModel(
                 sessionManager = sessionManager,
                 rechargeRepository = rechargeRepository,
-                validator = addRechargeValidator
+                validator = rechargeValidator
             ) as T
         }
 
@@ -112,7 +112,8 @@ class AppViewModelFactory(
         if (modelClass.isAssignableFrom(RechargeListingViewModel::class.java)) {
             return RechargeListingViewModel(
                 sessionManager = sessionManager,
-                rechargeRepository = rechargeRepository
+                rechargeRepository = rechargeRepository,
+                validator = rechargeValidator
             ) as T
         }
 

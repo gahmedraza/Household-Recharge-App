@@ -20,10 +20,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PhoneAndroid
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -39,26 +37,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.raza.householdrecharge.common.RechargeStatusIndicator
 import com.raza.householdrecharge.common.TitleBar
-import com.raza.householdrecharge.common.getPrintableDate
 import com.raza.householdrecharge.common.getViewModel
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
-import com.raza.householdrecharge.domain.model.Member
 
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
-    onClick: (String, String) -> Unit,
-    onAddMember: () -> Unit,
-    onDashboardClick: () -> Unit,
-    onRechargeHistoryClick: () -> Unit,
-    onSettingClick: () -> Unit
+    onDashboardCardClick: (String, String) -> Unit,
+    onAddMobileNumber: () -> Unit
 ) {
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
     LaunchedEffect(Unit) {
         viewModel.loadMobileNumbers(
             onSuccess = {
@@ -74,40 +70,6 @@ fun DashboardScreen(
         )
     }
 
-    DashboardContent(
-        viewModel = viewModel,
-        onClick = { memberId, mobileNumber ->
-            onClick(memberId, mobileNumber)
-        },
-        onAddMember = {
-            onAddMember()
-        },
-        onDashboardClick = {
-            onDashboardClick()
-        },
-        onRechargeHistoryClick = {
-            onRechargeHistoryClick()
-        },
-        onSettingClick = {
-            onSettingClick()
-        }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DashboardContent(
-    viewModel: DashboardViewModel,
-    onClick: (String, String) -> Unit,
-    onAddMember: () -> Unit,
-    onDashboardClick: () -> Unit,
-    onRechargeHistoryClick: () -> Unit,
-    onSettingClick: () -> Unit
-) {
-
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -121,7 +83,7 @@ fun DashboardContent(
             if (true) {
                 FloatingActionButton(
                     onClick = {
-                        onClick("","")
+                        onAddMobileNumber()
                     }
                 ) {
                     Icon(
@@ -157,7 +119,7 @@ fun DashboardContent(
                         DashboardListItem(
                             item = item,
                             onClick = {
-                                onClick("", "")
+                                onDashboardCardClick(item.accountId, item.mobileNumber.toString())
                             }
                         )
                     }
@@ -169,43 +131,6 @@ fun DashboardContent(
             }
         }
     }
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun DashboardScreenDarkPreview() {
-    content()
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-fun DashboardScreenLightPreview() {
-    content()
-}
-
-@Composable
-fun content() {
-    val viewModel =
-        getViewModel(DashboardViewModel::class.java)
-
-    DashboardScreen(
-        viewModel = viewModel,
-        onClick = { memberId, mobileNumber ->
-
-        },
-        onAddMember = {
-
-        },
-        onDashboardClick = {
-
-        },
-        onRechargeHistoryClick = {
-
-        },
-        onSettingClick = {
-
-        }
-    )
 }
 
 @Composable
@@ -352,4 +277,34 @@ fun DashboardListItem(
             }
         }
     }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun DashboardScreenDarkPreview() {
+    content()
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+fun DashboardScreenLightPreview() {
+    content()
+}
+
+@Composable
+fun content() {
+    val viewModel =
+        getViewModel(DashboardViewModel::class.java)
+
+    DashboardScreen(
+        viewModel = viewModel,
+
+        onDashboardCardClick = { memberId, mobileNumber ->
+
+        },
+
+        onAddMobileNumber = {
+
+        }
+    )
 }

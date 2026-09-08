@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.ui.addrecharge
+package com.raza.householdrecharge.ui.recharge
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -6,41 +6,31 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.common.BaseViewModel
 import com.raza.householdrecharge.common.SessionManager
-import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
 import com.raza.householdrecharge.data.repository.RechargeRepository
-import com.raza.householdrecharge.domain.validator.RechargeValidator
+import com.raza.householdrecharge.domain.model.Recharge
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.domain.validator.RechargeValidator
 
-class AddRechargeViewModel(
+class RechargeListingViewModel(
     private val sessionManager: SessionManager,
     private val rechargeRepository: RechargeRepository,
     private val validator: RechargeValidator
 ) : BaseViewModel() {
-    var amount by mutableStateOf("")
-    var date by mutableStateOf("")
-    var rechargedBy by mutableStateOf("")
 
-    fun addRecharge(
-        memberId: String,
-        mobileNumber: String,
+    var rechargeList by mutableStateOf<List<Recharge>>(emptyList())
+
+    fun loadAllRecharges(
         onSuccess: () -> Unit,
-        onFailure: (String?) -> Unit
+        onFailure: (String?) -> Unit,
+        memberId: String,
+        mobileNumber: String
     ) {
         viewModelScope.launch {
-            //
             isLoading = true
 
-            val rechargeDto = RechargeDtoFactory(
-                sessionManager = sessionManager
-            ).create(
-                rechargeAmount = amount.toInt(),
-                rechargeDate = date.toLong(),
-                rechargedBy = rechargedBy
-            )
-
-            val validationResult = validator.validateAddRechargeApiCall(
+            val validationResult = validator.validateRechargeListingApiCall(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
                 memberId = memberId,
@@ -53,16 +43,14 @@ class AddRechargeViewModel(
                 onFailure("failure")
                 return@launch
             }
-            //
 
-            val result = rechargeRepository.addRecharge(
-                rechargeDto = rechargeDto
-            )
+            val result = rechargeRepository.getAllRecharges()
 
-            when (result) {
+            when(result) {
 
-                is Result.Success<String> -> {
+                is Result.Success<List<Recharge>> -> {
                     isLoading = false
+                    rechargeList = result.data
                     onSuccess()
                 }
 

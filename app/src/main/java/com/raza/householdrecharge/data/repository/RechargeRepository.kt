@@ -1,8 +1,7 @@
 package com.raza.householdrecharge.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.data.remote.dto.AppUserDto
-import com.raza.householdrecharge.domain.model.RechargeHistory
+import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
@@ -13,8 +12,7 @@ class RechargeRepository(
 ) {
 
     suspend fun addRecharge(
-        rechargeDto: RechargeDto,
-        appUserDto: AppUserDto
+        rechargeDto: RechargeDto
     ): Result<String, String> {
 
         var result: Result<String, String>
@@ -41,37 +39,24 @@ class RechargeRepository(
         return result
     }
 
-    suspend fun fetchRechargeHistoryList(
-        appUserDto: AppUserDto
-    ): Result<List<RechargeHistory>, String> {
+    suspend fun getAllRecharges(
+    ): Result<List<Recharge>, String> {
 
-        var result: Result<List<RechargeHistory>, String>
+        var result: Result<List<Recharge>, String>
 
         try {
 
             val documentSnapshot = firestore
 
-                .collection("users")
-                .document(appUserDto.authId)
-
-                .collection("households")
-                .document(appUserDto.householdId)
-
-                .collection("members")
-                .document(appUserDto.memberId)
-
-                .collection("mobileNumbers")
-                .document(appUserDto.mobileNumber)
-
                 .collection("recharges")
                 .get()
                 .await()
 
-            val rechargeHistoryList = documentSnapshot.documents.mapNotNull { document ->
-                document.toObject(RechargeHistory::class.java)
+            val rechargeList = documentSnapshot.documents.mapNotNull { document ->
+                document.toObject(Recharge::class.java)
             }
 
-            result = Result.Success(rechargeHistoryList)
+            result = Result.Success(rechargeList)
 
         } catch (e: Exception) {
 
