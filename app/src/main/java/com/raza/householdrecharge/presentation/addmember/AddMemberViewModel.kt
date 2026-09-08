@@ -10,8 +10,11 @@ import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.MemberDto
 import com.raza.householdrecharge.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AddMemberViewModel(
+@HiltViewModel
+class AddMemberViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val memberRepository: MemberRepository
 ) : BaseViewModel() {

@@ -8,8 +8,9 @@ import com.raza.householdrecharge.data.remote.dto.MemberDto
 import com.raza.householdrecharge.domain.model.Member
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class MemberRepository(
+class MemberRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 

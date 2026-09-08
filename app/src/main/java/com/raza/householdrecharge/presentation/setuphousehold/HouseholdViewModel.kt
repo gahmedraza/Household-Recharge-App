@@ -15,10 +15,13 @@ import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import com.raza.householdrecharge.util.cleanString
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HouseholdViewModel(
+@HiltViewModel
+class HouseholdViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase,
     private val householdRepository: HouseholdRepository,

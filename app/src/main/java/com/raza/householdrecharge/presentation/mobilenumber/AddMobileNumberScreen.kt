@@ -28,17 +28,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.components.AppCard
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun AddMobileNumberScreen(
-    viewModel: MobileNumberViewModel,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
+    viewModel: MobileNumberViewModel = hiltViewModel(),
+    onSuccess: () -> Unit = {},
+    onFailure: () -> Unit = {}
 ) {
 
     val modifier = Modifier
@@ -175,14 +175,7 @@ fun Body(
 
 @Composable
 fun Content(viewModel: MobileNumberViewModel) {
-    val viewModel =
-        getViewModel(MobileNumberViewModel::class.java)
-
-    AddMobileNumberScreen(
-        viewModel = viewModel,
-        onSuccess = {},
-        onFailure = {}
-    )
+    AddMobileNumberScreen()
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

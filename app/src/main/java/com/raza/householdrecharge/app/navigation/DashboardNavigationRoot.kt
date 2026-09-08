@@ -13,15 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.raza.householdrecharge.app.HouseholdRechargeApplication
-import com.raza.householdrecharge.common.AppViewModelFactory
 import com.raza.householdrecharge.presentation.addmember.AddMemberScreen
 import com.raza.householdrecharge.presentation.addrecharge.AddRechargeScreen
 import com.raza.householdrecharge.presentation.dashbord.DashboardScreen
@@ -34,13 +30,6 @@ import com.raza.householdrecharge.presentation.settings.SettingScreen
 @Composable
 fun DashboardNavigationRoot() {
     val navController = rememberNavController()
-
-    val application = LocalContext.current.applicationContext
-            as HouseholdRechargeApplication
-
-    val genericFactory = AppViewModelFactory(
-        sessionManager = application.sessionManager
-    )
 
     val backStackEntry by navController.currentBackStackEntryAsState()
 
@@ -64,10 +53,6 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.Dashboard.description) {
                 DashboardScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
                     onDashboardCardClick = { mobileNumber ->
 
                         navController.navigate("${ComposeScreen.AddRecharge}/$mobileNumber")
@@ -91,10 +76,6 @@ fun DashboardNavigationRoot() {
 
                     mobileNumber = mobileNumber,
 
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
                     onSuccess = {
                         navController.navigate(ComposeScreen.Dashboard.description)
                     },
@@ -111,10 +92,6 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.Setting.description) {
                 SettingScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
                     onAddMember = {
                         navController.navigate(ComposeScreen.AddMember.description)
                     },
@@ -139,10 +116,6 @@ fun DashboardNavigationRoot() {
             composable(ComposeScreen.Invitation.description) {
 
                 InvitationListingScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
                     onAddInvitation = {
                         navController.navigate(ComposeScreen.AddInvitation.description)
                     }
@@ -151,9 +124,6 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.AddInvitation.description) {
                 AddInvitationScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
                     onInvitationVerified = { invitationCode ->
 
                         navController.navigate(ComposeScreen.ConfirmHousehold.description)
@@ -163,10 +133,6 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.AddMember.description) {
                 AddMemberScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
                     onSuccess = {
 
                         navController.navigate(ComposeScreen.Setting.description)
@@ -187,10 +153,6 @@ fun DashboardNavigationRoot() {
                 AddRechargeScreen(
                     mobileNumber = mobileNumber,
 
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
                     onSuccess = {
 
                         navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
@@ -208,10 +170,6 @@ fun DashboardNavigationRoot() {
             ) {
 
                 AddMobileNumberScreen(
-                    viewModel = viewModel(
-                        factory = genericFactory
-                    ),
-
                     onSuccess = {
 
                         navController.navigate(ComposeScreen.DashboardNavigationRoot.description)

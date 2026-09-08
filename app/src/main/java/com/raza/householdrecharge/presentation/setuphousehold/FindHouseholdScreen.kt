@@ -26,17 +26,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.raza.householdrecharge.presentation.components.AppCard
-import com.raza.householdrecharge.presentation.preview.getViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
+import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun FindHouseholdScreen(
-    viewModel: HouseholdViewModel,
-    onSuccess: (HouseholdDto?) -> Unit,
-    onFailure: () -> Unit
+    viewModel: HouseholdViewModel = hiltViewModel(),
+    onSuccess: (HouseholdDto?) -> Unit = {},
+    onFailure: () -> Unit = {}
 ) {
     Scaffold { paddingValues ->
 
@@ -213,21 +213,8 @@ fun FindHouseholdBody(
 
 @Composable
 fun FindHouseholdContent() {
-    val viewModel =
-        getViewModel(HouseholdViewModel::class.java)
-
     HouseholdRechargeTheme(dynamicColor = false) {
-        FindHouseholdScreen(
-            viewModel = viewModel,
-
-            onSuccess = {
-
-            },
-
-            onFailure = {
-
-            }
-        )
+        FindHouseholdScreen()
     }
 }
 

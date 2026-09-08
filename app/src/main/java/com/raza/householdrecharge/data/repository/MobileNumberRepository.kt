@@ -5,8 +5,9 @@ import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class MobileNumberRepository(
+class MobileNumberRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 

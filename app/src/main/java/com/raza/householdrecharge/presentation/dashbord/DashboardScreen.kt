@@ -40,16 +40,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.RechargeStatusIndicator
 import com.raza.householdrecharge.presentation.components.TitleBar
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel,
-    onDashboardCardClick: (String) -> Unit,
-    onAddMobileNumber: () -> Unit
+    viewModel: DashboardViewModel = hiltViewModel(),
+    onDashboardCardClick: (String) -> Unit = { a -> },
+    onAddMobileNumber: () -> Unit = {}
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -293,18 +293,5 @@ fun DashboardScreenLightPreview() {
 
 @Composable
 fun content() {
-    val viewModel =
-        getViewModel(DashboardViewModel::class.java)
-
-    DashboardScreen(
-        viewModel = viewModel,
-
-        onDashboardCardClick = { mobileNumber ->
-
-        },
-
-        onAddMobileNumber = {
-
-        }
-    )
+    DashboardScreen()
 }

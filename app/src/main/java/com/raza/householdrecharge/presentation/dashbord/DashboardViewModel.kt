@@ -15,8 +15,11 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class DashboardViewModel(
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val memberRepository: MemberRepository,
     private val mobileNumberRepository: MobileNumberRepository

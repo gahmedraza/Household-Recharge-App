@@ -3,8 +3,9 @@ package com.raza.householdrecharge.domain.validator
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.domain.error.AddRechargeValidationError
 import com.raza.householdrecharge.domain.error.MobileNumberValidationError
+import javax.inject.Inject
 
-class MobileNumberValidator {
+class MobileNumberValidator @Inject constructor( ) {
 
     fun validate(
         userId: String,

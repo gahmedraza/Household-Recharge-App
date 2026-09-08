@@ -26,17 +26,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeDisplayText
 import com.raza.householdrecharge.presentation.components.LargeHeadlineText
 import com.raza.householdrecharge.presentation.components.LargeTitleText
-import com.raza.householdrecharge.presentation.preview.getViewModel
 
 @Composable
 fun AddInvitationScreen(
-    viewModel: InvitationViewModel,
-    onInvitationVerified: (String) -> Unit
+    viewModel: InvitationViewModel = hiltViewModel(),
+    onInvitationVerified: (String) -> Unit = { a-> }
 ) {
 
     AddInvitationBody(
@@ -48,8 +48,8 @@ fun AddInvitationScreen(
 
 @Composable
 fun AddInvitationBody(
-    modifier: Modifier,
-    viewModel: InvitationViewModel
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    viewModel: InvitationViewModel = hiltViewModel()
 ) {
 
     Card(
@@ -209,14 +209,7 @@ fun AddInvitationBody(
 )
 @Composable
 fun AddInvitationDarkPreview() {
-    val viewModel =
-        getViewModel(InvitationViewModel::class.java)
-
-    AddInvitationBody(
-        modifier = Modifier
-            .fillMaxWidth(),
-        viewModel = viewModel
-    )
+    AddInvitationBody()
 }
 
 @Preview(

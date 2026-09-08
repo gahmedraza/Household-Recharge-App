@@ -10,10 +10,13 @@ import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.domain.validator.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MobileNumberViewModel(
+@HiltViewModel
+class MobileNumberViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val mobileNumberRepository: MobileNumberRepository,
     private val validator: MobileNumberValidator

@@ -14,8 +14,9 @@ import com.raza.householdrecharge.data.repository.account.HouseholdError
 import com.raza.householdrecharge.data.repository.account.InvitationError
 import com.raza.householdrecharge.data.repository.account.PENDING
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
+import javax.inject.Inject
 
-class HouseholdUseCase(
+class HouseholdUseCase @Inject constructor(
     private val householdRepository: HouseholdRepository,
     private val accountRepository: AccountRepository,
     private val invitationRepository: InvitationRepository

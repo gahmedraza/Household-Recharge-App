@@ -2,13 +2,9 @@ package com.raza.householdrecharge.app.navigation
 
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.raza.householdrecharge.app.HouseholdRechargeApplication
-import com.raza.householdrecharge.common.AppViewModelFactory
 import com.raza.householdrecharge.presentation.auth.LoginScreen
 import com.raza.householdrecharge.presentation.auth.RegisterScreen
 import com.raza.householdrecharge.presentation.setuphousehold.ConfirmHouseholdScreen
@@ -20,13 +16,6 @@ import com.raza.householdrecharge.presentation.splash.SplashScreen
 @Composable
 fun OnboardingNavigation() {
     val navController = rememberNavController()
-
-    val application = LocalContext.current.applicationContext
-            as HouseholdRechargeApplication
-
-    val genericFactory = AppViewModelFactory(
-        sessionManager = application.sessionManager
-    )
 
     NavHost(
         navController = navController,
@@ -47,21 +36,13 @@ fun OnboardingNavigation() {
 
                 openDashboard = {
                     navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
-                },
-
-                viewModel = viewModel(
-                    factory = genericFactory
-                )
+                }
             )
         }
 
         composable(ComposeScreen.Login.description) {
 
             LoginScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onSignup = {
                     Log.d("TAG", "OnSignup")
                     navController.navigate(ComposeScreen.Register.description)
@@ -82,10 +63,6 @@ fun OnboardingNavigation() {
         composable(ComposeScreen.Register.description) {
 
             RegisterScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onSuccess = {
                     Log.d("TAG", "On Signup Success")
                     navController.navigate(ComposeScreen.SetupHousehold.description)
@@ -99,10 +76,6 @@ fun OnboardingNavigation() {
 
         composable(ComposeScreen.SetupHousehold.description) {
             SetupHouseholdScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onJoinHousehold = {
 
                     navController.navigate(ComposeScreen.FindHousehold.description)
@@ -117,10 +90,6 @@ fun OnboardingNavigation() {
 
         composable(ComposeScreen.FindHousehold.description) {
             FindHouseholdScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onSuccess = { householdDto ->
 
                     navController.navigate("${ComposeScreen.ConfirmHousehold.description}/${householdDto?.householdName}/${householdDto?.householdId}/${householdDto?.invitationCode}")
@@ -143,10 +112,6 @@ fun OnboardingNavigation() {
 
                 invitationCode = invitationCode,
 
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onSuccess = {
                     navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
                 },
@@ -157,10 +122,6 @@ fun OnboardingNavigation() {
 
         composable(ComposeScreen.CreateHousehold.description) {
             CreateHouseholdScreen(
-                viewModel = viewModel(
-                    factory = genericFactory
-                ),
-
                 onSuccess = {
                     navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
                 },

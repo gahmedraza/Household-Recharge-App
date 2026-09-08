@@ -7,8 +7,9 @@ import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.repository.account.AuthError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class AuthRepository(
+class AuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) {
 

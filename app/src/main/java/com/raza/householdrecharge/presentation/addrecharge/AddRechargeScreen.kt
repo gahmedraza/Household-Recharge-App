@@ -28,19 +28,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.AppDatePicker
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun AddRechargeScreen(
-    mobileNumber: String,
-    viewModel: AddRechargeViewModel,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
+    mobileNumber: String = "",
+    viewModel: AddRechargeViewModel = hiltViewModel(),
+    onSuccess: () -> Unit = {},
+    onFailure: () -> Unit = {}
 ) {
 
     val modifier = Modifier
@@ -59,6 +58,7 @@ fun AddRechargeScreen(
     )
 }
 
+//TODO merge body with main fn
 @Composable
 fun Body(
     mobileNumber: String,
@@ -240,27 +240,19 @@ fun Body(
 }
 
 @Composable
-fun Content(viewModel: AddRechargeViewModel) {
-    val viewModel =
-        getViewModel(AddRechargeViewModel::class.java)
-
-    AddRechargeScreen(
-        mobileNumber = "",
-        viewModel = viewModel,
-        onSuccess = {},
-        onFailure = {}
-    )
+fun Content() {
+    AddRechargeScreen()
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun AddRechargeHistoryScreenDarkPreview() {
-    Content(viewModel = viewModel())
+    Content()
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun AddRechargeHistoryScreenLightPreview() {
-    Content(viewModel = viewModel())
+    Content()
 }
 

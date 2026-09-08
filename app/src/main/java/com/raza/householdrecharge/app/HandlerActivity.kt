@@ -8,7 +8,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.raza.householdrecharge.app.navigation.OnboardingNavigation
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HandlerActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

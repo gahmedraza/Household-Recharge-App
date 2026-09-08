@@ -28,16 +28,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.raza.householdrecharge.presentation.components.AppCard
-import com.raza.householdrecharge.presentation.preview.getViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun RegisterScreen(
-    viewModel: RegisterViewModel,
-    onSuccess: () -> Unit,
-    onSignIn: () -> Unit
+    viewModel: RegisterViewModel = hiltViewModel(),
+    onSuccess: () -> Unit = {},
+    onSignIn: () -> Unit = {}
 ) {
     var shouldProceed by remember { mutableStateOf(false) }
     var signupStatus by remember { mutableStateOf("") }
@@ -223,17 +223,7 @@ fun darkPreviewSignup() {
 
 @Composable
 fun SignupContent() {
-    val viewModel =
-        getViewModel(RegisterViewModel::class.java)
-
     HouseholdRechargeTheme(dynamicColor = false) {
-        RegisterScreen(
-            viewModel = viewModel,
-            onSuccess = {
-
-            },
-            onSignIn = {
-
-            })
+        RegisterScreen()
     }
 }

@@ -24,16 +24,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeTitleText
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.components.getPrintableDate
-import com.raza.householdrecharge.presentation.preview.getViewModel
 
 @Composable
 fun InvitationListingScreen(
-    viewModel: InvitationViewModel,
-    onAddInvitation: () -> Unit
+    viewModel: InvitationViewModel = hiltViewModel(),
+    onAddInvitation: () -> Unit = {}
 ) {
 
     LaunchedEffect(Unit) {
@@ -55,8 +55,8 @@ fun InvitationListingScreen(
 
 @Composable
 fun Body(
-    viewModel: InvitationViewModel,
-    onAddInvitation: () -> Unit
+    viewModel: InvitationViewModel = hiltViewModel(),
+    onAddInvitation: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -221,13 +221,7 @@ fun invitationScreenLightPreview() {
 
 @Composable
 fun InvitationScreenContent() {
-    val viewModel =
-        getViewModel(InvitationViewModel::class.java)
-
-    Body(
-        viewModel = viewModel,
-        onAddInvitation = {}
-    )
+    Body()
 }
 
 data class Invitation(

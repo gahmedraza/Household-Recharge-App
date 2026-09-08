@@ -19,15 +19,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.AppCard
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun SetupHouseholdScreen(
-    viewModel: HouseholdViewModel,
-    onCreateHousehold: () -> Unit,
-    onJoinHousehold: () -> Unit
+    viewModel: HouseholdViewModel = hiltViewModel(),
+    onCreateHousehold: () -> Unit = {},
+    onJoinHousehold: () -> Unit = {}
 ) {
     Scaffold { paddingValues ->
 
@@ -190,21 +190,8 @@ fun SetupHouseholdBody(
 
 @Composable
 fun SetupHouseholdContent() {
-    val viewModel =
-        getViewModel(HouseholdViewModel::class.java)
-
     HouseholdRechargeTheme(dynamicColor = false) {
-        SetupHouseholdScreen(
-            viewModel = viewModel,
-
-            onCreateHousehold = {
-
-            },
-
-            onJoinHousehold = {
-
-            }
-        )
+        SetupHouseholdScreen()
     }
 }
 

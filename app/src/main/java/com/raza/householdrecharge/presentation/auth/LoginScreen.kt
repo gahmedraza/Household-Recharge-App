@@ -30,20 +30,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
-import com.raza.householdrecharge.presentation.components.AppCard
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.data.remote.dto.AuthDto
+import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel,
-    onSignup: () -> Unit,
-    onSignInCompletion: () -> Unit,
-    onBoardingNotComplete: () -> Unit
+    viewModel: LoginViewModel = hiltViewModel(),
+    onSignup: () -> Unit = {},
+    onSignInCompletion: () -> Unit = {},
+    onBoardingNotComplete: () -> Unit = {}
 ) {
     var mobileNumber by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -267,14 +267,7 @@ fun darkPreviewSignIn() {
 
 @Composable
 fun Content() {
-    val viewModel = getViewModel(LoginViewModel::class.java)
-
     HouseholdRechargeTheme(dynamicColor = false) {
-        LoginScreen(
-            viewModel = viewModel,
-            onSignup = {},
-            onSignInCompletion = {},
-            onBoardingNotComplete = {}
-        )
+        LoginScreen()
     }
 }

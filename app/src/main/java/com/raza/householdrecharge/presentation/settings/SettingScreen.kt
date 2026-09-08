@@ -15,16 +15,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.TitleBar
-import com.raza.householdrecharge.presentation.preview.getViewModel
 
 @Composable
 fun SettingScreen(
-    viewModel: SettingViewModel,
-    onAddMember: () -> Unit,
-    onAddHousehold: () -> Unit,
-    onSignOut: () -> Unit,
-    onInvitation: () -> Unit
+    viewModel: SettingViewModel = hiltViewModel(),
+    onAddMember: () -> Unit = {},
+    onAddHousehold: () -> Unit = {},
+    onSignOut: () -> Unit = {},
+    onInvitation: () -> Unit = {}
 ) {
 
     Scaffold(
@@ -154,16 +154,7 @@ fun Body(
 
 @Composable
 fun Content() {
-    val viewModel =
-        getViewModel(SettingViewModel::class.java)
-
-    SettingScreen(
-        viewModel = viewModel,
-        onAddMember = {},
-        onAddHousehold = {},
-        onSignOut = {},
-        onInvitation = {}
-    )
+    SettingScreen()
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)

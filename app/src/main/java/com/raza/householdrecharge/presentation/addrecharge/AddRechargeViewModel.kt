@@ -10,10 +10,13 @@ import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
 import com.raza.householdrecharge.data.repository.RechargeRepository
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddRechargeViewModel(
+@HiltViewModel
+class AddRechargeViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeRepository: RechargeRepository,
     private val validator: RechargeValidator

@@ -9,8 +9,9 @@ import com.raza.householdrecharge.data.repository.account.AccountError
 import com.raza.householdrecharge.data.repository.account.HouseholdID
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class AccountRepository(
+class AccountRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 

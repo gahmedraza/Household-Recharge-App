@@ -14,19 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SplashScreen(
-    openLogin: () -> Unit,
-    openSetupHousehold: () -> Unit,
-    openDashboard: () -> Unit,
-
-    viewModel: SplashViewModel
+    openLogin: () -> Unit = {},
+    openSetupHousehold: () -> Unit = {},
+    openDashboard: () -> Unit = {},
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
 
     LaunchedEffect(Unit) {
@@ -68,16 +67,8 @@ fun SplashScreen(
 
 @Composable
 fun SplashContent() {
-    val viewModel =
-        getViewModel(SplashViewModel::class.java)
-
     HouseholdRechargeTheme(dynamicColor = false) {
-        SplashScreen(
-            openLogin = {},
-            openSetupHousehold = {},
-            openDashboard = {},
-            viewModel = viewModel
-        )
+        SplashScreen()
     }
 }
 

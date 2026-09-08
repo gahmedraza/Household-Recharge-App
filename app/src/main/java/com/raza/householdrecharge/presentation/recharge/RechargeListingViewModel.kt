@@ -12,8 +12,11 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RechargeListingViewModel(
+@HiltViewModel
+class RechargeListingViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeRepository: RechargeRepository,
     private val validator: RechargeValidator

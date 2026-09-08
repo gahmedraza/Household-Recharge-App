@@ -6,10 +6,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-open class AuthViewModel(
+@HiltViewModel
+open class AuthViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
 

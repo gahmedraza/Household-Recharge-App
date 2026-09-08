@@ -12,8 +12,11 @@ import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.presentation.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class InvitationViewModel(
+@HiltViewModel
+class InvitationViewModel @Inject constructor(
     val sessionManager: SessionManager,
     private val invitationRepository: InvitationRepository
 ): BaseViewModel() {

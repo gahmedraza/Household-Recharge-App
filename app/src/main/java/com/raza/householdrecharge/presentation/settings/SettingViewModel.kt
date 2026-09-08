@@ -8,10 +8,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import com.raza.householdrecharge.presentation.theme.ThemeMode
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SettingViewModel(
+@HiltViewModel
+class SettingViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ) : BaseViewModel() {
 

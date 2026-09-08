@@ -9,8 +9,11 @@ import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.repository.account.AccountError
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class RegisterViewModel(
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val authUseCase: AuthUseCase
 ) : AuthViewModel(sessionManager) {

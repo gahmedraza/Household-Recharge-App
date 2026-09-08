@@ -21,19 +21,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.AppDatePicker
 import com.raza.householdrecharge.presentation.components.AppSnackbar
 import com.raza.householdrecharge.presentation.components.TitleBar
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.presentation.snackbar.SnackbarUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
 fun AddMemberScreen(
-    viewModel: AddMemberViewModel,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
+    viewModel: AddMemberViewModel = hiltViewModel(),
+    onSuccess: () -> Unit = {},
+    onFailure: () -> Unit = {}
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -235,12 +235,5 @@ fun lightPreviewSignIn() {
 
 @Composable
 fun Content() {
-    val viewModel =
-        getViewModel(AddMemberViewModel::class.java)
-
-    AddMemberScreen(
-        viewModel = viewModel,
-        onSuccess = {},
-        onFailure = {}
-    )
+    AddMemberScreen()
 }

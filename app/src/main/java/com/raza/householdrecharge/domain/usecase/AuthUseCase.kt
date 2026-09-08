@@ -9,8 +9,9 @@ import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.repository.account.AccountError
+import javax.inject.Inject
 
-class AuthUseCase(
+class AuthUseCase @Inject constructor(
     private val authRepository: AuthRepository,
     private val accountRepository: AccountRepository
 ) {

@@ -7,8 +7,9 @@ import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.data.repository.account.HouseholdError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class HouseholdRepository(
+class HouseholdRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 

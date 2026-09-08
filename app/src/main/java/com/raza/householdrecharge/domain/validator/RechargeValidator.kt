@@ -2,8 +2,9 @@ package com.raza.householdrecharge.domain.validator
 
 import com.raza.householdrecharge.domain.error.AddRechargeValidationError
 import com.raza.householdrecharge.core.result.Result
+import javax.inject.Inject
 
-class RechargeValidator {
+class RechargeValidator @Inject constructor() {
 
     fun validateAddRechargeApiCall(
         userId: String,

@@ -39,20 +39,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.raza.householdrecharge.presentation.components.TitleBar
-import com.raza.householdrecharge.presentation.components.getPrintableDate
-import com.raza.householdrecharge.presentation.preview.getViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.domain.model.Recharge
+import com.raza.householdrecharge.presentation.components.TitleBar
+import com.raza.householdrecharge.presentation.components.getPrintableDate
 
 @Composable
 fun RechargeListingScreen(
-    memberId: String,
-    mobileNumber: String,
-    viewModel: RechargeListingViewModel,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit,
-    onAddRecharge: (String, String) -> Unit
+    memberId: String = "",
+    mobileNumber: String = "",
+    viewModel: RechargeListingViewModel = hiltViewModel(),
+    onSuccess: () -> Unit = {},
+    onFailure: () -> Unit = {},
+    onAddRecharge: (String, String) -> Unit = {a,b ->}
 ) {
     LaunchedEffect(Unit) {
         viewModel.loadAllRecharges(
@@ -151,21 +151,10 @@ fun RechargeListingScreenLightPreview() {
     )
 }
 
+//TODO remove param
 @Composable
 fun Content(item: Recharge?) {
-    val viewModel =
-        getViewModel(RechargeListingViewModel::class.java)
-
-    RechargeListingScreen(
-        memberId = "",
-        mobileNumber = "",
-        viewModel = viewModel,
-        onSuccess = {},
-        onFailure = {},
-        onAddRecharge = { memberId, mobileNumber ->
-
-        }
-    )
+    RechargeListingScreen()
 }
 
 @Composable

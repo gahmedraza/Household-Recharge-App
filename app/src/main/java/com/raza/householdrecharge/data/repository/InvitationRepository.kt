@@ -8,8 +8,9 @@ import com.raza.householdrecharge.data.repository.account.InvitationError
 import com.raza.householdrecharge.presentation.invitation.Invitation
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class InvitationRepository(
+class InvitationRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 

@@ -25,22 +25,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeDisplayText
 import com.raza.householdrecharge.presentation.components.SmallHeadlineText
-import com.raza.householdrecharge.presentation.preview.getViewModel
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun ConfirmHouseholdScreen(
-    householdName: String?,
-    householdId: String?,
-    invitationCode: String?,
-    viewModel: HouseholdViewModel,
-    onSuccess:() -> Unit,
-    onFailure:() -> Unit
+    householdName: String? = "",
+    householdId: String? = "",
+    invitationCode: String? = "",
+    viewModel: HouseholdViewModel = hiltViewModel(),
+    onSuccess:() -> Unit = {},
+    onFailure:() -> Unit = {}
 ) {
     ConfirmHouseholdBody(
         householdName = householdName,
@@ -52,14 +52,15 @@ fun ConfirmHouseholdScreen(
     )
 }
 
+//TODO merge with main fn
 @Composable
 fun ConfirmHouseholdBody(
-    householdName: String?,
-    householdId: String?,
-    invitationCode: String?,
-    viewModel: HouseholdViewModel,
-    onSuccess:() -> Unit,
-    onFailure:() -> Unit
+    householdName: String? = "",
+    householdId: String? = "",
+    invitationCode: String? = "",
+    viewModel: HouseholdViewModel = hiltViewModel(),
+    onSuccess:() -> Unit = {},
+    onFailure:() -> Unit = {}
 ) {
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
@@ -236,17 +237,7 @@ fun ConfirmHouseholdLightPreview() {
 
 @Composable
 fun ConfirmHouseholdContent() {
-    val viewModel =
-        getViewModel(HouseholdViewModel::class.java)
-
     HouseholdRechargeTheme(dynamicColor = false) {
-        ConfirmHouseholdBody(
-            householdName = "",
-            householdId = "",
-            invitationCode = "",
-            viewModel = viewModel,
-            onSuccess = {},
-            onFailure = {}
-        )
+        ConfirmHouseholdBody()
     }
 }

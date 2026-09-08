@@ -6,8 +6,9 @@ import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class RechargeRepository(
+class RechargeRepository @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 

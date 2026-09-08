@@ -12,8 +12,11 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.util.cleanString
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class LoginViewModel(
+@HiltViewModel
+class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val authRepository: AuthRepository,
     private val authUseCase: AuthUseCase
