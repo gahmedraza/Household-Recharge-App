@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
-import com.raza.householdrecharge.common.log
+import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.repository.account.AuthError

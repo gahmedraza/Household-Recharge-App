@@ -11,22 +11,24 @@ import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.data.repository.MemberRepository
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
+import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.domain.validator.MobileNumberValidator
-import com.raza.householdrecharge.ui.addmember.AddMemberViewModel
-import com.raza.householdrecharge.ui.addrecharge.AddRechargeViewModel
-import com.raza.householdrecharge.ui.auth.LoginViewModel
-import com.raza.householdrecharge.ui.auth.RegisterViewModel
-import com.raza.householdrecharge.ui.dashbord.DashboardViewModel
-import com.raza.householdrecharge.ui.invitation.InvitationViewModel
-import com.raza.householdrecharge.ui.mobilenumber.MobileNumberViewModel
-import com.raza.householdrecharge.ui.notification.NotificationViewModel
-import com.raza.householdrecharge.ui.recharge.RechargeListingViewModel
-import com.raza.householdrecharge.ui.settings.SettingViewModel
-import com.raza.householdrecharge.ui.setuphousehold.HouseholdViewModel
-import com.raza.householdrecharge.ui.splash.SplashViewModel
+import com.raza.householdrecharge.presentation.addmember.AddMemberViewModel
+import com.raza.householdrecharge.presentation.addrecharge.AddRechargeViewModel
+import com.raza.householdrecharge.presentation.auth.LoginViewModel
+import com.raza.householdrecharge.presentation.auth.RegisterViewModel
+import com.raza.householdrecharge.presentation.auth.UserViewModel
+import com.raza.householdrecharge.presentation.dashbord.DashboardViewModel
+import com.raza.householdrecharge.presentation.invitation.InvitationViewModel
+import com.raza.householdrecharge.presentation.mobilenumber.MobileNumberViewModel
+import com.raza.householdrecharge.presentation.notification.NotificationViewModel
+import com.raza.householdrecharge.presentation.recharge.RechargeListingViewModel
+import com.raza.householdrecharge.presentation.settings.SettingViewModel
+import com.raza.householdrecharge.presentation.setuphousehold.HouseholdViewModel
+import com.raza.householdrecharge.presentation.splash.SplashViewModel
 
 class AppViewModelFactory(
     private val sessionManager: SessionManager

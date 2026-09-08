@@ -1,10 +1,10 @@
 package com.raza.householdrecharge.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.common.MemberDto
-import com.raza.householdrecharge.common.map
+import com.raza.householdrecharge.data.remote.mapper.map
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
+import com.raza.householdrecharge.data.remote.dto.MemberDto
 import com.raza.householdrecharge.domain.model.Member
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await

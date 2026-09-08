@@ -1,11 +1,11 @@
 package com.raza.householdrecharge.data.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.common.log
+import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.account.InvitationError
-import com.raza.householdrecharge.ui.invitation.Invitation
+import com.raza.householdrecharge.presentation.invitation.Invitation
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 

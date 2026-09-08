@@ -1,6 +1,5 @@
 package com.raza.householdrecharge.domain.validator
 
-import com.raza.householdrecharge.common.log
 import com.raza.householdrecharge.domain.error.AddRechargeValidationError
 import com.raza.householdrecharge.core.result.Result
 

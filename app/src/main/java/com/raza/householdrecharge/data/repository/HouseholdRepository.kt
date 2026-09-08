@@ -1,10 +1,9 @@
 package com.raza.householdrecharge.data.repository
 
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.common.HouseholdDto
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
+import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.data.repository.account.HouseholdError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
