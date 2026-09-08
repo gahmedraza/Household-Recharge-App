@@ -11,6 +11,7 @@ import com.raza.householdrecharge.domain.model.Recharge
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 
 class RechargeListingViewModel(
@@ -19,7 +20,7 @@ class RechargeListingViewModel(
     private val validator: RechargeValidator
 ) : BaseViewModel() {
 
-    var rechargeList by mutableStateOf<List<Recharge>>(emptyList())
+    var rechargeList by mutableStateOf<List<RechargeDto>>(emptyList())
 
     fun loadAllRecharges(
         onSuccess: () -> Unit,
@@ -48,7 +49,7 @@ class RechargeListingViewModel(
 
             when(result) {
 
-                is Result.Success<List<Recharge>> -> {
+                is Result.Success<List<RechargeDto>> -> {
                     isLoading = false
                     rechargeList = result.data
                     onSuccess()

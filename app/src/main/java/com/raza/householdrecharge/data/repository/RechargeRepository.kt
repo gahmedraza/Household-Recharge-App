@@ -40,9 +40,9 @@ class RechargeRepository(
     }
 
     suspend fun getAllRecharges(
-    ): Result<List<Recharge>, String> {
+    ): Result<List<RechargeDto>, String> {
 
-        var result: Result<List<Recharge>, String>
+        var result: Result<List<RechargeDto>, String>
 
         try {
 
@@ -53,7 +53,7 @@ class RechargeRepository(
                 .await()
 
             val rechargeList = documentSnapshot.documents.mapNotNull { document ->
-                document.toObject(Recharge::class.java)
+                document.toObject(RechargeDto::class.java)
             }
 
             result = Result.Success(rechargeList)

@@ -48,7 +48,7 @@ import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel,
-    onDashboardCardClick: (String, String) -> Unit,
+    onDashboardCardClick: (String) -> Unit,
     onAddMobileNumber: () -> Unit
 ) {
 
@@ -119,7 +119,7 @@ fun DashboardScreen(
                         DashboardListItem(
                             item = item,
                             onClick = {
-                                onDashboardCardClick(item.accountId, item.mobileNumber.toString())
+                                onDashboardCardClick(item.mobileNumber.toString())
                             }
                         )
                     }
@@ -299,7 +299,7 @@ fun content() {
     DashboardScreen(
         viewModel = viewModel,
 
-        onDashboardCardClick = { memberId, mobileNumber ->
+        onDashboardCardClick = { mobileNumber ->
 
         },
 

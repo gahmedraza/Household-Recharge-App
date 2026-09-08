@@ -1,9 +1,11 @@
 package com.raza.householdrecharge.ui.recharge
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,25 +21,32 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.toString
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.raza.householdrecharge.common.RechargeStatusIndicator
 import com.raza.householdrecharge.common.TitleBar
 import com.raza.householdrecharge.common.getPrintableDate
 import com.raza.householdrecharge.common.getViewModel
+import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
+import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.domain.model.Recharge
 
 @Composable
@@ -65,7 +74,7 @@ fun RechargeListingScreen(
 
     Scaffold(
         topBar = {
-            TitleBar("Recharge History")
+            TitleBar("Recharge Listing")
         },
 
         /*floatingActionButton = {
@@ -109,13 +118,21 @@ fun Body(
         }
     } else {
         LazyColumn(modifier = modifier) {
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+
             items(viewModel.rechargeList) { item ->
-                RechargeListItemCard(
+                RechargeListItemCard2(
                     item = item,
                     onClick = {
 
                     }
                 )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
@@ -157,7 +174,7 @@ fun Content(item: Recharge?) {
 
 @Composable
 fun RechargeListItemCard(
-    item: Recharge,
+    item: RechargeDto,
     onClick: () -> Unit
 ) {
     Card(
@@ -213,7 +230,7 @@ fun RechargeListItemCard(
             ) {
 
                 Text(
-                    text = "₹${item.amount}",
+                    text = "₹${item.rechargeAmount}",
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -223,7 +240,7 @@ fun RechargeListItemCard(
 
                 Text(
                     text = getPrintableDate(
-                        item.date
+                        item.rechargeDate.toString()
                     ),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -262,3 +279,106 @@ fun RechargeListItemCard(
         }
     }
 }
+
+// recharge list item new card
+@Composable
+fun RechargeListItemCard2(
+    item: RechargeDto,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 16.dp,
+                vertical = 8.dp
+            )
+            .clickable {
+                onClick()
+            },
+        elevation = CardDefaults
+            .cardElevation(
+                defaultElevation = 4.dp
+            ),
+        shape = RoundedCornerShape(12.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.background)
+                .padding(10.dp)
+        ) {
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = "Recharge Amount: ${item.rechargeAmount} INR",
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = "2GB per day for 84 days",
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = "Recharge Date: ${getPrintableDate(item.rechargeDate.toString())}",
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Text(
+                text = "Expiry Date: ${getPrintableDate(item.expiryDate.toString())}",
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+
+            Text(
+                text = "Recharged by: ${item.rechargedBy}",
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            HorizontalDivider()
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row {
+                Column {
+                    Row {
+                        RechargeStatusIndicator(
+                            modifier = Modifier.align(
+                                alignment = Alignment.CenterVertically
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text(
+                            text = "Plan Active",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = "Expires in 24 days",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f))
+            }
+        }
+    }
+}
+//

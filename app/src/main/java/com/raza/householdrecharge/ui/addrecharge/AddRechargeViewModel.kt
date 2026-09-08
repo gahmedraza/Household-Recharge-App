@@ -23,7 +23,6 @@ class AddRechargeViewModel(
     var rechargedBy by mutableStateOf("")
 
     fun addRecharge(
-        memberId: String,
         mobileNumber: String,
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
@@ -37,13 +36,13 @@ class AddRechargeViewModel(
             ).create(
                 rechargeAmount = amount.toInt(),
                 rechargeDate = date.toLong(),
-                rechargedBy = rechargedBy
+                rechargedBy = rechargedBy,
+                mobileNumber = mobileNumber.toLong()
             )
 
             val validationResult = validator.validateAddRechargeApiCall(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
-                memberId = memberId,
                 mobileNumber = mobileNumber
             )
 

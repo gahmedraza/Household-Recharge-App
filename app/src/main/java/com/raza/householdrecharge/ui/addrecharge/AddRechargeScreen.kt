@@ -40,7 +40,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AddRechargeScreen(
-    memberId: String,
     mobileNumber: String,
     viewModel: AddRechargeViewModel,
     onSuccess: () -> Unit,
@@ -51,7 +50,6 @@ fun AddRechargeScreen(
         .fillMaxWidth()
 
     Body(
-        memberId = memberId,
         mobileNumber = mobileNumber,
         viewModel = viewModel,
         modifier = modifier,
@@ -66,7 +64,6 @@ fun AddRechargeScreen(
 
 @Composable
 fun Body(
-    memberId: String,
     mobileNumber: String,
     viewModel: AddRechargeViewModel,
     modifier: Modifier,
@@ -125,6 +122,20 @@ fun Body(
 
                 Spacer(Modifier.height(20.dp))
 
+                AppDatePicker(
+                    modifier = modifier,
+
+                    label = "Expiry Date",
+
+                    onDateSelected = {
+                        viewModel.date = it.toString()
+                    },
+
+                    value = viewModel.date,
+                )
+
+                Spacer(Modifier.height(20.dp))
+
                 OutlinedTextField(
                     modifier = modifier,
 
@@ -148,7 +159,6 @@ fun Body(
 
                     onClick = {
                         viewModel.addRecharge(
-                            memberId = memberId,
                             mobileNumber = mobileNumber,
                             onSuccess = {
 
@@ -222,7 +232,6 @@ fun Content(viewModel: AddRechargeViewModel) {
         getViewModel(AddRechargeViewModel::class.java)
 
     AddRechargeScreen(
-        memberId = "",
         mobileNumber = "",
         viewModel = viewModel,
         onSuccess = {},

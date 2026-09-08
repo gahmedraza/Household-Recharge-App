@@ -24,7 +24,7 @@ data class RechargeDto(
     //data modeling details begin
     //...
     //this cannot be null and should point to valid mobile number
-    var mobileNumber: Int = 0,
+    var mobileNumber: Long = 0,
     //this cannot be null and should point to valid account id
     var accountId: String = "",
     //this cannot be null and should point to valid household

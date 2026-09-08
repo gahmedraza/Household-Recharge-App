@@ -1,5 +1,6 @@
 package com.raza.householdrecharge.domain.validator
 
+import com.raza.householdrecharge.common.log
 import com.raza.householdrecharge.domain.error.AddRechargeValidationError
 import com.raza.householdrecharge.core.result.Result
 
@@ -8,7 +9,6 @@ class RechargeValidator {
     fun validateAddRechargeApiCall(
         userId: String,
         householdId: String,
-        memberId: String,
         mobileNumber: String
     ): Result<Unit, AddRechargeValidationError> {
 
@@ -23,13 +23,6 @@ class RechargeValidator {
                 AddRechargeValidationError.HouseholdNotFound
             )
         }
-
-        /*if (memberId.isEmpty()) {
-            log("memberId: $memberId")
-            return Result.Failure(
-                AddRechargeValidationError.MemberNotFound
-            )
-        }*/
 
         if (mobileNumber.isEmpty()) {
             return Result.Failure(
