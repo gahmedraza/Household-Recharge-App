@@ -55,19 +55,29 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation("androidx.room:room-runtime:2.8.4")
-    implementation("androidx.room:room-ktx:2.8.4")
-    ksp("androidx.room:room-compiler:2.8.4")
-    implementation("androidx.navigation:navigation-compose:2.9.4")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.sqlite:sqlite-bundled:2.7.0")
-    implementation(platform("com.google.firebase:firebase-bom:34.17.0"))
-    implementation("com.google.firebase:firebase-auth")
-    implementation("com.google.firebase:firebase-firestore")
-    implementation("androidx.datastore:datastore-preferences:1.2.1")
+
+    //Firebase Begins
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
+    //Firebase Ends
+
+    //Dagger Hilt Begins
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    //Dagger Hilt Ends
+
+    //Room Begins
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    //Room Ends
+
     //
-    implementation("com.google.dagger:hilt-android:2.60.1")
-    ksp("com.google.dagger:hilt-android-compiler:2.60.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.4.0")
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.sqlite.bundled)
     //
 }
