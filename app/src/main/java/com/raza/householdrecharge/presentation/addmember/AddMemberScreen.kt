@@ -26,7 +26,7 @@ import com.raza.householdrecharge.presentation.components.AppDatePicker
 import com.raza.householdrecharge.presentation.components.AppSnackbar
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.snackbar.SnackbarUtil
-import kotlinx.coroutines.CoroutineScope
+import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -49,169 +49,156 @@ fun AddMemberScreen(
 
         ) { paddingValues ->
 
-        Body(
-            snackbarHostState = snackbarHostState,
-            scope = scope,
-            viewModel = viewModel,
-            modifier = Modifier
+        val modifier = Modifier
+            .fillMaxWidth()
+            .padding(paddingValues)
+            .padding(
+                start = 10.dp,
+                end = 10.dp,
+                top = 10.dp,
+                bottom = 10.dp
+            )
+
+
+        val scrollState = rememberScrollState()
+
+        Column(
+            modifier = modifier
                 .fillMaxWidth()
-                .padding(paddingValues)
-                .padding(
-                    start = 10.dp,
-                    end = 10.dp,
-                    top = 10.dp,
-                    bottom = 10.dp
-                ),
-            onSuccess = {
-                onSuccess()
-            },
-            onFailure = {
-                onFailure()
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            OutlinedTextField(
+                modifier = modifier,
+                label = {
+                    Text("Name")
+                },
+                onValueChange = {
+                    viewModel.accountName = it
+                },
+                value = viewModel.accountName
+            )
+
+            Spacer(modifier = Modifier.padding(12.dp))
+
+            OutlinedTextField(
+                modifier = modifier,
+                label = {
+                    Text("Mobile Number")
+                },
+                onValueChange = {
+                    viewModel.mobileNumber = it
+                },
+                value = viewModel.mobileNumber
+            )
+
+            AppDatePicker(
+                modifier = modifier,
+
+                label = "Last Recharge Date",
+
+                onDateSelected = {
+                    viewModel.lastRechargeDate = it.toString()
+                },
+
+                value = viewModel.lastRechargeDate,
+            )
+
+            OutlinedTextField(
+                modifier = modifier,
+                label = {
+                    Text("Plan Amount")
+                },
+                onValueChange = {
+                    viewModel.planAmount = it
+                },
+                value = viewModel.planAmount
+            )
+
+            AppDatePicker(
+                modifier = modifier,
+
+                label = "Plan Expiry Date",
+
+                onDateSelected = {
+                    viewModel.planExpiryDate = it.toString()
+                },
+
+                value = viewModel.planExpiryDate,
+            )
+
+            OutlinedTextField(
+                modifier = modifier,
+                label = {
+                    Text("Plan Duration Days")
+                },
+                onValueChange = {
+                    viewModel.planDurationDays = it
+                },
+                value = viewModel.planDurationDays
+            )
+
+            OutlinedTextField(
+                modifier = modifier,
+                label = {
+                    Text("Days to Expiry")
+                },
+                onValueChange = {
+                    viewModel.daysToExpiry = it
+                },
+                value = viewModel.daysToExpiry
+            )
+
+            Spacer(modifier = Modifier.padding(20.dp))
+
+            if (viewModel.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(24.dp)
+                )
             }
-        )
+
+            OutlinedButton(
+                modifier = modifier,
+
+                onClick = {
+                    viewModel.onAddMember(
+                        onSuccess = { memberId ->
+
+                            scope.launch {
+                                SnackbarUtil.show(
+                                    snackbarHostState = snackbarHostState,
+                                    message = "member added $memberId"
+                                )
+                            }
+
+                            onSuccess()
+                        },
+
+                        onFailure = { errorMessage ->
+
+                            scope.launch {
+                                SnackbarUtil.show(
+                                    snackbarHostState = snackbarHostState,
+                                    message = "error: $errorMessage"
+                                )
+                            }
+
+                            onFailure()
+                        }
+                    )
+                }
+            ) {
+                Text("Add Member")
+            }
+        }
     }
 }
 
 @Composable
-fun Body(
-    snackbarHostState: SnackbarHostState,
-    scope: CoroutineScope,
-    viewModel: AddMemberViewModel,
-    modifier: Modifier,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
-) {
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        OutlinedTextField(
-            modifier = modifier,
-            label = {
-                Text("Name")
-            },
-            onValueChange = {
-                viewModel.accountName = it
-            },
-            value = viewModel.accountName
-        )
-
-        Spacer(modifier = Modifier.padding(12.dp))
-
-        OutlinedTextField(
-            modifier = modifier,
-            label = {
-                Text("Mobile Number")
-            },
-            onValueChange = {
-                viewModel.mobileNumber = it
-            },
-            value = viewModel.mobileNumber
-        )
-
-        AppDatePicker(
-            modifier = modifier,
-
-            label = "Last Recharge Date",
-
-            onDateSelected = {
-                viewModel.lastRechargeDate = it.toString()
-            },
-
-            value = viewModel.lastRechargeDate,
-        )
-
-        OutlinedTextField(
-            modifier = modifier,
-            label = {
-                Text("Plan Amount")
-            },
-            onValueChange = {
-                viewModel.planAmount = it
-            },
-            value = viewModel.planAmount
-        )
-
-        AppDatePicker(
-            modifier = modifier,
-
-            label = "Plan Expiry Date",
-
-            onDateSelected = {
-                viewModel.planExpiryDate = it.toString()
-            },
-
-            value = viewModel.planExpiryDate,
-        )
-
-        OutlinedTextField(
-            modifier = modifier,
-            label = {
-                Text("Plan Duration Days")
-            },
-            onValueChange = {
-                viewModel.planDurationDays = it
-            },
-            value = viewModel.planDurationDays
-        )
-
-        OutlinedTextField(
-            modifier = modifier,
-            label = {
-                Text("Days to Expiry")
-            },
-            onValueChange = {
-                viewModel.daysToExpiry = it
-            },
-            value = viewModel.daysToExpiry
-        )
-
-        Spacer(modifier = Modifier.padding(20.dp))
-
-        if (viewModel.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .size(24.dp)
-            )
-        }
-
-        OutlinedButton(
-            modifier = modifier,
-
-            onClick = {
-                viewModel.onAddMember(
-                    onSuccess = { memberId ->
-
-                        scope.launch {
-                            SnackbarUtil.show(
-                                snackbarHostState = snackbarHostState,
-                                message = "member added $memberId"
-                            )
-                        }
-
-                        onSuccess()
-                    },
-
-                    onFailure = { errorMessage ->
-
-                        scope.launch {
-                            SnackbarUtil.show(
-                                snackbarHostState = snackbarHostState,
-                                message = "error: $errorMessage"
-                            )
-                        }
-
-                        onFailure()
-                    }
-                )
-            }
-        ) {
-            Text("Add Member")
-        }
+fun AddMemberContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        AddMemberScreen()
     }
 }
 
@@ -220,8 +207,8 @@ fun Body(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun darkPreviewSignIn() {
-    Content()
+fun AddMemberScreenDarkPreview() {
+    AddMemberContent()
 }
 
 @Preview(
@@ -229,11 +216,6 @@ fun darkPreviewSignIn() {
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun lightPreviewSignIn() {
-    Content()
-}
-
-@Composable
-fun Content() {
-    AddMemberScreen()
+fun AddMemberScreenLightPreview() {
+    AddMemberContent()
 }

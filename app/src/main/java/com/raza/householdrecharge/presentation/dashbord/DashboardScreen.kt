@@ -44,6 +44,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.RechargeStatusIndicator
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
+import com.raza.householdrecharge.domain.model.Household
+import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun DashboardScreen(
@@ -116,7 +118,7 @@ fun DashboardScreen(
                     }
 
                     items(viewModel.mobileNumbers) { item ->
-                        DashboardListItem(
+                        DashboardListItemCard(
                             item = item,
                             onClick = {
                                 onDashboardCardClick(item.mobileNumber.toString())
@@ -134,7 +136,7 @@ fun DashboardScreen(
 }
 
 @Composable
-fun DashboardListItem(
+fun DashboardListItemCard(
     item: MobileNumberDto,
     onClick: () -> Unit
 ) {
@@ -279,19 +281,27 @@ fun DashboardListItem(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun DashboardContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        DashboardScreen()
+    }
+}
+
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun DashboardScreenDarkPreview() {
-    content()
+    DashboardContent()
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
 @Composable
 fun DashboardScreenLightPreview() {
-    content()
-}
-
-@Composable
-fun content() {
-    DashboardScreen()
+    DashboardContent()
 }

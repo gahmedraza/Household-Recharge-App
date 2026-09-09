@@ -49,183 +49,166 @@ fun FindHouseholdScreen(
 
         ) {
 
-            FindHouseholdBody(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues)
-                    .padding(
-                        start = 10.dp,
-                        end = 10.dp
-                    ),
-
-                viewModel = viewModel,
-
-                onSuccess = { householdDto ->
-                    onSuccess(householdDto)
-                },
-
-                onFailure = {
-                    onFailure()
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun FindHouseholdBody(
-    modifier: Modifier,
-    viewModel: HouseholdViewModel,
-    onSuccess: (HouseholdDto?) -> Unit,
-    onFailure: () -> Unit
-) {
-    var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var signinStatus by rememberSaveable { mutableStateOf("") }
-    var householdDto: HouseholdDto? = null
-
-    AppCard(Modifier.fillMaxWidth()) {
-
-        Column(
-            modifier = modifier
-        ) {
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Text(
-                modifier = modifier,
-                text = "Let's get you added to the household",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Text(
-                modifier = modifier,
-                text = "Enter your invitation code",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            OutlinedTextField(
-                modifier = modifier,
-
-                label = {
-                    Text("Invitation Code")
-                },
-
-                onValueChange = {
-                    viewModel.invitationCode = it.trim()
-
-                },
-
-                value = viewModel.invitationCode
-            )
-
-            Spacer(modifier = Modifier.height(42.dp))
-
-            OutlinedButton(
-                modifier = modifier,
-
-                enabled = !viewModel.isLoading,
-
-                onClick = {
-
-                    viewModel.findHousehold(
-                        invitationCode = viewModel.invitationCode,
-
-                        onSuccess = { household ->
-                            householdDto = household
-
-                            shouldProceed = true
-                            signinStatus = "invitation code found"
-                        },
-                        onFailure = { message ->
-                            shouldProceed = false
-                            signinStatus = message.cleanString()
-
-                            onFailure()
-                        }
-                    )
-                }) {
-
-                Text("Find Household")
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            //
-
-            OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
-
-                enabled = shouldProceed,
-
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if(shouldProceed) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.surfaceVariant
-                    }
-                ),
-
-                onClick = {
-
-                    onSuccess(householdDto)
-                }
-            ) {
-                Text("Proceed")
-            }
-
-            Spacer(modifier = Modifier.padding(20.dp))
-
-            if (viewModel.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(24.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
+            val modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddingValues)
+                .padding(
+                    start = 10.dp,
+                    end = 10.dp
                 )
+
+            var shouldProceed by rememberSaveable { mutableStateOf(false) }
+            var signinStatus by rememberSaveable { mutableStateOf("") }
+            var householdDto: HouseholdDto? = null
+
+            AppCard(Modifier.fillMaxWidth()) {
+
+                Column(
+                    modifier = modifier
+                ) {
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Text(
+                        modifier = modifier,
+                        text = "Let's get you added to the household",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    Text(
+                        modifier = modifier,
+                        text = "Enter your invitation code",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        modifier = modifier,
+
+                        label = {
+                            Text("Invitation Code")
+                        },
+
+                        onValueChange = {
+                            viewModel.invitationCode = it.trim()
+
+                        },
+
+                        value = viewModel.invitationCode
+                    )
+
+                    Spacer(modifier = Modifier.height(42.dp))
+
+                    OutlinedButton(
+                        modifier = modifier,
+
+                        enabled = !viewModel.isLoading,
+
+                        onClick = {
+
+                            viewModel.findHousehold(
+                                invitationCode = viewModel.invitationCode,
+
+                                onSuccess = { household ->
+                                    householdDto = household
+
+                                    shouldProceed = true
+                                    signinStatus = "invitation code found"
+                                },
+                                onFailure = { message ->
+                                    shouldProceed = false
+                                    signinStatus = message.cleanString()
+
+                                    onFailure()
+                                }
+                            )
+                        }) {
+
+                        Text("Find Household")
+                    }
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+
+                        enabled = shouldProceed,
+
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = if(shouldProceed) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.surfaceVariant
+                            }
+                        ),
+
+                        onClick = {
+
+                            onSuccess(householdDto)
+                        }
+                    ) {
+                        Text("Proceed")
+                    }
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    if (viewModel.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .fillMaxWidth()
+                                .align(Alignment.CenterHorizontally)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally),
+                        text = signinStatus,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (shouldProceed) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        },
+                        textAlign = TextAlign.Center
+                    )
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+                }
             }
-
-            Spacer(modifier = Modifier.padding(20.dp))
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally),
-                text = signinStatus,
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (shouldProceed) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.error
-                },
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(modifier = Modifier.padding(20.dp))
-            //
         }
     }
 }
 
 @Composable
-fun FindHouseholdContent() {
+fun FindHouseholdScreenContent() {
     HouseholdRechargeTheme(dynamicColor = false) {
         FindHouseholdScreen()
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun FindHouseholdScreenDarkPreview() {
-    FindHouseholdContent()
+    FindHouseholdScreenContent()
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
 @Composable
 fun FindHouseholdScreenLightPreview() {
-    FindHouseholdContent()
+    FindHouseholdScreenContent()
 }

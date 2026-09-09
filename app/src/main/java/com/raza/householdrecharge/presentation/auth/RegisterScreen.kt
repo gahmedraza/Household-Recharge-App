@@ -203,13 +203,11 @@ fun RegisterScreen(
     }
 }
 
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
 @Composable
-fun lightPreviewSignup() {
-    SignupContent()
+fun SignupScreenContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        RegisterScreen()
+    }
 }
 
 @Preview(
@@ -217,13 +215,15 @@ fun lightPreviewSignup() {
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun darkPreviewSignup() {
-    SignupContent()
+fun SignupScreenDarkPreview() {
+    SignupScreenContent()
 }
 
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
 @Composable
-fun SignupContent() {
-    HouseholdRechargeTheme(dynamicColor = false) {
-        RegisterScreen()
-    }
+fun SignupScreenLightPreview() {
+    SignupScreenContent()
 }

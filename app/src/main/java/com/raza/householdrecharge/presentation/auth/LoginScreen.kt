@@ -34,6 +34,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.data.remote.dto.AuthDto
+import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.launch
@@ -137,7 +138,7 @@ fun LoginScreen(
                     onClick = {
 
                         //validate the input fields
-                        mobileNumberError = validateMobileNumber(mobileNumber, mobileNumberError)
+                        mobileNumberError = MobileNumberValidator.validateMobileNumber(mobileNumber, mobileNumberError)
 
                         if(password.length < 8) {
                             passwordError = "Password must contain at least 8 characters"
@@ -239,21 +240,11 @@ fun LoginScreen(
     }
 }
 
-private fun validateMobileNumber(mobileNumber: String, mobileNumberError: String): String {
-    var mobileNumberError1 = mobileNumberError
-    if (mobileNumber.length != 10) {
-        mobileNumberError1 = "Enter a valid mobile number"
-    }
-    return mobileNumberError1
-}
-
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
 @Composable
-fun lightPreviewSignIn() {
-    Content()
+fun LoginScreenContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        LoginScreen()
+    }
 }
 
 @Preview(
@@ -261,13 +252,15 @@ fun lightPreviewSignIn() {
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun darkPreviewSignIn() {
-    Content()
+fun LoginScreenDarkPreview() {
+    LoginScreenContent()
 }
 
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
 @Composable
-fun Content() {
-    HouseholdRechargeTheme(dynamicColor = false) {
-        LoginScreen()
-    }
+fun LoginScreenLightPreview() {
+    LoginScreenContent()
 }

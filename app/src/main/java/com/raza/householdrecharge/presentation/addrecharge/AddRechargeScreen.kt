@@ -32,6 +32,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.AppDatePicker
+import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
 
 @Composable
@@ -42,34 +43,9 @@ fun AddRechargeScreen(
     onFailure: () -> Unit = {}
 ) {
 
-    val modifier = Modifier
-        .fillMaxWidth()
-
-    Body(
-        mobileNumber = mobileNumber,
-        viewModel = viewModel,
-        modifier = modifier,
-        onSuccess = {
-            onSuccess()
-        },
-        onFailure = {
-            onFailure()
-        }
-    )
-}
-
-//TODO merge body with main fn
-@Composable
-fun Body(
-    mobileNumber: String,
-    viewModel: AddRechargeViewModel,
-    modifier: Modifier,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
-) {
-
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
+    val modifier = Modifier.fillMaxWidth()
 
     AppCard {
 
@@ -240,19 +216,27 @@ fun Body(
 }
 
 @Composable
-fun Content() {
-    AddRechargeScreen()
+fun AddRechargeContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        AddRechargeScreen()
+    }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
-fun AddRechargeHistoryScreenDarkPreview() {
-    Content()
+fun AddRechargeScreenDarkPreview() {
+    AddRechargeContent()
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
 @Composable
-fun AddRechargeHistoryScreenLightPreview() {
-    Content()
+fun AddRechargeScreenLightPreview() {
+    AddRechargeContent()
 }
 

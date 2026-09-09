@@ -74,18 +74,18 @@ fun SplashContent() {
 
 @Preview(
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun SplashScreenLightPreview() {
+fun SplashScreenDarkPreview() {
     SplashContent()
 }
 
 @Preview(
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
+    uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun SplashScreenDarkPreview() {
+fun SplashScreenLightPreview() {
     SplashContent()
 }

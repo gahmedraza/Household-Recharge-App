@@ -42,117 +42,88 @@ fun CreateHouseholdScreen(
 
         ) {
 
-            CreateHouseholdBody(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(paddingValues)
-                    .padding(
-                        start = 10.dp,
-                        end = 10.dp
-                    ),
-
-                viewModel = viewModel,
-
-                onSuccess = {
-                    onSuccess()
-                },
-
-                onFailure = {
-                    onFailure()
-                }
-            )
-        }
-    }
-}
-
-@Composable
-fun CreateHouseholdBody(
-    modifier: Modifier,
-    viewModel: HouseholdViewModel,
-    onSuccess: () -> Unit,
-    onFailure: () -> Unit
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Text(
-            text = "Let's create the household",
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onBackground
-        )
-
-        Spacer(modifier = Modifier.height(42.dp))
-
-        OutlinedTextField(
-            modifier = modifier,
-
-            label = {
-                Text("Household Name")
-            },
-
-            onValueChange = {
-                viewModel.household = viewModel.household.copy(
-                    name = it.trim()
+            val modifier = Modifier
+                .fillMaxWidth()
+                .padding(paddingValues)
+                .padding(
+                    start = 10.dp,
+                    end = 10.dp
                 )
-            },
 
-            value = viewModel.household.name ?: ""
-        )
+            Column(
+                modifier = modifier,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(32.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
+                Text(
+                    text = "Let's create the household",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
 
-        if (viewModel.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .size(24.dp)
-            )
-        }
+                Spacer(modifier = Modifier.height(42.dp))
 
-        Spacer(modifier = Modifier.height(20.dp))
+                OutlinedTextField(
+                    modifier = modifier,
 
-        OutlinedButton(
-            modifier = modifier,
-
-            enabled = !viewModel.isLoading,
-
-            onClick = {
-
-                viewModel.onAddHousehold(
-                    householdName = viewModel.household.name.cleanString(),
-
-                    onSuccess = { householdId ->
-                        Log.d("TAG", "success: $householdId")
-                        onSuccess()
+                    label = {
+                        Text("Household Name")
                     },
-                    onFailure = { error ->
-                        Log.d("TAG", "failure: $error")
-                        onFailure()
-                    }
-                )
-            }) {
 
-            Text("Add")
+                    onValueChange = {
+                        viewModel.household = viewModel.household.copy(
+                            name = it.trim()
+                        )
+                    },
+
+                    value = viewModel.household.name ?: ""
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                OutlinedButton(
+                    modifier = modifier,
+
+                    enabled = !viewModel.isLoading,
+
+                    onClick = {
+
+                        viewModel.onAddHousehold(
+                            householdName = viewModel.household.name.cleanString(),
+
+                            onSuccess = { householdId ->
+                                Log.d("TAG", "success: $householdId")
+                                onSuccess()
+                            },
+                            onFailure = { error ->
+                                Log.d("TAG", "failure: $error")
+                                onFailure()
+                            }
+                        )
+                    }) {
+
+                    Text("Add")
+                }
+            }
         }
     }
 }
 
 @Composable
-fun CreateHouseholdContent() {
+fun CreateHouseholdScreenContent() {
     HouseholdRechargeTheme(dynamicColor = false) {
         CreateHouseholdScreen ()
     }
-}
-
-@Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
-@Composable
-fun CreateHouseholdScreenLightPreview() {
-    CreateHouseholdContent()
 }
 
 @Preview(
@@ -161,5 +132,14 @@ fun CreateHouseholdScreenLightPreview() {
 )
 @Composable
 fun CreateHouseholdScreenDarkPreview() {
-    CreateHouseholdContent()
+    CreateHouseholdScreenContent()
+}
+
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
+@Composable
+fun CreateHouseholdScreenLightPreview() {
+    CreateHouseholdScreenContent()
 }

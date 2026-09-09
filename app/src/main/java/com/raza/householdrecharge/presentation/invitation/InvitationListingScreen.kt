@@ -29,6 +29,7 @@ import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeTitleText
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.components.getPrintableDate
+import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun InvitationListingScreen(
@@ -47,17 +48,6 @@ fun InvitationListingScreen(
         )
     }
 
-    Body(
-        viewModel = viewModel,
-        onAddInvitation = onAddInvitation
-    )
-}
-
-@Composable
-fun Body(
-    viewModel: InvitationViewModel = hiltViewModel(),
-    onAddInvitation: () -> Unit = {}
-) {
     Scaffold(
         topBar = {
             TitleBar("Invitations")
@@ -78,33 +68,23 @@ fun Body(
         }
     ) { paddingValues ->
 
-        InvitationList(
-            modifier = Modifier.padding(paddingValues),
-            viewModel = viewModel
-        )
-    }
-}
+        val modifier = Modifier.padding(paddingValues)
 
-@Composable
-fun InvitationList(
-    modifier: Modifier,
-    viewModel: InvitationViewModel
-) {
+        LazyColumn(modifier = modifier) {
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
 
-    LazyColumn(modifier = modifier) {
-        item {
-            Spacer(modifier = Modifier.height(20.dp))
-        }
+            items(viewModel.invitationList) { invitation ->
 
-        items(viewModel.invitationList) { invitation ->
-
-            invitationCard(modifier, invitation)
+                InvitationListItemCard(modifier, invitation)
+            }
         }
     }
 }
 
 @Composable
-fun invitationCard(
+fun InvitationListItemCard(
     modifier: Modifier,
     invitation: Invitation
 ) {
@@ -201,29 +181,32 @@ fun invitationCard(
     }
 }
 
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    showBackground = true
-)
 @Composable
-fun invitationScreenDarkPreview() {
-    InvitationScreenContent()
+fun InvitationListingScreenContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        InvitationListingScreen()
+    }
 }
 
 @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    showBackground = true
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun invitationScreenLightPreview() {
-    InvitationScreenContent()
+fun InvitationListingScreenDarkPreview() {
+    InvitationListingScreenContent()
 }
 
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
 @Composable
-fun InvitationScreenContent() {
-    Body()
+fun InvitationListingScreenLightPreview() {
+    InvitationListingScreenContent()
 }
 
+//todo belongs either in domain or data/remote/dto
 data class Invitation(
     val code: String = "",
     val dateCreated: String = "",

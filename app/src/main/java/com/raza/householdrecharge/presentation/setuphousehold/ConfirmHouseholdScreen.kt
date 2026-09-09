@@ -42,26 +42,6 @@ fun ConfirmHouseholdScreen(
     onSuccess:() -> Unit = {},
     onFailure:() -> Unit = {}
 ) {
-    ConfirmHouseholdBody(
-        householdName = householdName,
-        householdId = householdId,
-        invitationCode = invitationCode,
-        viewModel = viewModel,
-        onSuccess = onSuccess,
-        onFailure = onFailure
-    )
-}
-
-//TODO merge with main fn
-@Composable
-fun ConfirmHouseholdBody(
-    householdName: String? = "",
-    householdId: String? = "",
-    invitationCode: String? = "",
-    viewModel: HouseholdViewModel = hiltViewModel(),
-    onSuccess:() -> Unit = {},
-    onFailure:() -> Unit = {}
-) {
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
@@ -155,7 +135,7 @@ fun ConfirmHouseholdBody(
                         text = "Join"
                     )
                 }
-//
+
                 Spacer(Modifier.height(10.dp))
 
                 OutlinedButton(
@@ -211,9 +191,15 @@ fun ConfirmHouseholdBody(
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
-                //
             }
         }
+    }
+}
+
+@Composable
+fun ConfirmHouseholdScreenContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        ConfirmHouseholdScreen()
     }
 }
 
@@ -222,8 +208,8 @@ fun ConfirmHouseholdBody(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun ConfirmHouseholdDarkPreview() {
-    ConfirmHouseholdContent()
+fun ConfirmHouseholdScreenDarkPreview() {
+    ConfirmHouseholdScreenContent()
 }
 
 @Preview(
@@ -231,13 +217,6 @@ fun ConfirmHouseholdDarkPreview() {
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun ConfirmHouseholdLightPreview() {
-    ConfirmHouseholdContent()
-}
-
-@Composable
-fun ConfirmHouseholdContent() {
-    HouseholdRechargeTheme(dynamicColor = false) {
-        ConfirmHouseholdBody()
-    }
+fun ConfirmHouseholdScreenLightPreview() {
+    ConfirmHouseholdScreenContent()
 }

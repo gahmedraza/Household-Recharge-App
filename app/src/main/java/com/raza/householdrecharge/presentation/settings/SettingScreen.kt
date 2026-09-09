@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.presentation.components.TitleBar
+import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun SettingScreen(
@@ -33,138 +34,124 @@ fun SettingScreen(
         }
     ) { paddingValues ->
 
-        Body(
-            viewModel = viewModel,
-            modifier = Modifier.padding(paddingValues),
-            onAddMember = {
-                onAddMember()
-            },
-            onAddHousehold = {
-                onAddHousehold()
-            },
-            onSignOut = onSignOut,
-            onInvitation = onInvitation
-        )
-    }
-}
+        val modifier = Modifier.padding(paddingValues)
 
-@Composable
-fun Body(
-    viewModel: SettingViewModel,
-    modifier: Modifier,
-    onAddMember: () -> Unit,
-    onAddHousehold: () -> Unit,
-    onSignOut: () -> Unit,
-    onInvitation: () -> Unit
-) {
+        Column(modifier = modifier) {
+            val cellPadding = PaddingValues(
+                start = 30.dp,
+                end = 30.dp,
+                top = 30.dp,
+                bottom = 30.dp
+            )
 
-    Column(modifier = modifier) {
-        val cellPadding = PaddingValues(
-            start = 30.dp,
-            end = 30.dp,
-            top = 30.dp,
-            bottom = 30.dp
-        )
+            val cellModifier = Modifier
+                .fillMaxWidth()
+                .padding(cellPadding)
 
-        val cellModifier = Modifier
-            .fillMaxWidth()
-            .padding(cellPadding)
-
-        Text(
-            text = "Account",
-            modifier = cellModifier,
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        HorizontalDivider(modifier = Modifier.height(1.dp))
-
-        Text(
-            text = "Household",
-            modifier = cellModifier,
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        HorizontalDivider(modifier = Modifier.height(1.dp))
-
-        Column(modifier = Modifier.padding(start = 10.dp)) {
             Text(
-                text = "Add Household",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onAddHousehold()
-                    }
-                    .padding(cellPadding),
-
+                text = "Account",
+                modifier = cellModifier,
                 style = MaterialTheme.typography.titleLarge
             )
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
 
             Text(
-                text = "Invitations",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable {
-                        onInvitation()
-                    }
-                    .padding(cellPadding),
-
+                text = "Household",
+                modifier = cellModifier,
                 style = MaterialTheme.typography.titleLarge
             )
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
 
+            Column(modifier = Modifier.padding(start = 10.dp)) {
+                Text(
+                    text = "Add Household",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onAddHousehold()
+                        }
+                        .padding(cellPadding),
+
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                HorizontalDivider(modifier = Modifier.height(1.dp))
+
+                Text(
+                    text = "Invitations",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onInvitation()
+                        }
+                        .padding(cellPadding),
+
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                HorizontalDivider(modifier = Modifier.height(1.dp))
+
+                Text(
+                    text = "Add Member",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            onAddMember()
+                        }
+                        .padding(cellPadding),
+
+                    style = MaterialTheme.typography.titleLarge
+                )
+
+                HorizontalDivider(modifier = Modifier.height(1.dp))
+            }
+
             Text(
-                text = "Add Member",
+                text = "SignOut",
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        onAddMember()
+                        viewModel.signOut(
+                            onSuccess = {
+                                onSignOut()
+                            },
+                            onFailure = {
+
+                            }
+                        )
                     }
                     .padding(cellPadding),
-
                 style = MaterialTheme.typography.titleLarge
             )
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
         }
-
-        Text(
-            text = "SignOut",
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable {
-                    viewModel.signOut(
-                        onSuccess = {
-                            onSignOut()
-                        },
-                        onFailure = {
-
-                        }
-                    )
-                }
-                .padding(cellPadding),
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        HorizontalDivider(modifier = Modifier.height(1.dp))
     }
 }
 
 @Composable
-fun Content() {
-    SettingScreen()
+fun SettingContent() {
+    HouseholdRechargeTheme(dynamicColor = false) {
+        SettingScreen()
+    }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 fun SettingScreenDarkPreview() {
-    Content()
+    SettingContent()
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO
+)
 @Composable
 fun SettingScreenLightPreview() {
-    Content()
+    SettingContent()
 }
