@@ -3,12 +3,14 @@ package com.raza.householdrecharge.data.repository
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.local.dao.MobileNumberDao
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class MobileNumberRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val firestore: FirebaseFirestore,
+    private val mobileNumberDao: MobileNumberDao
 ) {
 
     suspend fun addMobileNumber(
