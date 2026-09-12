@@ -4,7 +4,10 @@ import com.raza.householdrecharge.data.local.dao.MobileNumberDao
 import com.raza.householdrecharge.data.remote.datasource.MobileNumberRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.remote.mapper.MobileNumberEntity
+import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
+import com.raza.householdrecharge.data.remote.mapper.MobileNumberEntityMapper
+import com.raza.householdrecharge.util.cleanString
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MobileNumberRepository @Inject constructor(
@@ -19,10 +22,40 @@ class MobileNumberRepository @Inject constructor(
         return mobileNumberRemoteDataSource.addMobileNumber(mobileNumberDto)
     }
 
+    fun observeMobileNumbers(
+    ): Flow<List<MobileNumberEntity>> {
+        return mobileNumberDao.observeMobileNumbers()
+    }
+
     suspend fun getAllMobileNumbers(
     ): Result<List<MobileNumberDto>, String> {
 
         return mobileNumberRemoteDataSource.getAllMobileNumbers()
+    }
+
+    suspend fun getAllMobileNumbers2(
+    ): Result<List<MobileNumberDto>, String> {
+        val result = mobileNumberRemoteDataSource.getAllMobileNumbers()
+
+        if(result is Result.Failure) {
+            Result.Failure(result.error.cleanString())
+        }
+
+        val mobileNumberList = (result as Result.Success).data
+
+        val mobileNumberEntityList = MobileNumberEntityMapper.map(mobileNumberList)
+
+        mobileNumberDao.insertMobileNumbers(mobileNumberEntityList)
+
+        val mobileNumberEntityList2 = mobileNumberDao.getAllMobileNumbers()
+
+        val mobileNumberList2 = com.raza.householdrecharge
+            .data.remote.mapper
+            .MobileNumberDtoMapper.map(mobileNumberEntityList2)
+
+        val result2 = Result.Success(mobileNumberList2)
+
+        return result2
     }
 
     suspend fun syncMobileNumbers() {
@@ -37,7 +70,7 @@ class MobileNumberRepository @Inject constructor(
         val mobileNumberDtoList = (result as Result.Success).data
 
         val mobileNumberEntityList = mobileNumberDtoList.map { eachMobileNumberDto ->
-            MobileNumberEntity.map(eachMobileNumberDto)
+            MobileNumberEntityMapper.map(eachMobileNumberDto)
         }
 
         //Save server data into Room

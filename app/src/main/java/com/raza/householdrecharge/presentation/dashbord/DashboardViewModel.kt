@@ -27,12 +27,16 @@ class DashboardViewModel @Inject constructor(
     var members by mutableStateOf<List<Member>>(emptyList())
     var mobileNumbers by mutableStateOf<List<MobileNumberDto>>(emptyList())
 
+    init {
+        observeMobileNumbers()
+    }
+
     fun loadMobileNumbers(
         onSuccess: (List<MobileNumberDto>) -> Unit,
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
-            val result = mobileNumberRepository.getAllMobileNumbers()
+            val result = mobileNumberRepository.getAllMobileNumbers2()
 
             when(result) {
                 is Result.Success -> {
@@ -45,6 +49,20 @@ class DashboardViewModel @Inject constructor(
 
                     onFailure("failure")
                 }
+            }
+        }
+    }
+
+    fun observeMobileNumbers(
+    ) {
+        viewModelScope.launch {
+            mobileNumberRepository.observeMobileNumbers().collect { mobileNumberEntityList ->
+
+                val mobileNumberDtoList = com.raza.householdrecharge
+                    .data.remote.mapper
+                    .MobileNumberDtoMapper.map(mobileNumberEntityList)
+
+                mobileNumbers = mobileNumberDtoList
             }
         }
     }

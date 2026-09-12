@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MobileNumberDao {
@@ -27,4 +28,7 @@ interface MobileNumberDao {
 
     @Query("select * from mobile_numbers")
     suspend fun getAllMobileNumbers(): List<MobileNumberEntity>
+
+    @Query("select * from mobile_numbers")
+    fun observeMobileNumbers(): Flow<List<MobileNumberEntity>>
 }
