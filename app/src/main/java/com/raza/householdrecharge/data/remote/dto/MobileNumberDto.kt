@@ -1,12 +1,17 @@
 package com.raza.householdrecharge.data.remote.dto
 
 data class MobileNumberDto(
-    //recharge details begin
+    //server side id begin
+    //...
+    var id: String = "",
+    //...
+    //server side id end
+    //mobile number details begin
     //...
     //this cannot be null and should point to valid mobile number
     var mobileNumber: Long = 0,
     //...
-    //recharge details end
+    //mobile number details end
 
     //data modeling details begin
     //...

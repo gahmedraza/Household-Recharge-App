@@ -13,6 +13,9 @@ interface MobileNumberDao {
     @Insert
     suspend fun insertMobileNumber(mobileNumber: MobileNumberEntity)
 
+    @Insert
+    suspend fun insertMobileNumbers(mobileNumberList: List<MobileNumberEntity>)
+
     @Update
     suspend fun updateMobileNumber(mobileNumber: MobileNumberEntity)
 

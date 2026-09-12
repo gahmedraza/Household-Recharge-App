@@ -1,71 +1,46 @@
 package com.raza.householdrecharge.data.repository
 
-import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.util.cleanString
-import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.local.dao.MobileNumberDao
+import com.raza.householdrecharge.data.remote.datasource.MobileNumberRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
-import kotlinx.coroutines.tasks.await
+import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.mapper.MobileNumberEntity
 import javax.inject.Inject
 
 class MobileNumberRepository @Inject constructor(
-    private val firestore: FirebaseFirestore,
+    private val mobileNumberRemoteDataSource: MobileNumberRemoteDataSource,
     private val mobileNumberDao: MobileNumberDao
 ) {
 
     suspend fun addMobileNumber(
-        mobileNumberDto: MobileNumberDto,
+        mobileNumberDto: MobileNumberDto
     ): Result<String, String> {
 
-        var result: Result<String, String>
-
-        try {
-
-            val documentReference = firestore
-
-                .collection("mobile_numbers")
-                .add(mobileNumberDto)
-
-                .await()
-
-            val mobileNumberId = documentReference.id
-
-            result = Result.Success(mobileNumberId)
-
-
-        } catch (e: Exception) {
-
-            result = Result.Failure(e.message.cleanString())
-        }
-
-        return result
+        return mobileNumberRemoteDataSource.addMobileNumber(mobileNumberDto)
     }
 
     suspend fun getAllMobileNumbers(
     ): Result<List<MobileNumberDto>, String> {
 
-        var result: Result<List<MobileNumberDto>, String>
+        return mobileNumberRemoteDataSource.getAllMobileNumbers()
+    }
 
-        try {
+    suspend fun syncMobileNumbers() {
+        //Get data from server
+        val result = mobileNumberRemoteDataSource.getAllMobileNumbers()
 
-            val documentSnapshot = firestore
-
-                .collection("mobile_numbers")
-                .get()
-
-                .await()
-
-            val mobileNumberList = documentSnapshot.documents.mapNotNull { document ->
-                document.toObject(MobileNumberDto::class.java)
-            }
-
-            result = Result.Success(mobileNumberList)
-
-        } catch (e: Exception) {
-
-            result = Result.Failure(e.message.cleanString())
+        //Covert DTOs to Room entities
+        if(result is Result.Failure) {
+            return
         }
 
-        return result
+        val mobileNumberDtoList = (result as Result.Success).data
+
+        val mobileNumberEntityList = mobileNumberDtoList.map { eachMobileNumberDto ->
+            MobileNumberEntity.map(eachMobileNumberDto)
+        }
+
+        //Save server data into Room
+        mobileNumberDao.insertMobileNumbers(mobileNumberEntityList)
     }
 }
