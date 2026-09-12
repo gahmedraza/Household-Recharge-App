@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -193,15 +194,22 @@ fun BottomNavigationBar(
 
         NavigationBarItem(
             selected = false,
+
             onClick = {
-                navController.navigate(ComposeScreen.Dashboard.description)
+                navController.navigate(ComposeScreen.Dashboard.description) {
+
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
             },
+
             icon = {
                 Icon(
                     Icons.Default.Home,
                     contentDescription = ComposeScreen.Dashboard.description
                 )
             },
+
             label = {
                 Text(ComposeScreen.Dashboard.description)
             }

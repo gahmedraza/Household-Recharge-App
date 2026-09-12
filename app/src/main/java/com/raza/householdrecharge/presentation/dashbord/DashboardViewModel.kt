@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.repository.MemberRepository
@@ -13,9 +14,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
+import com.raza.householdrecharge.data.remote.mapper.MobileNumberDtoMapper
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +30,10 @@ class DashboardViewModel @Inject constructor(
     var members by mutableStateOf<List<Member>>(emptyList())
     var mobileNumbers by mutableStateOf<List<MobileNumberDto>>(emptyList())
 
+    val mobileNumberList = MutableStateFlow<List<MobileNumberDto>>(emptyList())
+
     init {
+        log("viewmodel init called...")
         observeMobileNumbers()
     }
 
@@ -36,17 +42,21 @@ class DashboardViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
+            isLoading = true
+
             val result = mobileNumberRepository.getAllMobileNumbers2()
 
             when(result) {
                 is Result.Success -> {
                     mobileNumbers = result.data
 
+                    isLoading = false
                     onSuccess(mobileNumbers)
                 }
 
                 is Result.Failure -> {
 
+                    isLoading = false
                     onFailure("failure")
                 }
             }
@@ -58,11 +68,9 @@ class DashboardViewModel @Inject constructor(
         viewModelScope.launch {
             mobileNumberRepository.observeMobileNumbers().collect { mobileNumberEntityList ->
 
-                val mobileNumberDtoList = com.raza.householdrecharge
-                    .data.remote.mapper
-                    .MobileNumberDtoMapper.map(mobileNumberEntityList)
+                val mobileNumberDtoList = MobileNumberDtoMapper.map(mobileNumberEntityList)
 
-                mobileNumbers = mobileNumberDtoList
+                mobileNumberList.value = mobileNumberDtoList
             }
         }
     }
