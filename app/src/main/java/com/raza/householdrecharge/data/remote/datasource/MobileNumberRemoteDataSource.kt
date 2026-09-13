@@ -1,5 +1,6 @@
 package com.raza.householdrecharge.data.remote.datasource
 
+import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.HouseholdCollection
@@ -14,9 +15,9 @@ class MobileNumberRemoteDataSource @Inject constructor(
 
     suspend fun addMobileNumber(
         mobileNumberDto: MobileNumberDto,
-    ): Result<String, String> {
+    ): Result<MobileNumberDto, String> {
 
-        var result: Result<String, String>
+        var result: Result<MobileNumberDto, String>
 
         try {
 
@@ -29,8 +30,11 @@ class MobileNumberRemoteDataSource @Inject constructor(
 
             val mobileNumberId = documentReference.id
 
-            result = Result.Success(mobileNumberId)
+            val newMobileNumberDto = mobileNumberDto.copy(
+                id = mobileNumberId
+            )
 
+            result = Result.Success(newMobileNumberDto)
 
         } catch (e: Exception) {
 
@@ -55,7 +59,14 @@ class MobileNumberRemoteDataSource @Inject constructor(
                 .await()
 
             val mobileNumberList = documentSnapshot.documents.mapNotNull { document ->
-                document.toObject(MobileNumberDto::class.java)
+                val data = document.data
+                val id = document.id
+                Log.d("TAG", "data: $data")
+                Log.d("TAG","id: $id")
+
+                val mobileNumberDto = document.toObject(MobileNumberDto::class.java)
+                mobileNumberDto?.id = document.id
+                mobileNumberDto
             }
 
             result = Result.Success(mobileNumberList)

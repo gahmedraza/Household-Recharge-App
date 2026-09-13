@@ -5,8 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity("mobile_numbers")
 data class MobileNumberEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    @PrimaryKey
+    val id: String = "",
     var mobileNumber: Long = 0,
     var accountId: String = "",
     var householdId: String = ""

@@ -1,7 +1,6 @@
 package com.raza.householdrecharge.presentation.dashbord
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,14 +29,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -48,7 +43,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.presentation.components.RechargeStatusIndicator
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
-import com.raza.householdrecharge.domain.model.Household
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
@@ -59,45 +53,26 @@ fun DashboardScreen(
 ) {
 
     val mobileNumberList by viewModel.mobileNumberList.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
-        /*viewModel.loadMobileNumbers(
-            onSuccess = {
-
-                Log.d("TAG", "dashboard items fetched from firebase")
-            },
-
-            onFailure = {
-
-                Log.e("TAG", "dashboard items fetch resulted in error")
-                Log.e("TAG", "error: $it")
-            }
-        )*/
+        viewModel.syncMobileNumbers()
     }
 
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
-        },
-
         topBar = {
             TitleBar("Dashboard")
         },
 
         floatingActionButton = {
-            if (true) {
-                FloatingActionButton(
-                    onClick = {
-                        onAddMobileNumber()
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = "add member"
-                    )
+            FloatingActionButton(
+                onClick = {
+                    onAddMobileNumber()
                 }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "add mobile number"
+                )
             }
         }
     ) { paddingValues ->

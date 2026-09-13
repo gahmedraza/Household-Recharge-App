@@ -28,8 +28,6 @@ class DashboardViewModel @Inject constructor(
     private val mobileNumberRepository: MobileNumberRepository
 ) : BaseViewModel() {
     var members by mutableStateOf<List<Member>>(emptyList())
-    var mobileNumbers by mutableStateOf<List<MobileNumberDto>>(emptyList())
-
     val mobileNumberList = MutableStateFlow<List<MobileNumberDto>>(emptyList())
 
     init {
@@ -37,29 +35,10 @@ class DashboardViewModel @Inject constructor(
         observeMobileNumbers()
     }
 
-    fun loadMobileNumbers(
-        onSuccess: (List<MobileNumberDto>) -> Unit,
-        onFailure: (String?) -> Unit
+    fun syncMobileNumbers(
     ) {
         viewModelScope.launch {
-            isLoading = true
-
-            val result = mobileNumberRepository.getAllMobileNumbers2()
-
-            when(result) {
-                is Result.Success -> {
-                    mobileNumbers = result.data
-
-                    isLoading = false
-                    onSuccess(mobileNumbers)
-                }
-
-                is Result.Failure -> {
-
-                    isLoading = false
-                    onFailure("failure")
-                }
-            }
+            mobileNumberRepository.syncMobileNumbers()
         }
     }
 
