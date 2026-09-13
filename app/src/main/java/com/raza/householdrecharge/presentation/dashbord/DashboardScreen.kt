@@ -55,7 +55,7 @@ fun DashboardScreen(
     val mobileNumberList by viewModel.mobileNumberList.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.syncMobileNumbers()
+        viewModel.getAllMobileNumbers()
     }
 
     Scaffold(

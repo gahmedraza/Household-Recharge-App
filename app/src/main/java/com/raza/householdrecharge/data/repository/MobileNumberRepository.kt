@@ -6,7 +6,6 @@ import com.raza.householdrecharge.data.remote.datasource.MobileNumberRemoteDataS
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
-import com.raza.householdrecharge.data.remote.mapper.MobileNumberDtoMapper
 import com.raza.householdrecharge.data.remote.mapper.MobileNumberEntityMapper
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
@@ -20,11 +19,12 @@ class MobileNumberRepository @Inject constructor(
     suspend fun addMobileNumber(
         mobileNumberDto: MobileNumberDto
 
-    ) {
+    ): Result<String, String> {
         val result = mobileNumberRemoteDataSource.addMobileNumber(mobileNumberDto)
 
         if(result is Result.Failure) {
             log(result.error.cleanString())
+            return Result.Failure(result.error.cleanString())
         }
 
         val mobileNumberDto = (result as Result.Success).data
@@ -32,6 +32,8 @@ class MobileNumberRepository @Inject constructor(
         val mobileNumberEntity = MobileNumberEntityMapper.map(mobileNumberDto)
 
         mobileNumberDao.upsertMobileNumber(mobileNumberEntity)
+
+        return Result.Success("")
     }
 
     fun observeMobileNumbers(
@@ -39,7 +41,7 @@ class MobileNumberRepository @Inject constructor(
         return mobileNumberDao.observeMobileNumbers()
     }
 
-    suspend fun syncMobileNumbers(
+    suspend fun getAllMobileNumbers(
     ) {
         val result = mobileNumberRemoteDataSource.getAllMobileNumbers()
 
