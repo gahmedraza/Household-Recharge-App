@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -33,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.domain.model.Household
 import com.raza.householdrecharge.presentation.components.TitleBar
@@ -48,6 +50,8 @@ fun RechargeListingScreen(
     onFailure: () -> Unit = {},
     onAddRecharge: (String, String) -> Unit = {a,b ->}
 ) {
+    val rechargeList by viewModel.rechargeList2.collectAsStateWithLifecycle()
+
     LaunchedEffect(Unit) {
         viewModel.loadAllRecharges(
             memberId = memberId,
@@ -85,7 +89,7 @@ fun RechargeListingScreen(
 
         val modifier = Modifier.padding(paddingValues)
 
-        if (viewModel.rechargeList.isEmpty()) {
+        if (rechargeList.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -105,7 +109,7 @@ fun RechargeListingScreen(
                     Spacer(modifier = Modifier.height(20.dp))
                 }
 
-                items(viewModel.rechargeList) { item ->
+                items(rechargeList) { item ->
                     RechargeListItemCard(
                         item = item,
                         onClick = {

@@ -19,7 +19,7 @@ class DashboardViewModel @Inject constructor(
     val mobileNumberList = MutableStateFlow<List<MobileNumberDto>>(emptyList())
 
     init {
-        log("viewmodel init called...")
+        log("dashboard viewmodel init called...")
         observeMobileNumbers()
     }
 

@@ -4,15 +4,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
+import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.data.repository.RechargeRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +26,22 @@ class RechargeListingViewModel @Inject constructor(
     private val validator: RechargeValidator
 ) : BaseViewModel() {
 
-    var rechargeList by mutableStateOf<List<RechargeDto>>(emptyList())
+    var rechargeList2 = MutableStateFlow<List<RechargeDto>>(emptyList())
+
+    init {
+        log("recharge listing viewmodel init called")
+        observeRecharges()
+    }
+
+    fun observeRecharges() {
+        viewModelScope.launch {
+            rechargeRepository.observeRecharges().collect { rechargeDtoList ->
+                rechargeList2.value = rechargeDtoList.map { rechargeDto ->
+                    RechargeDtoMapper.map(rechargeDto)
+                }
+            }
+        }
+    }
 
     fun loadAllRecharges(
         onSuccess: () -> Unit,
@@ -31,8 +50,6 @@ class RechargeListingViewModel @Inject constructor(
         mobileNumber: String
     ) {
         viewModelScope.launch {
-            isLoading = true
-
             val validationResult = validator.validateRechargeListingApiCall(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
@@ -42,26 +59,11 @@ class RechargeListingViewModel @Inject constructor(
 
             //user understandable errors should be placed in a class
             if(validationResult is Result.Failure) {
-                isLoading = false
                 onFailure("failure")
                 return@launch
             }
 
-            val result = rechargeRepository.getAllRecharges()
-
-            when(result) {
-
-                is Result.Success<List<RechargeDto>> -> {
-                    isLoading = false
-                    rechargeList = result.data
-                    onSuccess()
-                }
-
-                is Result.Failure<String> -> {
-                    isLoading = false
-                    onFailure(result.error)
-                }
-            }
+            rechargeRepository.getAllRecharges()
         }
     }
 }

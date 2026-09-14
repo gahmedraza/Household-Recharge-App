@@ -1,6 +1,10 @@
 package com.raza.householdrecharge.data.remote.dto
 
 data class RechargeDto(
+    //...
+    val id: String = "",
+    //...
+
     //recharge details begin
     //...
     //recharge amount input should be numbered type

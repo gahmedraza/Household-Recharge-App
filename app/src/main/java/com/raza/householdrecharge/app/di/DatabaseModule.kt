@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.raza.householdrecharge.app.HouseholdRechargeDatabase
 import com.raza.householdrecharge.data.local.dao.MobileNumberDao
+import com.raza.householdrecharge.data.local.dao.RechargeDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,5 +35,13 @@ object DatabaseModule {
     ): MobileNumberDao {
 
         return database.mobileNumberDao()
+    }
+
+    @Provides
+    fun provideRechargeDao(
+        database: HouseholdRechargeDatabase
+    ): RechargeDao {
+
+        return database.rechargeDao()
     }
 }

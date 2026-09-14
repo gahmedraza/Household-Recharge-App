@@ -1,69 +1,59 @@
 package com.raza.householdrecharge.data.repository
 
-import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.domain.model.Recharge
-import com.raza.householdrecharge.util.cleanString
+import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.data.local.dao.RechargeDao
+import com.raza.householdrecharge.data.local.entity.RechargeEntity
+import com.raza.householdrecharge.data.remote.datasource.RechargeRemoteDataSource
+import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
-import kotlinx.coroutines.tasks.await
-import javax.inject.Inject
+import com.raza.householdrecharge.data.remote.mapper.RechargeEntityMapper
+import com.raza.householdrecharge.util.cleanString
 
 class RechargeRepository @Inject constructor(
-    private val firestore: FirebaseFirestore
+    private val rechargeRemoteDataSource: RechargeRemoteDataSource,
+    private val rechargeDao: RechargeDao
 ) {
 
     suspend fun addRecharge(
         rechargeDto: RechargeDto
     ): Result<String, String> {
+        val result = rechargeRemoteDataSource.addRecharge(rechargeDto)
 
-        var result: Result<String, String>
-
-        try {
-
-            val documentReference = firestore
-
-                .collection("recharges")
-                .add(rechargeDto)
-
-                .await()
-
-            val rechargeHistoryId = documentReference.id
-
-            result = Result.Success(rechargeHistoryId)
-
-
-        } catch (e: Exception) {
-
-            result = Result.Failure(e.message.cleanString())
+        if(result is Result.Failure) {
+            log(result.error.cleanString())
+            return Result.Failure(result.error.cleanString())
         }
 
-        return result
+        val rechargeDto = (result as Result.Success).data
+
+        val rechargeEntity = RechargeEntityMapper.map(rechargeDto)
+
+        rechargeDao.upsertRecharge(rechargeEntity)
+
+        return Result.Success("")
+    }
+
+    fun observeRecharges(
+    ): Flow<List<RechargeEntity>> {
+        return rechargeDao.observeRecharges()
     }
 
     suspend fun getAllRecharges(
-    ): Result<List<RechargeDto>, String> {
 
-        var result: Result<List<RechargeDto>, String>
+    ) {
+        val result = rechargeRemoteDataSource.getAllRecharges()
 
-        try {
-
-            val documentSnapshot = firestore
-
-                .collection("recharges")
-                .get()
-                .await()
-
-            val rechargeList = documentSnapshot.documents.mapNotNull { document ->
-                document.toObject(RechargeDto::class.java)
-            }
-
-            result = Result.Success(rechargeList)
-
-        } catch (e: Exception) {
-
-            result = Result.Failure(e.message.cleanString())
+        if(result is Result.Failure) {
+            log(result.error.cleanString())
         }
 
-        return result
+        val rechargeList = (result as Result.Success).data
+
+        val rechargeEntityList = RechargeEntityMapper.map(rechargeList)
+
+        rechargeDao.upsertRecharges(rechargeEntityList)
     }
+
 }
