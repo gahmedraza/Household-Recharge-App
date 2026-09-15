@@ -8,6 +8,7 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
 import com.raza.householdrecharge.data.repository.RechargeRepository
+import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddRechargeViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val rechargeRepository: RechargeRepository,
+    private val rechargeUseCase: RechargeUseCase,
     private val validator: RechargeValidator
 ) : BaseViewModel() {
 
@@ -29,6 +30,7 @@ class AddRechargeViewModel @Inject constructor(
 
     fun addRecharge(
         mobileNumber: String,
+        mobileNumberId: String,
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
     ) {
@@ -61,8 +63,9 @@ class AddRechargeViewModel @Inject constructor(
             }
             //
 
-            val result = rechargeRepository.addRecharge(
-                rechargeDto = rechargeDto
+            val result = rechargeUseCase.addRechargeAndUpdateMobileNumber(
+                rechargeDto = rechargeDto,
+                mobileNumberId = mobileNumberId
             )
 
             when (result) {

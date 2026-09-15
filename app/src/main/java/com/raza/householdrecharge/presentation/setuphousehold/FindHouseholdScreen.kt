@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
+import com.raza.householdrecharge.domain.usecase.FindHouseholdResponse
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
@@ -35,7 +36,7 @@ import com.raza.householdrecharge.util.cleanString
 @Composable
 fun FindHouseholdScreen(
     viewModel: HouseholdViewModel = hiltViewModel(),
-    onSuccess: (HouseholdDto?) -> Unit = {},
+    onSuccess: (FindHouseholdResponse?) -> Unit = { a -> },
     onFailure: () -> Unit = {}
 ) {
     Scaffold { paddingValues ->
@@ -59,7 +60,7 @@ fun FindHouseholdScreen(
 
             var shouldProceed by rememberSaveable { mutableStateOf(false) }
             var signinStatus by rememberSaveable { mutableStateOf("") }
-            var householdDto: HouseholdDto? = null
+            var findHouseholdResponse: FindHouseholdResponse? = null
 
             AppCard(Modifier.fillMaxWidth()) {
 
@@ -113,8 +114,8 @@ fun FindHouseholdScreen(
                             viewModel.findHousehold(
                                 invitationCode = viewModel.invitationCode,
 
-                                onSuccess = { household ->
-                                    householdDto = household
+                                onSuccess = { response ->
+                                    findHouseholdResponse = response
 
                                     shouldProceed = true
                                     signinStatus = "invitation code found"
@@ -148,7 +149,7 @@ fun FindHouseholdScreen(
 
                         onClick = {
 
-                            onSuccess(householdDto)
+                            onSuccess(findHouseholdResponse)
                         }
                     ) {
                         Text("Proceed")

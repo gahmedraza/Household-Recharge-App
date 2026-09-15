@@ -32,7 +32,7 @@ class RechargeRepository @Inject constructor(
 
         rechargeDao.upsertRecharge(rechargeEntity)
 
-        return Result.Success("")
+        return Result.Success(rechargeDto.id)
     }
 
     fun observeRecharges(

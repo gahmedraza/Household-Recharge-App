@@ -59,7 +59,7 @@ class HouseholdRepository @Inject constructor(
         }
 
         val householdDto = snapshot.toObject(HouseholdDto::class.java)
-        householdDto?.householdId = householdId
+        //householdDto?.householdId = householdId
 
         if(householdDto == null) {
             return Result.Failure(HouseholdError.HouseholdDataMappingError)

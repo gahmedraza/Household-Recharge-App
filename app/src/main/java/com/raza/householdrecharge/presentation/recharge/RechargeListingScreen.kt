@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
-import com.raza.householdrecharge.domain.model.Household
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.components.getPrintableDate
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
@@ -50,10 +49,10 @@ fun RechargeListingScreen(
     onFailure: () -> Unit = {},
     onAddRecharge: (String, String) -> Unit = {a,b ->}
 ) {
-    val rechargeList by viewModel.rechargeList2.collectAsStateWithLifecycle()
+    val rechargeList by viewModel.rechargeList.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.loadAllRecharges(
+        viewModel.getAllRecharges(
             memberId = memberId,
             mobileNumber = mobileNumber,
 

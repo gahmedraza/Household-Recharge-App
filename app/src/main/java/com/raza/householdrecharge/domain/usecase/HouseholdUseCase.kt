@@ -108,9 +108,9 @@ class HouseholdUseCase @Inject constructor(
     suspend fun validateInvitationAndFindLinkedHousehold(
         authId: String,
         invitationCode: String
-    ): Result<HouseholdDto, HouseholdUseCaseError> {
+    ): Result<FindHouseholdResponse?, HouseholdUseCaseError> {
 
-        var result: Result<HouseholdDto, HouseholdUseCaseError>
+        var result: Result<FindHouseholdResponse?, HouseholdUseCaseError>
 
         try {
 
@@ -154,9 +154,15 @@ class HouseholdUseCase @Inject constructor(
 
             val household = (result4 as Result.Success).data
 
-            household.invitationCode = invitationCode
+            //household.invitationCode = invitationCode
 
-            result = Result.Success(household)
+            val findHouseholdResponse = FindHouseholdResponse(
+                householdId = invitation.householdId,
+                householdName = household.householdName.cleanString(),
+                invitationCode = invitation.code
+            )
+
+            result = Result.Success(findHouseholdResponse)
 
         } catch (e: Exception) {
 
@@ -192,3 +198,9 @@ class HouseholdUseCase @Inject constructor(
     }
     //
 }
+
+data class FindHouseholdResponse(
+    val householdId: String = "",
+    val householdName: String = "",
+    val invitationCode: String = ""
+)

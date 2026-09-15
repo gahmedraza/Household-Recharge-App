@@ -38,6 +38,7 @@ import com.raza.householdrecharge.util.cleanString
 @Composable
 fun AddRechargeScreen(
     mobileNumber: String = "",
+    id: String = "",
     viewModel: AddRechargeViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
@@ -149,6 +150,7 @@ fun AddRechargeScreen(
                     onClick = {
                         viewModel.addRecharge(
                             mobileNumber = mobileNumber,
+                            mobileNumberId = id,
                             onSuccess = {
 
                                 signinStatus = "recharge has been added"

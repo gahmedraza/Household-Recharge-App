@@ -1,8 +1,5 @@
 package com.raza.householdrecharge.presentation.recharge
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.data.session.SessionManager
@@ -16,7 +13,6 @@ import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +22,7 @@ class RechargeListingViewModel @Inject constructor(
     private val validator: RechargeValidator
 ) : BaseViewModel() {
 
-    var rechargeList2 = MutableStateFlow<List<RechargeDto>>(emptyList())
+    var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
 
     init {
         log("recharge listing viewmodel init called")
@@ -36,14 +32,14 @@ class RechargeListingViewModel @Inject constructor(
     fun observeRecharges() {
         viewModelScope.launch {
             rechargeRepository.observeRecharges().collect { rechargeDtoList ->
-                rechargeList2.value = rechargeDtoList.map { rechargeDto ->
+                rechargeList.value = rechargeDtoList.map { rechargeDto ->
                     RechargeDtoMapper.map(rechargeDto)
                 }
             }
         }
     }
 
-    fun loadAllRecharges(
+    fun getAllRecharges(
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit,
         memberId: String,

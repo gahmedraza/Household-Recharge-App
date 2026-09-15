@@ -78,4 +78,25 @@ class MobileNumberRemoteDataSource @Inject constructor(
 
         return result
     }
+
+    suspend fun updateMobileNumber(
+        mobileNumberId: String,
+        rechargeId: String
+    ): Result<Boolean, String> {
+
+        try {
+
+            firestore
+                .collection(HouseholdCollection.MobileNumbers.description)
+                .document(mobileNumberId)
+                .update("lastRechargeId", rechargeId)
+                .await()
+
+            return Result.Success(true)
+
+        } catch(e: Exception) {
+
+            return Result.Failure(e.message.cleanString())
+        }
+    }
 }

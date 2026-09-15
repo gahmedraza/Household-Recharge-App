@@ -9,9 +9,11 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
+import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
+import com.raza.householdrecharge.domain.usecase.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import com.raza.householdrecharge.util.cleanString
@@ -98,7 +100,7 @@ class HouseholdViewModel @Inject constructor(
      */
     fun findHousehold(
         invitationCode: String,
-        onSuccess: (HouseholdDto?) -> Unit,
+        onSuccess: (FindHouseholdResponse?) -> Unit,
         onFailure: (String?) -> Unit
     ) {
 

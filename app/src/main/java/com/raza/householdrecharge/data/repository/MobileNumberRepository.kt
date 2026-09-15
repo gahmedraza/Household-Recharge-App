@@ -55,4 +55,12 @@ class MobileNumberRepository @Inject constructor(
 
         mobileNumberDao.upsertMobileNumbers(mobileNumberEntityList)
     }
+
+    suspend fun updateMobileNumber(
+        mobileNumberId: String,
+        rechargeId: String
+    ): Result<Boolean, String> {
+
+        return mobileNumberRemoteDataSource.updateMobileNumber(mobileNumberId, rechargeId)
+    }
 }

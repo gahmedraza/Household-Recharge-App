@@ -90,9 +90,9 @@ fun OnboardingNavigation() {
 
         composable(ComposeScreen.FindHousehold.description) {
             FindHouseholdScreen(
-                onSuccess = { householdDto ->
+                onSuccess = { findHouseholdResponse ->
 
-                    navController.navigate("${ComposeScreen.ConfirmHousehold.description}/${householdDto?.householdName}/${householdDto?.householdId}/${householdDto?.invitationCode}")
+                    navController.navigate("${ComposeScreen.ConfirmHousehold.description}/${findHouseholdResponse?.householdName}/${findHouseholdResponse?.householdId}/${findHouseholdResponse?.invitationCode}")
                 },
 
                 onFailure = {}

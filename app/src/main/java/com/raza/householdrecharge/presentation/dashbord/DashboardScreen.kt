@@ -40,22 +40,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.presentation.components.RechargeStatusIndicator
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
+import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.presentation.components.getPrintableDate
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
+
+const val TAG2 = "Dashboard"
 
 @Composable
 fun DashboardScreen(
     viewModel: DashboardViewModel = hiltViewModel(),
-    onDashboardCardClick: (String) -> Unit = { a -> },
+    onDashboardCardClick: (String, String) -> Unit = { a,b -> },
     onAddMobileNumber: () -> Unit = {}
 ) {
 
     val mobileNumberList by viewModel.mobileNumberList.collectAsStateWithLifecycle()
+    val rechargeList by viewModel.rechargeList.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getAllMobileNumbers()
+        viewModel.getAllRecharges()
     }
 
     Scaffold(
@@ -112,10 +119,24 @@ fun DashboardScreen(
                     }
 
                     items(mobileNumberList) { item ->
+
+                        log(TAG2, rechargeList.toString())
+                        var rechargeDto = rechargeList.find {
+                            log(TAG2, "rechargeId: ${it.id}, mobileNumberId: ${item.id}")
+                            it.id == item.id
+                        }
+                        log(TAG2, rechargeDto.toString())
+
+                        if(rechargeDto == null) {
+                            log(TAG2, "empty recharge dto")
+                            rechargeDto = RechargeDto()
+                        }
+
                         DashboardListItemCard(
                             item = item,
+                            recharge = rechargeDto,
                             onClick = {
-                                onDashboardCardClick(item.mobileNumber.toString())
+                                onDashboardCardClick(item.mobileNumber.toString(), item.id)
                             }
                         )
                     }
@@ -132,6 +153,7 @@ fun DashboardScreen(
 @Composable
 fun DashboardListItemCard(
     item: MobileNumberDto,
+    recharge: RechargeDto,
     onClick: () -> Unit
 ) {
     Card(
@@ -192,28 +214,32 @@ fun DashboardListItemCard(
             Spacer(modifier = Modifier.height(20.dp))
 
             Text(
-                text = "Last Recharge: 979 INR",
+                //text = "Last Recharge: 979 INR",
+                text = "Last Recharge: ${recharge.rechargeAmount}",
                 style = MaterialTheme.typography.bodyLarge
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "2GB per day for 84 days",
+                //text = "2GB per day for 84 days",
+                text = recharge.rechargeDescription,
                 style = MaterialTheme.typography.bodyLarge
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Recharge Date: 02 Sep 2026",
+                //text = "Recharge Date: 02 Sep 2026",
+                text = "Recharge Date: ${getPrintableDate(recharge.rechargeDate.toString())}",
                 style = MaterialTheme.typography.bodyLarge
             )
 
             Spacer(modifier = Modifier.height(10.dp))
 
             Text(
-                text = "Recharged by: Raza",
+                //text = "Recharged by: Raza",
+                text = "Recharged by: ${recharge.rechargedBy}",
                 style = MaterialTheme.typography.bodyLarge
             )
 

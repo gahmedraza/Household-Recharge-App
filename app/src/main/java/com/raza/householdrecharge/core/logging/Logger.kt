@@ -6,5 +6,9 @@ import com.raza.householdrecharge.util.cleanString
 const val DEFAULT_TAG = "TAG"
 
 fun log(message: String?) {
-    Log.d(DEFAULT_TAG, message.cleanString())
+    log(DEFAULT_TAG, message.cleanString())
+}
+
+fun log(tag: String, message: String?) {
+    Log.d(tag, message.cleanString())
 }

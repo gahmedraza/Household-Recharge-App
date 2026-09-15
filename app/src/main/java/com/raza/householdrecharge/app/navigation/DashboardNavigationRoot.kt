@@ -54,9 +54,9 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.Dashboard.description) {
                 DashboardScreen(
-                    onDashboardCardClick = { mobileNumber ->
+                    onDashboardCardClick = { mobileNumber, id ->
 
-                        navController.navigate("${ComposeScreen.AddRecharge}/$mobileNumber")
+                        navController.navigate("${ComposeScreen.AddRecharge}/$mobileNumber/$id")
                     },
 
                     onAddMobileNumber = {
@@ -146,13 +146,16 @@ fun DashboardNavigationRoot() {
             }
 
             composable(
-                route = "${ComposeScreen.AddRecharge.description}/{mobileNumber}"
+                route = "${ComposeScreen.AddRecharge.description}/{mobileNumber}/{id}"
             ) { backStackEntry ->
 
                 val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
+                val id = backStackEntry.arguments?.getString("id") ?: ""
 
                 AddRechargeScreen(
                     mobileNumber = mobileNumber,
+
+                    id = id,
 
                     onSuccess = {
 

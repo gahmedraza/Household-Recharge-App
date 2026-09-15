@@ -7,6 +7,7 @@ object MobileNumberDtoMapper {
 
     fun map(mobileNumberEntity: MobileNumberEntity): MobileNumberDto {
         return MobileNumberDto(
+            id = mobileNumberEntity.id,
             mobileNumber = mobileNumberEntity.mobileNumber,
             accountId = mobileNumberEntity.accountId,
             householdId = mobileNumberEntity.householdId
