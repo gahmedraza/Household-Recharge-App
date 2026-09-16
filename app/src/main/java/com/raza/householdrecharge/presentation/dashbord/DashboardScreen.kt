@@ -122,8 +122,8 @@ fun DashboardScreen(
 
                         log(TAG2, rechargeList.toString())
                         var rechargeDto = rechargeList.find {
-                            log(TAG2, "rechargeId: ${it.id}, mobileNumberId: ${item.id}")
-                            it.id == item.id
+                            log(TAG2, "rechargeId: ${it.id}, lastRechargeId: ${item.lastRechargeId}")
+                            it.id == item.lastRechargeId
                         }
                         log(TAG2, rechargeDto.toString())
 

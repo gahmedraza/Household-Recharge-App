@@ -61,6 +61,20 @@ class MobileNumberRepository @Inject constructor(
         rechargeId: String
     ): Result<Boolean, String> {
 
-        return mobileNumberRemoteDataSource.updateMobileNumber(mobileNumberId, rechargeId)
+        val result = mobileNumberRemoteDataSource.updateMobileNumber(mobileNumberId, rechargeId)
+
+        if(result is Result.Failure) {
+            return Result.Failure(result.error.cleanString())
+        }
+
+        val isSuccess = (result as Result.Success).data
+
+        if(!isSuccess) {
+            return Result.Failure("failure")
+        }
+
+        mobileNumberDao.updateMobileNumber(mobileNumberId, rechargeId)
+
+        return Result.Success(true)
     }
 }

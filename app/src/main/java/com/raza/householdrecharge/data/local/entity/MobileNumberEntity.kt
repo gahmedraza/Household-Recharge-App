@@ -9,5 +9,6 @@ data class MobileNumberEntity(
     val id: String = "",
     var mobileNumber: Long = 0,
     var accountId: String = "",
-    var householdId: String = ""
+    var householdId: String = "",
+    var lastRechargeId: String = ""
 )

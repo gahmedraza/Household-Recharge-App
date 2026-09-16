@@ -10,7 +10,8 @@ object MobileNumberDtoMapper {
             id = mobileNumberEntity.id,
             mobileNumber = mobileNumberEntity.mobileNumber,
             accountId = mobileNumberEntity.accountId,
-            householdId = mobileNumberEntity.householdId
+            householdId = mobileNumberEntity.householdId,
+            lastRechargeId = mobileNumberEntity.lastRechargeId
         )
     }
 

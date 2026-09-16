@@ -22,6 +22,20 @@ class MobileNumberRemoteDataSource @Inject constructor(
         try {
 
             val documentReference = firestore
+                .collection(HouseholdCollection.MobileNumbers.description)
+                .document()
+
+            val mobileNumberId = documentReference.id
+
+            mobileNumberDto.id = mobileNumberId
+
+            documentReference
+                .set(mobileNumberDto)
+                .await()
+
+            result = Result.Success(mobileNumberDto)
+
+            /*val documentReference = firestore
 
                 .collection(HouseholdCollection.MobileNumbers.description)
                 .add(mobileNumberDto)
@@ -34,7 +48,7 @@ class MobileNumberRemoteDataSource @Inject constructor(
                 id = mobileNumberId
             )
 
-            result = Result.Success(newMobileNumberDto)
+            result = Result.Success(newMobileNumberDto)*/
 
         } catch (e: Exception) {
 

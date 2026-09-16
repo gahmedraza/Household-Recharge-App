@@ -16,4 +16,7 @@ interface MobileNumberDao {
 
     @Query("select * from mobile_numbers")
     fun observeMobileNumbers(): Flow<List<MobileNumberEntity>>
+
+    @Query("update mobile_numbers set lastRechargeId = :lastRechargeId where id = :id")
+    fun updateMobileNumber(id: String, lastRechargeId: String)
 }
