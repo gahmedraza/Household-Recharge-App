@@ -12,6 +12,7 @@ import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class AddRechargeViewModel @Inject constructor(
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             //
             isLoading = true
 

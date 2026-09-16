@@ -41,12 +41,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.core.logging.log
-import com.raza.householdrecharge.presentation.components.RechargeStatusIndicator
+import com.raza.householdrecharge.presentation.components.ActivePlanIndicator
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.presentation.components.ExpiredPlanIndicator
 import com.raza.householdrecharge.presentation.components.getPrintableDate
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
+import com.raza.householdrecharge.presentation.theme.Red66
 
 const val TAG2 = "Dashboard"
 
@@ -251,17 +253,53 @@ fun DashboardListItemCard(
 
             Row {
                 Column {
+                    val millisPerDay = 24*60*60*1000L
+                    val currentMillis = System.currentTimeMillis()
+                    val expiryMillis = recharge.expiryDate
+                    val daysToExpiry = (expiryMillis - currentMillis + millisPerDay - 1) / millisPerDay
+                    var isActive: Boolean
+                    var activeText: String
+                    var expiryInfoText: String
+
+                    if(daysToExpiry < 0) {
+                        //expired
+                        isActive = false
+                        activeText = "Plan Expired"
+                        expiryInfoText = "Expired on ${getPrintableDate(recharge.expiryDate.toString())}"
+                    } else {
+
+                        isActive = true
+                        activeText = "Plan Active"
+                        expiryInfoText = "Expires in $daysToExpiry days"
+                    }
+
                     Row {
-                        RechargeStatusIndicator(
-                            modifier = Modifier.align(
-                                alignment = Alignment.CenterVertically
+
+                        if(isActive) {
+                            ActivePlanIndicator(
+                                modifier = Modifier.align(
+                                    alignment = Alignment.CenterVertically
+                                )
                             )
-                        )
+
+                        } else {
+                            ExpiredPlanIndicator(
+                                modifier = Modifier.align(
+                                    alignment = Alignment.CenterVertically
+                                )
+                            )
+                        }
 
                         Spacer(modifier = Modifier.width(4.dp))
 
                         Text(
-                            text = "Plan Active",
+                            //text = "Plan Active",
+                            text = activeText,
+                            color = if (isActive) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                Red66
+                            },
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
@@ -269,8 +307,14 @@ fun DashboardListItemCard(
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Text(
-                        text = "Expires in 24 days",
-                        style = MaterialTheme.typography.bodyLarge
+                        //text = "Expires in 24 days",
+                        text = expiryInfoText,
+                        color = if (isActive) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            Red66
+                        },
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
 

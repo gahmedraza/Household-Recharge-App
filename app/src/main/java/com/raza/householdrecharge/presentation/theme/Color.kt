@@ -17,3 +17,5 @@ val DarkLogoColor = Color(0xFF2DD4BF)
 // Light theme
 val LightBackgroundColor = Color(0xFFF8FAFC)
 val LightLogoColor = Color(0xFF0F766E)
+
+val Red66 = Color(0xFFFF6666)

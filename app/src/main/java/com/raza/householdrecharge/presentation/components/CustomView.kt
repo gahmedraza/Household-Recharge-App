@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.raza.householdrecharge.presentation.theme.Red66
 
 @Composable
 fun LargeTitleText(modifier: Modifier = Modifier,
@@ -155,12 +156,24 @@ fun AppCard(
 }
 
 @Composable
-fun RechargeStatusIndicator(modifier: Modifier) {
+fun ActivePlanIndicator(modifier: Modifier) {
     Box(
         modifier = modifier
             .size(8.dp)
             .background(
                 color = MaterialTheme.colorScheme.primary,
+                shape = CircleShape
+            )
+    )
+}
+
+@Composable
+fun ExpiredPlanIndicator(modifier: Modifier) {
+    Box(
+        modifier = modifier
+            .size(8.dp)
+            .background(
+                color = Red66,
                 shape = CircleShape
             )
     )

@@ -56,15 +56,31 @@ fun SettingScreen(
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
 
-            Text(
+            /*Text(
                 text = "Household",
                 modifier = cellModifier,
                 style = MaterialTheme.typography.titleLarge
             )
 
-            HorizontalDivider(modifier = Modifier.height(1.dp))
+            HorizontalDivider(modifier = Modifier.height(1.dp))*/
 
-            Column(modifier = Modifier.padding(start = 10.dp)) {
+            //
+            Text(
+                text = "Invitations",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onInvitation()
+                    }
+                    .padding(cellPadding),
+
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            HorizontalDivider(modifier = Modifier.height(1.dp))
+            //
+
+            /*Column(modifier = Modifier.padding(start = 10.dp)) {
                 Text(
                     text = "Add Household",
                     modifier = Modifier
@@ -106,7 +122,7 @@ fun SettingScreen(
                 )
 
                 HorizontalDivider(modifier = Modifier.height(1.dp))
-            }
+            }*/
 
             Text(
                 text = "SignOut",
