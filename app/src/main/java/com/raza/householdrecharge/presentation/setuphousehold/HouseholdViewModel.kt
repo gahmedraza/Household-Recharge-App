@@ -117,6 +117,11 @@ class HouseholdViewModel @Inject constructor(
 
             if(result is Result.Success) {
                 isLoading = false
+
+                val findHouseholdResponse = result.data
+                sessionManager.saveHouseholdId(findHouseholdResponse?.householdId.cleanString())
+                sessionManager.saveHouseholdName(findHouseholdResponse?.householdName.cleanString())
+
                 onSuccess(result.data)
 
             } else {

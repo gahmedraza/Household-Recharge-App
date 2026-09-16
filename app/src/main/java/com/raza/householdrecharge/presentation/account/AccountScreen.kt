@@ -89,13 +89,13 @@ fun AccountScreen(
                     Spacer(modifier = Modifier.height(20.dp))
 
                     Text(
-                        text = viewModel.profileHousehold
+                        text = "Household Name"
                     )
 
                     Spacer(modifier = Modifier.height(5.dp))
 
                     Text(
-                        text = "Household Name"
+                        text = viewModel.profileHousehold
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
