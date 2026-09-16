@@ -25,7 +25,8 @@ fun SettingScreen(
     onAddMember: () -> Unit = {},
     onAddHousehold: () -> Unit = {},
     onSignOut: () -> Unit = {},
-    onInvitation: () -> Unit = {}
+    onInvitation: () -> Unit = {},
+    onAccount: () -> Unit = {}
 ) {
 
     Scaffold(
@@ -50,7 +51,13 @@ fun SettingScreen(
 
             Text(
                 text = "Account",
-                modifier = cellModifier,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onAccount()
+                    }
+                    .padding(cellPadding),
+
                 style = MaterialTheme.typography.titleLarge
             )
 

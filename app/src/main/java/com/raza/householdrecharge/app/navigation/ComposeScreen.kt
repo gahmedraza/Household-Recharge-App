@@ -18,6 +18,7 @@ enum class ComposeScreen(val description: String) {
     CreateHousehold("CreateHousehold"),
     FindHousehold("FindHousehold"),
     ConfirmHousehold("ConfirmHousehold"),
-    OnboardingNavigation("V2Navigation")
+    OnboardingNavigation("V2Navigation"),
+    Account("Account")
 }
 

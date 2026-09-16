@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.raza.householdrecharge.presentation.account.AccountScreen
 import com.raza.householdrecharge.presentation.addmember.AddMemberScreen
 import com.raza.householdrecharge.presentation.addrecharge.AddRechargeScreen
 import com.raza.householdrecharge.presentation.dashbord.DashboardScreen
@@ -106,8 +107,15 @@ fun DashboardNavigationRoot() {
                     },
                     onInvitation = {
                         navController.navigate(ComposeScreen.Invitation.description)
+                    },
+                    onAccount = {
+                        navController.navigate(ComposeScreen.Account.description)
                     }
                 )
+            }
+
+            composable(ComposeScreen.Account.description) {
+                AccountScreen()
             }
 
             composable(ComposeScreen.OnboardingNavigation.description) {
