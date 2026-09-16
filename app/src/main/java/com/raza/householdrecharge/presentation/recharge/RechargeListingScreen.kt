@@ -174,7 +174,8 @@ fun RechargeListItemCard(
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
-                    text = "2GB per day for 84 days".uppercase(),
+                    //text = "2GB per day for 84 days".uppercase(),
+                    text = item.rechargeDescription.uppercase(),
                     letterSpacing = 2.sp,
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary

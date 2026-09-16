@@ -12,6 +12,7 @@ import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -60,6 +61,11 @@ class RechargeListingViewModel @Inject constructor(
             }
 
             rechargeRepository.getAllRecharges()
+
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            rechargeRepository.queryDatabase()
         }
     }
 }

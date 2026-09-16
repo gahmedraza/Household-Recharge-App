@@ -53,7 +53,14 @@ class RechargeRepository @Inject constructor(
 
         val rechargeEntityList = RechargeEntityMapper.map(rechargeList)
 
+        log("RechargeEntityList2", rechargeEntityList.toString())
+
         rechargeDao.upsertRecharges(rechargeEntityList)
+    }
+
+    suspend fun queryDatabase() {
+        val rechargeEntityList2 = rechargeDao.getAllRecharges()
+        log("RechargeEntityList", rechargeEntityList2.toString())
     }
 
 }

@@ -22,6 +22,23 @@ class RechargeRemoteDataSource @Inject constructor(
             val documentReference = firestore
 
                 .collection("recharges")
+                .document()
+
+            val rechargeId = documentReference.id
+
+            val rechargeDto = rechargeDto.copy(
+                id = rechargeId
+            )
+
+            documentReference
+                .set(rechargeDto)
+                .await()
+
+            result = Result.Success(rechargeDto)
+
+            /*val documentReference = firestore
+
+                .collection("recharges")
                 .add(rechargeDto)
 
                 .await()
@@ -32,7 +49,7 @@ class RechargeRemoteDataSource @Inject constructor(
                 id = rechargeId
             )
 
-            result = Result.Success(newRechargeDto)
+            result = Result.Success(newRechargeDto)*/
 
 
         } catch (e: Exception) {

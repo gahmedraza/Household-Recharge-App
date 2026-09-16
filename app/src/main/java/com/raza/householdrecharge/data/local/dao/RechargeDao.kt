@@ -17,4 +17,7 @@ interface RechargeDao {
 
     @Query("select * from recharges")
     fun observeRecharges(): Flow<List<RechargeEntity>>
+
+    @Query("select * from recharges")
+    fun getAllRecharges(): List<RechargeEntity>
 }
