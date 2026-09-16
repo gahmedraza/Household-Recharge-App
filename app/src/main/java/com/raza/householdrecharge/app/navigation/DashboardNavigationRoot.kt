@@ -125,9 +125,15 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.AddInvitation.description) {
                 AddInvitationScreen(
-                    onInvitationVerified = { invitationCode ->
+                    /*onInvitationVerified = { invitationCode ->
 
                         navController.navigate(ComposeScreen.ConfirmHousehold.description)
+                    }*/
+
+                    onInvitationCreated = {
+
+                        //navController.navigate(ComposeScreen.Invitation.description)
+                        navController.popBackStack()
                     }
                 )
             }
