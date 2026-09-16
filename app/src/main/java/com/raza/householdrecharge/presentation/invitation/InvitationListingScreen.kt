@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeTitleText
 import com.raza.householdrecharge.presentation.components.TitleBar
@@ -79,6 +80,10 @@ fun InvitationListingScreen(
 
                 InvitationListItemCard(modifier, invitation)
             }
+
+            item {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }
@@ -89,19 +94,14 @@ fun InvitationListItemCard(
     invitation: Invitation
 ) {
 
-    Card(
+    AppCard(
         modifier = Modifier
             .padding(
                 top = 8.dp,
                 bottom = 8.dp,
                 start = 20.dp,
                 end = 20.dp
-            ),
-        elevation = CardDefaults
-            .cardElevation(
-                defaultElevation = 2.dp
-            ),
-        shape = RoundedCornerShape(2.dp)
+            )
     ) {
 
         Column(
@@ -137,7 +137,9 @@ fun InvitationListItemCard(
                 Spacer(modifier = Modifier.weight(1f))
 
                 LargeBodyText(
-                    text = invitation.dateCreated
+                    text = getPrintableDate(
+                        invitation.createdAt.toString()
+                    )
                 )
             }
 
@@ -152,14 +154,14 @@ fun InvitationListItemCard(
 
                 LargeBodyText(
                     text = getPrintableDate(
-                        invitation.dateExpiresMillis.toString()
+                        invitation.expiresAt.toString()
                     )
                 )
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(modifier = Modifier.fillMaxWidth()) {
+            /*Row(modifier = Modifier.fillMaxWidth()) {
 
                 OutlinedButton(
                     onClick = {},
@@ -176,7 +178,7 @@ fun InvitationListItemCard(
                 ) {
                     Text("Share")
                 }
-            }
+            }*/
         }
     }
 }
@@ -213,5 +215,10 @@ data class Invitation(
     val dateCreatedMillis: Long = 0,
     val dateExpires: String = "",
     val dateExpiresMillis: Long = 0,
-    val status: String = ""
+    val status: String = "",
+    //
+    val createdAt: String = "",
+    val createdBy: String = "",
+    val expiresAt: String = "",
+    //
 )

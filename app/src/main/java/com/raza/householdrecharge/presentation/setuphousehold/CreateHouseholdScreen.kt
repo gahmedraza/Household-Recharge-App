@@ -2,6 +2,7 @@ package com.raza.householdrecharge.presentation.setuphousehold
 
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -17,13 +19,22 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
+import kotlinx.coroutines.launch
 
 @Composable
 fun CreateHouseholdScreen(
@@ -31,6 +42,11 @@ fun CreateHouseholdScreen(
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
+
+    var shouldProceed by rememberSaveable { mutableStateOf(false) }
+    var signinStatus by rememberSaveable { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+
     Scaffold { paddingValues ->
 
         Box(
@@ -82,19 +98,10 @@ fun CreateHouseholdScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                if (viewModel.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .size(24.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(20.dp))
-
                 OutlinedButton(
                     modifier = modifier,
 
-                    enabled = !viewModel.isLoading,
+                    enabled = !shouldProceed,
 
                     onClick = {
 
@@ -103,10 +110,16 @@ fun CreateHouseholdScreen(
 
                             onSuccess = { householdId ->
                                 Log.d("TAG", "success: $householdId")
-                                onSuccess()
+
+                                signinStatus = "household created"
+                                shouldProceed = true
                             },
                             onFailure = { error ->
                                 Log.d("TAG", "failure: $error")
+
+                                signinStatus = "household creation failure\n$error"
+                                shouldProceed = false
+
                                 onFailure()
                             }
                         )
@@ -114,6 +127,52 @@ fun CreateHouseholdScreen(
 
                     Text("Add")
                 }
+
+                //
+                Spacer(modifier = Modifier.padding(10.dp))
+
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+
+                    enabled = shouldProceed,
+
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if(shouldProceed) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant
+                        }
+                    ),
+
+                    onClick = {
+                        onSuccess()
+                    }
+                ) {
+                    Text(stringResource(R.string.proceed))
+                }
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.padding(20.dp))
+
+                Text(
+                    text = signinStatus,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (shouldProceed) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    },
+                    textAlign = TextAlign.Center
+                )
+                //
             }
         }
     }
