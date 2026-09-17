@@ -3,7 +3,7 @@ package com.raza.householdrecharge.data.repository
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.datasource.AccountRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.AccountDto
-import com.raza.householdrecharge.data.repository.account.AccountError
+import com.raza.householdrecharge.domain.error.AccountError
 import javax.inject.Inject
 
 //TODO Add Dao entries

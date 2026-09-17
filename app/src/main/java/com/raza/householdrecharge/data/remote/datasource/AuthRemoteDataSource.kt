@@ -5,7 +5,7 @@ import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.UserDto
-import com.raza.householdrecharge.data.repository.account.AuthError
+import com.raza.householdrecharge.domain.error.AuthError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject

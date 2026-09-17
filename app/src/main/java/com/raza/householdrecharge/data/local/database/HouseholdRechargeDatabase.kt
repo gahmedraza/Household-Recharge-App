@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.app
+package com.raza.householdrecharge.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

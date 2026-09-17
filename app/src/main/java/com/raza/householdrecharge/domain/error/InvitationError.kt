@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.data.repository.account
+package com.raza.householdrecharge.domain.error
 
 sealed class InvitationError {
     data object InvitationCodeNotFound: InvitationError() //"invitation code not found"

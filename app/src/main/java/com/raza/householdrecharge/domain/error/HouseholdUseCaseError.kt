@@ -1,8 +1,5 @@
 package com.raza.householdrecharge.domain.error
 
-import com.raza.householdrecharge.data.repository.account.HouseholdError
-import com.raza.householdrecharge.data.repository.account.InvitationError
-
 sealed class HouseholdUseCaseError {
     data class Invitation(
         val error: InvitationError

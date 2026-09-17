@@ -2,9 +2,9 @@ package com.raza.householdrecharge.app.di
 
 import android.content.Context
 import androidx.room.Room
-import com.raza.householdrecharge.app.HouseholdRechargeDatabase
 import com.raza.householdrecharge.data.local.dao.MobileNumberDao
 import com.raza.householdrecharge.data.local.dao.RechargeDao
+import com.raza.householdrecharge.data.local.database.HouseholdRechargeDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

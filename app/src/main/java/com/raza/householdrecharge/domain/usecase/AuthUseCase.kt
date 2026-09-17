@@ -8,7 +8,7 @@ import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.repository.account.AccountError
+import com.raza.householdrecharge.domain.error.AccountError
 import javax.inject.Inject
 
 class AuthUseCase @Inject constructor(

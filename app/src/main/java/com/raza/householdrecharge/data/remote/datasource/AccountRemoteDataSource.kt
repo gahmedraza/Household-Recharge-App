@@ -7,7 +7,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.AccountDto
-import com.raza.householdrecharge.data.repository.account.AccountError
+import com.raza.householdrecharge.domain.error.AccountError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 

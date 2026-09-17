@@ -8,7 +8,7 @@ import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.repository.account.AccountError
+import com.raza.householdrecharge.domain.error.AccountError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

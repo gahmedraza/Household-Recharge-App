@@ -10,11 +10,11 @@ import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
-import com.raza.householdrecharge.data.repository.account.HouseholdError
-import com.raza.householdrecharge.data.repository.account.InvitationError
-import com.raza.householdrecharge.data.repository.account.InvitationStatus
+import com.raza.householdrecharge.domain.error.HouseholdError
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
+import com.raza.householdrecharge.domain.error.InvitationError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
+import com.raza.householdrecharge.domain.model.InvitationStatus
 import javax.inject.Inject
 
 class HouseholdUseCase @Inject constructor(
@@ -185,7 +185,7 @@ class HouseholdUseCase @Inject constructor(
             return Result.Failure(InvitationError.InvitationCodeNotFound)
         }
 
-        if(invitation.status != InvitationStatus.PENDING) {
+        if(invitation.status != InvitationStatus.PENDING.description) {
             return Result.Failure(InvitationError.InvitationAlreadyUsed)
         }
 

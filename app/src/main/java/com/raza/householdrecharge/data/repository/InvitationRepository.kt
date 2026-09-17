@@ -3,7 +3,7 @@ package com.raza.householdrecharge.data.repository
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.datasource.InvitationRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.data.repository.account.InvitationError
+import com.raza.householdrecharge.domain.error.InvitationError
 import com.raza.householdrecharge.presentation.invitation.Invitation
 import javax.inject.Inject
 

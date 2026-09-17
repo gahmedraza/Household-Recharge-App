@@ -4,7 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
-import com.raza.householdrecharge.data.repository.account.HouseholdError
+import com.raza.householdrecharge.domain.error.HouseholdError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject

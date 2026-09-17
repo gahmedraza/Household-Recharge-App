@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.data.repository.account
+package com.raza.householdrecharge.domain.error
 
 sealed class HouseholdError {
     data object NoHouseholdFound: HouseholdError()
