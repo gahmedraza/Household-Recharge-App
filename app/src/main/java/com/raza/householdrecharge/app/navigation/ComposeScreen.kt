@@ -9,7 +9,6 @@ enum class ComposeScreen(val description: String) {
 
     Invitation("Invitation"),
     AddInvitation("addInvitation"),
-    AddMember("AddMember"),
     AddRecharge("AddRecharge"),
     AddMobileNumber("AddMobileNumber"),
     RechargeListing("RechargeListing"),

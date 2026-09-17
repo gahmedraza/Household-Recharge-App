@@ -20,7 +20,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.raza.householdrecharge.presentation.account.AccountScreen
-import com.raza.householdrecharge.presentation.addmember.AddMemberScreen
 import com.raza.householdrecharge.presentation.addrecharge.AddRechargeScreen
 import com.raza.householdrecharge.presentation.dashbord.DashboardScreen
 import com.raza.householdrecharge.presentation.invitation.AddInvitationScreen
@@ -95,7 +94,7 @@ fun DashboardNavigationRoot() {
             composable(ComposeScreen.Setting.description) {
                 SettingScreen(
                     onAddMember = {
-                        navController.navigate(ComposeScreen.AddMember.description)
+
                     },
 
                     onAddHousehold = {
@@ -142,19 +141,6 @@ fun DashboardNavigationRoot() {
 
                         //navController.navigate(ComposeScreen.Invitation.description)
                         navController.popBackStack()
-                    }
-                )
-            }
-
-            composable(ComposeScreen.AddMember.description) {
-                AddMemberScreen(
-                    onSuccess = {
-
-                        navController.navigate(ComposeScreen.Setting.description)
-                    },
-
-                    onFailure = {
-
                     }
                 )
             }
