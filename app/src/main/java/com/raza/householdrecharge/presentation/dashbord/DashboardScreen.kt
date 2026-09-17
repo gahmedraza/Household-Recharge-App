@@ -59,6 +59,7 @@ fun DashboardScreen(
     onAddMobileNumber: () -> Unit = {}
 ) {
 
+    var dashboardUIState = viewModel.dashboardUIState
     val mobileNumberList by viewModel.mobileNumberList.collectAsStateWithLifecycle()
     val rechargeList by viewModel.rechargeList.collectAsStateWithLifecycle()
 
@@ -94,7 +95,7 @@ fun DashboardScreen(
         ) {
             LazyColumn {
 
-                if(viewModel.isLoading) {
+                if(dashboardUIState.isLoading) {
 
                     item {
                         CircularProgressIndicator(

@@ -3,6 +3,7 @@ package com.raza.householdrecharge.presentation.setuphousehold
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.core.result.Result
@@ -12,7 +13,6 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
-import com.raza.householdrecharge.presentation.common.BaseViewModel
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
@@ -23,9 +23,9 @@ import javax.inject.Inject
 class HouseholdViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase
-) : BaseViewModel() {
+) : ViewModel() {
 
-    var invitationCode by mutableStateOf("")
+    var householdUIState by mutableStateOf(HouseholdUIState())
 
     fun onAddHousehold(
         householdName: String,
@@ -33,7 +33,7 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
-            isLoading = true
+            householdUIState.isLoading = true
 
             val userId = sessionManager.authId.first()
             val accountId = sessionManager.accountId.first()
@@ -41,7 +41,7 @@ class HouseholdViewModel @Inject constructor(
             val userNotFound = userId.isEmpty()
 
             if (userNotFound) {
-                isLoading = false
+                householdUIState.isLoading = false
                 onFailure("user not found")
                 return@launch
             }
@@ -72,14 +72,14 @@ class HouseholdViewModel @Inject constructor(
                         sessionManager.saveHouseholdName(householdName)
                         sessionManager.saveHouseholdId(householdId)
 
-                        isLoading = false
+                        householdUIState.isLoading = false
                         onSuccess(householdId)
                     }
                 }
 
                 is Result.Failure<String> -> {
 
-                    isLoading = false
+                    householdUIState.isLoading = false
                     onFailure(result.error)
                 }
             }
@@ -101,7 +101,7 @@ class HouseholdViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            isLoading = true
+            householdUIState.isLoading = true
 
             val authId = sessionManager.authId.first()
 
@@ -111,7 +111,7 @@ class HouseholdViewModel @Inject constructor(
             )
 
             if(result is Result.Success) {
-                isLoading = false
+                householdUIState.isLoading = false
 
                 val findHouseholdResponse = result.data
                 sessionManager.saveHouseholdId(findHouseholdResponse?.householdId.cleanString())
@@ -120,7 +120,7 @@ class HouseholdViewModel @Inject constructor(
                 onSuccess(result.data)
 
             } else {
-                isLoading = false
+                householdUIState.isLoading = false
                 val error = (result as Result.Failure).error
 
                 when(error) {
@@ -147,7 +147,7 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String) -> Unit
     ) {
         viewModelScope.launch {
-            isLoading = true
+            householdUIState.isLoading = true
 
             try {
 
@@ -167,14 +167,14 @@ class HouseholdViewModel @Inject constructor(
 
                     is Result.Success<String> -> {
 
-                        isLoading = false
+                        householdUIState.isLoading = false
 
                         onSuccess("you have been added to the household")
                     }
 
                     is Result.Failure<String> -> {
 
-                        isLoading = false
+                        householdUIState.isLoading = false
 
                         onFailure("unable to add you to the household")
                     }
@@ -182,7 +182,7 @@ class HouseholdViewModel @Inject constructor(
 
             } catch (e: Exception) {
 
-                isLoading = false
+                householdUIState.isLoading = false
                 onFailure("unable to join household")
 
             }

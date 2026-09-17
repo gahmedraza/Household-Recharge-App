@@ -42,6 +42,7 @@ fun AddMobileNumberScreen(
     onFailure: () -> Unit = {}
 ) {
 
+    var mobileNumberUIState = viewModel.mobileNumberUIState
     val modifier = Modifier.fillMaxWidth()
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
@@ -69,10 +70,10 @@ fun AddMobileNumberScreen(
                     },
 
                     onValueChange = {
-                        viewModel.mobileNumber2 = it
+                        mobileNumberUIState.mobileNumber = it
                     },
 
-                    value = viewModel.mobileNumber2,
+                    value = mobileNumberUIState.mobileNumber,
 
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
@@ -130,7 +131,7 @@ fun AddMobileNumberScreen(
 
                 Spacer(Modifier.height(40.dp))
 
-                if (viewModel.isLoading) {
+                if (mobileNumberUIState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)

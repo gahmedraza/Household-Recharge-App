@@ -43,7 +43,7 @@ fun AddRechargeScreen(
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-
+    var addRechargeUIState = viewModel.addRechargeUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
     val modifier = Modifier.fillMaxWidth()
@@ -118,10 +118,10 @@ fun AddRechargeScreen(
                     label = "Expiry Date",
 
                     onDateSelected = {
-                        viewModel.planExpiryDate = it.toString()
+                        addRechargeUIState.planExpiryDate = it.toString()
                     },
 
-                    value = viewModel.planExpiryDate,
+                    value = addRechargeUIState.planExpiryDate,
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -193,7 +193,7 @@ fun AddRechargeScreen(
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                if (viewModel.isLoading) {
+                if (addRechargeUIState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)

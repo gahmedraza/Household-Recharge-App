@@ -38,10 +38,12 @@ fun InvitationListingScreen(
     onAddInvitation: () -> Unit = {}
 ) {
 
+    var invitationUIState = viewModel.invitationUIState
+
     LaunchedEffect(Unit) {
         viewModel.fetchInvitationList(
             onSuccess = { invitationList ->
-                viewModel.invitationList = invitationList
+                invitationUIState.invitationList = invitationList
             },
             onFailure = {
 
@@ -76,7 +78,7 @@ fun InvitationListingScreen(
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
-            items(viewModel.invitationList) { invitation ->
+            items(invitationUIState.invitationList) { invitation ->
 
                 InvitationListItemCard(modifier, invitation)
             }

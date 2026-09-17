@@ -3,27 +3,25 @@ package com.raza.householdrecharge.presentation.invitation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.data.session.SessionManager
+import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.data.repository.InvitationRepository
+import com.raza.householdrecharge.data.session.SessionManager
+import com.raza.householdrecharge.domain.usecase.InvitationUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
-import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.domain.usecase.InvitationUseCase
-import com.raza.householdrecharge.presentation.common.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class InvitationViewModel @Inject constructor(
     val sessionManager: SessionManager,
     private val invitationUseCase: InvitationUseCase
-): BaseViewModel() {
+): ViewModel() {
 
-    var invitationCode by mutableStateOf("")
-    var invitationList by mutableStateOf(listOf<Invitation>())
+    var invitationUIState by mutableStateOf(InvitationUIState())
 
     fun createInvitation(
         code: String,
@@ -31,7 +29,7 @@ class InvitationViewModel @Inject constructor(
         onFailure: (String) -> Unit
     ) {
         viewModelScope.launch {
-            isLoading = true
+            invitationUIState.isLoading = true
 
             val invitation = InvitationDto(
                 code = code,
@@ -45,12 +43,12 @@ class InvitationViewModel @Inject constructor(
             invitationUseCase.createInvitationFacade(
                 invitation = invitation,
                 onSuccess = { data ->
-                    isLoading = false
+                    invitationUIState.isLoading = false
 
                     onSuccess(data)
                 },
                 onFailure = { error ->
-                    isLoading = false
+                    invitationUIState.isLoading = false
 
                     onFailure(error)
                 }
@@ -79,7 +77,7 @@ class InvitationViewModel @Inject constructor(
 
             when(invitationResult) {
                 is Result.Success<List<Invitation>> -> {
-                    this@InvitationViewModel.invitationList = invitationResult.data
+                    invitationUIState.invitationList = invitationResult.data
 
                     onSuccess(invitationResult.data)
                 }

@@ -1,5 +1,9 @@
 package com.raza.householdrecharge.presentation.auth
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.data.remote.dto.AuthDto
@@ -16,15 +20,18 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val authUseCase: AuthUseCase
-) : AuthViewModel(sessionManager) {
+) : ViewModel() {
+
+    var registerUIState by mutableStateOf(RegisterUIState())
+
     fun registerAndAddAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
-            isLoading = true
+            registerUIState.isLoading = true
 
             val authDto = AuthDto(
-                accountName = accountName,
-                mobileNumber = "$mobileNumber@householdrecharge.local",
-                password = password
+                accountName = registerUIState.accountName,
+                mobileNumber = "${registerUIState.mobileNumber}@householdrecharge.local",
+                password = registerUIState.password
             )
 
             val result = authUseCase.registerAndCreateAccount(
@@ -39,17 +46,17 @@ class RegisterViewModel @Inject constructor(
                     viewModelScope.launch {
                         sessionManager.saveUserId(onBoardingDto.authId.cleanString())
                         sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
-                        sessionManager.saveMobileNumber(mobileNumber)
+                        sessionManager.saveMobileNumber(registerUIState.mobileNumber)
                     }
 
-                    authId = onBoardingDto.authId.cleanString()
-                    isLoading = false
+                    registerUIState.authId = onBoardingDto.authId.cleanString()
+                    registerUIState.isLoading = false
                     onSuccess(onBoardingDto.authId.cleanString())
                 }
 
                 is Result.Failure<AccountError> -> {
 
-                    isLoading = false
+                    registerUIState.isLoading = false
                     onFailure(result.error.toString())//todo modify
                 }
             }

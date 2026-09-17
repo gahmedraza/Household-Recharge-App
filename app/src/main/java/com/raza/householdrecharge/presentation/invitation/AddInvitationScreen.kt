@@ -36,7 +36,7 @@ fun AddInvitationScreen(
     viewModel: InvitationViewModel = hiltViewModel(),
     onInvitationCreated: () -> Unit = {}
 ) {
-
+    var invitationUIState = viewModel.invitationUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var status by rememberSaveable { mutableStateOf("") }
 
@@ -95,7 +95,7 @@ fun AddInvitationScreen(
                             end = 20.dp
                         )
                         .align(Alignment.CenterHorizontally),
-                    text = viewModel.invitationCode,
+                    text = invitationUIState.invitationCode,
                     color = MaterialTheme.colorScheme.primary
                 )
 
@@ -111,10 +111,10 @@ fun AddInvitationScreen(
 
                     onClick = {
 
-                        viewModel.invitationCode = viewModel.generateInvitationCode()
+                        invitationUIState.invitationCode = viewModel.generateInvitationCode()
 
                         viewModel.createInvitation(
-                            code = viewModel.invitationCode,
+                            code = invitationUIState.invitationCode,
                             onSuccess = { data ->
 
                                 status = data
@@ -160,7 +160,7 @@ fun AddInvitationScreen(
                         .height(50.dp)
                 )
 
-                if (viewModel.isLoading) {
+                if (invitationUIState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)
@@ -168,7 +168,7 @@ fun AddInvitationScreen(
                     )
                 }
 
-                if(!viewModel.isLoading) {
+                if(!invitationUIState.isLoading) {
                     LargeBodyText(
                         text = status,
                         modifier = Modifier

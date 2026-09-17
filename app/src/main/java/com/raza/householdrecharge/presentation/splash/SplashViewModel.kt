@@ -1,12 +1,11 @@
 package com.raza.householdrecharge.presentation.splash
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.repository.AuthRepository
+import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
-import com.raza.householdrecharge.presentation.auth.AuthViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +15,7 @@ class SplashViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase,
     private val authUseCase: AuthUseCase
-) : AuthViewModel(sessionManager) {
+): ViewModel() {
 
     suspend fun getStartDestination(
     ): SplashDestination {

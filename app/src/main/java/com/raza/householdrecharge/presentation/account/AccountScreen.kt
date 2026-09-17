@@ -32,6 +32,8 @@ fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel()
 ) {
 
+    var accountUIState = viewModel.accountUIState
+
     LaunchedEffect(Unit) {
         viewModel.getAccount()
     }

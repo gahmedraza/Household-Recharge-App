@@ -46,10 +46,7 @@ fun LoginScreen(
     onSignInCompletion: () -> Unit = {},
     onBoardingNotComplete: () -> Unit = {}
 ) {
-    var mobileNumber by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
-    var mobileNumberError by rememberSaveable { mutableStateOf("") }
-    var passwordError by rememberSaveable { mutableStateOf("") }
+    var loginUIState = viewModel.loginUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -84,21 +81,21 @@ fun LoginScreen(
                     ),
 
                     onValueChange = {
-                        mobileNumber = it.trim()
-                        mobileNumberError = ""
+                        loginUIState.mobileNumber = it.trim()
+                        loginUIState.mobileNumberError = ""
                     },
 
                     label = {
                         Text(stringResource(R.string.mobile_number))
                     },
 
-                    value = mobileNumber,
+                    value = loginUIState.mobileNumber,
 
-                    isError = mobileNumberError.isNotEmpty(),
+                    isError = loginUIState.mobileNumberError.isNotEmpty(),
 
                     supportingText = {
-                        if(mobileNumberError.isNotEmpty()) {
-                            Text(mobileNumberError)
+                        if(loginUIState.mobileNumberError.isNotEmpty()) {
+                            Text(loginUIState.mobileNumberError)
                         }
                     }
                 )
@@ -109,21 +106,21 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        password = it.trim()
-                        passwordError = ""
+                        loginUIState.password = it.trim()
+                        loginUIState.passwordError = ""
                     },
 
                     label = {
                         Text(stringResource(R.string.password))
                     },
 
-                    value = password,
+                    value = loginUIState.password,
 
-                    isError = passwordError.isNotEmpty(),
+                    isError = loginUIState.passwordError.isNotEmpty(),
 
                     supportingText = {
-                        if(passwordError.isNotEmpty()) {
-                            Text(passwordError)
+                        if(loginUIState.passwordError.isNotEmpty()) {
+                            Text(loginUIState.passwordError)
                         }
                     }
                 )
@@ -138,13 +135,13 @@ fun LoginScreen(
                     onClick = {
 
                         //validate the input fields
-                        mobileNumberError = MobileNumberValidator.validateMobileNumber(mobileNumber, mobileNumberError)
+                        loginUIState.mobileNumberError = MobileNumberValidator.validateMobileNumber(loginUIState.mobileNumber, loginUIState.mobileNumberError)
 
-                        if(password.length < 8) {
-                            passwordError = "Password must contain at least 8 characters"
+                        if(loginUIState.password.length < 8) {
+                            loginUIState.passwordError = "Password must contain at least 8 characters"
                         }
 
-                        if(mobileNumberError.isNotEmpty()||passwordError.isNotEmpty()) {
+                        if(loginUIState.mobileNumberError.isNotEmpty()||loginUIState.passwordError.isNotEmpty()) {
                             return@OutlinedButton
                         }
 
@@ -152,8 +149,8 @@ fun LoginScreen(
                         viewModel.login2(
                             authDto = AuthDto(
                                 accountName = null,
-                                mobileNumber = mobileNumber,
-                                password = password
+                                mobileNumber = loginUIState.mobileNumber,
+                                password = loginUIState.password
                             ),
 
                             onSuccess = { userId ->
@@ -216,7 +213,7 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                if (viewModel.isLoading) {
+                if (loginUIState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)

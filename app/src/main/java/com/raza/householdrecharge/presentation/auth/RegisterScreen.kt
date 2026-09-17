@@ -39,6 +39,7 @@ fun RegisterScreen(
     onSuccess: () -> Unit = {},
     onSignIn: () -> Unit = {}
 ) {
+    var registerUIState = viewModel.registerUIState
     var shouldProceed by remember { mutableStateOf(false) }
     var signupStatus by remember { mutableStateOf("") }
 
@@ -68,14 +69,14 @@ fun RegisterScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        viewModel.accountName = it.trim()
+                        registerUIState.accountName = it.trim()
                     },
 
                     label = {
                         Text("Name")
                     },
 
-                    value = viewModel.accountName
+                    value = registerUIState.accountName
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -88,14 +89,14 @@ fun RegisterScreen(
                     ),
 
                     onValueChange = {
-                        viewModel.mobileNumber = it.trim()
+                        registerUIState.mobileNumber = it.trim()
                     },
 
                     label = {
                         Text("Mobile Number")
                     },
 
-                    value = viewModel.mobileNumber
+                    value = registerUIState.mobileNumber
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -104,14 +105,14 @@ fun RegisterScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        viewModel.password = it.trim()
+                        registerUIState.password = it.trim()
                     },
 
                     label = {
                         Text("Password")
                     },
 
-                    value = viewModel.password
+                    value = registerUIState.password
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -178,7 +179,7 @@ fun RegisterScreen(
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                if (viewModel.isLoading) {
+                if (registerUIState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)

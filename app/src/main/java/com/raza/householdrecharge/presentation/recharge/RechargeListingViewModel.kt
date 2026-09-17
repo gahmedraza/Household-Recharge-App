@@ -1,20 +1,19 @@
 package com.raza.householdrecharge.presentation.recharge
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.data.session.SessionManager
-import com.raza.householdrecharge.data.repository.RechargeRepository
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
+import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
-import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,7 +21,7 @@ class RechargeListingViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeUseCase: RechargeUseCase,
     private val validator: RechargeValidator
-) : BaseViewModel() {
+) : ViewModel() {
 
     var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
 

@@ -43,6 +43,7 @@ fun ConfirmHouseholdScreen(
     onFailure:() -> Unit = {}
 ) {
 
+    var householdUIState = viewModel.householdUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
 
@@ -165,7 +166,7 @@ fun ConfirmHouseholdScreen(
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                if (viewModel.isLoading) {
+                if (householdUIState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)

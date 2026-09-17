@@ -1,19 +1,20 @@
 package com.raza.householdrecharge.presentation.dashbord
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.remote.mapper.MobileNumberDtoMapper
 import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
-import com.raza.householdrecharge.data.repository.RechargeRepository
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,7 +22,9 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val mobileNumberRepository: MobileNumberRepository,
     private val rechargeUseCase: RechargeUseCase
-) : BaseViewModel() {
+) : ViewModel() {
+
+    var dashboardUIState by mutableStateOf(DashboardUIState())
     val mobileNumberList = MutableStateFlow<List<MobileNumberDto>>(emptyList())
     var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
 

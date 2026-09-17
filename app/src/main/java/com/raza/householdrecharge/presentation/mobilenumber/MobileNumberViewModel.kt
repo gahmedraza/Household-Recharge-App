@@ -3,14 +3,13 @@ package com.raza.householdrecharge.presentation.mobilenumber
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
-import com.raza.householdrecharge.data.repository.MobileNumberRepository
+import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.validator.MobileNumberValidator
-import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -21,33 +20,33 @@ class MobileNumberViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val mobileNumberUseCase: MobileNumberUseCase,
     private val validator: MobileNumberValidator
-) : BaseViewModel() {
+) : ViewModel() {
 
-    var mobileNumber2 by mutableStateOf("")
+    var mobileNumberUIState by mutableStateOf(MobileNumberUIState())
 
     fun addMobileNumber(
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
-            isLoading = true
+            mobileNumberUIState.isLoading = true
             //
             val mobileNumberDto = MobileNumberDtoFactory(
                 sessionManager = sessionManager
             ).create(
-                mobileNumber = mobileNumber2.toLong()
+                mobileNumber = mobileNumberUIState.mobileNumber.toLong()
             )
 
             val validationResult = validator.validate(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
-                mobileNumber = mobileNumber2
+                mobileNumber = mobileNumberUIState.mobileNumber
             )
 
             //user understandable errors should be placed in a class
             if (validationResult is Result.Failure) {
                 onFailure(validationResult.error.toString())
-                isLoading = false
+                mobileNumberUIState.isLoading = false
                 return@launch
             }
             //
@@ -59,12 +58,12 @@ class MobileNumberViewModel @Inject constructor(
             when (result) {
 
                 is Result.Success<String> -> {
-                    isLoading = false
+                    mobileNumberUIState.isLoading = false
                     onSuccess()
                 }
 
                 is Result.Failure<String> -> {
-                    isLoading = false
+                    mobileNumberUIState.isLoading = false
                     onFailure(result.error)
                 }
             }

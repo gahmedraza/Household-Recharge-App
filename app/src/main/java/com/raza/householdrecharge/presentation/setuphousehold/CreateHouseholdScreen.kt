@@ -2,7 +2,6 @@ package com.raza.householdrecharge.presentation.setuphousehold
 
 import android.content.res.Configuration
 import android.util.Log
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,7 +33,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
-import kotlinx.coroutines.launch
 
 @Composable
 fun CreateHouseholdScreen(
@@ -42,7 +40,7 @@ fun CreateHouseholdScreen(
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-
+    var householdUIState = viewModel.householdUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -88,12 +86,12 @@ fun CreateHouseholdScreen(
                     },
 
                     onValueChange = {
-                        viewModel.household = viewModel.household.copy(
+                        householdUIState.household = householdUIState.household.copy(
                             name = it.trim()
                         )
                     },
 
-                    value = viewModel.household.name ?: ""
+                    value = householdUIState.household.name ?: ""
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -106,7 +104,7 @@ fun CreateHouseholdScreen(
                     onClick = {
 
                         viewModel.onAddHousehold(
-                            householdName = viewModel.household.name.cleanString(),
+                            householdName = householdUIState.household.name.cleanString(),
 
                             onSuccess = { householdId ->
                                 Log.d("TAG", "success: $householdId")
@@ -153,7 +151,7 @@ fun CreateHouseholdScreen(
 
                 Spacer(modifier = Modifier.padding(20.dp))
 
-                if (viewModel.isLoading) {
+                if (householdUIState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(24.dp)

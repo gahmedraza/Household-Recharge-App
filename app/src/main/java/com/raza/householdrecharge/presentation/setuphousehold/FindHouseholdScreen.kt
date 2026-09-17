@@ -39,6 +39,8 @@ fun FindHouseholdScreen(
     onSuccess: (FindHouseholdResponse?) -> Unit = { a -> },
     onFailure: () -> Unit = {}
 ) {
+
+    var householdUIState = viewModel.householdUIState
     Scaffold { paddingValues ->
 
         Box(
@@ -95,11 +97,11 @@ fun FindHouseholdScreen(
                         },
 
                         onValueChange = {
-                            viewModel.invitationCode = it.trim()
+                            householdUIState.invitationCode = it.trim()
 
                         },
 
-                        value = viewModel.invitationCode
+                        value = householdUIState.invitationCode
                     )
 
                     Spacer(modifier = Modifier.height(42.dp))
@@ -107,12 +109,12 @@ fun FindHouseholdScreen(
                     OutlinedButton(
                         modifier = modifier,
 
-                        enabled = !viewModel.isLoading,
+                        enabled = !householdUIState.isLoading,
 
                         onClick = {
 
                             viewModel.findHousehold(
-                                invitationCode = viewModel.invitationCode,
+                                invitationCode = householdUIState.invitationCode,
 
                                 onSuccess = { response ->
                                     findHouseholdResponse = response
@@ -157,7 +159,7 @@ fun FindHouseholdScreen(
 
                     Spacer(modifier = Modifier.padding(20.dp))
 
-                    if (viewModel.isLoading) {
+                    if (householdUIState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .size(24.dp)

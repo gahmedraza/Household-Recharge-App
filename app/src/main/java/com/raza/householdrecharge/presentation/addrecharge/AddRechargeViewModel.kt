@@ -3,14 +3,13 @@ package com.raza.householdrecharge.presentation.addrecharge
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
-import com.raza.householdrecharge.data.repository.RechargeRepository
+import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
-import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -22,7 +21,9 @@ class AddRechargeViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeUseCase: RechargeUseCase,
     private val validator: RechargeValidator
-) : BaseViewModel() {
+) : ViewModel() {
+
+    var addRechargeUIState by mutableStateOf(AddRechargeUIState())
 
     var rechargeDescription by mutableStateOf("")
     var amount by mutableStateOf("")
@@ -37,14 +38,14 @@ class AddRechargeViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             //
-            isLoading = true
+            addRechargeUIState.isLoading = true
 
             val rechargeDto = RechargeDtoFactory(
                 sessionManager = sessionManager
             ).create(
                 rechargeAmount = amount.toInt(),
                 rechargeDate = date.toLong(),
-                expiryDate = planExpiryDate.toLong(),
+                expiryDate = addRechargeUIState.planExpiryDate.toLong(),
                 rechargedBy = rechargedBy,
                 rechargeDescription = rechargeDescription,
                 mobileNumber = mobileNumber.toLong()
@@ -58,7 +59,7 @@ class AddRechargeViewModel @Inject constructor(
 
             //user understandable errors should be placed in a class
             if(validationResult is Result.Failure) {
-                isLoading = false
+                addRechargeUIState.isLoading = false
                 onFailure("failure")
                 return@launch
             }
@@ -72,12 +73,12 @@ class AddRechargeViewModel @Inject constructor(
             when (result) {
 
                 is Result.Success<String> -> {
-                    isLoading = false
+                    addRechargeUIState.isLoading = false
                     onSuccess()
                 }
 
                 is Result.Failure<String> -> {
-                    isLoading = false
+                    addRechargeUIState.isLoading = false
                     onFailure(result.error)
                 }
             }
