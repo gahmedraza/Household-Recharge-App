@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.domain.usecase
 
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.OnboardingDto
@@ -57,7 +57,7 @@ class AuthUseCase @Inject constructor(
 
                     } else {
 
-                        log("account id was not generated in accounts collection")
+                        Logger.log("account id was not generated in accounts collection")
                         result = Result.Failure(AccountError.AccountIdNotGenerated)
 
                     }
@@ -65,14 +65,14 @@ class AuthUseCase @Inject constructor(
 
                 is Result.Failure -> {
 
-                    log(signupResult.error.cleanString())
+                    Logger.log(signupResult.error.cleanString())
                     result = Result.Failure(AccountError.Unknown)
                 }
             }
 
         } catch (e: Exception) {
 
-            log(e.message.cleanString())
+            Logger.log(e.message.cleanString())
             result = Result.Failure(AccountError.Unknown)
         }
 

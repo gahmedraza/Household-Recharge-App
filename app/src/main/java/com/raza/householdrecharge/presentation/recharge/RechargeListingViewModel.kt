@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.presentation.recharge
 
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.data.repository.RechargeRepository
 import kotlinx.coroutines.flow.first
@@ -26,7 +26,7 @@ class RechargeListingViewModel @Inject constructor(
     var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
 
     init {
-        log("recharge listing viewmodel init called")
+        Logger.log("recharge listing viewmodel init called")
         observeRecharges()
     }
 

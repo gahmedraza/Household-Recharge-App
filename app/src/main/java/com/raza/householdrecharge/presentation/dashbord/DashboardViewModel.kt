@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.presentation.dashbord
 
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
@@ -25,7 +25,7 @@ class DashboardViewModel @Inject constructor(
     var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
 
     init {
-        log("dashboard viewmodel init called...")
+        Logger.log("dashboard viewmodel init called...")
         observeMobileNumbers()
         observeRecharges()
     }

@@ -9,5 +9,3 @@ sealed class InvitationError {
 
     data object InvitationDataMappingError: InvitationError()
 }
-
-const val PENDING = "pending"

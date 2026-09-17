@@ -1,9 +1,10 @@
 package com.raza.householdrecharge.data.remote.datasource
 
 import com.google.firebase.auth.FirebaseAuth
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
+import com.raza.householdrecharge.data.remote.dto.UserDto
 import com.raza.householdrecharge.data.repository.account.AuthError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
@@ -25,7 +26,7 @@ class AuthRemoteDataSource @Inject constructor(
 
         if(firebaseUser == null) {
 
-            log("user is not logged in")
+            Logger.log("user is not logged in")
             result = Result.Failure(AuthError.UserNotLoggedIn)
 
         } else {
@@ -92,9 +93,3 @@ class AuthRemoteDataSource @Inject constructor(
         return result
     }
 }
-
-data class UserDto(
-    var userId: String = "",
-    var email: String = "",
-    var photoUrl: String = ""
-)

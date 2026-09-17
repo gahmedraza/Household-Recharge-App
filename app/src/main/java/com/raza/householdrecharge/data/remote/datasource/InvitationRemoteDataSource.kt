@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.data.remote.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.account.InvitationError
@@ -113,7 +113,7 @@ class InvitationRemoteDataSource @Inject constructor(
 
         } catch (e: Exception) {
 
-            log(e.message)
+            Logger.log(e.message)
             result = Result.Failure(InvitationError.UnknownError)
         }
 

@@ -12,7 +12,7 @@ import javax.inject.Inject
 val Context.datastore by preferencesDataStore("session")
 
 class SessionManager @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
     val isUserLinkedToAHousehold = context.datastore.data.map {
         it[booleanPreferencesKey("isUserLinkedToAHousehold")] ?: false

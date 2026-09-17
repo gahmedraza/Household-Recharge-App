@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.data.repository
 
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.local.dao.RechargeDao
 import com.raza.householdrecharge.data.local.entity.RechargeEntity
 import com.raza.householdrecharge.data.remote.datasource.RechargeRemoteDataSource
@@ -22,7 +22,7 @@ class RechargeRepository @Inject constructor(
         val result = rechargeRemoteDataSource.addRecharge(rechargeDto)
 
         if(result is Result.Failure) {
-            log(result.error.cleanString())
+            Logger.log(result.error.cleanString())
             return Result.Failure(result.error.cleanString())
         }
 
@@ -46,21 +46,21 @@ class RechargeRepository @Inject constructor(
         val result = rechargeRemoteDataSource.getAllRecharges()
 
         if(result is Result.Failure) {
-            log(result.error.cleanString())
+            Logger.log(result.error.cleanString())
         }
 
         val rechargeList = (result as Result.Success).data
 
         val rechargeEntityList = RechargeEntityMapper.map(rechargeList)
 
-        log("RechargeEntityList2", rechargeEntityList.toString())
+        Logger.log("RechargeEntityList2", rechargeEntityList.toString())
 
         rechargeDao.upsertRecharges(rechargeEntityList)
     }
 
     suspend fun queryDatabase() {
         val rechargeEntityList2 = rechargeDao.getAllRecharges()
-        log("RechargeEntityList", rechargeEntityList2.toString())
+        Logger.log("RechargeEntityList", rechargeEntityList2.toString())
     }
 
 }

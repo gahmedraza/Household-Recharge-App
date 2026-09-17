@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.data.repository
 
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.local.dao.MobileNumberDao
 import com.raza.householdrecharge.data.remote.datasource.MobileNumberRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
@@ -23,7 +23,7 @@ class MobileNumberRepository @Inject constructor(
         val result = mobileNumberRemoteDataSource.addMobileNumber(mobileNumberDto)
 
         if(result is Result.Failure) {
-            log(result.error.cleanString())
+            Logger.log(result.error.cleanString())
             return Result.Failure(result.error.cleanString())
         }
 
@@ -46,7 +46,7 @@ class MobileNumberRepository @Inject constructor(
         val result = mobileNumberRemoteDataSource.getAllMobileNumbers()
 
         if(result is Result.Failure) {
-            log(result.error.cleanString())
+            Logger.log(result.error.cleanString())
         }
 
         val mobileNumberList = (result as Result.Success).data

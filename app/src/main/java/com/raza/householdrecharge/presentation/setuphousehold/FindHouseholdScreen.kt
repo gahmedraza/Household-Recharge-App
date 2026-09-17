@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
-import com.raza.householdrecharge.domain.usecase.FindHouseholdResponse
+import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString

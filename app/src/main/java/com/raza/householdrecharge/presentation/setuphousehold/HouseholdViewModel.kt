@@ -13,7 +13,7 @@ import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
-import com.raza.householdrecharge.domain.usecase.FindHouseholdResponse
+import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import com.raza.householdrecharge.util.cleanString
@@ -194,10 +194,3 @@ class HouseholdViewModel @Inject constructor(
         }
     }
 }
-
-data class InvitationResultDto(
-    val bool: Boolean = false,
-    val householdId: String?,
-    val householdName: String?,
-    val message: String?
-)

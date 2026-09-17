@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.domain.usecase
 
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
@@ -12,8 +12,9 @@ import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.data.repository.account.HouseholdError
 import com.raza.householdrecharge.data.repository.account.InvitationError
-import com.raza.householdrecharge.data.repository.account.PENDING
+import com.raza.householdrecharge.data.repository.account.InvitationStatus
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
+import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import javax.inject.Inject
 
 class HouseholdUseCase @Inject constructor(
@@ -48,7 +49,7 @@ class HouseholdUseCase @Inject constructor(
             //update user with householdId
             accountRepository.updateAccount(appUserDto.accountId, householdId)
 
-            log("user collection updated with householdId")
+            Logger.log("user collection updated with householdId")
             result = Result.Success(householdId)
 
         } catch (e: Exception) {
@@ -72,7 +73,7 @@ class HouseholdUseCase @Inject constructor(
                 )
 
             if(accountResult is Result.Failure) {
-                log("error in fetching account")
+                Logger.log("error in fetching account")
                 return Result.Failure(HouseholdError.NoAccountFound)
             }
 
@@ -87,13 +88,13 @@ class HouseholdUseCase @Inject constructor(
 
             } else {
 
-                log("Account already member of another household")
+                Logger.log("Account already member of another household")
                 result = Result.Failure(HouseholdError.HouseholdAlreadyAssigned)
             }
 
         } catch (e: Exception) {
 
-            log(e.message)
+            Logger.log(e.message)
             result = Result.Failure(HouseholdError.Unknown)
         }
 
@@ -184,7 +185,7 @@ class HouseholdUseCase @Inject constructor(
             return Result.Failure(InvitationError.InvitationCodeNotFound)
         }
 
-        if(invitation.status != PENDING) {
+        if(invitation.status != InvitationStatus.PENDING) {
             return Result.Failure(InvitationError.InvitationAlreadyUsed)
         }
 
@@ -198,9 +199,3 @@ class HouseholdUseCase @Inject constructor(
     }
     //
 }
-
-data class FindHouseholdResponse(
-    val householdId: String = "",
-    val householdName: String = "",
-    val invitationCode: String = ""
-)

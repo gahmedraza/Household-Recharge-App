@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.components.AppCard
@@ -161,14 +161,14 @@ fun LoginScreen(
                                 signinStatus = "login success"
                                 shouldProceed = true
 
-                                log("user logged in with id= $userId")
+                                Logger.log("user logged in with id= $userId")
                             },
                             onFailure = { message ->
 
                                 signinStatus = "login failure\n$message"
                                 shouldProceed = false
 
-                                log("response= $message")
+                                Logger.log("response= $message")
                             })
                     }
                 ) {

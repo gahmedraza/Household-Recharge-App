@@ -1,13 +1,13 @@
 package com.raza.householdrecharge.data.remote.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.raza.householdrecharge.core.logging.Logger
 import javax.inject.Inject
-import com.raza.householdrecharge.core.logging.log
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.repository.account.AccountError
-import com.raza.householdrecharge.data.repository.account.HouseholdID
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
@@ -65,7 +65,7 @@ class AccountRemoteDataSource @Inject constructor(
 
                 .collection(HouseholdCollection.Accounts.description)
                 .document(collectionId)
-                .update(HouseholdID, householdId)
+                .update(CollectionField.HouseholdID.description, householdId)
 
                 .await()
 
@@ -73,7 +73,7 @@ class AccountRemoteDataSource @Inject constructor(
 
         } catch (e: Exception) {
 
-            log(e.message)
+            Logger.log(e.message)
             result = Result.Failure(AccountError.Unknown)
         }
 
@@ -114,7 +114,7 @@ class AccountRemoteDataSource @Inject constructor(
             }
 
         } catch (e: Exception) {
-            log(e.message)
+            Logger.log(e.message)
             result = Result.Failure(AccountError.Unknown)
 
         }

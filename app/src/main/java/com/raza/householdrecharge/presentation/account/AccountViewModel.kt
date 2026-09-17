@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.presentation.common.BaseViewModel
@@ -34,7 +34,7 @@ class AccountViewModel @Inject constructor(
             val result = accountRepository.fetchAccountByAccountId(accountId)
 
             if(result is Result.Failure) {
-                log(result.error.toString())
+                Logger.log(result.error.toString())
                 return@launch
             }
 

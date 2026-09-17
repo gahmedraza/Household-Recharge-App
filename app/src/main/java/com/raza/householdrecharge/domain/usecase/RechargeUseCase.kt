@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.domain.usecase
 
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
@@ -23,7 +23,7 @@ class RechargeUseCase @Inject constructor(
         )
 
         if(result is Result.Failure) {
-            log(result.error.cleanString())
+            Logger.log(result.error.cleanString())
             return Result.Failure(result.error.cleanString())
         }
 
@@ -35,7 +35,7 @@ class RechargeUseCase @Inject constructor(
         )
 
         if(result2 is Result.Failure) {
-            log(result2.error)
+            Logger.log(result2.error)
             return Result.Failure(result2.error.cleanString())
         }
 

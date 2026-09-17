@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.raza.householdrecharge.core.logging.log
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.presentation.components.ActivePlanIndicator
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
@@ -122,15 +122,15 @@ fun DashboardScreen(
 
                     items(mobileNumberList) { item ->
 
-                        log(TAG2, rechargeList.toString())
+                        Logger.log(TAG2, rechargeList.toString())
                         var rechargeDto = rechargeList.find {
-                            log(TAG2, "rechargeId: ${it.id}, lastRechargeId: ${item.lastRechargeId}")
+                            Logger.log(TAG2, "rechargeId: ${it.id}, lastRechargeId: ${item.lastRechargeId}")
                             it.id == item.lastRechargeId
                         }
-                        log(TAG2, rechargeDto.toString())
+                        Logger.log(TAG2, rechargeDto.toString())
 
                         if(rechargeDto == null) {
-                            log(TAG2, "empty recharge dto")
+                            Logger.log(TAG2, "empty recharge dto")
                             rechargeDto = RechargeDto()
                         }
 
