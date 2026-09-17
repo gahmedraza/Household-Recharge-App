@@ -44,10 +44,7 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 fun RechargeListingScreen(
     memberId: String = "",
     mobileNumber: String = "",
-    viewModel: RechargeListingViewModel = hiltViewModel(),
-    onSuccess: () -> Unit = {},
-    onFailure: () -> Unit = {},
-    onAddRecharge: (String, String) -> Unit = {a,b ->}
+    viewModel: RechargeListingViewModel = hiltViewModel()
 ) {
     val rechargeList by viewModel.rechargeList.collectAsStateWithLifecycle()
 
@@ -68,22 +65,8 @@ fun RechargeListingScreen(
     Scaffold(
         topBar = {
             TitleBar("Recharge Listing")
-        },
+        }
 
-        /*floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onAddRecharge(
-                        memberId, mobileNumber
-                    )
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "add recharge"
-                )
-            }
-        }*/
     ) { paddingValues ->
 
         val modifier = Modifier.padding(paddingValues)

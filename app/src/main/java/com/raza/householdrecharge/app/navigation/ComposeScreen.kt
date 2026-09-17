@@ -12,12 +12,12 @@ enum class ComposeScreen(val description: String) {
     AddRecharge("AddRecharge"),
     AddMobileNumber("AddMobileNumber"),
     RechargeListing("RechargeListing"),
-    DashboardNavigationRoot("Dashboard"),
+    DashboardNavigationRoot("DashboardNavigationRoot"),
     SetupHousehold("SetupHousehold"),
     CreateHousehold("CreateHousehold"),
     FindHousehold("FindHousehold"),
     ConfirmHousehold("ConfirmHousehold"),
-    OnboardingNavigation("V2Navigation"),
+    OnboardingNavigationRoot("OnBoardingNavigationRoot"),
     Account("Account")
 }
 

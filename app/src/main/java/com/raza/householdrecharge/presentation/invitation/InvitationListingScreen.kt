@@ -160,25 +160,6 @@ fun InvitationListItemCard(
             }
 
             Spacer(modifier = Modifier.height(20.dp))
-
-            /*Row(modifier = Modifier.fillMaxWidth()) {
-
-                OutlinedButton(
-                    onClick = {},
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Copy")
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                OutlinedButton(
-                    onClick = {},
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Share")
-                }
-            }*/
         }
     }
 }

@@ -22,8 +22,6 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 @Composable
 fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
-    onAddMember: () -> Unit = {},
-    onAddHousehold: () -> Unit = {},
     onSignOut: () -> Unit = {},
     onInvitation: () -> Unit = {},
     onAccount: () -> Unit = {}
@@ -45,10 +43,6 @@ fun SettingScreen(
                 bottom = 30.dp
             )
 
-            val cellModifier = Modifier
-                .fillMaxWidth()
-                .padding(cellPadding)
-
             Text(
                 text = "Account",
                 modifier = Modifier
@@ -63,15 +57,6 @@ fun SettingScreen(
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
 
-            /*Text(
-                text = "Household",
-                modifier = cellModifier,
-                style = MaterialTheme.typography.titleLarge
-            )
-
-            HorizontalDivider(modifier = Modifier.height(1.dp))*/
-
-            //
             Text(
                 text = "Invitations",
                 modifier = Modifier
@@ -85,51 +70,6 @@ fun SettingScreen(
             )
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
-            //
-
-            /*Column(modifier = Modifier.padding(start = 10.dp)) {
-                Text(
-                    text = "Add Household",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onAddHousehold()
-                        }
-                        .padding(cellPadding),
-
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                HorizontalDivider(modifier = Modifier.height(1.dp))
-
-                Text(
-                    text = "Invitations",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onInvitation()
-                        }
-                        .padding(cellPadding),
-
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                HorizontalDivider(modifier = Modifier.height(1.dp))
-
-                Text(
-                    text = "Add Member",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            onAddMember()
-                        }
-                        .padding(cellPadding),
-
-                    style = MaterialTheme.typography.titleLarge
-                )
-
-                HorizontalDivider(modifier = Modifier.height(1.dp))
-            }*/
 
             Text(
                 text = "SignOut",

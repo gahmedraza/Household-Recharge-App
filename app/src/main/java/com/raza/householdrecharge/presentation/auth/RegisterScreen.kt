@@ -42,7 +42,6 @@ fun RegisterScreen(
     var shouldProceed by remember { mutableStateOf(false) }
     var signupStatus by remember { mutableStateOf("") }
 
-
     AppCard {
 
         Box(

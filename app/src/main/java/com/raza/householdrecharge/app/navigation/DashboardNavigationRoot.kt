@@ -75,34 +75,14 @@ fun DashboardNavigationRoot() {
                 RechargeListingScreen(
                     memberId = memberId,
 
-                    mobileNumber = mobileNumber,
-
-                    onSuccess = {
-                        navController.navigate(ComposeScreen.Dashboard.description)
-                    },
-
-                    onFailure = {
-
-                    },
-
-                    onAddRecharge = { memberId, mobileNumber ->
-                        navController.navigate("${ComposeScreen.AddRecharge}/$memberId/$mobileNumber")
-                    }
+                    mobileNumber = mobileNumber
                 )
             }
 
             composable(ComposeScreen.Setting.description) {
                 SettingScreen(
-                    onAddMember = {
-
-                    },
-
-                    onAddHousehold = {
-                        navController.navigate(ComposeScreen.CreateHousehold.description)
-                    },
-
                     onSignOut = {
-                        navController.navigate(ComposeScreen.OnboardingNavigation.description)
+                        navController.navigate(ComposeScreen.OnboardingNavigationRoot.description)
                     },
                     onInvitation = {
                         navController.navigate(ComposeScreen.Invitation.description)
@@ -117,7 +97,7 @@ fun DashboardNavigationRoot() {
                 AccountScreen()
             }
 
-            composable(ComposeScreen.OnboardingNavigation.description) {
+            composable(ComposeScreen.OnboardingNavigationRoot.description) {
                 OnboardingNavigation()
             }
 
@@ -132,11 +112,6 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.AddInvitation.description) {
                 AddInvitationScreen(
-                    /*onInvitationVerified = { invitationCode ->
-
-                        navController.navigate(ComposeScreen.ConfirmHousehold.description)
-                    }*/
-
                     onInvitationCreated = {
 
                         //navController.navigate(ComposeScreen.Invitation.description)
