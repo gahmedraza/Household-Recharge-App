@@ -13,13 +13,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.domain.usecase.AccountUseCase
 import com.raza.householdrecharge.util.cleanString
 import javax.inject.Inject
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val accountRepository: AccountRepository
+    private val accountUseCase: AccountUseCase
 ): BaseViewModel() {
 
     var profileName by mutableStateOf("")
@@ -31,7 +32,7 @@ class AccountViewModel @Inject constructor(
 
             val accountId = sessionManager.authId.first()
 
-            val result = accountRepository.fetchAccountByAccountId(accountId)
+            val result = accountUseCase.fetchAccountByAccountId(accountId)
 
             if(result is Result.Failure) {
                 Logger.log(result.error.toString())

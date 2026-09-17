@@ -1,0 +1,66 @@
+package com.raza.householdrecharge.domain.usecase
+
+import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.dto.InvitationDto
+import com.raza.householdrecharge.data.repository.InvitationRepository
+import com.raza.householdrecharge.domain.error.InvitationError
+import com.raza.householdrecharge.presentation.invitation.Invitation
+import javax.inject.Inject
+
+class InvitationUseCase @Inject constructor(
+    private val invitationRepository: InvitationRepository
+) {
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun createInvitation(
+        invitation: InvitationDto
+    ): Result<String, String> {
+
+        return invitationRepository.createInvitation(
+            invitation
+        )
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun createInvitationFacade(
+        invitation: InvitationDto,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+
+        return invitationRepository.createInvitationFacade(
+            invitation,
+            onSuccess,
+            onFailure
+        )
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun getAllInvitations(
+    ): Result<List<Invitation>, String> {
+
+        return invitationRepository.getAllInvitations()
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun getInvitationByInvitationCode(
+        code: String
+    ): Result<InvitationDto, InvitationError> {
+
+        return invitationRepository.getInvitationByInvitationCode(
+            code
+        )
+    }
+}

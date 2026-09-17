@@ -8,7 +8,9 @@ import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.dto.UserDto
 import com.raza.householdrecharge.domain.error.AccountError
+import com.raza.householdrecharge.domain.error.AuthError
 import javax.inject.Inject
 
 class AuthUseCase @Inject constructor(
@@ -103,5 +105,30 @@ class AuthUseCase @Inject constructor(
         val accountDto = (result2 as Result.Success).data
 
         return Result.Success(accountDto)
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun login(
+        authDto: AuthDto
+    ): Result<String, String> {
+
+        return authRepository.login(
+            authDto
+        )
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    fun getUser(
+
+    ): Result<UserDto, AuthError>
+    //FirebaseUser?
+    {
+        return authRepository.getUser()
     }
 }

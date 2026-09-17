@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val authRepository: AuthRepository,
     private val authUseCase: AuthUseCase
 ) : AuthViewModel(sessionManager) {
 
@@ -106,7 +105,7 @@ class LoginViewModel @Inject constructor(
                 password = authDto.password
             )
 
-            val result = authRepository.login(
+            val result = authUseCase.login(
                 authDto = authDto
             )
 

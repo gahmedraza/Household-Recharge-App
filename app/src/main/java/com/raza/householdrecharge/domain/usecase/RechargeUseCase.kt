@@ -5,7 +5,9 @@ import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.local.entity.RechargeEntity
 import com.raza.householdrecharge.util.cleanString
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RechargeUseCase @Inject constructor(
@@ -42,4 +44,32 @@ class RechargeUseCase @Inject constructor(
         return Result.Success("")
     }
 
+    /**
+     * Transit Method
+     * No additional code
+     */
+    fun observeRecharges(
+    ): Flow<List<RechargeEntity>> {
+
+        return rechargeRepository.observeRecharges()
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun getAllRecharges(
+
+    ) {
+        return rechargeRepository.getAllRecharges()
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun queryDatabase() {
+
+        return rechargeRepository.queryDatabase()
+    }
 }

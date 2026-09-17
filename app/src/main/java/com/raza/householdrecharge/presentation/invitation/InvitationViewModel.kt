@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.domain.usecase.InvitationUseCase
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class InvitationViewModel @Inject constructor(
     val sessionManager: SessionManager,
-    private val invitationRepository: InvitationRepository
+    private val invitationUseCase: InvitationUseCase
 ): BaseViewModel() {
 
     var invitationCode by mutableStateOf("")
@@ -41,7 +42,7 @@ class InvitationViewModel @Inject constructor(
                 status = "pending"
             )
 
-            invitationRepository.createInvitationFacade(
+            invitationUseCase.createInvitationFacade(
                 invitation = invitation,
                 onSuccess = { data ->
                     isLoading = false
@@ -74,7 +75,7 @@ class InvitationViewModel @Inject constructor(
     ) {
 
         viewModelScope.launch {
-            val invitationResult = invitationRepository.getAllInvitations()
+            val invitationResult = invitationUseCase.getAllInvitations()
 
             when(invitationResult) {
                 is Result.Success<List<Invitation>> -> {

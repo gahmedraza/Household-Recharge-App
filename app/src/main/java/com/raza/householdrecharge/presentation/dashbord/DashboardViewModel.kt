@@ -9,6 +9,7 @@ import com.raza.householdrecharge.data.remote.mapper.MobileNumberDtoMapper
 import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
+import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
     private val mobileNumberRepository: MobileNumberRepository,
-    private val rechargeRepository: RechargeRepository
+    private val rechargeUseCase: RechargeUseCase
 ) : BaseViewModel() {
     val mobileNumberList = MutableStateFlow<List<MobileNumberDto>>(emptyList())
     var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
@@ -40,7 +41,7 @@ class DashboardViewModel @Inject constructor(
     fun getAllRecharges(
     ) {
         viewModelScope.launch {
-            rechargeRepository.getAllRecharges()
+            rechargeUseCase.getAllRecharges()
         }
     }
 
@@ -59,7 +60,7 @@ class DashboardViewModel @Inject constructor(
     fun observeRecharges(
     ) {
         viewModelScope.launch {
-            rechargeRepository.observeRecharges().collect { rechargeDtoList ->
+            rechargeUseCase.observeRecharges().collect { rechargeDtoList ->
 
                 val rechargeDtoList = RechargeDtoMapper.map(rechargeDtoList)
 

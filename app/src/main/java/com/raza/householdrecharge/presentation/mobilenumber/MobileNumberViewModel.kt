@@ -8,6 +8,7 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
+import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.validator.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MobileNumberViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val mobileNumberRepository: MobileNumberRepository,
+    private val mobileNumberUseCase: MobileNumberUseCase,
     private val validator: MobileNumberValidator
 ) : BaseViewModel() {
 
@@ -51,7 +52,7 @@ class MobileNumberViewModel @Inject constructor(
             }
             //
 
-            val result = mobileNumberRepository.addMobileNumber(
+            val result = mobileNumberUseCase.addMobileNumber(
                 mobileNumberDto = mobileNumberDto
             )
 

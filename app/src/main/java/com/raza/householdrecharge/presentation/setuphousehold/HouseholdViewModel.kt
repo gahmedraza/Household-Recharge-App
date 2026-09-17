@@ -5,13 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
-import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.data.repository.HouseholdRepository
-import com.raza.householdrecharge.data.repository.InvitationRepository
+import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
@@ -25,9 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HouseholdViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val householdUseCase: HouseholdUseCase,
-    private val householdRepository: HouseholdRepository,
-    private val invitationRepository: InvitationRepository
+    private val householdUseCase: HouseholdUseCase
 ) : BaseViewModel() {
 
     var invitationCode by mutableStateOf("")
@@ -162,7 +157,7 @@ class HouseholdViewModel @Inject constructor(
                     ?.uid
                     .cleanString()
 
-                val result = householdRepository.joinHousehold(
+                val result = householdUseCase.joinHousehold(
                     userId = userId,
                     householdId = householdId,
                     invitationCode = invitationCode

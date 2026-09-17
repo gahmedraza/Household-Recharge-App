@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
+import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RechargeListingViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val rechargeRepository: RechargeRepository,
+    private val rechargeUseCase: RechargeUseCase,
     private val validator: RechargeValidator
 ) : BaseViewModel() {
 
@@ -32,7 +33,7 @@ class RechargeListingViewModel @Inject constructor(
 
     fun observeRecharges() {
         viewModelScope.launch {
-            rechargeRepository.observeRecharges().collect { rechargeDtoList ->
+            rechargeUseCase.observeRecharges().collect { rechargeDtoList ->
                 rechargeList.value = rechargeDtoList.map { rechargeDto ->
                     RechargeDtoMapper.map(rechargeDto)
                 }
@@ -60,12 +61,12 @@ class RechargeListingViewModel @Inject constructor(
                 return@launch
             }
 
-            rechargeRepository.getAllRecharges()
+            rechargeUseCase.getAllRecharges()
 
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            rechargeRepository.queryDatabase()
+            rechargeUseCase.queryDatabase()
         }
     }
 }

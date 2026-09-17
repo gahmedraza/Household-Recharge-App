@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.repository.AuthRepository
+import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.presentation.auth.AuthViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,13 +15,13 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase,
-    private val authRepository: AuthRepository
+    private val authUseCase: AuthUseCase
 ) : AuthViewModel(sessionManager) {
 
     suspend fun getStartDestination(
     ): SplashDestination {
 
-        val result51 = authRepository.getUser()
+        val result51 = authUseCase.getUser()
 
         if(result51 is Result.Failure) {
             return SplashDestination.Login

@@ -198,4 +198,21 @@ class HouseholdUseCase @Inject constructor(
         return Result.Success(Unit)
     }
     //
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun joinHousehold(
+        userId: String,
+        householdId: String,
+        invitationCode: String
+    ): Result<String, String> {
+
+        return householdRepository.joinHousehold(
+            userId,
+            householdId,
+            invitationCode
+        )
+    }
 }
