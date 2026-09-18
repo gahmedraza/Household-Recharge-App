@@ -25,7 +25,7 @@ class HouseholdRemoteDataSource @Inject constructor(
 
             val documentReference = firestore
 
-                .collection("households")
+                .collection("households") //todo remove the string
                 .add(householdDto)
                 .await()
 
@@ -49,7 +49,7 @@ class HouseholdRemoteDataSource @Inject constructor(
     ): Result<HouseholdDto, HouseholdError>{
 
         val snapshot = firestore
-            .collection("households")
+            .collection("households") //todo string
             .document(householdId)
             .get()
             .await()
@@ -69,6 +69,7 @@ class HouseholdRemoteDataSource @Inject constructor(
         }
     }
 
+    //unpack to use case
     suspend fun joinHousehold(
         userId: String,
         householdId: String,

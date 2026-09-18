@@ -1,8 +1,10 @@
 package com.raza.householdrecharge.data.repository
 
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.local.dao.AccountDao
 import com.raza.householdrecharge.data.remote.datasource.AccountRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.AccountDto
+import com.raza.householdrecharge.data.remote.mapper.account.AccountEntityMapper
 import com.raza.householdrecharge.domain.error.AccountError
 import javax.inject.Inject
 
@@ -11,7 +13,8 @@ import javax.inject.Inject
 //TODO on an explicit basis as the former does not guarantee
 //TODO the execution on a background thread
 class AccountRepository @Inject constructor(
-    private val accountRemoteDataSource: AccountRemoteDataSource
+    private val accountRemoteDataSource: AccountRemoteDataSource,
+    private val accountDao: AccountDao
 ) {
 
     /**
@@ -24,10 +27,20 @@ class AccountRepository @Inject constructor(
 
     ): Result<Unit, String> {
 
-        return accountRemoteDataSource.createAccount(
+        val result51 = accountRemoteDataSource.createAccount(
             collectionId,
             accountDto
         )
+
+        if(result51 is Result.Failure) {
+            return result51
+        }
+
+        val accountEntity = AccountEntityMapper.map(accountDto)
+
+        accountDao.upsertAccount(accountEntity)
+
+        return result51
     }
 
     /**
@@ -40,10 +53,18 @@ class AccountRepository @Inject constructor(
 
     ): Result<Unit, AccountError> {
 
-        return accountRemoteDataSource.updateAccount(
+        val result51 = accountRemoteDataSource.updateAccount(
             collectionId,
             householdId
         )
+
+        if(result51 is Result.Failure) {
+            return result51
+        }
+
+        accountDao.updateAccount(collectionId, householdId)
+
+        return result51
     }
 
     /**
@@ -55,8 +76,20 @@ class AccountRepository @Inject constructor(
 
     ): Result<AccountDto, AccountError> {
 
-        return accountRemoteDataSource.fetchAccountByAccountId(
+        val result51 = accountRemoteDataSource.fetchAccountByAccountId(
             accountId
         )
+
+        if(result51 is Result.Failure) {
+            return result51
+        }
+
+        val account = (result51 as Result.Success).data
+
+        val accountEntity = AccountEntityMapper.map(account)
+
+        accountDao.upsertAccount(accountEntity)
+
+        return result51 //todo remove and add flowstate observable
     }
 }
