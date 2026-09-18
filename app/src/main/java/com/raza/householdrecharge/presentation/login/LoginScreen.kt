@@ -33,9 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.data.remote.dto.AuthDto
-import com.raza.householdrecharge.presentation.common.MobileNumberValidator
-import com.raza.householdrecharge.presentation.common.PasswordValidator
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.login.LoginViewModel
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
@@ -43,12 +40,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
+    viewmodel: LoginViewModel = hiltViewModel(),
     onRegister: () -> Unit = {},
     onLoginCompletion: () -> Unit = {},
     onBoardingNotComplete: () -> Unit = {}
 ) {
-    val loginUIState = viewModel.loginUIState
+    val loginUIState = viewmodel.loginUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -137,7 +134,7 @@ fun LoginScreen(
                     onClick = {
 
                         //make the api call
-                        viewModel.login(
+                        viewmodel.login(
                             onSuccess = { userId ->
 
                                 apiStatus = "login success"
@@ -174,7 +171,7 @@ fun LoginScreen(
 
                     onClick = {
                         scope.launch {
-                            if(viewModel.isOnboardingComplete()) {
+                            if(viewmodel.isOnboardingComplete()) {
 
                                 onLoginCompletion()
                             } else {

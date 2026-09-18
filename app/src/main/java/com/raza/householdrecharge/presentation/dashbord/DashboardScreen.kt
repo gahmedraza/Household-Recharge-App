@@ -54,16 +54,16 @@ const val TAG2 = "Dashboard"
 
 @Composable
 fun DashboardScreen(
-    viewModel: DashboardViewModel = hiltViewModel(),
+    viewmodel: DashboardViewModel = hiltViewModel(),
     onDashboardCardClick: (String, String) -> Unit = { a,b -> },
     onAddMobileNumber: () -> Unit = {}
 ) {
 
-    val dashboardUIState by viewModel.dashboardUIState.collectAsStateWithLifecycle()
+    val dashboardUIState by viewmodel.dashboardUIState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.getAllMobileNumbers()
-        viewModel.getAllRecharges()
+        viewmodel.getAllMobileNumbers()
+        viewmodel.getAllRecharges()
     }
 
     Scaffold(

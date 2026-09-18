@@ -29,13 +29,13 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun AccountScreen(
-    viewModel: AccountViewModel = hiltViewModel()
+    viewmodel: AccountViewModel = hiltViewModel()
 ) {
 
-    val accountUIState = viewModel.accountUIState
+    val accountUIState = viewmodel.accountUIState
 
     LaunchedEffect(Unit) {
-        viewModel.getAccount()
+        viewmodel.getAccount()
     }
 
     Scaffold(

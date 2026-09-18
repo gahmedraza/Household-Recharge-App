@@ -38,12 +38,12 @@ fun ConfirmHouseholdScreen(
     householdName: String? = "",
     householdId: String? = "",
     invitationCode: String? = "",
-    viewModel: HouseholdViewModel = hiltViewModel(),
+    viewmodel: HouseholdViewModel = hiltViewModel(),
     onSuccess:() -> Unit = {},
     onFailure:() -> Unit = {}
 ) {
 
-    val householdUIState = viewModel.householdUIState
+    val householdUIState = viewmodel.householdUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
 
@@ -114,7 +114,7 @@ fun ConfirmHouseholdScreen(
 
                     onClick = {
 
-                        viewModel.onJoinHousehold(
+                        viewmodel.onJoinHousehold(
                             invitationCode = invitationCode.cleanString(),
                             householdId = householdId.cleanString(),
                             onSuccess = {

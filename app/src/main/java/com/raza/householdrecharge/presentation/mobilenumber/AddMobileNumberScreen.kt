@@ -37,12 +37,12 @@ import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun AddMobileNumberScreen(
-    viewModel: MobileNumberViewModel = hiltViewModel(),
+    viewmodel: MobileNumberViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
 
-    val mobileNumberUIState = viewModel.mobileNumberUIState
+    val mobileNumberUIState = viewmodel.mobileNumberUIState
     val modifier = Modifier.fillMaxWidth()
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
@@ -88,7 +88,7 @@ fun AddMobileNumberScreen(
                     enabled = !shouldProceed,
 
                     onClick = {
-                        viewModel.addMobileNumber(
+                        viewmodel.addMobileNumber(
 
                             onSuccess = {
                                 apiStatus = "mobile number has been added"

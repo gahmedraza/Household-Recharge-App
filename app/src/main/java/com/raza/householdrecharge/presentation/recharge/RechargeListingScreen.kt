@@ -44,12 +44,12 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 fun RechargeListingScreen(
     memberId: String = "",
     mobileNumber: String = "",
-    viewModel: RechargeListingViewModel = hiltViewModel()
+    viewmodel: RechargeListingViewModel = hiltViewModel()
 ) {
-    val rechargeListingUIState by viewModel.rechargeListingUIState.collectAsStateWithLifecycle()
+    val rechargeListingUIState by viewmodel.rechargeListingUIState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.getAllRecharges(
+        viewmodel.getAllRecharges(
             memberId = memberId,
             mobileNumber = mobileNumber,
 

@@ -30,14 +30,14 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun InvitationListingScreen(
-    viewModel: InvitationViewModel = hiltViewModel(),
+    viewmodel: InvitationViewModel = hiltViewModel(),
     onAddInvitation: () -> Unit = {}
 ) {
 
-    val invitationUIState = viewModel.invitationUIState
+    val invitationUIState = viewmodel.invitationUIState
 
     LaunchedEffect(Unit) {
-        viewModel.fetchInvitationList(
+        viewmodel.fetchInvitationList(
             onSuccess = { invitationList ->
                 invitationUIState.invitationList = invitationList
             },

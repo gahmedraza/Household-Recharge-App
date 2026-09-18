@@ -21,7 +21,7 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun SettingScreen(
-    viewModel: SettingViewModel = hiltViewModel(),
+    viewmodel: SettingViewModel = hiltViewModel(),
     onLogout: () -> Unit = {},
     onInvitation: () -> Unit = {},
     onAccount: () -> Unit = {}
@@ -76,7 +76,7 @@ fun SettingScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        viewModel.logout(
+                        viewmodel.logout(
                             onSuccess = {
                                 onLogout()
                             },

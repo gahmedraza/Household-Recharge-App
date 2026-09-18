@@ -34,12 +34,12 @@ import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun FindHouseholdScreen(
-    viewModel: HouseholdViewModel = hiltViewModel(),
+    viewmodel: HouseholdViewModel = hiltViewModel(),
     onSuccess: (FindHouseholdResponse?) -> Unit = { a -> },
     onFailure: () -> Unit = {}
 ) {
 
-    val householdUIState = viewModel.householdUIState
+    val householdUIState = viewmodel.householdUIState
     Scaffold { paddingValues ->
 
         Box(
@@ -112,7 +112,7 @@ fun FindHouseholdScreen(
 
                         onClick = {
 
-                            viewModel.findHousehold(
+                            viewmodel.findHousehold(
                                 invitationCode = householdUIState.invitationCode,
 
                                 onSuccess = { response ->

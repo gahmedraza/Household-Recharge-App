@@ -36,11 +36,11 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun RegisterScreen(
-    viewModel: RegisterViewModel = hiltViewModel(),
+    viewmodel: RegisterViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
     onLogin: () -> Unit = {}
 ) {
-    val registerUIState = viewModel.registerUIState
+    val registerUIState = viewmodel.registerUIState
     var shouldProceed by remember { mutableStateOf(false) }
     var apiStatus by remember { mutableStateOf("") }
 
@@ -125,7 +125,7 @@ fun RegisterScreen(
 
                     onClick = {
 
-                        viewModel.registerAndAddAccount(
+                        viewmodel.registerAndAddAccount(
                             onSuccess = { userId ->
 
                                 apiStatus = "account creation success"

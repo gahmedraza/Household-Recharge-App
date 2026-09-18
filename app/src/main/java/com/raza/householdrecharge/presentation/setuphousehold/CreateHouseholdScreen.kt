@@ -36,11 +36,11 @@ import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun CreateHouseholdScreen(
-    viewModel: HouseholdViewModel = hiltViewModel(),
+    viewmodel: HouseholdViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-    val householdUIState = viewModel.householdUIState
+    val householdUIState = viewmodel.householdUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
@@ -103,7 +103,7 @@ fun CreateHouseholdScreen(
 
                     onClick = {
 
-                        viewModel.onAddHousehold(
+                        viewmodel.onAddHousehold(
                             householdName = householdUIState.household.name.cleanString(),
 
                             onSuccess = { householdId ->

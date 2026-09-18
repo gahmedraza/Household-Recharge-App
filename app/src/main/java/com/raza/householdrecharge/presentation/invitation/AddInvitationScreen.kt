@@ -33,10 +33,10 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun AddInvitationScreen(
-    viewModel: InvitationViewModel = hiltViewModel(),
+    viewmodel: InvitationViewModel = hiltViewModel(),
     onInvitationCreated: () -> Unit = {}
 ) {
-    val invitationUIState = viewModel.invitationUIState
+    val invitationUIState = viewmodel.invitationUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var status by rememberSaveable { mutableStateOf("") }
 
@@ -111,9 +111,9 @@ fun AddInvitationScreen(
 
                     onClick = {
 
-                        invitationUIState.invitationCode = viewModel.generateInvitationCode()
+                        invitationUIState.invitationCode = viewmodel.generateInvitationCode()
 
-                        viewModel.createInvitation(
+                        viewmodel.createInvitation(
                             code = invitationUIState.invitationCode,
                             onSuccess = { data ->
 

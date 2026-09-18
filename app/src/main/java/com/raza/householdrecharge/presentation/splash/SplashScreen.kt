@@ -25,13 +25,13 @@ fun SplashScreen(
     openLogin: () -> Unit = {},
     openSetupHousehold: () -> Unit = {},
     openDashboard: () -> Unit = {},
-    viewModel: SplashViewModel = hiltViewModel()
+    viewmodel: SplashViewModel = hiltViewModel()
 ) {
 
     LaunchedEffect(Unit) {
         delay(2000.milliseconds)
 
-        val destination = viewModel.getStartDestination()
+        val destination = viewmodel.getStartDestination()
 
         when(destination) {
 

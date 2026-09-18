@@ -25,7 +25,7 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
 fun SetupHouseholdScreen(
-    viewModel: HouseholdViewModel = hiltViewModel(),
+    viewmodel: HouseholdViewModel = hiltViewModel(),
     onCreateHousehold: () -> Unit = {},
     onJoinHousehold: () -> Unit = {}
 ) {

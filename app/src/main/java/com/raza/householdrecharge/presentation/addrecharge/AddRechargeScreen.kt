@@ -39,12 +39,12 @@ import com.raza.householdrecharge.util.cleanString
 fun AddRechargeScreen(
     mobileNumber: String = "",
     id: String = "",
-    viewModel: AddRechargeViewModel = hiltViewModel(),
+    viewmodel: AddRechargeViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
 
-    val addRechargeUIState = viewModel.addRechargeUIState
+    val addRechargeUIState = viewmodel.addRechargeUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
     val modifier = Modifier.fillMaxWidth()
@@ -149,7 +149,7 @@ fun AddRechargeScreen(
                     enabled = !shouldProceed,
 
                     onClick = {
-                        viewModel.addRecharge(
+                        viewmodel.addRecharge(
                             mobileNumber = mobileNumber,
                             mobileNumberId = id,
                             onSuccess = {
