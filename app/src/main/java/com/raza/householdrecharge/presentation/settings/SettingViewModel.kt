@@ -18,7 +18,7 @@ class SettingViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ): ViewModel() {
 
-    var themeMode by mutableStateOf(ThemeMode.SYSTEM)
+    var settingUIState by mutableStateOf(SettingUIState())
 
     fun signOut(onSuccess: () -> Unit, onFailure: () -> Unit) {
         FirebaseAuth

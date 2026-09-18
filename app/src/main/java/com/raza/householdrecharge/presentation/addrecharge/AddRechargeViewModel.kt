@@ -25,11 +25,6 @@ class AddRechargeViewModel @Inject constructor(
 
     var addRechargeUIState by mutableStateOf(AddRechargeUIState())
 
-    var rechargeDescription by mutableStateOf("")
-    var amount by mutableStateOf("")
-    var date by mutableStateOf("")
-    var rechargedBy by mutableStateOf("")
-
     fun addRecharge(
         mobileNumber: String,
         mobileNumberId: String,
@@ -37,17 +32,16 @@ class AddRechargeViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //
             addRechargeUIState.isLoading = true
 
             val rechargeDto = RechargeDtoFactory(
                 sessionManager = sessionManager
             ).create(
-                rechargeAmount = amount.toInt(),
-                rechargeDate = date.toLong(),
+                rechargeAmount = addRechargeUIState.amount.toInt(),
+                rechargeDate = addRechargeUIState.date.toLong(),
                 expiryDate = addRechargeUIState.planExpiryDate.toLong(),
-                rechargedBy = rechargedBy,
-                rechargeDescription = rechargeDescription,
+                rechargedBy = addRechargeUIState.rechargedBy,
+                rechargeDescription = addRechargeUIState.rechargeDescription,
                 mobileNumber = mobileNumber.toLong()
             )
 
@@ -63,7 +57,6 @@ class AddRechargeViewModel @Inject constructor(
                 onFailure("failure")
                 return@launch
             }
-            //
 
             val result = rechargeUseCase.addRechargeAndUpdateMobileNumber(
                 rechargeDto = rechargeDto,

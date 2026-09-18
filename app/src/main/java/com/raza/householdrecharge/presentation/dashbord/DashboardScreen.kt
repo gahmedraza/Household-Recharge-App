@@ -41,11 +41,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.presentation.components.ActivePlanIndicator
-import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.presentation.components.ActivePlanIndicator
 import com.raza.householdrecharge.presentation.components.ExpiredPlanIndicator
+import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.components.getPrintableDate
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.presentation.theme.Red66
@@ -59,9 +59,7 @@ fun DashboardScreen(
     onAddMobileNumber: () -> Unit = {}
 ) {
 
-    var dashboardUIState = viewModel.dashboardUIState
-    val mobileNumberList by viewModel.mobileNumberList.collectAsStateWithLifecycle()
-    val rechargeList by viewModel.rechargeList.collectAsStateWithLifecycle()
+    val dashboardUIState by viewModel.dashboardUIState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getAllMobileNumbers()
@@ -106,7 +104,7 @@ fun DashboardScreen(
                     }
                 }
 
-                else if (mobileNumberList.isEmpty()) {
+                else if (dashboardUIState.mobileNumberList.isEmpty()) {
                     item {
                         Text(
                             text = "No mobile numbers added",
@@ -121,10 +119,10 @@ fun DashboardScreen(
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 
-                    items(mobileNumberList) { item ->
+                    items(dashboardUIState.mobileNumberList) { item ->
 
-                        Logger.log(TAG2, rechargeList.toString())
-                        var rechargeDto = rechargeList.find {
+                        Logger.log(TAG2, dashboardUIState.rechargeList.toString())
+                        var rechargeDto = dashboardUIState.rechargeList.find {
                             Logger.log(TAG2, "rechargeId: ${it.id}, lastRechargeId: ${item.lastRechargeId}")
                             it.id == item.lastRechargeId
                         }

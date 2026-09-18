@@ -15,6 +15,7 @@ import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,9 +25,7 @@ class DashboardViewModel @Inject constructor(
     private val rechargeUseCase: RechargeUseCase
 ) : ViewModel() {
 
-    var dashboardUIState by mutableStateOf(DashboardUIState())
-    val mobileNumberList = MutableStateFlow<List<MobileNumberDto>>(emptyList())
-    var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
+    var dashboardUIState = MutableStateFlow(DashboardUIState())
 
     init {
         Logger.log("dashboard viewmodel init called...")
@@ -55,7 +54,11 @@ class DashboardViewModel @Inject constructor(
 
                 val mobileNumberDtoList = MobileNumberDtoMapper.map(mobileNumberEntityList)
 
-                mobileNumberList.value = mobileNumberDtoList
+                dashboardUIState.update {
+                    it.copy(
+                        mobileNumberList = mobileNumberDtoList
+                    )
+                }
             }
         }
     }
@@ -67,7 +70,11 @@ class DashboardViewModel @Inject constructor(
 
                 val rechargeDtoList = RechargeDtoMapper.map(rechargeDtoList)
 
-                rechargeList.value = rechargeDtoList
+                dashboardUIState.update {
+                    it.copy(
+                        rechargeList = rechargeDtoList
+                    )
+                }
             }
         }
     }

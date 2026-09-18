@@ -46,7 +46,7 @@ fun RechargeListingScreen(
     mobileNumber: String = "",
     viewModel: RechargeListingViewModel = hiltViewModel()
 ) {
-    val rechargeList by viewModel.rechargeList.collectAsStateWithLifecycle()
+    val rechargeListingUIState by viewModel.rechargeListingUIState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getAllRecharges(
@@ -71,7 +71,7 @@ fun RechargeListingScreen(
 
         val modifier = Modifier.padding(paddingValues)
 
-        if (rechargeList.isEmpty()) {
+        if (rechargeListingUIState.rechargeList.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -91,7 +91,7 @@ fun RechargeListingScreen(
                     Spacer(modifier = Modifier.height(20.dp))
                 }
 
-                items(rechargeList) { item ->
+                items(rechargeListingUIState.rechargeList) { item ->
                     RechargeListItemCard(
                         item = item,
                         onClick = {

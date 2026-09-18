@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
@@ -13,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class RechargeListingViewModel @Inject constructor(
     private val validator: RechargeValidator
 ) : ViewModel() {
 
-    var rechargeList = MutableStateFlow<List<RechargeDto>>(emptyList())
+    var rechargeListingUIState = MutableStateFlow(RechargeListingUIState())
 
     init {
         Logger.log("recharge listing viewmodel init called")
@@ -33,8 +33,12 @@ class RechargeListingViewModel @Inject constructor(
     fun observeRecharges() {
         viewModelScope.launch {
             rechargeUseCase.observeRecharges().collect { rechargeDtoList ->
-                rechargeList.value = rechargeDtoList.map { rechargeDto ->
-                    RechargeDtoMapper.map(rechargeDto)
+                rechargeListingUIState.update {
+                    it.copy(
+                        rechargeList = rechargeDtoList.map { rechargeDto ->
+                            RechargeDtoMapper.map(rechargeDto)
+                        }
+                    )
                 }
             }
         }

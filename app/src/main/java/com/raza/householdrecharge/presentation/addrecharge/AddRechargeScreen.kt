@@ -43,7 +43,8 @@ fun AddRechargeScreen(
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-    var addRechargeUIState = viewModel.addRechargeUIState
+
+    val addRechargeUIState = viewModel.addRechargeUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var signinStatus by rememberSaveable { mutableStateOf("") }
     val modifier = Modifier.fillMaxWidth()
@@ -70,10 +71,10 @@ fun AddRechargeScreen(
                     },
 
                     onValueChange = {
-                        viewModel.rechargeDescription = it
+                        addRechargeUIState.rechargeDescription = it
                     },
 
-                    value = viewModel.rechargeDescription
+                    value = addRechargeUIState.rechargeDescription
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -86,10 +87,10 @@ fun AddRechargeScreen(
                     },
 
                     onValueChange = {
-                        viewModel.amount = it
+                        addRechargeUIState.amount = it
                     },
 
-                    value = viewModel.amount,
+                    value = addRechargeUIState.amount,
 
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
@@ -104,10 +105,10 @@ fun AddRechargeScreen(
                     label = "Recharge Date",
 
                     onDateSelected = {
-                        viewModel.date = it.toString()
+                        addRechargeUIState.date = it.toString()
                     },
 
-                    value = viewModel.date,
+                    value = addRechargeUIState.date,
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -134,10 +135,10 @@ fun AddRechargeScreen(
                     },
 
                     onValueChange = {
-                        viewModel.rechargedBy = it
+                        addRechargeUIState.rechargedBy = it
                     },
 
-                    value = viewModel.rechargedBy
+                    value = addRechargeUIState.rechargedBy
                 )
 
                 Spacer(Modifier.height(40.dp))

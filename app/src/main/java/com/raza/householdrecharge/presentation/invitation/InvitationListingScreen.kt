@@ -38,7 +38,7 @@ fun InvitationListingScreen(
     onAddInvitation: () -> Unit = {}
 ) {
 
-    var invitationUIState = viewModel.invitationUIState
+    val invitationUIState = viewModel.invitationUIState
 
     LaunchedEffect(Unit) {
         viewModel.fetchInvitationList(

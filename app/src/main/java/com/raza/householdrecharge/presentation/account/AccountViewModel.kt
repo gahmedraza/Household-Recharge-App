@@ -24,8 +24,6 @@ class AccountViewModel @Inject constructor(
 ): ViewModel() {
 
     var accountUIState by mutableStateOf(AccountUIState())
-    var profileName by mutableStateOf("")
-    var profileHousehold by mutableStateOf("")
 
     fun getAccount() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -37,13 +35,15 @@ class AccountViewModel @Inject constructor(
 
             if(result is Result.Failure) {
                 Logger.log(result.error.toString())
+                accountUIState.isLoading = false
                 return@launch
             }
 
             val account = (result as Result.Success).data
 
-            profileName = account.accountName.cleanString()
-            profileHousehold = sessionManager.householdName.first()
+            accountUIState.profileName = account.accountName.cleanString()
+            accountUIState.profileHousehold = sessionManager.householdName.first()
+            accountUIState.isLoading = false
         }
     }
 }

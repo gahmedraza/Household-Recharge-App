@@ -40,7 +40,7 @@ fun FindHouseholdScreen(
     onFailure: () -> Unit = {}
 ) {
 
-    var householdUIState = viewModel.householdUIState
+    val householdUIState = viewModel.householdUIState
     Scaffold { paddingValues ->
 
         Box(

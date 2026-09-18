@@ -32,7 +32,7 @@ fun AccountScreen(
     viewModel: AccountViewModel = hiltViewModel()
 ) {
 
-    var accountUIState = viewModel.accountUIState
+    val accountUIState = viewModel.accountUIState
 
     LaunchedEffect(Unit) {
         viewModel.getAccount()
@@ -85,7 +85,7 @@ fun AccountScreen(
                     Spacer(modifier = Modifier.height(5.dp))
 
                     Text(
-                        text = viewModel.profileName
+                        text = accountUIState.profileName
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
@@ -97,7 +97,7 @@ fun AccountScreen(
                     Spacer(modifier = Modifier.height(5.dp))
 
                     Text(
-                        text = viewModel.profileHousehold
+                        text = accountUIState.profileHousehold
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))

@@ -42,7 +42,7 @@ fun AddMobileNumberScreen(
     onFailure: () -> Unit = {}
 ) {
 
-    var mobileNumberUIState = viewModel.mobileNumberUIState
+    val mobileNumberUIState = viewModel.mobileNumberUIState
     val modifier = Modifier.fillMaxWidth()
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
