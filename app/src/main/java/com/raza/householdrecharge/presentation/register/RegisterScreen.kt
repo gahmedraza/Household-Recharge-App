@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.presentation.auth
+package com.raza.householdrecharge.presentation.register
 
 import android.content.res.Configuration
 import androidx.compose.foundation.clickable
@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.presentation.components.AppCard
-import com.raza.householdrecharge.presentation.register.RegisterViewModel
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
 @Composable
