@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.presentation.auth
+package com.raza.householdrecharge.presentation.register
 
 data class RegisterUIState(
     var isLoading: Boolean = false,

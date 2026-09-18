@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.presentation.auth
+package com.raza.householdrecharge.presentation.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

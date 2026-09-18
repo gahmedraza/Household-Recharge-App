@@ -40,7 +40,7 @@ fun CreateHouseholdScreen(
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-    var householdUIState = viewModel.householdUIState
+    val householdUIState = viewModel.householdUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()

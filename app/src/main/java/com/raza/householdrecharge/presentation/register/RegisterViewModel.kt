@@ -1,19 +1,19 @@
-package com.raza.householdrecharge.presentation.auth
+package com.raza.householdrecharge.presentation.register
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.data.session.SessionManager
+import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.OnboardingDto
+import com.raza.householdrecharge.data.session.SessionManager
+import com.raza.householdrecharge.domain.error.AccountError
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.util.cleanString
-import kotlinx.coroutines.launch
-import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.domain.error.AccountError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel

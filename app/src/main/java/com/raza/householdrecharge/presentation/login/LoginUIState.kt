@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.presentation.auth
+package com.raza.householdrecharge.presentation.login
 
 data class LoginUIState(
     var mobileNumber: String = "",

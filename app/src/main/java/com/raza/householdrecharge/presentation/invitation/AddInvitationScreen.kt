@@ -36,7 +36,7 @@ fun AddInvitationScreen(
     viewModel: InvitationViewModel = hiltViewModel(),
     onInvitationCreated: () -> Unit = {}
 ) {
-    var invitationUIState = viewModel.invitationUIState
+    val invitationUIState = viewModel.invitationUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var status by rememberSaveable { mutableStateOf("") }
 
