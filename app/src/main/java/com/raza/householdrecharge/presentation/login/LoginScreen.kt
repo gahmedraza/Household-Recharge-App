@@ -35,6 +35,7 @@ import com.raza.householdrecharge.R
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
+import com.raza.householdrecharge.presentation.common.PasswordValidator
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.login.LoginViewModel
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
@@ -135,25 +136,8 @@ fun LoginScreen(
 
                     onClick = {
 
-                        //validate the input fields
-                        loginUIState.mobileNumberError = MobileNumberValidator.validateMobileNumber(loginUIState.mobileNumber, loginUIState.mobileNumberError)
-
-                        if(loginUIState.password.length < 8) {
-                            loginUIState.passwordError = "Password must contain at least 8 characters"
-                        }
-
-                        if(loginUIState.mobileNumberError.isNotEmpty()||loginUIState.passwordError.isNotEmpty()) {
-                            return@OutlinedButton
-                        }
-
                         //make the api call
-                        viewModel.login2(
-                            authDto = AuthDto(
-                                accountName = null,
-                                mobileNumber = loginUIState.mobileNumber,
-                                password = loginUIState.password
-                            ),
-
+                        viewModel.login(
                             onSuccess = { userId ->
 
                                 apiStatus = "login success"

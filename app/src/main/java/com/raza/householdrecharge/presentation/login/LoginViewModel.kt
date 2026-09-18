@@ -10,6 +10,8 @@ import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
+import com.raza.householdrecharge.presentation.common.MobileNumberValidator
+import com.raza.householdrecharge.presentation.common.PasswordValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
@@ -24,17 +26,36 @@ class LoginViewModel @Inject constructor(
 
     var loginUIState by mutableStateOf(LoginUIState())
 
-    fun login2(
-        authDto: AuthDto,
+    fun login(
         onSuccess: (String?) -> Unit,
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
+            //
+            //validate the input fields
+            loginUIState.mobileNumberError = MobileNumberValidator.validateMobileNumber(
+                loginUIState.mobileNumber,
+                loginUIState.mobileNumberError
+            )
+
+            loginUIState.passwordError = PasswordValidator.validatePassword(
+                loginUIState.password,
+                loginUIState.passwordError
+            )
+
+            if(loginUIState.mobileNumberError.isNotEmpty()
+                || loginUIState.passwordError.isNotEmpty()
+                ) {
+
+                return@launch
+            }
+            //
+
             loginUIState.isLoading = true
 
             val authDto = AuthDto(
-                mobileNumber = "${authDto.mobileNumber}@householdrecharge.local",
-                password = authDto.password
+                mobileNumber = "${loginUIState.mobileNumber}@householdrecharge.local",
+                password = loginUIState.password
             )
 
             val result51 = authUseCase.loginAndRetrieveAccount(
@@ -61,40 +82,6 @@ class LoginViewModel @Inject constructor(
 
                     loginUIState.isLoading = false
                     onFailure(result51.error)
-                }
-            }
-
-        }
-    }
-
-    fun login(
-        authDto: AuthDto,
-        onSuccess: (String?) -> Unit,
-        onFailure: (String?) -> Unit
-    ) {
-        viewModelScope.launch {
-            loginUIState.isLoading = true
-
-            val authDto = AuthDto(
-                mobileNumber = "${authDto.mobileNumber}@householdrecharge.local",
-                password = authDto.password
-            )
-
-            val result = authUseCase.login(
-                authDto = authDto
-            )
-
-            when(result) {
-                is Result.Success<String> -> {
-
-                    sessionManager.saveUserId(result.data)
-                    loginUIState.isLoading = false
-                    onSuccess(result.data)
-                }
-                is Result.Failure<String> -> {
-
-                    loginUIState.isLoading = false
-                    onFailure(result.error)
                 }
             }
 
