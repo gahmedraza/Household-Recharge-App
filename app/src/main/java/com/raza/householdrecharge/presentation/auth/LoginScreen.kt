@@ -42,13 +42,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    onSignup: () -> Unit = {},
-    onSignInCompletion: () -> Unit = {},
+    onRegister: () -> Unit = {},
+    onLoginCompletion: () -> Unit = {},
     onBoardingNotComplete: () -> Unit = {}
 ) {
-    var loginUIState = viewModel.loginUIState
+    val loginUIState = viewModel.loginUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var signinStatus by rememberSaveable { mutableStateOf("") }
+    var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
     AppCard {
@@ -155,14 +155,14 @@ fun LoginScreen(
 
                             onSuccess = { userId ->
 
-                                signinStatus = "login success"
+                                apiStatus = "login success"
                                 shouldProceed = true
 
                                 Logger.log("user logged in with id= $userId")
                             },
                             onFailure = { message ->
 
-                                signinStatus = "login failure\n$message"
+                                apiStatus = "login failure\n$message"
                                 shouldProceed = false
 
                                 Logger.log("response= $message")
@@ -191,7 +191,7 @@ fun LoginScreen(
                         scope.launch {
                             if(viewModel.isOnboardingComplete()) {
 
-                                onSignInCompletion()
+                                onLoginCompletion()
                             } else {
 
                                 onBoardingNotComplete()
@@ -208,7 +208,7 @@ fun LoginScreen(
                     text = stringResource(R.string.create_account),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { onSignup() }
+                    modifier = Modifier.clickable { onRegister() }
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -223,7 +223,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = signinStatus,
+                    text = apiStatus,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (shouldProceed) {
                         MaterialTheme.colorScheme.primary

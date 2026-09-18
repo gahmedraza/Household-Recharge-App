@@ -59,7 +59,7 @@ class AuthRemoteDataSource @Inject constructor(
             val userId = documentReference.user?.uid.cleanString()
 
             if (userId.isEmpty()) {
-                result = Result.Failure<String>("user id was not created during signup")
+                result = Result.Failure<String>("user id was not created during register")
             }
 
             result = Result.Success<String>(userId)

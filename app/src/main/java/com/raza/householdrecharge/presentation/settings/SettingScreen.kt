@@ -22,7 +22,7 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 @Composable
 fun SettingScreen(
     viewModel: SettingViewModel = hiltViewModel(),
-    onSignOut: () -> Unit = {},
+    onLogout: () -> Unit = {},
     onInvitation: () -> Unit = {},
     onAccount: () -> Unit = {}
 ) {
@@ -72,13 +72,13 @@ fun SettingScreen(
             HorizontalDivider(modifier = Modifier.height(1.dp))
 
             Text(
-                text = "SignOut",
+                text = "Logout",
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        viewModel.signOut(
+                        viewModel.logout(
                             onSuccess = {
-                                onSignOut()
+                                onLogout()
                             },
                             onFailure = {
 

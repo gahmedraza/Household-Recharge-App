@@ -37,11 +37,11 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 fun RegisterScreen(
     viewModel: RegisterViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
-    onSignIn: () -> Unit = {}
+    onLogin: () -> Unit = {}
 ) {
-    var registerUIState = viewModel.registerUIState
+    val registerUIState = viewModel.registerUIState
     var shouldProceed by remember { mutableStateOf(false) }
-    var signupStatus by remember { mutableStateOf("") }
+    var apiStatus by remember { mutableStateOf("") }
 
     AppCard {
 
@@ -127,14 +127,14 @@ fun RegisterScreen(
                         viewModel.registerAndAddAccount(
                             onSuccess = { userId ->
 
-                                signupStatus = "account creation success"
+                                apiStatus = "account creation success"
                                 shouldProceed = true
 
                                 Logger.log("user created with id= $userId")
                             },
                             onFailure = { message ->
 
-                                signupStatus = "account creation failure\n$message"
+                                apiStatus = "account creation failure\n$message"
                                 shouldProceed = false
 
                                 Logger.log("response= $message")
@@ -174,7 +174,7 @@ fun RegisterScreen(
                     text = "Already have an account? Log In",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.clickable { onSignIn() }
+                    modifier = Modifier.clickable { onLogin() }
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -189,7 +189,7 @@ fun RegisterScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = signupStatus,
+                    text = apiStatus,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (shouldProceed) {
                         MaterialTheme.colorScheme.primary
@@ -204,7 +204,7 @@ fun RegisterScreen(
 }
 
 @Composable
-fun SignupScreenContent() {
+fun RegisterScreenContent() {
     HouseholdRechargeTheme(dynamicColor = false) {
         RegisterScreen()
     }
@@ -215,8 +215,8 @@ fun SignupScreenContent() {
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun SignupScreenDarkPreview() {
-    SignupScreenContent()
+fun RegisterScreenDarkPreview() {
+    RegisterScreenContent()
 }
 
 @Preview(
@@ -224,6 +224,6 @@ fun SignupScreenDarkPreview() {
     uiMode = Configuration.UI_MODE_NIGHT_NO
 )
 @Composable
-fun SignupScreenLightPreview() {
-    SignupScreenContent()
+fun RegisterScreenLightPreview() {
+    RegisterScreenContent()
 }

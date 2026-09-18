@@ -101,10 +101,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun signinAndFetchAccount() {
+    fun loginAndFetchAccount() {
         //user provides mobile number and password
-        //signin using firebase auth
-        //when signin is done you receive authid from firebase auth collection
+        //login using firebase auth
+        //when login is done you receive authid from firebase auth collection
         //fetch account using fire store
         //save the details in the session manager
         //allow user to proceed

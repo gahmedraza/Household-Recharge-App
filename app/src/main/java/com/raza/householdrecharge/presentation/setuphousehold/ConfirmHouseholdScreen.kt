@@ -45,7 +45,7 @@ fun ConfirmHouseholdScreen(
 
     val householdUIState = viewModel.householdUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var signinStatus by rememberSaveable { mutableStateOf("") }
+    var apiStatus by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -119,12 +119,12 @@ fun ConfirmHouseholdScreen(
                             householdId = householdId.cleanString(),
                             onSuccess = {
 
-                                signinStatus = "You have been added to the household"
+                                apiStatus = "You have been added to the household"
                                 shouldProceed = true
                             },
                             onFailure = {
 
-                                signinStatus = "Failure"
+                                apiStatus = "Failure"
                                 shouldProceed = false
 
                                 onFailure()
@@ -181,7 +181,7 @@ fun ConfirmHouseholdScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
-                    text = signinStatus,
+                    text = apiStatus,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (shouldProceed) {
                         MaterialTheme.colorScheme.primary

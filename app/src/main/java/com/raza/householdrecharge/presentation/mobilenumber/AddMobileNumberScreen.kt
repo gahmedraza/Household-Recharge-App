@@ -46,7 +46,7 @@ fun AddMobileNumberScreen(
     val modifier = Modifier.fillMaxWidth()
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var signinStatus by rememberSaveable { mutableStateOf("") }
+    var apiStatus by rememberSaveable { mutableStateOf("") }
 
     AppCard {
 
@@ -91,12 +91,12 @@ fun AddMobileNumberScreen(
                         viewModel.addMobileNumber(
 
                             onSuccess = {
-                                signinStatus = "mobile number has been added"
+                                apiStatus = "mobile number has been added"
                                 shouldProceed = true
                             },
 
                             onFailure = { message ->
-                                signinStatus = message.cleanString()
+                                apiStatus = message.cleanString()
                                 shouldProceed = false
 
                                 onFailure()
@@ -141,7 +141,7 @@ fun AddMobileNumberScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = signinStatus,
+                    text = apiStatus,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (shouldProceed) {
                         MaterialTheme.colorScheme.primary

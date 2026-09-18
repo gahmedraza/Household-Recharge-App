@@ -30,20 +30,20 @@ class AuthUseCase @Inject constructor(
 
             var accountDto: AccountDto? = null
 
-            val signupResult = authRepository.register(authDto = authDto)
+            val registerResult = authRepository.register(authDto = authDto)
 
-            when (signupResult) {
+            when (registerResult) {
                 is Result.Success -> {
 
                     accountDto = AccountDto(
                         accountName = authDto.accountName,
-                        accountId = signupResult.data.cleanString()
+                        accountId = registerResult.data.cleanString()
                     )
 
                     val addAccountResult = accountRepository
 
                         .createAccount(
-                            collectionId = signupResult.data.cleanString(),
+                            collectionId = registerResult.data.cleanString(),
                             accountDto = accountDto
                         )
 
@@ -51,8 +51,8 @@ class AuthUseCase @Inject constructor(
 
                         onBoardingDto =
                             OnboardingDto(
-                                authId = signupResult.data.cleanString(),
-                                accountId = signupResult.data.cleanString()
+                                authId = registerResult.data.cleanString(),
+                                accountId = registerResult.data.cleanString()
                             )
 
                         result = Result.Success(onBoardingDto)
@@ -67,7 +67,7 @@ class AuthUseCase @Inject constructor(
 
                 is Result.Failure -> {
 
-                    Logger.log(signupResult.error.cleanString())
+                    Logger.log(registerResult.error.cleanString())
                     result = Result.Failure(AccountError.Unknown)
                 }
             }

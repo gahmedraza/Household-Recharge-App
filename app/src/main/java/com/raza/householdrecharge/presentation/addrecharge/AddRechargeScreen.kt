@@ -46,7 +46,7 @@ fun AddRechargeScreen(
 
     val addRechargeUIState = viewModel.addRechargeUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var signinStatus by rememberSaveable { mutableStateOf("") }
+    var apiStatus by rememberSaveable { mutableStateOf("") }
     val modifier = Modifier.fillMaxWidth()
 
     AppCard {
@@ -154,13 +154,13 @@ fun AddRechargeScreen(
                             mobileNumberId = id,
                             onSuccess = {
 
-                                signinStatus = "recharge has been added"
+                                apiStatus = "recharge has been added"
                                 shouldProceed = true
 
                             },
                             onFailure = { message ->
 
-                                signinStatus = message.cleanString()
+                                apiStatus = message.cleanString()
                                 shouldProceed = false
                                 onFailure()
                             }
@@ -204,7 +204,7 @@ fun AddRechargeScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = signinStatus,
+                    text = apiStatus,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (shouldProceed) {
                         MaterialTheme.colorScheme.primary

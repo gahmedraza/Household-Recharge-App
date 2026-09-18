@@ -43,13 +43,13 @@ fun OnboardingNavigation() {
         composable(ComposeScreen.Login.description) {
 
             LoginScreen(
-                onSignup = {
-                    Log.d("TAG", "OnSignup")
+                onRegister = {
+                    Log.d("TAG", "OnRegister")
                     navController.navigate(ComposeScreen.Register.description)
                 },
 
-                onSignInCompletion = {
-                    Log.d("TAG", "OnSignIn")
+                onLoginCompletion = {
+                    Log.d("TAG", "OnLogin")
                     navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
                 },
 
@@ -64,12 +64,12 @@ fun OnboardingNavigation() {
 
             RegisterScreen(
                 onSuccess = {
-                    Log.d("TAG", "On Signup Success")
+                    Log.d("TAG", "On Register Success")
                     navController.navigate(ComposeScreen.SetupHousehold.description)
                 },
 
-                onSignIn = {
-                    Log.d("TAG", "OnSignIn")
+                onLogin = {
+                    Log.d("TAG", "onLogin")
                     navController.navigate(ComposeScreen.Login.description)
                 })
         }

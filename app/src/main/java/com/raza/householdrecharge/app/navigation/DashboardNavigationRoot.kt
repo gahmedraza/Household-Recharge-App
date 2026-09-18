@@ -81,7 +81,7 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.Setting.description) {
                 SettingScreen(
-                    onSignOut = {
+                    onLogout = {
                         navController.navigate(ComposeScreen.OnboardingNavigationRoot.description)
                     },
                     onInvitation = {

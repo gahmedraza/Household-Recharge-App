@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.data.session.SessionManager
-import com.raza.householdrecharge.presentation.theme.ThemeMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -20,7 +19,7 @@ class SettingViewModel @Inject constructor(
 
     var settingUIState by mutableStateOf(SettingUIState())
 
-    fun signOut(onSuccess: () -> Unit, onFailure: () -> Unit) {
+    fun logout(onSuccess: () -> Unit, onFailure: () -> Unit) {
         FirebaseAuth
             .getInstance()
             .signOut()

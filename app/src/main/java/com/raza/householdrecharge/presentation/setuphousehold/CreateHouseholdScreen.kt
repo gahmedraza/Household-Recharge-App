@@ -42,7 +42,7 @@ fun CreateHouseholdScreen(
 ) {
     var householdUIState = viewModel.householdUIState
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var signinStatus by rememberSaveable { mutableStateOf("") }
+    var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
     Scaffold { paddingValues ->
@@ -109,13 +109,13 @@ fun CreateHouseholdScreen(
                             onSuccess = { householdId ->
                                 Log.d("TAG", "success: $householdId")
 
-                                signinStatus = "household created"
+                                apiStatus = "household created"
                                 shouldProceed = true
                             },
                             onFailure = { error ->
                                 Log.d("TAG", "failure: $error")
 
-                                signinStatus = "household creation failure\n$error"
+                                apiStatus = "household creation failure\n$error"
                                 shouldProceed = false
 
                                 onFailure()
@@ -161,7 +161,7 @@ fun CreateHouseholdScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = signinStatus,
+                    text = apiStatus,
                     style = MaterialTheme.typography.bodyLarge,
                     color = if (shouldProceed) {
                         MaterialTheme.colorScheme.primary
