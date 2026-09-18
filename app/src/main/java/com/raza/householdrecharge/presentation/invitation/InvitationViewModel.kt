@@ -68,7 +68,7 @@ class InvitationViewModel @Inject constructor(
     }
 
     fun fetchInvitationList(
-        onSuccess: (List<Invitation>) -> Unit,
+        onSuccess: (List<InvitationDto>) -> Unit,
         onFailure: (String) -> Unit
     ) {
 
@@ -76,7 +76,7 @@ class InvitationViewModel @Inject constructor(
             val invitationResult = invitationUseCase.getAllInvitations()
 
             when(invitationResult) {
-                is Result.Success<List<Invitation>> -> {
+                is Result.Success<List<InvitationDto>> -> {
                     invitationUIState.invitationList = invitationResult.data
 
                     onSuccess(invitationResult.data)

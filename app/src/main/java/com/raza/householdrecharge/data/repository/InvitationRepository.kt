@@ -4,7 +4,6 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.datasource.InvitationRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.domain.error.InvitationError
-import com.raza.householdrecharge.presentation.invitation.Invitation
 import javax.inject.Inject
 
 class InvitationRepository @Inject constructor(
@@ -46,7 +45,7 @@ class InvitationRepository @Inject constructor(
      * No additional code
      */
     suspend fun getAllInvitations(
-    ): Result<List<Invitation>, String> {
+    ): Result<List<InvitationDto>, String> {
 
         return invitationRemoteDataSource.getAllInvitations()
     }

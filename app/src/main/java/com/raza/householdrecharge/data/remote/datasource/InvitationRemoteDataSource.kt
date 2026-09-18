@@ -5,7 +5,6 @@ import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.domain.error.InvitationError
-import com.raza.householdrecharge.presentation.invitation.Invitation
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -59,9 +58,9 @@ class InvitationRemoteDataSource @Inject constructor(
     }
 
     suspend fun getAllInvitations(
-    ): Result<List<Invitation>, String> {
+    ): Result<List<InvitationDto>, String> {
 
-        var result: Result<List<Invitation>, String>
+        var result: Result<List<InvitationDto>, String>
 
         try {
             val documentSnapshot = firestore
@@ -70,7 +69,7 @@ class InvitationRemoteDataSource @Inject constructor(
                 .await()
 
             val invitationList = documentSnapshot.documents.mapNotNull { document ->
-                document.toObject(Invitation::class.java)
+                document.toObject(InvitationDto::class.java)
             }
 
             result = Result.Success(invitationList)

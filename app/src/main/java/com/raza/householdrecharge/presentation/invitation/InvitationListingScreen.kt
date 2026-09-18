@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeTitleText
@@ -88,7 +89,7 @@ fun InvitationListingScreen(
 @Composable
 fun InvitationListItemCard(
     modifier: Modifier,
-    invitation: Invitation
+    invitation: InvitationDto
 ) {
 
     AppCard(
@@ -185,18 +186,3 @@ fun InvitationListingScreenDarkPreview() {
 fun InvitationListingScreenLightPreview() {
     InvitationListingScreenContent()
 }
-
-//todo belongs either in domain or data/remote/dto
-data class Invitation(
-    val code: String = "",
-    val dateCreated: String = "",
-    val dateCreatedMillis: Long = 0,
-    val dateExpires: String = "",
-    val dateExpiresMillis: Long = 0,
-    val status: String = "",
-    //
-    val createdAt: String = "",
-    val createdBy: String = "",
-    val expiresAt: String = "",
-    //
-)
