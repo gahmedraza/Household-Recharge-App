@@ -24,7 +24,7 @@ import com.raza.householdrecharge.presentation.addrecharge.AddRechargeScreen
 import com.raza.householdrecharge.presentation.dashbord.DashboardScreen
 import com.raza.householdrecharge.presentation.invitation.AddInvitationScreen
 import com.raza.householdrecharge.presentation.invitation.InvitationListingScreen
-import com.raza.householdrecharge.presentation.mobilenumber.AddMobileNumberScreen
+import com.raza.householdrecharge.presentation.addmobilenumber.AddMobileNumberScreen
 import com.raza.householdrecharge.presentation.recharge.RechargeListingScreen
 import com.raza.householdrecharge.presentation.settings.SettingScreen
 

@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.presentation.mobilenumber
+package com.raza.householdrecharge.presentation.addmobilenumber
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,20 +15,20 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MobileNumberViewModel @Inject constructor(
+class AddMobileNumberViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val mobileNumberUseCase: MobileNumberUseCase,
     private val validator: MobileNumberValidator
 ) : ViewModel() {
 
-    var mobileNumberUIState = MutableStateFlow(MobileNumberUIState())
+    var addMobileNumberUIState = MutableStateFlow(AddMobileNumberUIState())
 
     fun addMobileNumber(
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
-            mobileNumberUIState.update {
+            addMobileNumberUIState.update {
                 it.copy(
                     isLoading = true
                 )
@@ -37,19 +37,19 @@ class MobileNumberViewModel @Inject constructor(
             val mobileNumberDto = MobileNumberDtoFactory(
                 sessionManager = sessionManager
             ).create(
-                mobileNumber = mobileNumberUIState.value.mobileNumber.toLong()
+                mobileNumber = addMobileNumberUIState.value.mobileNumber.toLong()
             )
 
             val validationResult = validator.validate(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
-                mobileNumber = mobileNumberUIState.value.mobileNumber
+                mobileNumber = addMobileNumberUIState.value.mobileNumber
             )
 
             //user understandable errors should be placed in a class
             if (validationResult is Result.Failure) {
                 onFailure(validationResult.error.toString())
-                mobileNumberUIState.update {
+                addMobileNumberUIState.update {
                     it.copy(
                         isLoading = false
                     )
@@ -65,7 +65,7 @@ class MobileNumberViewModel @Inject constructor(
             when (result) {
 
                 is Result.Success<String> -> {
-                    mobileNumberUIState.update {
+                    addMobileNumberUIState.update {
                         it.copy(
                             isLoading = false
                         )
@@ -74,7 +74,7 @@ class MobileNumberViewModel @Inject constructor(
                 }
 
                 is Result.Failure<String> -> {
-                    mobileNumberUIState.update {
+                    addMobileNumberUIState.update {
                         it.copy(
                             isLoading = false
                         )

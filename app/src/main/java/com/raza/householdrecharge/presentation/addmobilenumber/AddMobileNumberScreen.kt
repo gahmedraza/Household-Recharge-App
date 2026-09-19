@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.presentation.mobilenumber
+package com.raza.householdrecharge.presentation.addmobilenumber
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
@@ -38,12 +38,12 @@ import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun AddMobileNumberScreen(
-    viewmodel: MobileNumberViewModel = hiltViewModel(),
+    viewmodel: AddMobileNumberViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
 
-    val mobileNumberUIState by viewmodel.mobileNumberUIState.collectAsStateWithLifecycle()
+    val mobileNumberUIState by viewmodel.addMobileNumberUIState.collectAsStateWithLifecycle()
     val modifier = Modifier.fillMaxWidth()
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
@@ -157,7 +157,7 @@ fun AddMobileNumberScreen(
 }
 
 @Composable
-fun AddMobileNumberContent(viewModel: MobileNumberViewModel) {
+fun AddMobileNumberContent(viewModel: AddMobileNumberViewModel) {
     HouseholdRechargeTheme(dynamicColor = false) {
         AddMobileNumberScreen()
     }
