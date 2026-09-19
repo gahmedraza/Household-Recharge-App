@@ -3,9 +3,9 @@ package com.raza.householdrecharge.presentation.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.session.SessionManager
+import com.raza.householdrecharge.domain.model.Account
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
@@ -74,7 +74,7 @@ class LoginViewModel @Inject constructor(
             )
 
             when(result51) {
-                is Result.Success<AccountDto> -> {
+                is Result.Success<Account> -> {
                     val accountDto = result51.data
 
                     sessionManager.saveUserId(accountDto.accountId.cleanString())

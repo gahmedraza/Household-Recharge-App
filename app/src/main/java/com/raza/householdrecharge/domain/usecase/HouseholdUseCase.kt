@@ -79,13 +79,13 @@ class HouseholdUseCase @Inject constructor(
                 return Result.Failure(HouseholdError.NoAccountFound)
             }
 
-            val accountDto = (accountResult as Result.Success).data
+            val account = (accountResult as Result.Success).data
 
-            if (accountDto.householdId.isNullOrEmpty()) {
+            if (account.householdId.isNullOrEmpty()) {
 
                 result = Result.Success(AccountEligibilityDto(
                     isEligible = true,
-                    accountDto = accountDto
+                    account = account
                 ))
 
             } else {

@@ -5,7 +5,9 @@ import com.raza.householdrecharge.data.local.dao.AccountDao
 import com.raza.householdrecharge.data.remote.datasource.AccountRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.mapper.account.AccountEntityMapper
+import com.raza.householdrecharge.data.remote.mapper.account.AccountMapper
 import com.raza.householdrecharge.domain.error.AccountError
+import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
 //TODO Add Dao entries
@@ -74,7 +76,7 @@ class AccountRepository @Inject constructor(
     suspend fun fetchAccountByAccountId(
         accountId: String
 
-    ): Result<AccountDto, AccountError> {
+    ): Result<Account, AccountError> {
 
         val result51 = accountRemoteDataSource.fetchAccountByAccountId(
             accountId
@@ -90,6 +92,8 @@ class AccountRepository @Inject constructor(
 
         accountDao.upsertAccount(accountEntity)
 
-        return result51 //todo remove and add flowstate observable
+        val accountModel = AccountMapper.map(account)
+
+        return Result.Success(accountModel) //todo remove and add flowstate observable
     }
 }

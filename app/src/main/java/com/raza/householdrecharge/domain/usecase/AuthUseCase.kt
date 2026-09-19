@@ -11,6 +11,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.UserDto
 import com.raza.householdrecharge.domain.error.AccountError
 import com.raza.householdrecharge.domain.error.AuthError
+import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
 class AuthUseCase @Inject constructor(
@@ -83,7 +84,7 @@ class AuthUseCase @Inject constructor(
 
     suspend fun loginAndRetrieveAccount(
         authDto: AuthDto
-    ): Result<AccountDto, String> {
+    ): Result<Account, String> {
         //login to firebase
         val result1 = authRepository.login(authDto)
 
