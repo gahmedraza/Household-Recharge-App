@@ -4,6 +4,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.domain.error.InvitationError
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class InvitationUseCase @Inject constructor(
@@ -45,7 +46,7 @@ class InvitationUseCase @Inject constructor(
      * No additional code
      */
     suspend fun getAllInvitations(
-    ): Result<List<InvitationDto>, String> {
+    ) {
 
         return invitationRepository.getAllInvitations()
     }
@@ -61,5 +62,14 @@ class InvitationUseCase @Inject constructor(
         return invitationRepository.getInvitationByInvitationCode(
             code
         )
+    }
+
+    /**
+     * Transit Method
+     * No additional code
+     */
+    suspend fun observeInvitations(): Flow<List<InvitationDto>> {
+
+        return invitationRepository.observeInvitations()
     }
 }

@@ -10,7 +10,9 @@ import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.InvitationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import javax.inject.Inject
@@ -21,7 +23,11 @@ class InvitationViewModel @Inject constructor(
     private val invitationUseCase: InvitationUseCase
 ): ViewModel() {
 
-    var invitationUIState by mutableStateOf(InvitationUIState())
+    var invitationUIState = MutableStateFlow(InvitationUIState())
+
+    init {
+        observeInvitations()
+    }
 
     fun createInvitation(
         code: String,
@@ -29,7 +35,11 @@ class InvitationViewModel @Inject constructor(
         onFailure: (String) -> Unit
     ) {
         viewModelScope.launch {
-            invitationUIState.isLoading = true
+            invitationUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             val invitation = InvitationDto(
                 code = code,
@@ -43,12 +53,20 @@ class InvitationViewModel @Inject constructor(
             invitationUseCase.createInvitationFacade(
                 invitation = invitation,
                 onSuccess = { data ->
-                    invitationUIState.isLoading = false
+                    invitationUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
 
                     onSuccess(data)
                 },
                 onFailure = { error ->
-                    invitationUIState.isLoading = false
+                    invitationUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
 
                     onFailure(error)
                 }
@@ -68,22 +86,20 @@ class InvitationViewModel @Inject constructor(
     }
 
     fun fetchInvitationList(
-        onSuccess: (List<InvitationDto>) -> Unit,
-        onFailure: (String) -> Unit
     ) {
-
         viewModelScope.launch {
-            val invitationResult = invitationUseCase.getAllInvitations()
+            invitationUseCase.getAllInvitations()
+        }
+    }
 
-            when(invitationResult) {
-                is Result.Success<List<InvitationDto>> -> {
-                    invitationUIState.invitationList = invitationResult.data
+    fun observeInvitations() {
+        viewModelScope.launch {
+            invitationUseCase.observeInvitations().collect { invitationDtoList ->
 
-                    onSuccess(invitationResult.data)
-                }
-                is Result.Failure<String> -> {
-
-                    onFailure(invitationResult.error)
+                invitationUIState.update {
+                    it.copy(
+                        invitationList = invitationDtoList
+                    )
                 }
             }
         }

@@ -1,11 +1,16 @@
 package com.raza.householdrecharge.data.repository
 
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.local.dao.InvitationDao
+import com.raza.householdrecharge.data.local.entity.InvitationEntity
 import com.raza.householdrecharge.data.remote.datasource.InvitationRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
+import com.raza.householdrecharge.data.remote.mapper.invitation.InvitationDtoMapper
 import com.raza.householdrecharge.data.remote.mapper.invitation.InvitationEntityMapper
 import com.raza.householdrecharge.domain.error.InvitationError
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class InvitationRepository @Inject constructor(
@@ -58,12 +63,11 @@ class InvitationRepository @Inject constructor(
      * No additional code
      */
     suspend fun getAllInvitations(
-    ): Result<List<InvitationDto>, String> {
-
+    ) {
         val result51 = invitationRemoteDataSource.getAllInvitations()
 
         if(result51 is Result.Failure) {
-            return result51
+            Logger.log(result51.error)
         }
 
         val invitationDtoList = (result51 as Result.Success).data
@@ -71,8 +75,6 @@ class InvitationRepository @Inject constructor(
         val invitationEntityList = InvitationEntityMapper.map(invitationDtoList)
 
         invitationDao.upsertInvitations(invitationEntityList)
-
-        return result51
     }
 
     /**
@@ -98,5 +100,11 @@ class InvitationRepository @Inject constructor(
         invitationDao.upsertInvitation(invitationEntity)
 
         return result51
+    }
+
+    suspend fun observeInvitations(): Flow<List<InvitationDto>> {
+        return invitationDao.observeInvitations().map { invitationEntityList ->
+            InvitationDtoMapper.map(invitationEntityList)
+        }
     }
 }

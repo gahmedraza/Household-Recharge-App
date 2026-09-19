@@ -16,10 +16,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.LargeBodyText
@@ -34,17 +36,10 @@ fun InvitationListingScreen(
     onAddInvitation: () -> Unit = {}
 ) {
 
-    val invitationUIState = viewmodel.invitationUIState
+    val invitationUIState by viewmodel.invitationUIState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewmodel.fetchInvitationList(
-            onSuccess = { invitationList ->
-                invitationUIState.invitationList = invitationList
-            },
-            onFailure = {
-
-            }
-        )
+        viewmodel.fetchInvitationList()
     }
 
     Scaffold(
