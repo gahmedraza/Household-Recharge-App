@@ -69,7 +69,8 @@ class HouseholdRemoteDataSource @Inject constructor(
         }
     }
 
-    //unpack to use case
+    //todo remove after testing
+    //unpack to use case completed
     suspend fun joinHousehold(
         userId: String,
         householdId: String,
@@ -93,25 +94,25 @@ class HouseholdRemoteDataSource @Inject constructor(
                 val invitationSnapshot = transaction.get(invitationReference)
 
                 if(!invitationSnapshot.exists()) {
-                    result = Result.Failure("invitation does not exist")
+                    result = Result.Failure("invitation does not exist")//
                 }
 
                 val status = invitationSnapshot.getString("status")
 
-                if(status != "pending") {
-                    result = Result.Failure("invitation has already been used")
+                if(status != "pending") {//
+                    result = Result.Failure("invitation has already been used")//
                 }
 
                 val invitationHouseholdId = invitationSnapshot.getString("householdId")
 
-                if(invitationHouseholdId != householdId) {
-                    result = Result.Failure("invalid invitation")
+                if(invitationHouseholdId != householdId) {//
+                    result = Result.Failure("invalid invitation")//
                 }
 
                 val expiresAt = invitationSnapshot.getString("expiresAt")?.toLong()
 
-                if(expiresAt != null && expiresAt < System.currentTimeMillis()) {
-                    result = Result.Failure("invitation has expired")
+                if(expiresAt != null && expiresAt < System.currentTimeMillis()) {//
+                    result = Result.Failure("invitation has expired")//
                 }
 
                 transaction.update(
@@ -123,9 +124,9 @@ class HouseholdRemoteDataSource @Inject constructor(
                 transaction.update(
                     invitationReference,
                     mapOf(
-                        "status" to "used",
-                        "usedBy" to userId,
-                        "usedAt" to System.currentTimeMillis()
+                        "status" to "used",//
+                        "usedBy" to userId,//
+                        "usedAt" to System.currentTimeMillis()//
                     )
                 )
             }.await()

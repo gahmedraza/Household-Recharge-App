@@ -107,4 +107,24 @@ class InvitationRepository @Inject constructor(
             InvitationDtoMapper.map(invitationEntityList)
         }
     }
+
+    suspend fun updateInvitation(
+        invitation: InvitationDto
+
+    ): Result<String, String> {
+
+        val result51 = invitationRemoteDataSource.updateInvitation(
+            invitation
+        )
+
+        if(result51 is Result.Failure) {
+            return result51
+        }
+
+        val invitationEntity = InvitationEntityMapper.map(invitation)
+
+        invitationDao.upsertInvitation(invitationEntity)
+
+        return result51 //todo remove
+    }
 }

@@ -15,12 +15,14 @@ import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.error.InvitationError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.model.InvitationStatus
+import com.raza.householdrecharge.domain.validator.InvitationValidator
 import javax.inject.Inject
 
 class HouseholdUseCase @Inject constructor(
     private val householdRepository: HouseholdRepository,
     private val accountRepository: AccountRepository,
-    private val invitationRepository: InvitationRepository
+    private val invitationRepository: InvitationRepository,
+    private val invitationValidator: InvitationValidator
 ) {
     suspend fun createHouseholdAndUpdateAccount(
         appUserDto: AppUserDto,
@@ -214,5 +216,45 @@ class HouseholdUseCase @Inject constructor(
             householdId,
             invitationCode
         )
+    }
+
+    //todo get invitation is done 2'ce
+    suspend fun validateInvitationAndUpdateAccountAndMarkUsed(
+        userId: String,
+        householdId: String,
+        invitationCode: String
+    ): Result<String, String> {
+
+        //validate invitation for all fields
+        val result51 = invitationRepository.getInvitationByInvitationCode(invitationCode)
+
+        if(result51 is Result.Failure) {
+            return Result.Failure(result51.error.toString())
+        }
+
+        val invitationDto = (result51 as Result.Success).data
+
+        val result52 = invitationValidator.validate(invitationDto, householdId)
+
+        if(result52 is Result.Failure) {
+            return result52
+        }
+
+        //todo should this be last statement?
+        //update account with household id
+        accountRepository.updateAccount(userId, householdId)
+
+        //mark invitation used in invitation document
+
+        //todo should this be elsewhere?
+        val updatedInvitationDto = invitationDto.copy(
+            status = "used",
+            usedBy = userId,
+            usedAt = System.currentTimeMillis()
+        )
+
+        invitationRepository.updateInvitation(updatedInvitationDto)
+
+        return Result.Success("success")
     }
 }

@@ -118,4 +118,28 @@ class InvitationRemoteDataSource @Inject constructor(
 
         return result
     }
+
+    suspend fun updateInvitation(
+        invitation: InvitationDto
+    ): Result<String, String> {
+
+        var result: Result<String, String>
+
+        try {
+
+            val documentReference = firestore
+                .collection("invitations")//todo string
+                .document(invitation.code)
+                .set(invitation)
+                .await()
+
+            result = Result.Success("success")
+
+        } catch (e: Exception) {
+
+            result = Result.Failure(e.message.cleanString())
+        }
+
+        return result
+    }
 }

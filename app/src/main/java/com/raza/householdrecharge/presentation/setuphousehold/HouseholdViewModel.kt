@@ -188,7 +188,7 @@ class HouseholdViewModel @Inject constructor(
                     ?.uid
                     .cleanString()
 
-                val result = householdUseCase.joinHousehold(
+                val result = householdUseCase.validateInvitationAndUpdateAccountAndMarkUsed(
                     userId = userId,
                     householdId = householdId,
                     invitationCode = invitationCode
