@@ -1,13 +1,11 @@
 package com.raza.householdrecharge.presentation.settings
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.data.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,7 +15,7 @@ class SettingViewModel @Inject constructor(
     private val sessionManager: SessionManager
 ): ViewModel() {
 
-    var settingUIState by mutableStateOf(SettingUIState())
+    var settingUIState = MutableStateFlow(SettingUIState())
 
     fun logout(onSuccess: () -> Unit, onFailure: () -> Unit) {
         FirebaseAuth

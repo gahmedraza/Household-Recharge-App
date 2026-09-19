@@ -18,11 +18,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
@@ -32,7 +34,7 @@ fun AccountScreen(
     viewmodel: AccountViewModel = hiltViewModel()
 ) {
 
-    val accountUIState = viewmodel.accountUIState
+    val accountUIState by viewmodel.accountUIState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewmodel.getAccount()

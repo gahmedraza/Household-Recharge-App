@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
@@ -39,7 +40,8 @@ fun FindHouseholdScreen(
     onFailure: () -> Unit = {}
 ) {
 
-    val householdUIState = viewmodel.householdUIState
+    val householdUIState by viewmodel.householdUIState.collectAsStateWithLifecycle()
+
     Scaffold { paddingValues ->
 
         Box(

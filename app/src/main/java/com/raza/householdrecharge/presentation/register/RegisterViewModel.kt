@@ -1,8 +1,5 @@
 package com.raza.householdrecharge.presentation.register
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.result.Result
@@ -13,6 +10,8 @@ import com.raza.householdrecharge.domain.error.AccountError
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,16 +21,20 @@ class RegisterViewModel @Inject constructor(
     private val authUseCase: AuthUseCase
 ) : ViewModel() {
 
-    var registerUIState by mutableStateOf(RegisterUIState())
+    var registerUIState = MutableStateFlow(RegisterUIState())
 
     fun registerAndAddAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
         viewModelScope.launch {
-            registerUIState.isLoading = true
+            registerUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             val authDto = AuthDto(
-                accountName = registerUIState.accountName,
-                mobileNumber = "${registerUIState.mobileNumber}@householdrecharge.local",
-                password = registerUIState.password
+                accountName = registerUIState.value.accountName,
+                mobileNumber = "${registerUIState.value.mobileNumber}@householdrecharge.local",
+                password = registerUIState.value.password
             )
 
             val result = authUseCase.registerAndCreateAccount(
@@ -46,17 +49,25 @@ class RegisterViewModel @Inject constructor(
                     viewModelScope.launch {
                         sessionManager.saveUserId(onBoardingDto.authId.cleanString())
                         sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
-                        sessionManager.saveMobileNumber(registerUIState.mobileNumber)
+                        sessionManager.saveMobileNumber(registerUIState.value.mobileNumber)
                     }
 
-                    registerUIState.authId = onBoardingDto.authId.cleanString()
-                    registerUIState.isLoading = false
+                    registerUIState.value.authId = onBoardingDto.authId.cleanString()
+                    registerUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                     onSuccess(onBoardingDto.authId.cleanString())
                 }
 
                 is Result.Failure<AccountError> -> {
 
-                    registerUIState.isLoading = false
+                    registerUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                     onFailure(result.error.toString())//todo modify
                 }
             }

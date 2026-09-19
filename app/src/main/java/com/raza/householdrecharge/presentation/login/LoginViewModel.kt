@@ -1,8 +1,5 @@
 package com.raza.householdrecharge.presentation.login
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.result.Result
@@ -14,7 +11,9 @@ import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +23,7 @@ class LoginViewModel @Inject constructor(
     private val authUseCase: AuthUseCase
 ): ViewModel() {
 
-    var loginUIState by mutableStateOf(LoginUIState())
+    var loginUIState = MutableStateFlow(LoginUIState())
 
     fun login(
         onSuccess: (String?) -> Unit,
@@ -33,29 +32,41 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             //
             //validate the input fields
-            loginUIState.mobileNumberError = MobileNumberValidator.validateMobileNumber(
-                loginUIState.mobileNumber,
-                loginUIState.mobileNumberError
-            )
+            loginUIState.update {
+                it.copy(
+                    mobileNumberError = MobileNumberValidator.validateMobileNumber(
+                        loginUIState.value.mobileNumber,
+                        loginUIState.value.mobileNumberError
+                    )
+                )
+            }
 
-            loginUIState.passwordError = PasswordValidator.validatePassword(
-                loginUIState.password,
-                loginUIState.passwordError
-            )
+            loginUIState.update {
+                it.copy(
+                    passwordError = PasswordValidator.validatePassword(
+                        loginUIState.value.password,
+                        loginUIState.value.passwordError
+                    )
+                )
+            }
 
-            if(loginUIState.mobileNumberError.isNotEmpty()
-                || loginUIState.passwordError.isNotEmpty()
+            if(loginUIState.value.mobileNumberError.isNotEmpty()
+                || loginUIState.value.passwordError.isNotEmpty()
                 ) {
 
                 return@launch
             }
             //
 
-            loginUIState.isLoading = true
+            loginUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             val authDto = AuthDto(
-                mobileNumber = "${loginUIState.mobileNumber}@householdrecharge.local",
-                password = loginUIState.password
+                mobileNumber = "${loginUIState.value.mobileNumber}@householdrecharge.local",
+                password = loginUIState.value.password
             )
 
             val result51 = authUseCase.loginAndRetrieveAccount(
@@ -75,12 +86,20 @@ class LoginViewModel @Inject constructor(
                         sessionManager.saveHouseholdId(accountDto.householdId.cleanString())
                     }
 
-                    loginUIState.isLoading = false
+                    loginUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                     onSuccess(accountDto.accountId.cleanString())
                 }
                 is Result.Failure<String> -> {
 
-                    loginUIState.isLoading = false
+                    loginUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                     onFailure(result51.error)
                 }
             }

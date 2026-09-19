@@ -29,6 +29,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.components.AppCard
@@ -42,7 +43,7 @@ fun AddMobileNumberScreen(
     onFailure: () -> Unit = {}
 ) {
 
-    val mobileNumberUIState = viewmodel.mobileNumberUIState
+    val mobileNumberUIState by viewmodel.mobileNumberUIState.collectAsStateWithLifecycle()
     val modifier = Modifier.fillMaxWidth()
 
     var shouldProceed by rememberSaveable { mutableStateOf(false) }

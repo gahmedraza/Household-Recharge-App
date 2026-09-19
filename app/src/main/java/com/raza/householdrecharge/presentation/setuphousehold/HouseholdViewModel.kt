@@ -1,8 +1,5 @@
 package com.raza.householdrecharge.presentation.setuphousehold
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -15,7 +12,9 @@ import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +24,7 @@ class HouseholdViewModel @Inject constructor(
     private val householdUseCase: HouseholdUseCase
 ) : ViewModel() {
 
-    var householdUIState by mutableStateOf(HouseholdUIState())
+    var householdUIState = MutableStateFlow(HouseholdUIState())
 
     fun onAddHousehold(
         householdName: String,
@@ -33,7 +32,11 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch {
-            householdUIState.isLoading = true
+            householdUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             val userId = sessionManager.authId.first()
             val accountId = sessionManager.accountId.first()
@@ -41,7 +44,11 @@ class HouseholdViewModel @Inject constructor(
             val userNotFound = userId.isEmpty()
 
             if (userNotFound) {
-                householdUIState.isLoading = false
+                householdUIState.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
                 onFailure("user not found")
                 return@launch
             }
@@ -72,14 +79,22 @@ class HouseholdViewModel @Inject constructor(
                         sessionManager.saveHouseholdName(householdName)
                         sessionManager.saveHouseholdId(householdId)
 
-                        householdUIState.isLoading = false
+                        householdUIState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
                         onSuccess(householdId)
                     }
                 }
 
                 is Result.Failure<String> -> {
 
-                    householdUIState.isLoading = false
+                    householdUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                     onFailure(result.error)
                 }
             }
@@ -101,7 +116,11 @@ class HouseholdViewModel @Inject constructor(
 
         viewModelScope.launch {
 
-            householdUIState.isLoading = true
+            householdUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             val authId = sessionManager.authId.first()
 
@@ -111,7 +130,11 @@ class HouseholdViewModel @Inject constructor(
             )
 
             if(result is Result.Success) {
-                householdUIState.isLoading = false
+                householdUIState.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
 
                 val findHouseholdResponse = result.data
                 sessionManager.saveHouseholdId(findHouseholdResponse?.householdId.cleanString())
@@ -120,7 +143,11 @@ class HouseholdViewModel @Inject constructor(
                 onSuccess(result.data)
 
             } else {
-                householdUIState.isLoading = false
+                householdUIState.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
                 val error = (result as Result.Failure).error
 
                 when(error) {
@@ -147,7 +174,11 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String) -> Unit
     ) {
         viewModelScope.launch {
-            householdUIState.isLoading = true
+            householdUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             try {
 
@@ -167,14 +198,22 @@ class HouseholdViewModel @Inject constructor(
 
                     is Result.Success<String> -> {
 
-                        householdUIState.isLoading = false
+                        householdUIState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
 
                         onSuccess("you have been added to the household")
                     }
 
                     is Result.Failure<String> -> {
 
-                        householdUIState.isLoading = false
+                        householdUIState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
 
                         onFailure("unable to add you to the household")
                     }
@@ -182,7 +221,11 @@ class HouseholdViewModel @Inject constructor(
 
             } catch (e: Exception) {
 
-                householdUIState.isLoading = false
+                householdUIState.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
                 onFailure("unable to join household")
 
             }

@@ -1,8 +1,5 @@
 package com.raza.householdrecharge.presentation.addrecharge
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.result.Result
@@ -12,7 +9,9 @@ import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,7 +22,7 @@ class AddRechargeViewModel @Inject constructor(
     private val validator: RechargeValidator
 ) : ViewModel() {
 
-    var addRechargeUIState by mutableStateOf(AddRechargeUIState())
+    var addRechargeUIState = MutableStateFlow(AddRechargeUIState())
 
     fun addRecharge(
         mobileNumber: String,
@@ -32,16 +31,20 @@ class AddRechargeViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            addRechargeUIState.isLoading = true
+            addRechargeUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
             val rechargeDto = RechargeDtoFactory(
                 sessionManager = sessionManager
             ).create(
-                rechargeAmount = addRechargeUIState.amount.toInt(),
-                rechargeDate = addRechargeUIState.date.toLong(),
-                expiryDate = addRechargeUIState.planExpiryDate.toLong(),
-                rechargedBy = addRechargeUIState.rechargedBy,
-                rechargeDescription = addRechargeUIState.rechargeDescription,
+                rechargeAmount = addRechargeUIState.value.amount.toInt(),
+                rechargeDate = addRechargeUIState.value.date.toLong(),
+                expiryDate = addRechargeUIState.value.planExpiryDate.toLong(),
+                rechargedBy = addRechargeUIState.value.rechargedBy,
+                rechargeDescription = addRechargeUIState.value.rechargeDescription,
                 mobileNumber = mobileNumber.toLong()
             )
 
@@ -53,7 +56,11 @@ class AddRechargeViewModel @Inject constructor(
 
             //user understandable errors should be placed in a class
             if(validationResult is Result.Failure) {
-                addRechargeUIState.isLoading = false
+                addRechargeUIState.update {
+                    it.copy(
+                        isLoading = false
+                    )
+                }
                 onFailure("failure")
                 return@launch
             }
@@ -66,12 +73,20 @@ class AddRechargeViewModel @Inject constructor(
             when (result) {
 
                 is Result.Success<String> -> {
-                    addRechargeUIState.isLoading = false
+                    addRechargeUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                     onSuccess()
                 }
 
                 is Result.Failure<String> -> {
-                    addRechargeUIState.isLoading = false
+                    addRechargeUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
                     onFailure(result.error)
                 }
             }

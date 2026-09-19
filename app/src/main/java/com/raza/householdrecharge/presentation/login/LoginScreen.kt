@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.presentation.components.AppCard
@@ -44,7 +45,7 @@ fun LoginScreen(
     onLoginCompletion: () -> Unit = {},
     onBoardingNotComplete: () -> Unit = {}
 ) {
-    val loginUIState = viewmodel.loginUIState
+    val loginUIState by viewmodel.loginUIState.collectAsStateWithLifecycle()
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()

@@ -30,6 +30,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
@@ -40,7 +41,7 @@ fun CreateHouseholdScreen(
     onSuccess: () -> Unit = {},
     onFailure: () -> Unit = {}
 ) {
-    val householdUIState = viewmodel.householdUIState
+    val householdUIState by viewmodel.householdUIState.collectAsStateWithLifecycle()
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
