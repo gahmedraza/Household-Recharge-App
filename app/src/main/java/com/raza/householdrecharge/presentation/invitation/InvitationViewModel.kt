@@ -2,9 +2,11 @@ package com.raza.householdrecharge.presentation.invitation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raza.householdrecharge.core.logging.Logger.log
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.InvitationUseCase
+import com.raza.householdrecharge.domain.validator.InvitationRequestValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
@@ -12,11 +14,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import javax.inject.Inject
+import com.raza.householdrecharge.core.result.Result
 
 @HiltViewModel
 class InvitationViewModel @Inject constructor(
     val sessionManager: SessionManager,
-    private val invitationUseCase: InvitationUseCase
+    private val invitationUseCase: InvitationUseCase,
+    private val invitationRequestValidator: InvitationRequestValidator
 ): ViewModel() {
 
     var invitationUIState = MutableStateFlow(InvitationUIState())
@@ -37,6 +41,17 @@ class InvitationViewModel @Inject constructor(
                 )
             }
 
+            val validationResult = invitationRequestValidator.validate(
+                householdId = sessionManager.householdId.first(),
+                accountId = sessionManager.authId.first()
+            )
+
+            if(validationResult is Result.Failure) {
+                log(validationResult.error.toString())
+                return@launch
+            }
+
+            //todo add to factory
             val invitation = InvitationDto(
                 code = code,
                 householdId = sessionManager.householdId.first(),

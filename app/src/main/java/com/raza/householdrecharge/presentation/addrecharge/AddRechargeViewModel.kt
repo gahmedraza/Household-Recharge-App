@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
-import com.raza.householdrecharge.domain.validator.RechargeValidator
+import com.raza.householdrecharge.domain.validator.RechargeRequestValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import javax.inject.Inject
 class AddRechargeViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeUseCase: RechargeUseCase,
-    private val validator: RechargeValidator
+    private val requestValidator: RechargeRequestValidator
 ) : ViewModel() {
 
     var addRechargeUIState = MutableStateFlow(AddRechargeUIState())
@@ -48,7 +48,7 @@ class AddRechargeViewModel @Inject constructor(
                 mobileNumber = mobileNumber.toLong()
             )
 
-            val validationResult = validator.validateAddRechargeApiCall(
+            val validationResult = requestValidator.validateAddRechargeApiCall(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
                 mobileNumber = mobileNumber

@@ -15,14 +15,14 @@ import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.error.InvitationError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.model.InvitationStatus
-import com.raza.householdrecharge.domain.validator.InvitationValidator
+import com.raza.householdrecharge.domain.validator.InvitationResponseValidator
 import javax.inject.Inject
 
 class HouseholdUseCase @Inject constructor(
     private val householdRepository: HouseholdRepository,
     private val accountRepository: AccountRepository,
     private val invitationRepository: InvitationRepository,
-    private val invitationValidator: InvitationValidator
+    private val invitationResponseValidator: InvitationResponseValidator
 ) {
     suspend fun createHouseholdAndUpdateAccount(
         appUserDto: AppUserDto,
@@ -234,7 +234,7 @@ class HouseholdUseCase @Inject constructor(
 
         val invitationDto = (result51 as Result.Success).data
 
-        val result52 = invitationValidator.validate(invitationDto, householdId)
+        val result52 = invitationResponseValidator.validate(invitationDto, householdId)
 
         if(result52 is Result.Failure) {
             return result52

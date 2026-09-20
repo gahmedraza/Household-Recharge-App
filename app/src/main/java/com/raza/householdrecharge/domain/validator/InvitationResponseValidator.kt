@@ -4,7 +4,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import javax.inject.Inject
 
-class InvitationValidator @Inject constructor(
+class InvitationResponseValidator @Inject constructor(
 ) {
 
     fun validate(

@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeDtoMapper
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
-import com.raza.householdrecharge.domain.validator.RechargeValidator
+import com.raza.householdrecharge.domain.validator.RechargeRequestValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +19,7 @@ import javax.inject.Inject
 class RechargeListingViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeUseCase: RechargeUseCase,
-    private val validator: RechargeValidator
+    private val validator: RechargeRequestValidator
 ) : ViewModel() {
 
     var rechargeListingUIState = MutableStateFlow(RechargeListingUIState())

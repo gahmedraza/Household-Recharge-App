@@ -1,5 +1,6 @@
 package com.raza.householdrecharge.presentation.common
 
+//remove object, create class
 object MobileNumberValidator {
 
     fun validateMobileNumber(mobileNumber: String, mobileNumberError: String): String {

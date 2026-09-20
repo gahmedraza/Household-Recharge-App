@@ -3,6 +3,7 @@ package com.raza.householdrecharge.presentation.setuphousehold
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.raza.householdrecharge.core.logging.Logger.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
@@ -10,6 +11,7 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
+import com.raza.householdrecharge.domain.validator.HouseholdRequestValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HouseholdViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val householdUseCase: HouseholdUseCase
+    private val householdUseCase: HouseholdUseCase,
+    private val householdRequestValidator: HouseholdRequestValidator
 ) : ViewModel() {
 
     var householdUIState = MutableStateFlow(HouseholdUIState())
@@ -50,6 +53,16 @@ class HouseholdViewModel @Inject constructor(
                     )
                 }
                 onFailure("user not found")
+                return@launch
+            }
+
+            val validationResult = householdRequestValidator.validate(
+                accountId = accountId,
+                authId = userId
+            )
+
+            if(validationResult is Result.Failure) {
+                log(validationResult.error.toString())
                 return@launch
             }
 
