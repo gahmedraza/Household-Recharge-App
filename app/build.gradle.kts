@@ -36,6 +36,18 @@ android {
     buildFeatures {
         compose = true
     }
+
+    flavorDimensions += "environment"
+
+    productFlavors {
+        create("dev") {
+            dimension = "environment"
+        }
+
+        create("qa") {
+            dimension = "environment"
+        }
+    }
 }
 
 dependencies {
