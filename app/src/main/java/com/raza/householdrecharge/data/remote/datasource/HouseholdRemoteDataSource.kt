@@ -2,6 +2,8 @@ package com.raza.householdrecharge.data.remote.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.CollectionField
+import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.domain.error.HouseholdError
@@ -25,7 +27,7 @@ class HouseholdRemoteDataSource @Inject constructor(
 
             val documentReference = firestore
 
-                .collection("households") //todo remove the string
+                .collection(HouseholdCollection.Households.description)
                 .add(householdDto)
                 .await()
 
@@ -49,7 +51,7 @@ class HouseholdRemoteDataSource @Inject constructor(
     ): Result<HouseholdDto, HouseholdError>{
 
         val snapshot = firestore
-            .collection("households") //todo string
+            .collection(HouseholdCollection.Households.description)
             .document(householdId)
             .get()
             .await()
@@ -84,11 +86,11 @@ class HouseholdRemoteDataSource @Inject constructor(
             firestore.runTransaction { transaction ->
 
                 val invitationReference = firestore
-                    .collection("invitations")
+                    .collection(HouseholdCollection.Invitations.description)
                     .document(invitationCode.uppercase())
 
                 val accountReference = firestore
-                    .collection("accounts")
+                    .collection(HouseholdCollection.Accounts.description)
                     .document(userId)
 
                 val invitationSnapshot = transaction.get(invitationReference)
@@ -117,7 +119,7 @@ class HouseholdRemoteDataSource @Inject constructor(
 
                 transaction.update(
                     accountReference,
-                    "householdId",
+                    CollectionField.HouseholdID.description,
                     householdId
                 )
 

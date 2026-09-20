@@ -4,5 +4,6 @@ enum class HouseholdCollection(val description: String) {
     Accounts("accounts"),
     Households("households"),
     Invitations("invitations"),
-    MobileNumbers("mobile_numbers")
+    MobileNumbers("mobile_numbers"),
+    Recharges("recharges")
 }

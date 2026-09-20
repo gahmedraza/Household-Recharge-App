@@ -3,6 +3,7 @@ package com.raza.householdrecharge.data.remote.datasource
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.util.cleanString
@@ -103,7 +104,7 @@ class MobileNumberRemoteDataSource @Inject constructor(
             firestore
                 .collection(HouseholdCollection.MobileNumbers.description)
                 .document(mobileNumberId)
-                .update("lastRechargeId", rechargeId)
+                .update(CollectionField.LastRechargeID.description, rechargeId)
                 .await()
 
             return Result.Success(true)

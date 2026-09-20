@@ -3,6 +3,7 @@ package com.raza.householdrecharge.data.remote.datasource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.domain.error.InvitationError
 import com.raza.householdrecharge.util.cleanString
@@ -22,7 +23,7 @@ class InvitationRemoteDataSource @Inject constructor(
         try {
 
             val documentReference = firestore
-                .collection("invitations")
+                .collection(HouseholdCollection.Invitations.description)
                 .document(invitation.code)
                 .set(invitation)
                 .await()
@@ -64,7 +65,7 @@ class InvitationRemoteDataSource @Inject constructor(
 
         try {
             val documentSnapshot = firestore
-                .collection("invitations")
+                .collection(HouseholdCollection.Invitations.description)
                 .get()
                 .await()
 
@@ -92,7 +93,7 @@ class InvitationRemoteDataSource @Inject constructor(
         try {
 
             val snapshot = firestore
-                .collection("invitations")
+                .collection(HouseholdCollection.Invitations.description)
                 .document(code.uppercase())
                 .get()
                 .await()
@@ -128,7 +129,7 @@ class InvitationRemoteDataSource @Inject constructor(
         try {
 
             val documentReference = firestore
-                .collection("invitations")//todo string
+                .collection(HouseholdCollection.Invitations.description)
                 .document(invitation.code)
                 .set(invitation)
                 .await()

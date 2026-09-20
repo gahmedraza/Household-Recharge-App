@@ -2,6 +2,7 @@ package com.raza.householdrecharge.data.remote.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
@@ -21,7 +22,7 @@ class RechargeRemoteDataSource @Inject constructor(
 
             val documentReference = firestore
 
-                .collection("recharges")
+                .collection(HouseholdCollection.Recharges.description)
                 .document()
 
             val rechargeId = documentReference.id
@@ -38,7 +39,7 @@ class RechargeRemoteDataSource @Inject constructor(
 
             /*val documentReference = firestore
 
-                .collection("recharges")
+                .collection(HouseholdCollection.Recharges.description)
                 .add(rechargeDto)
 
                 .await()
@@ -69,7 +70,7 @@ class RechargeRemoteDataSource @Inject constructor(
 
             val documentSnapshot = firestore
 
-                .collection("recharges")
+                .collection(HouseholdCollection.Recharges.description)
                 .get()
                 .await()
 
