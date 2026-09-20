@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.raza.householdrecharge.data.remote.dto.InvitationDto
+import com.raza.householdrecharge.domain.model.Invitation
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeTitleText
@@ -84,7 +84,7 @@ fun InvitationListingScreen(
 @Composable
 fun InvitationListItemCard(
     modifier: Modifier,
-    invitation: InvitationDto
+    invitation: Invitation
 ) {
 
     AppCard(

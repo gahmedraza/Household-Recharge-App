@@ -1,11 +1,11 @@
 package com.raza.householdrecharge.domain.usecase
 
 import com.raza.householdrecharge.core.logging.Logger
+import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
-import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.local.entity.RechargeEntity
+import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -49,7 +49,7 @@ class RechargeUseCase @Inject constructor(
      * No additional code
      */
     fun observeRecharges(
-    ): Flow<List<RechargeEntity>> {
+    ): Flow<List<Recharge>> {
 
         return rechargeRepository.observeRecharges()
     }

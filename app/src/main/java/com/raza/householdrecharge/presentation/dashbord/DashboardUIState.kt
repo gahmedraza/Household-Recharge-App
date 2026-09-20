@@ -1,10 +1,10 @@
 package com.raza.householdrecharge.presentation.dashbord
 
-import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
-import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.domain.model.MobileNumber
+import com.raza.householdrecharge.domain.model.Recharge
 
 data class DashboardUIState(
     var isLoading: Boolean = false,
-    var mobileNumberList: List<MobileNumberDto> = emptyList(),
-    var rechargeList: List<RechargeDto> = emptyList()
+    var mobileNumberList: List<MobileNumber> = emptyList(),
+    var rechargeList: List<Recharge> = emptyList()
 )

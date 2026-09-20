@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.data.remote.mapper
+package com.raza.householdrecharge.data.remote.mapper.mobilenumber
 
 import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto

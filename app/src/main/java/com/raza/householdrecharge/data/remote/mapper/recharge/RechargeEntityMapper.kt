@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.data.remote.mapper
+package com.raza.householdrecharge.data.remote.mapper.recharge
 
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.data.local.entity.RechargeEntity

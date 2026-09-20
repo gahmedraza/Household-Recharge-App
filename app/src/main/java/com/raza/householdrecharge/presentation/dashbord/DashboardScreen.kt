@@ -41,8 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
-import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.domain.model.MobileNumber
+import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.presentation.components.ActivePlanIndicator
 import com.raza.householdrecharge.presentation.components.ExpiredPlanIndicator
 import com.raza.householdrecharge.presentation.components.TitleBar
@@ -130,7 +130,7 @@ fun DashboardScreen(
 
                         if(rechargeDto == null) {
                             Logger.log(TAG2, "empty recharge dto")
-                            rechargeDto = RechargeDto()
+                            rechargeDto = Recharge()
                         }
 
                         DashboardListItemCard(
@@ -153,8 +153,8 @@ fun DashboardScreen(
 
 @Composable
 fun DashboardListItemCard(
-    item: MobileNumberDto,
-    recharge: RechargeDto,
+    item: MobileNumber,
+    recharge: Recharge,
     onClick: () -> Unit
 ) {
     Card(

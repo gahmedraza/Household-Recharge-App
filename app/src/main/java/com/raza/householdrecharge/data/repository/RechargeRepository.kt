@@ -1,15 +1,17 @@
 package com.raza.householdrecharge.data.repository
 
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.data.local.dao.RechargeDao
-import com.raza.householdrecharge.data.local.entity.RechargeEntity
-import com.raza.householdrecharge.data.remote.datasource.RechargeRemoteDataSource
-import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.local.dao.RechargeDao
+import com.raza.householdrecharge.data.remote.datasource.RechargeRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
-import com.raza.householdrecharge.data.remote.mapper.RechargeEntityMapper
+import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeEntityMapper
+import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeMapper
+import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.util.cleanString
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class RechargeRepository @Inject constructor(
     private val rechargeRemoteDataSource: RechargeRemoteDataSource,
@@ -36,8 +38,10 @@ class RechargeRepository @Inject constructor(
     }
 
     fun observeRecharges(
-    ): Flow<List<RechargeEntity>> {
-        return rechargeDao.observeRecharges()
+    ): Flow<List<Recharge>> {
+        return rechargeDao.observeRecharges().map { rechargeEntityList ->
+            RechargeMapper.map(rechargeEntityList)
+        }
     }
 
     suspend fun getAllRecharges(

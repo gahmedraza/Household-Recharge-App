@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.components.getPrintableDate
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
@@ -110,7 +110,7 @@ fun RechargeListingScreen(
 
 @Composable
 fun RechargeListItemCard(
-    item: RechargeDto,
+    item: Recharge,
     onClick: () -> Unit
 ) {
     Card(

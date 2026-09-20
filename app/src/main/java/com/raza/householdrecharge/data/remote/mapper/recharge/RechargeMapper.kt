@@ -1,12 +1,12 @@
-package com.raza.householdrecharge.data.remote.mapper
+package com.raza.householdrecharge.data.remote.mapper.recharge
 
 import com.raza.householdrecharge.data.local.entity.RechargeEntity
-import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.domain.model.Recharge
 
-object RechargeDtoMapper {
+object RechargeMapper {
 
-    fun map(rechargeEntity: RechargeEntity): RechargeDto {
-        return RechargeDto(
+    fun map(rechargeEntity: RechargeEntity): Recharge {
+        return Recharge(
             id = rechargeEntity.id,
             rechargeAmount = rechargeEntity.rechargeAmount,
             rechargeDate = rechargeEntity.rechargeDate,
@@ -19,7 +19,7 @@ object RechargeDtoMapper {
         )
     }
 
-    fun map(rechargeEntityList: List<RechargeEntity>): List<RechargeDto> {
+    fun map(rechargeEntityList: List<RechargeEntity>): List<Recharge> {
         return rechargeEntityList.map { rechargeEntity ->
             map(rechargeEntity)
         }

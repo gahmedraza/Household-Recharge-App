@@ -6,9 +6,12 @@ import com.raza.householdrecharge.data.remote.datasource.MobileNumberRemoteDataS
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
-import com.raza.householdrecharge.data.remote.mapper.MobileNumberEntityMapper
+import com.raza.householdrecharge.data.remote.mapper.mobilenumber.MobileNumberEntityMapper
+import com.raza.householdrecharge.data.remote.mapper.mobilenumber.MobileNumberMapper
+import com.raza.householdrecharge.domain.model.MobileNumber
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MobileNumberRepository @Inject constructor(
@@ -37,8 +40,10 @@ class MobileNumberRepository @Inject constructor(
     }
 
     fun observeMobileNumbers(
-    ): Flow<List<MobileNumberEntity>> {
-        return mobileNumberDao.observeMobileNumbers()
+    ): Flow<List<MobileNumber>> {
+        return mobileNumberDao.observeMobileNumbers().map { mobileNumberEntityList ->
+            MobileNumberMapper.map2(mobileNumberEntityList)
+        }
     }
 
     suspend fun getAllMobileNumbers(

@@ -4,6 +4,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
+import com.raza.householdrecharge.domain.model.MobileNumber
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ class MobileNumberUseCase @Inject constructor(
     }
 
     fun observeMobileNumbers(
-    ): Flow<List<MobileNumberEntity>> {
+    ): Flow<List<MobileNumber>> {
 
         return mobileNumberRepository.observeMobileNumbers()
     }

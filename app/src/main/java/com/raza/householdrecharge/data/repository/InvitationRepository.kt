@@ -3,12 +3,12 @@ package com.raza.householdrecharge.data.repository
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.local.dao.InvitationDao
-import com.raza.householdrecharge.data.local.entity.InvitationEntity
 import com.raza.householdrecharge.data.remote.datasource.InvitationRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.data.remote.mapper.invitation.InvitationDtoMapper
 import com.raza.householdrecharge.data.remote.mapper.invitation.InvitationEntityMapper
+import com.raza.householdrecharge.data.remote.mapper.invitation.InvitationMapper
 import com.raza.householdrecharge.domain.error.InvitationError
+import com.raza.householdrecharge.domain.model.Invitation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -102,9 +102,9 @@ class InvitationRepository @Inject constructor(
         return result51
     }
 
-    suspend fun observeInvitations(): Flow<List<InvitationDto>> {
+    suspend fun observeInvitations(): Flow<List<Invitation>> {
         return invitationDao.observeInvitations().map { invitationEntityList ->
-            InvitationDtoMapper.map(invitationEntityList)
+            InvitationMapper.map(invitationEntityList)
         }
     }
 

@@ -1,11 +1,7 @@
 package com.raza.householdrecharge.presentation.invitation
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.InvitationUseCase
@@ -94,11 +90,11 @@ class InvitationViewModel @Inject constructor(
 
     fun observeInvitations() {
         viewModelScope.launch {
-            invitationUseCase.observeInvitations().collect { invitationDtoList ->
+            invitationUseCase.observeInvitations().collect { invitationList ->
 
                 invitationUIState.update {
                     it.copy(
-                        invitationList = invitationDtoList
+                        invitationList = invitationList
                     )
                 }
             }

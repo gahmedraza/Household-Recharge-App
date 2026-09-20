@@ -6,7 +6,9 @@ import com.raza.householdrecharge.data.remote.datasource.HouseholdRemoteDataSour
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.data.remote.mapper.household.HouseholdEntityMapper
+import com.raza.householdrecharge.data.remote.mapper.household.HouseholdMapper
 import com.raza.householdrecharge.domain.error.HouseholdError
+import com.raza.householdrecharge.domain.model.Household
 import javax.inject.Inject
 
 class HouseholdRepository @Inject constructor(
@@ -50,7 +52,7 @@ class HouseholdRepository @Inject constructor(
      */
     suspend fun getHouseholdByHouseholdId(
         householdId: String
-    ): Result<HouseholdDto, HouseholdError>{
+    ): Result<Household, HouseholdError>{
 
         val result51 = householdRemoteDataSource.getHouseholdByHouseholdId(
             householdId
@@ -68,7 +70,9 @@ class HouseholdRepository @Inject constructor(
 
         householdDao.upsertHousehold(householdEntity)
 
-        return result51
+        val household = HouseholdMapper.map(householdEntity)
+
+        return Result.Success(household)
     }
 
     /**

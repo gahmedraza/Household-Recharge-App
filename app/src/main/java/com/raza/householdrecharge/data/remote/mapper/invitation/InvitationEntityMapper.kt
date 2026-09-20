@@ -13,7 +13,9 @@ object InvitationEntityMapper {
             createdBy = invitationDto.createdBy.cleanString(),
             createdAt = invitationDto.createdAt.cleanString(),
             expiresAt = invitationDto.expiresAt.cleanString(),
-            status = invitationDto.status.cleanString()
+            status = invitationDto.status.cleanString(),
+            usedBy = invitationDto.usedBy.cleanString(),
+            usedAt = invitationDto.usedAt
         )
     }
 

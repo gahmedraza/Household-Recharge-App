@@ -13,5 +13,7 @@ data class InvitationEntity(
     val createdBy: String,
     val createdAt: String,
     val expiresAt: String,
-    val status: String
+    val status: String,
+    val usedBy: String,
+    val usedAt: Long
 )

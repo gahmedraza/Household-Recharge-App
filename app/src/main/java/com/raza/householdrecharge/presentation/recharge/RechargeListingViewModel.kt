@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
+import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeDtoMapper
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeValidator
@@ -32,12 +32,10 @@ class RechargeListingViewModel @Inject constructor(
 
     fun observeRecharges() {
         viewModelScope.launch {
-            rechargeUseCase.observeRecharges().collect { rechargeDtoList ->
+            rechargeUseCase.observeRecharges().collect { rechargeList ->
                 rechargeListingUIState.update {
                     it.copy(
-                        rechargeList = rechargeDtoList.map { rechargeDto ->
-                            RechargeDtoMapper.map(rechargeDto)
-                        }
+                        rechargeList = rechargeList
                     )
                 }
             }

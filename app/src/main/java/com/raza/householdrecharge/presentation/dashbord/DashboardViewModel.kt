@@ -3,8 +3,7 @@ package com.raza.householdrecharge.presentation.dashbord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.data.remote.mapper.MobileNumberDtoMapper
-import com.raza.householdrecharge.data.remote.mapper.RechargeDtoMapper
+import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeDtoMapper
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,13 +43,11 @@ class DashboardViewModel @Inject constructor(
     fun observeMobileNumbers(
     ) {
         viewModelScope.launch {
-            mobileNumberUseCase.observeMobileNumbers().collect { mobileNumberEntityList ->
-
-                val mobileNumberDtoList = MobileNumberDtoMapper.map(mobileNumberEntityList)
+            mobileNumberUseCase.observeMobileNumbers().collect { mobileNumberList ->
 
                 dashboardUIState.update {
                     it.copy(
-                        mobileNumberList = mobileNumberDtoList
+                        mobileNumberList = mobileNumberList
                     )
                 }
             }
@@ -60,13 +57,11 @@ class DashboardViewModel @Inject constructor(
     fun observeRecharges(
     ) {
         viewModelScope.launch {
-            rechargeUseCase.observeRecharges().collect { rechargeDtoList ->
-
-                val rechargeDtoList = RechargeDtoMapper.map(rechargeDtoList)
+            rechargeUseCase.observeRecharges().collect { rechargeList ->
 
                 dashboardUIState.update {
                     it.copy(
-                        rechargeList = rechargeDtoList
+                        rechargeList = rechargeList
                     )
                 }
             }
