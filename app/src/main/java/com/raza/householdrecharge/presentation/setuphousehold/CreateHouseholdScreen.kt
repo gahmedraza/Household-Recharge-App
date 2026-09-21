@@ -87,9 +87,7 @@ fun CreateHouseholdScreen(
                     },
 
                     onValueChange = {
-                        householdUIState.household = householdUIState.household.copy(
-                            name = it.trim()
-                        )
+                        viewmodel.onHouseholdNameChanged(it.trim())
                     },
 
                     value = householdUIState.household.name ?: ""

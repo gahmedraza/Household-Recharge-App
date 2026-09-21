@@ -71,7 +71,7 @@ fun AddMobileNumberScreen(
                     },
 
                     onValueChange = {
-                        mobileNumberUIState.mobileNumber = it
+                        viewmodel.onMobileNumberChanged(it.trim())
                     },
 
                     value = mobileNumberUIState.mobileNumber,

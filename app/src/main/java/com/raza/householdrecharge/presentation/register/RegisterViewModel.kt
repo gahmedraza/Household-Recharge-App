@@ -73,4 +73,28 @@ class RegisterViewModel @Inject constructor(
             }
         }
     }
+
+    fun onAccountNameChanged(accountName: String) {
+        registerUIState.update {
+            it.copy(
+                accountName = accountName
+            )
+        }
+    }
+
+    fun onMobileNumberChanged(mobileNumber: String) {
+        registerUIState.update {
+            it.copy(
+                mobileNumber = mobileNumber
+            )
+        }
+    }
+
+    fun onPasswordChanged(password: String) {
+        registerUIState.update {
+            it.copy(
+                password = password
+            )
+        }
+    }
 }

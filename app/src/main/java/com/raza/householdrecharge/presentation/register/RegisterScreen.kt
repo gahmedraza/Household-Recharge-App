@@ -70,7 +70,7 @@ fun RegisterScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        registerUIState.accountName = it.trim()
+                        viewmodel.onAccountNameChanged(it.trim())
                     },
 
                     label = {
@@ -90,7 +90,7 @@ fun RegisterScreen(
                     ),
 
                     onValueChange = {
-                        registerUIState.mobileNumber = it.trim()
+                        viewmodel.onMobileNumberChanged(it.trim())
                     },
 
                     label = {
@@ -106,7 +106,7 @@ fun RegisterScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        registerUIState.password = it.trim()
+                        viewmodel.onPasswordChanged(it.trim())
                     },
 
                     label = {

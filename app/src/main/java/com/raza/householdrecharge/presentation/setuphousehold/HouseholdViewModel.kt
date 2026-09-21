@@ -10,6 +10,7 @@ import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
+import com.raza.householdrecharge.domain.model.Household
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.HouseholdRequestValidator
 import com.raza.householdrecharge.util.cleanString
@@ -242,6 +243,25 @@ class HouseholdViewModel @Inject constructor(
                 onFailure("unable to join household")
 
             }
+        }
+    }
+
+    fun onInvitationCodeChanged(invitationCode: String) {
+        householdUIState.update {
+            it.copy(
+                invitationCode = invitationCode
+            )
+        }
+    }
+
+    //todo primitive
+    fun onHouseholdNameChanged(householdName: String) {
+        householdUIState.update {
+            it.copy(
+                household = it.household.copy(
+                    name = householdName
+                )
+            )
         }
     }
 }

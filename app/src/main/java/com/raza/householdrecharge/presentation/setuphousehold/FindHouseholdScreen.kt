@@ -98,8 +98,7 @@ fun FindHouseholdScreen(
                         },
 
                         onValueChange = {
-                            householdUIState.invitationCode = it.trim()
-
+                            viewmodel.onInvitationCodeChanged(it.trim())
                         },
 
                         value = householdUIState.invitationCode

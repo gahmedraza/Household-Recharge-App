@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -55,6 +58,8 @@ fun AddRechargeScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .imePadding()
+                .verticalScroll(rememberScrollState())
                 .padding(20.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -72,7 +77,7 @@ fun AddRechargeScreen(
                     },
 
                     onValueChange = {
-                        addRechargeUIState.rechargeDescription = it
+                        viewmodel.onRechargeDescriptionChanged(it)
                     },
 
                     value = addRechargeUIState.rechargeDescription
@@ -88,7 +93,7 @@ fun AddRechargeScreen(
                     },
 
                     onValueChange = {
-                        addRechargeUIState.amount = it
+                        viewmodel.onAmountChanged(it.trim())
                     },
 
                     value = addRechargeUIState.amount,
@@ -106,7 +111,7 @@ fun AddRechargeScreen(
                     label = "Recharge Date",
 
                     onDateSelected = {
-                        addRechargeUIState.date = it.toString()
+                        viewmodel.onDateChanged(it.toString())
                     },
 
                     value = addRechargeUIState.date,
@@ -120,7 +125,7 @@ fun AddRechargeScreen(
                     label = "Expiry Date",
 
                     onDateSelected = {
-                        addRechargeUIState.planExpiryDate = it.toString()
+                        viewmodel.onPlanExpiryDateChanged(it.toString())
                     },
 
                     value = addRechargeUIState.planExpiryDate,
@@ -137,6 +142,7 @@ fun AddRechargeScreen(
 
                     onValueChange = {
                         addRechargeUIState.rechargedBy = it
+                        viewmodel.onRechargedByChanged(it)
                     },
 
                     value = addRechargeUIState.rechargedBy

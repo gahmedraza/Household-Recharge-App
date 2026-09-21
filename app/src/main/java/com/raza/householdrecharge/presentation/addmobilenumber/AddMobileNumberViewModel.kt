@@ -84,4 +84,12 @@ class AddMobileNumberViewModel @Inject constructor(
             }
         }
     }
+
+    fun onMobileNumberChanged(mobileNumber: String) {
+        addMobileNumberUIState.update {
+            it.copy(
+                mobileNumber = mobileNumber
+            )
+        }
+    }
 }

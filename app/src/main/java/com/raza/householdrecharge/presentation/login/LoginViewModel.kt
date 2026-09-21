@@ -117,4 +117,36 @@ class LoginViewModel @Inject constructor(
     }
 
     suspend fun isOnboardingComplete() = sessionManager.isUserLinkedToAHousehold.first()
+
+    fun onMobileNumberChanged(mobileNumber: String) {
+        loginUIState.update {
+            it.copy(
+                mobileNumber = mobileNumber
+            )
+        }
+    }
+
+    fun resetMobileNumberError() {
+        loginUIState.update {
+            it.copy(
+                mobileNumberError = ""
+            )
+        }
+    }
+
+    fun onPasswordChanged(password: String) {
+        loginUIState.update {
+            it.copy(
+                password = password
+            )
+        }
+    }
+
+    fun resetPasswordError() {
+        loginUIState.update {
+            it.copy(
+                passwordError = ""
+            )
+        }
+    }
 }

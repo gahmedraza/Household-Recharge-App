@@ -92,4 +92,44 @@ class AddRechargeViewModel @Inject constructor(
             }
         }
     }
+
+    fun onPlanExpiryDateChanged(planExpiryDate: String) {
+        addRechargeUIState.update {
+            it.copy(
+                planExpiryDate = planExpiryDate
+            )
+        }
+    }
+
+    fun onRechargeDescriptionChanged(rechargeDescription: String) {
+        addRechargeUIState.update {
+            it.copy(
+                rechargeDescription = rechargeDescription
+            )
+        }
+    }
+
+    fun onAmountChanged(amount: String) {
+        addRechargeUIState.update {
+            it.copy(
+                amount = amount
+            )
+        }
+    }
+
+    fun onDateChanged(date: String) {
+        addRechargeUIState.update {
+            it.copy(
+                date = date
+            )
+        }
+    }
+
+    fun onRechargedByChanged(rechargedBy: String) {
+        addRechargeUIState.update {
+            it.copy(
+                rechargedBy = rechargedBy
+            )
+        }
+    }
 }

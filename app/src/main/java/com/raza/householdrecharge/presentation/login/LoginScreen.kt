@@ -80,8 +80,8 @@ fun LoginScreen(
                     ),
 
                     onValueChange = {
-                        loginUIState.mobileNumber = it.trim()
-                        loginUIState.mobileNumberError = ""
+                        viewmodel.onMobileNumberChanged(it.trim())
+                        viewmodel.resetMobileNumberError()
                     },
 
                     label = {
@@ -105,8 +105,8 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
 
                     onValueChange = {
-                        loginUIState.password = it.trim()
-                        loginUIState.passwordError = ""
+                        viewmodel.onPasswordChanged(it.trim())
+                        viewmodel.resetPasswordError()
                     },
 
                     label = {
