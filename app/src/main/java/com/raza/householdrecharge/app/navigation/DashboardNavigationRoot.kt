@@ -134,7 +134,7 @@ fun DashboardNavigationRoot() {
 
                     onSuccess = {
 
-                        navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                        navController.navigate(ComposeScreen.Dashboard.description)
                     },
 
                     onFailure = {
@@ -151,7 +151,7 @@ fun DashboardNavigationRoot() {
                 AddMobileNumberScreen(
                     onSuccess = {
 
-                        navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                        navController.navigate(ComposeScreen.Dashboard.description)
                     },
 
                     onFailure = {

@@ -15,6 +15,7 @@ import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.HouseholdRequestValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
@@ -35,7 +36,7 @@ class HouseholdViewModel @Inject constructor(
         onSuccess: (String?) -> Unit,
         onFailure: (String?) -> Unit
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             householdUIState.update {
                 it.copy(
                     isLoading = true
@@ -187,7 +188,7 @@ class HouseholdViewModel @Inject constructor(
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             householdUIState.update {
                 it.copy(
                     isLoading = true

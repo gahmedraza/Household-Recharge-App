@@ -141,7 +141,6 @@ fun AddRechargeScreen(
                     },
 
                     onValueChange = {
-                        addRechargeUIState.rechargedBy = it
                         viewmodel.onRechargedByChanged(it)
                     },
 
