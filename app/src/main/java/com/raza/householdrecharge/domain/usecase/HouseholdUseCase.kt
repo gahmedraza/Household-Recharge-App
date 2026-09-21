@@ -161,7 +161,7 @@ class HouseholdUseCase @Inject constructor(
 
             val findHouseholdResponse = FindHouseholdResponse(
                 householdId = invitation.householdId,
-                householdName = household.name.cleanString(),
+                householdName = household.householdName.cleanString(),
                 invitationCode = invitation.code
             )
 

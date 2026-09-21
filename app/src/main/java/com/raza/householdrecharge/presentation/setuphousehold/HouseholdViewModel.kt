@@ -10,7 +10,6 @@ import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
-import com.raza.householdrecharge.domain.model.Household
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.HouseholdRequestValidator
 import com.raza.householdrecharge.util.cleanString
@@ -260,7 +259,7 @@ class HouseholdViewModel @Inject constructor(
         householdUIState.update {
             it.copy(
                 household = it.household.copy(
-                    name = householdName
+                    householdName = householdName
                 )
             )
         }

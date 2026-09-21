@@ -23,12 +23,17 @@ class HouseholdRemoteDataSource @Inject constructor(
         var result: Result<String, String>
 
         try {
-            householdDto.authId = appUserDto.authId
+            householdDto.accountId = appUserDto.authId
 
             val documentReference = firestore
 
                 .collection(HouseholdCollection.Households.description)
-                .add(householdDto)
+                .document()
+
+            householdDto.householdId = documentReference.id
+
+
+            documentReference.set(householdDto)
                 .await()
 
             val householdId = documentReference.id.cleanString()

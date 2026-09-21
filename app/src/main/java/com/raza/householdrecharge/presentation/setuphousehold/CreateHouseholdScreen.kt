@@ -90,7 +90,7 @@ fun CreateHouseholdScreen(
                         viewmodel.onHouseholdNameChanged(it.trim())
                     },
 
-                    value = householdUIState.household.name ?: ""
+                    value = householdUIState.household.householdName ?: ""
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -103,7 +103,7 @@ fun CreateHouseholdScreen(
                     onClick = {
 
                         viewmodel.onAddHousehold(
-                            householdName = householdUIState.household.name.cleanString(),
+                            householdName = householdUIState.household.householdName.cleanString(),
 
                             onSuccess = { householdId ->
                                 Log.d("TAG", "success: $householdId")

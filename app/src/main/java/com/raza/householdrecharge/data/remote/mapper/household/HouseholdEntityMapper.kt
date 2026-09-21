@@ -8,8 +8,9 @@ object HouseholdEntityMapper {
 
     fun map(householdDto: HouseholdDto): HouseholdEntity {
         return HouseholdEntity(
+            householdId = householdDto.householdId.cleanString(),
             householdName = householdDto.householdName.cleanString(),
-            authId = householdDto.authId.cleanString()
+            accountId = householdDto.accountId.cleanString()
         )
     }
 }

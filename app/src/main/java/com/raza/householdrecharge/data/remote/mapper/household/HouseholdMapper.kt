@@ -7,8 +7,9 @@ object HouseholdMapper {
 
     fun map(householdEntity: HouseholdEntity): Household {
         return Household(
-            id = householdEntity.householdId,
-            name = householdEntity.householdName
+            householdId = householdEntity.householdId,
+            householdName = householdEntity.householdName,
+            accountId = householdEntity.accountId
         )
     }
 }
