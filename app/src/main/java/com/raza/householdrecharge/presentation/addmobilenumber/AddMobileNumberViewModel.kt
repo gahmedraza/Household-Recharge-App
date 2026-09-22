@@ -7,7 +7,10 @@ import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.validator.MobileNumberRequestValidator
+import com.raza.householdrecharge.presentation.common.AccountNameValidator
+import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
@@ -27,7 +30,19 @@ class AddMobileNumberViewModel @Inject constructor(
         onSuccess: () -> Unit,
         onFailure: (String?) -> Unit
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            //
+            //validate the input fields
+            addMobileNumberUIState.update {
+                it.copy(
+                    mobileNumberError = MobileNumberValidator.validateMobileNumber(
+                        addMobileNumberUIState.value.mobileNumber,
+                        addMobileNumberUIState.value.mobileNumberError
+                    )
+                )
+            }
+            //
+
             addMobileNumberUIState.update {
                 it.copy(
                     isLoading = true
@@ -89,6 +104,14 @@ class AddMobileNumberViewModel @Inject constructor(
         addMobileNumberUIState.update {
             it.copy(
                 mobileNumber = mobileNumber
+            )
+        }
+    }
+
+    fun resetMobileNumberError() {
+        addMobileNumberUIState.update {
+            it.copy(
+                mobileNumberError = ""
             )
         }
     }

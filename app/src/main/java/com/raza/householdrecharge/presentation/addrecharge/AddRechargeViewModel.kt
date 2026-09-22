@@ -101,10 +101,26 @@ class AddRechargeViewModel @Inject constructor(
         }
     }
 
+    fun resetPlanExpiryDateError() {
+        addRechargeUIState.update {
+            it.copy(
+                planExpiryDateError = ""
+            )
+        }
+    }
+
     fun onRechargeDescriptionChanged(rechargeDescription: String) {
         addRechargeUIState.update {
             it.copy(
                 rechargeDescription = rechargeDescription
+            )
+        }
+    }
+
+    fun resetRechargeDescriptionError() {
+        addRechargeUIState.update {
+            it.copy(
+                rechargeDescriptionError = ""
             )
         }
     }
@@ -117,6 +133,14 @@ class AddRechargeViewModel @Inject constructor(
         }
     }
 
+    fun resetAmountError() {
+        addRechargeUIState.update {
+            it.copy(
+                amountError = ""
+            )
+        }
+    }
+
     fun onDateChanged(date: String) {
         addRechargeUIState.update {
             it.copy(
@@ -125,10 +149,26 @@ class AddRechargeViewModel @Inject constructor(
         }
     }
 
+    fun resetDateError() {
+        addRechargeUIState.update {
+            it.copy(
+                dateError = ""
+            )
+        }
+    }
+
     fun onRechargedByChanged(rechargedBy: String) {
         addRechargeUIState.update {
             it.copy(
                 rechargedBy = rechargedBy
+            )
+        }
+    }
+
+    fun resetRechargedByError() {
+        addRechargeUIState.update {
+            it.copy(
+                rechargedByError = ""
             )
         }
     }

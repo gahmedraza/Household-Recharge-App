@@ -7,6 +7,7 @@ import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeDtoMapper
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -28,21 +29,21 @@ class DashboardViewModel @Inject constructor(
 
     fun getAllMobileNumbers(
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             mobileNumberUseCase.getAllMobileNumbers()
         }
     }
 
     fun getAllRecharges(
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             rechargeUseCase.getAllRecharges()
         }
     }
 
     fun observeMobileNumbers(
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             mobileNumberUseCase.observeMobileNumbers().collect { mobileNumberList ->
 
                 dashboardUIState.update {
@@ -56,7 +57,7 @@ class DashboardViewModel @Inject constructor(
 
     fun observeRecharges(
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             rechargeUseCase.observeRecharges().collect { rechargeList ->
 
                 dashboardUIState.update {

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.presentation.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,7 @@ open class AuthViewModel @Inject constructor(
     var authId by mutableStateOf("")
 
     fun setHouseholdLinkStatus(authFlowStatus: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
 
             sessionManager.saveHouseholdLinkStatus(authFlowStatus)
         }

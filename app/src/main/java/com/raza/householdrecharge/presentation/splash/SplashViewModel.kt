@@ -7,6 +7,7 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +39,7 @@ class SplashViewModel @Inject constructor(
 
         val accountEligibilityDto = (result53 as Result.Success).data
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             sessionManager.saveHouseholdLinkStatus(
                 accountEligibilityDto.isEligible
             )

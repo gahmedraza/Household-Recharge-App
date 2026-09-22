@@ -30,7 +30,7 @@ class RechargeListingViewModel @Inject constructor(
     }
 
     fun observeRecharges() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             rechargeUseCase.observeRecharges().collect { rechargeList ->
                 rechargeListingUIState.update {
                     it.copy(
@@ -47,7 +47,7 @@ class RechargeListingViewModel @Inject constructor(
         memberId: String,
         mobileNumber: String
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val validationResult = validator.validateRechargeListingApiCall(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),

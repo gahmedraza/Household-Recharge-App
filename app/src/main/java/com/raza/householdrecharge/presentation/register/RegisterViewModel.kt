@@ -8,8 +8,12 @@ import com.raza.householdrecharge.data.remote.dto.OnboardingDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.AccountError
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
+import com.raza.householdrecharge.presentation.common.MobileNumberValidator
+import com.raza.householdrecharge.presentation.common.PasswordValidator
+import com.raza.householdrecharge.presentation.common.AccountNameValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,13 +28,52 @@ class RegisterViewModel @Inject constructor(
     var registerUIState = MutableStateFlow(RegisterUIState())
 
     fun registerAndAddAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            //
+            //validate the input fields
+            registerUIState.update {
+                it.copy(
+                    accountNameError = AccountNameValidator.validateAccountName(
+                        registerUIState.value.accountName,
+                        registerUIState.value.accountNameError
+                    )
+                )
+            }
+
+            registerUIState.update {
+                it.copy(
+                    mobileNumberError = MobileNumberValidator.validateMobileNumber(
+                        registerUIState.value.mobileNumber,
+                        registerUIState.value.mobileNumberError
+                    )
+                )
+            }
+
+            registerUIState.update {
+                it.copy(
+                    passwordError = PasswordValidator.validatePassword(
+                        registerUIState.value.password,
+                        registerUIState.value.passwordError
+                    )
+                )
+            }
+
+            if(registerUIState.value.accountNameError.isNotEmpty()
+                || registerUIState.value.mobileNumberError.isNotEmpty()
+                || registerUIState.value.passwordError.isNotEmpty()
+            ) {
+
+                return@launch
+            }
+            //
+
             registerUIState.update {
                 it.copy(
                     isLoading = true
                 )
             }
 
+            //todo factory required
             val authDto = AuthDto(
                 accountName = registerUIState.value.accountName,
                 mobileNumber = "${registerUIState.value.mobileNumber}@householdrecharge.local",
@@ -46,7 +89,7 @@ class RegisterViewModel @Inject constructor(
 
                     val onBoardingDto = result.data
 
-                    viewModelScope.launch {
+                    viewModelScope.launch(Dispatchers.IO) {
                         sessionManager.saveUserId(onBoardingDto.authId.cleanString())
                         sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
                         sessionManager.saveMobileNumber(registerUIState.value.mobileNumber)
@@ -94,6 +137,30 @@ class RegisterViewModel @Inject constructor(
         registerUIState.update {
             it.copy(
                 password = password
+            )
+        }
+    }
+
+    fun resetAccountNameError() {
+        registerUIState.update {
+            it.copy(
+                accountNameError = ""
+            )
+        }
+    }
+
+    fun resetMobileNumberError() {
+        registerUIState.update {
+            it.copy(
+                mobileNumberError = ""
+            )
+        }
+    }
+
+    fun resetPasswordError() {
+        registerUIState.update {
+            it.copy(
+                passwordError = ""
             )
         }
     }

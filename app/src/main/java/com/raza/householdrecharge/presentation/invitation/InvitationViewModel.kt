@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
+import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class InvitationViewModel @Inject constructor(
@@ -34,7 +35,7 @@ class InvitationViewModel @Inject constructor(
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             invitationUIState.update {
                 it.copy(
                     isLoading = true
@@ -98,13 +99,13 @@ class InvitationViewModel @Inject constructor(
 
     fun fetchInvitationList(
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             invitationUseCase.getAllInvitations()
         }
     }
 
     fun observeInvitations() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             invitationUseCase.observeInvitations().collect { invitationList ->
 
                 invitationUIState.update {

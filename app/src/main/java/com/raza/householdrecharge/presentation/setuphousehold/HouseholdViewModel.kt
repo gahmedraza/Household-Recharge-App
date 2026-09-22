@@ -12,6 +12,9 @@ import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.HouseholdRequestValidator
+import com.raza.householdrecharge.presentation.common.HouseholdNameValidator
+import com.raza.householdrecharge.presentation.common.InvitationCodeValidator
+import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +39,18 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            //
+            //validate the input fields
+            householdUIState.update {
+                it.copy(
+                    householdNameError = HouseholdNameValidator.validateHouseholdName(
+                        householdUIState.value.householdName,
+                        householdUIState.value.householdNameError
+                    )
+                )
+            }
+            //
+
             householdUIState.update {
                 it.copy(
                     isLoading = true
@@ -89,7 +104,7 @@ class HouseholdViewModel @Inject constructor(
 
                     val householdId = result.data
 
-                    viewModelScope.launch {
+                    viewModelScope.launch(Dispatchers.IO) {
                         sessionManager.saveHouseholdName(householdName)
                         sessionManager.saveHouseholdId(householdId)
 
@@ -128,7 +143,18 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
+            //
+            //validate the input fields
+            householdUIState.update {
+                it.copy(
+                    invitationCodeError = InvitationCodeValidator.validateInvitationCode(
+                        householdUIState.value.invitationCode,
+                        householdUIState.value.invitationCodeError
+                    )
+                )
+            }
+            //
 
             householdUIState.update {
                 it.copy(
@@ -188,6 +214,18 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            //
+            //validate the input fields
+            householdUIState.update {
+                it.copy(
+                    invitationCodeError = InvitationCodeValidator.validateInvitationCode(
+                        householdUIState.value.invitationCode,
+                        householdUIState.value.invitationCodeError
+                    )
+                )
+            }
+            //
+
             householdUIState.update {
                 it.copy(
                     isLoading = true
@@ -254,13 +292,26 @@ class HouseholdViewModel @Inject constructor(
         }
     }
 
-    //todo primitive
+    fun resetInvitationCodeError() {
+        householdUIState.update {
+            it.copy(
+                invitationCodeError = ""
+            )
+        }
+    }
+
     fun onHouseholdNameChanged(householdName: String) {
         householdUIState.update {
             it.copy(
-                household = it.household.copy(
-                    householdName = householdName
-                )
+                householdName = householdName
+            )
+        }
+    }
+
+    fun resetHouseholdNameError() {
+        householdUIState.update {
+            it.copy(
+                householdNameError = ""
             )
         }
     }

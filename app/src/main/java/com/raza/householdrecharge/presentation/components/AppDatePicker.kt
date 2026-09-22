@@ -30,7 +30,9 @@ fun AppDatePicker(
     modifier: Modifier,
     value: String?,
     onDateSelected: (Long) -> Unit,
-    label: String
+    label: String,
+    isError: Boolean = false,
+    supportingText: @Composable () -> Unit = {}
 ) {
 
     var showDatePicker by remember { mutableStateOf(false) }
@@ -63,7 +65,11 @@ fun AppDatePicker(
 
         placeholder = {
             Text("select date")
-        }
+        },
+
+        isError = isError,
+
+        supportingText = supportingText
     )
 
     if (showDatePicker) {

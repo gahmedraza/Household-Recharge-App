@@ -78,9 +78,18 @@ fun AddRechargeScreen(
 
                     onValueChange = {
                         viewmodel.onRechargeDescriptionChanged(it)
+                        viewmodel.resetRechargeDescriptionError()
                     },
 
-                    value = addRechargeUIState.rechargeDescription
+                    value = addRechargeUIState.rechargeDescription,
+
+                    isError = addRechargeUIState.rechargeDescriptionError.isNotEmpty(),
+
+                    supportingText = {
+                        if(addRechargeUIState.rechargeDescriptionError.isNotEmpty()) {
+                            Text(addRechargeUIState.rechargeDescriptionError)
+                        }
+                    }
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -94,13 +103,22 @@ fun AddRechargeScreen(
 
                     onValueChange = {
                         viewmodel.onAmountChanged(it.trim())
+                        viewmodel.resetAmountError()
                     },
 
                     value = addRechargeUIState.amount,
 
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number
-                    )
+                    ),
+
+                    isError = addRechargeUIState.amountError.isNotEmpty(),
+
+                    supportingText = {
+                        if(addRechargeUIState.amountError.isNotEmpty()) {
+                            Text(addRechargeUIState.amountError)
+                        }
+                    }
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -112,9 +130,18 @@ fun AddRechargeScreen(
 
                     onDateSelected = {
                         viewmodel.onDateChanged(it.toString())
+                        viewmodel.resetDateError()
                     },
 
                     value = addRechargeUIState.date,
+
+                    isError = addRechargeUIState.dateError.isNotEmpty(),
+
+                    supportingText = {
+                        if(addRechargeUIState.dateError.isNotEmpty()) {
+                            Text(addRechargeUIState.dateError)
+                        }
+                    }
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -122,13 +149,22 @@ fun AddRechargeScreen(
                 AppDatePicker(
                     modifier = modifier,
 
-                    label = "Expiry Date",
+                    value = addRechargeUIState.planExpiryDate,
 
                     onDateSelected = {
                         viewmodel.onPlanExpiryDateChanged(it.toString())
+                        viewmodel.resetPlanExpiryDateError()
                     },
 
-                    value = addRechargeUIState.planExpiryDate,
+                    label = "Expiry Date",
+
+                    isError = addRechargeUIState.planExpiryDateError.isNotEmpty(),
+
+                    supportingText = {
+                        if(addRechargeUIState.planExpiryDateError.isNotEmpty()) {
+                            Text(addRechargeUIState.planExpiryDateError)
+                        }
+                    }
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -142,9 +178,18 @@ fun AddRechargeScreen(
 
                     onValueChange = {
                         viewmodel.onRechargedByChanged(it)
+                        viewmodel.resetRechargedByError()
                     },
 
-                    value = addRechargeUIState.rechargedBy
+                    value = addRechargeUIState.rechargedBy,
+
+                    isError = addRechargeUIState.rechargedByError.isNotEmpty(),
+
+                    supportingText = {
+                        if(addRechargeUIState.rechargedByError.isNotEmpty()) {
+                            Text(addRechargeUIState.rechargedByError)
+                        }
+                    }
                 )
 
                 Spacer(Modifier.height(40.dp))

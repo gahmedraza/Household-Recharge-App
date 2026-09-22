@@ -71,13 +71,22 @@ fun RegisterScreen(
 
                     onValueChange = {
                         viewmodel.onAccountNameChanged(it.trim())
+                        viewmodel.resetAccountNameError()
                     },
 
                     label = {
                         Text("Name")
                     },
 
-                    value = registerUIState.accountName
+                    value = registerUIState.accountName,
+
+                    isError = registerUIState.accountNameError.isNotEmpty(),
+
+                    supportingText = {
+                        if(registerUIState.accountNameError.isNotEmpty()) {
+                            Text(registerUIState.accountNameError)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -91,13 +100,22 @@ fun RegisterScreen(
 
                     onValueChange = {
                         viewmodel.onMobileNumberChanged(it.trim())
+                        viewmodel.resetMobileNumberError()
                     },
 
                     label = {
                         Text("Mobile Number")
                     },
 
-                    value = registerUIState.mobileNumber
+                    value = registerUIState.mobileNumber,
+
+                    isError = registerUIState.mobileNumberError.isNotEmpty(),
+
+                    supportingText = {
+                        if(registerUIState.mobileNumberError.isNotEmpty()) {
+                            Text(registerUIState.mobileNumberError)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -107,13 +125,22 @@ fun RegisterScreen(
 
                     onValueChange = {
                         viewmodel.onPasswordChanged(it.trim())
+                        viewmodel.resetPasswordError()
                     },
 
                     label = {
                         Text("Password")
                     },
 
-                    value = registerUIState.password
+                    value = registerUIState.password,
+
+                    isError = registerUIState.passwordError.isNotEmpty(),
+
+                    supportingText = {
+                        if(registerUIState.passwordError.isNotEmpty()) {
+                            Text(registerUIState.passwordError)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))

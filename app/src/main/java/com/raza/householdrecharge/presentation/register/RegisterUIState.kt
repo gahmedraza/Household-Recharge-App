@@ -5,5 +5,8 @@ data class RegisterUIState(
     var accountName: String = "",
     var mobileNumber: String = "",
     var password: String = "",
+    var accountNameError: String = "",
+    var mobileNumberError: String = "",
+    var passwordError: String = "",
     var authId: String = ""
 )

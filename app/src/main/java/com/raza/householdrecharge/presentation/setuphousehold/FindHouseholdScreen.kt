@@ -99,9 +99,18 @@ fun FindHouseholdScreen(
 
                         onValueChange = {
                             viewmodel.onInvitationCodeChanged(it.trim())
+                            viewmodel.resetInvitationCodeError()
                         },
 
-                        value = householdUIState.invitationCode
+                        value = householdUIState.invitationCode,
+
+                        isError = householdUIState.invitationCodeError.isNotEmpty(),
+
+                        supportingText = {
+                            if(householdUIState.invitationCodeError.isNotEmpty()) {
+                                Text(householdUIState.invitationCodeError)
+                            }
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(42.dp))

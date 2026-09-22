@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.raza.householdrecharge.data.session.SessionManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -22,7 +23,7 @@ class SettingViewModel @Inject constructor(
             .getInstance()
             .signOut()
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             sessionManager.clear()
         }
 
@@ -30,7 +31,7 @@ class SettingViewModel @Inject constructor(
     }
 
     fun getName(onSuccess: (String) -> Unit, onFailure: () -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val name = sessionManager.memberName.first()
 
             if(name.isNullOrEmpty()) {
@@ -42,7 +43,7 @@ class SettingViewModel @Inject constructor(
     }
 
     fun getHouseholdName(onSuccess: (String) -> Unit, onFailure: () -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val name = sessionManager.householdName.first()
 
             if(name.isNullOrEmpty()) {
@@ -54,7 +55,7 @@ class SettingViewModel @Inject constructor(
     }
 
     fun getMobileNumber(onSuccess: (String) -> Unit, onFailure: () -> Unit) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val name = sessionManager.mobileNumber.first()
 
             if(name.isNullOrEmpty()) {

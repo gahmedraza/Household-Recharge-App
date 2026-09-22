@@ -33,7 +33,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
-import com.raza.householdrecharge.util.cleanString
 
 @Composable
 fun CreateHouseholdScreen(
@@ -88,9 +87,18 @@ fun CreateHouseholdScreen(
 
                     onValueChange = {
                         viewmodel.onHouseholdNameChanged(it.trim())
+                        viewmodel.resetHouseholdNameError()
                     },
 
-                    value = householdUIState.household.householdName ?: ""
+                    value = householdUIState.householdName,
+
+                    isError = householdUIState.householdNameError.isNotEmpty(),
+
+                    supportingText = {
+                        if(householdUIState.householdNameError.isNotEmpty()) {
+                            Text(householdUIState.householdNameError)
+                        }
+                    }
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -103,7 +111,7 @@ fun CreateHouseholdScreen(
                     onClick = {
 
                         viewmodel.onAddHousehold(
-                            householdName = householdUIState.household.householdName.cleanString(),
+                            householdName = householdUIState.householdName,
 
                             onSuccess = { householdId ->
                                 Log.d("TAG", "success: $householdId")
