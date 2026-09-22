@@ -3,14 +3,18 @@ package com.raza.householdrecharge.presentation.common
 object HouseholdNameValidator {
 
     fun validateHouseholdName(householdName: String, householdNameError: String): String {
-        var householdNameError1 = householdNameError
         if (householdName.isEmpty()) {
-            householdNameError1 = "Household Name cannot be empty"
+            return "Household Name cannot be empty"
         }
 
         if (householdName.length < 4) {
-            householdNameError1 = "Household Name must contain at least 4 characters"
+            return "Household Name cannot be less than 4 characters"
         }
-        return householdNameError1
+
+        if (householdName.length > 24) {
+            return "Household Name cannot be more than 24 characters"
+        }
+
+        return householdNameError
     }
 }

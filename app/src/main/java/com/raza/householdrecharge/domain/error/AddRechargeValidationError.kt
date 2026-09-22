@@ -9,4 +9,6 @@ sealed class AddRechargeValidationError {
     data object MemberNotFound : AddRechargeValidationError()//"No member found"
 
     data object MobileNumberNotFound : AddRechargeValidationError()//"No mobile number found"
+
+    data object MobileNumberIDNotFound: AddRechargeValidationError()//"no mobile number id found"
 }

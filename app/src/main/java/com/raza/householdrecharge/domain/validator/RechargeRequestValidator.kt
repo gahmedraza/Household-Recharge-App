@@ -9,7 +9,8 @@ class RechargeRequestValidator @Inject constructor() {
     fun validateAddRechargeApiCall(
         userId: String,
         householdId: String,
-        mobileNumber: String
+        mobileNumber: String,
+        mobileNumberId: String
     ): Result<Unit, AddRechargeValidationError> {
 
         if (userId.isEmpty()) {
@@ -27,6 +28,12 @@ class RechargeRequestValidator @Inject constructor() {
         if (mobileNumber.isEmpty()) {
             return Result.Failure(
                 AddRechargeValidationError.MobileNumberNotFound
+            )
+        }
+
+        if(mobileNumberId.isEmpty()) {
+            return Result.Failure(
+                AddRechargeValidationError.MobileNumberIDNotFound
             )
         }
 

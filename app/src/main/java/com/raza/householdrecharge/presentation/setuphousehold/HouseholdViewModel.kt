@@ -49,6 +49,11 @@ class HouseholdViewModel @Inject constructor(
                     )
                 )
             }
+
+            if(householdUIState.value.householdNameError.isNotEmpty()) {
+
+                return@launch
+            }
             //
 
             householdUIState.update {
@@ -154,6 +159,11 @@ class HouseholdViewModel @Inject constructor(
                     )
                 )
             }
+
+            if(householdUIState.value.invitationCodeError.isNotEmpty()) {
+
+                return@launch
+            }
             //
 
             householdUIState.update {
@@ -214,18 +224,6 @@ class HouseholdViewModel @Inject constructor(
         onFailure: (String) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //
-            //validate the input fields
-            householdUIState.update {
-                it.copy(
-                    invitationCodeError = InvitationCodeValidator.validateInvitationCode(
-                        householdUIState.value.invitationCode,
-                        householdUIState.value.invitationCodeError
-                    )
-                )
-            }
-            //
-
             householdUIState.update {
                 it.copy(
                     isLoading = true

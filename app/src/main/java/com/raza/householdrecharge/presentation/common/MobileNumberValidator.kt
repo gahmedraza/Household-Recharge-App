@@ -4,14 +4,18 @@ package com.raza.householdrecharge.presentation.common
 object MobileNumberValidator {
 
     fun validateMobileNumber(mobileNumber: String, mobileNumberError: String): String {
-        var mobileNumberError1 = mobileNumberError
         if(mobileNumber.isEmpty()) {
-            mobileNumberError1 = "Mobile Number cannot be empty"
+            return "Mobile Number cannot be empty"
         }
 
-        if (mobileNumber.length != 10) {
-            mobileNumberError1 = "Mobile Number should contain 10 digits"
+        if (mobileNumber.length < 10) {
+            return "Mobile Number cannot be less than 10 characters"
         }
-        return mobileNumberError1
+
+        if (mobileNumber.length > 10) {
+            return "Mobile Number cannot be more than 10 characters"
+        }
+
+        return mobileNumberError
     }
 }

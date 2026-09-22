@@ -7,6 +7,12 @@ import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeRequestValidator
+import com.raza.householdrecharge.presentation.common.ExpiryDateValidator
+import com.raza.householdrecharge.presentation.common.MobileNumberValidator
+import com.raza.householdrecharge.presentation.common.RechargeAmountValidator
+import com.raza.householdrecharge.presentation.common.RechargeDateValidator
+import com.raza.householdrecharge.presentation.common.RechargeDescriptionValidator
+import com.raza.householdrecharge.presentation.common.RechargedByValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +30,7 @@ class AddRechargeViewModel @Inject constructor(
 
     var addRechargeUIState = MutableStateFlow(AddRechargeUIState())
 
+    //todo remove mobile number from params
     fun addRecharge(
         mobileNumber: String,
         mobileNumberId: String,
@@ -31,6 +38,66 @@ class AddRechargeViewModel @Inject constructor(
         onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            //
+            //validate the input fields
+            addRechargeUIState.update {
+                it.copy(
+                    amountError = RechargeAmountValidator.validate(
+                        addRechargeUIState.value.amount,
+                        addRechargeUIState.value.amountError
+                    )
+                )
+            }
+
+            addRechargeUIState.update {
+                it.copy(
+                    dateError = RechargeDateValidator.validate(
+                        addRechargeUIState.value.date,
+                        addRechargeUIState.value.dateError
+                    )
+                )
+            }
+
+            addRechargeUIState.update {
+                it.copy(
+                    planExpiryDateError = ExpiryDateValidator.validate(
+                        addRechargeUIState.value.planExpiryDate,
+                        addRechargeUIState.value.planExpiryDateError
+                    )
+                )
+            }
+
+            addRechargeUIState.update {
+                it.copy(
+                    rechargedByError = RechargedByValidator.validate(
+                        addRechargeUIState.value.rechargedBy,
+                        addRechargeUIState.value.rechargedByError
+                    )
+                )
+            }
+
+            addRechargeUIState.update {
+                it.copy(
+                    rechargeDescriptionError = RechargeDescriptionValidator.validate(
+                        addRechargeUIState.value.rechargeDescription,
+                        addRechargeUIState.value.rechargeDescriptionError
+                    )
+                )
+            }
+
+            if(
+                addRechargeUIState.value.amountError.isNotEmpty() ||
+                addRechargeUIState.value.dateError.isNotEmpty() ||
+                addRechargeUIState.value.planExpiryDateError.isNotEmpty() ||
+                addRechargeUIState.value.rechargedByError.isNotEmpty() ||
+                addRechargeUIState.value.rechargeDescriptionError.isNotEmpty()
+            ) {
+
+                return@launch
+            }
+            //
+
+
             addRechargeUIState.update {
                 it.copy(
                     isLoading = true
@@ -51,7 +118,8 @@ class AddRechargeViewModel @Inject constructor(
             val validationResult = requestValidator.validateAddRechargeApiCall(
                 userId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
-                mobileNumber = mobileNumber
+                mobileNumber = mobileNumber,
+                mobileNumberId = mobileNumberId
             )
 
             //user understandable errors should be placed in a class

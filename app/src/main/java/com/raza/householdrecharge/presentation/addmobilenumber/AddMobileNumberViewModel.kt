@@ -41,6 +41,12 @@ class AddMobileNumberViewModel @Inject constructor(
                     )
                 )
             }
+
+            if(addMobileNumberUIState.value.mobileNumberError.isNotEmpty()
+            ) {
+
+                return@launch
+            }
             //
 
             addMobileNumberUIState.update {
