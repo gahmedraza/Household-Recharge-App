@@ -1,6 +1,8 @@
 package com.raza.householdrecharge.presentation.common
 
-object RechargedByValidator {
+import javax.inject.Inject
+
+class RechargedByValidator @Inject constructor() {
 
     fun validate(rechargedBy: String, rechargedByError: String): String {
         if (rechargedBy.isEmpty()) {

@@ -2,8 +2,9 @@ package com.raza.householdrecharge.presentation.common
 
 import com.raza.householdrecharge.util.isLessThanSpecifiedMonths
 import com.raza.householdrecharge.util.isMoreThanSpecifiedMonths
+import javax.inject.Inject
 
-object ExpiryDateValidator {
+class ExpiryDateValidator @Inject constructor() {
 
     fun validate(expiryDateString: String, expiryDateError: String): String {
         if(expiryDateString.isEmpty()) {

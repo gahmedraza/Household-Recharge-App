@@ -1,8 +1,10 @@
 package com.raza.householdrecharge.presentation.common
 
-object PasswordValidator {
+import javax.inject.Inject
 
-    fun validatePassword(password: String, passwordError: String): String {
+class PasswordValidator @Inject constructor() {
+
+    fun validate(password: String, passwordError: String): String {
         if(password.isEmpty()) {
             return "Password cannot be empty"
         }

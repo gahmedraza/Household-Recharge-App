@@ -22,7 +22,10 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
+    private val accountNameValidator: AccountNameValidator,
+    private val mobileNumberValidator: MobileNumberValidator,
+    private val passwordValidator: PasswordValidator
 ) : ViewModel() {
 
     var registerUIState = MutableStateFlow(RegisterUIState())
@@ -33,7 +36,7 @@ class RegisterViewModel @Inject constructor(
             //validate the input fields
             registerUIState.update {
                 it.copy(
-                    accountNameError = AccountNameValidator.validateAccountName(
+                    accountNameError = accountNameValidator.validate(
                         registerUIState.value.accountName,
                         registerUIState.value.accountNameError
                     )
@@ -42,7 +45,7 @@ class RegisterViewModel @Inject constructor(
 
             registerUIState.update {
                 it.copy(
-                    mobileNumberError = MobileNumberValidator.validateMobileNumber(
+                    mobileNumberError = mobileNumberValidator.validate(
                         registerUIState.value.mobileNumber,
                         registerUIState.value.mobileNumberError
                     )
@@ -51,7 +54,7 @@ class RegisterViewModel @Inject constructor(
 
             registerUIState.update {
                 it.copy(
-                    passwordError = PasswordValidator.validatePassword(
+                    passwordError = passwordValidator.validate(
                         registerUIState.value.password,
                         registerUIState.value.passwordError
                     )

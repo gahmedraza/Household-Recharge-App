@@ -21,7 +21,9 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
+    private val mobileNumberValidator: MobileNumberValidator,
+    private val passwordValidator: PasswordValidator
 ): ViewModel() {
 
     var loginUIState = MutableStateFlow(LoginUIState())
@@ -35,7 +37,7 @@ class LoginViewModel @Inject constructor(
             //validate the input fields
             loginUIState.update {
                 it.copy(
-                    mobileNumberError = MobileNumberValidator.validateMobileNumber(
+                    mobileNumberError = mobileNumberValidator.validate(
                         loginUIState.value.mobileNumber,
                         loginUIState.value.mobileNumberError
                     )
@@ -44,7 +46,7 @@ class LoginViewModel @Inject constructor(
 
             loginUIState.update {
                 it.copy(
-                    passwordError = PasswordValidator.validatePassword(
+                    passwordError = passwordValidator.validate(
                         loginUIState.value.password,
                         loginUIState.value.passwordError
                     )

@@ -1,8 +1,10 @@
 package com.raza.householdrecharge.presentation.common
 
-object HouseholdNameValidator {
+import javax.inject.Inject
 
-    fun validateHouseholdName(householdName: String, householdNameError: String): String {
+class HouseholdNameValidator @Inject constructor() {
+
+    fun validate(householdName: String, householdNameError: String): String {
         if (householdName.isEmpty()) {
             return "Household Name cannot be empty"
         }

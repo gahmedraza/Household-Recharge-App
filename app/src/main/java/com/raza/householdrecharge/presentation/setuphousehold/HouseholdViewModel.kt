@@ -28,7 +28,9 @@ import javax.inject.Inject
 class HouseholdViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase,
-    private val householdRequestValidator: HouseholdRequestValidator
+    private val householdRequestValidator: HouseholdRequestValidator,
+    private val householdNameValidator: HouseholdNameValidator,
+    private val invitationCodeValidator: InvitationCodeValidator
 ) : ViewModel() {
 
     var householdUIState = MutableStateFlow(HouseholdUIState())
@@ -43,7 +45,7 @@ class HouseholdViewModel @Inject constructor(
             //validate the input fields
             householdUIState.update {
                 it.copy(
-                    householdNameError = HouseholdNameValidator.validateHouseholdName(
+                    householdNameError = householdNameValidator.validate(
                         householdUIState.value.householdName,
                         householdUIState.value.householdNameError
                     )
@@ -153,7 +155,7 @@ class HouseholdViewModel @Inject constructor(
             //validate the input fields
             householdUIState.update {
                 it.copy(
-                    invitationCodeError = InvitationCodeValidator.validateInvitationCode(
+                    invitationCodeError = invitationCodeValidator.validate(
                         householdUIState.value.invitationCode,
                         householdUIState.value.invitationCodeError
                     )

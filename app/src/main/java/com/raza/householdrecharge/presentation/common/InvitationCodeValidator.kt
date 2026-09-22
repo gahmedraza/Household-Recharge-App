@@ -1,8 +1,10 @@
 package com.raza.householdrecharge.presentation.common
 
-object InvitationCodeValidator {
+import javax.inject.Inject
 
-    fun validateInvitationCode(invitationCode: String, invitationCodeError: String): String {
+class InvitationCodeValidator @Inject constructor() {
+
+    fun validate(invitationCode: String, invitationCodeError: String): String {
         if (invitationCode.isEmpty()) {
             return "Invitation Code cannot be empty"
         }

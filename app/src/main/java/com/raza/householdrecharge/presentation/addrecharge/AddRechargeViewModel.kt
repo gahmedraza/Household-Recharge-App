@@ -8,7 +8,6 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.RechargeRequestValidator
 import com.raza.householdrecharge.presentation.common.ExpiryDateValidator
-import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.RechargeAmountValidator
 import com.raza.householdrecharge.presentation.common.RechargeDateValidator
 import com.raza.householdrecharge.presentation.common.RechargeDescriptionValidator
@@ -25,7 +24,12 @@ import javax.inject.Inject
 class AddRechargeViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeUseCase: RechargeUseCase,
-    private val requestValidator: RechargeRequestValidator
+    private val requestValidator: RechargeRequestValidator,
+    private val rechargeAmountValidator: RechargeAmountValidator,
+    private val rechargeDateValidator: RechargeDateValidator,
+    private val expiryDateValidator: ExpiryDateValidator,
+    private val rechargedByValidator: RechargedByValidator,
+    private val rechargeDescriptionValidator: RechargeDescriptionValidator
 ) : ViewModel() {
 
     var addRechargeUIState = MutableStateFlow(AddRechargeUIState())
@@ -42,7 +46,7 @@ class AddRechargeViewModel @Inject constructor(
             //validate the input fields
             addRechargeUIState.update {
                 it.copy(
-                    amountError = RechargeAmountValidator.validate(
+                    amountError = rechargeAmountValidator.validate(
                         addRechargeUIState.value.amount,
                         addRechargeUIState.value.amountError
                     )
@@ -51,7 +55,7 @@ class AddRechargeViewModel @Inject constructor(
 
             addRechargeUIState.update {
                 it.copy(
-                    dateError = RechargeDateValidator.validate(
+                    dateError = rechargeDateValidator.validate(
                         addRechargeUIState.value.date,
                         addRechargeUIState.value.dateError
                     )
@@ -60,7 +64,7 @@ class AddRechargeViewModel @Inject constructor(
 
             addRechargeUIState.update {
                 it.copy(
-                    planExpiryDateError = ExpiryDateValidator.validate(
+                    planExpiryDateError = expiryDateValidator.validate(
                         addRechargeUIState.value.planExpiryDate,
                         addRechargeUIState.value.planExpiryDateError
                     )
@@ -69,7 +73,7 @@ class AddRechargeViewModel @Inject constructor(
 
             addRechargeUIState.update {
                 it.copy(
-                    rechargedByError = RechargedByValidator.validate(
+                    rechargedByError = rechargedByValidator.validate(
                         addRechargeUIState.value.rechargedBy,
                         addRechargeUIState.value.rechargedByError
                     )
@@ -78,7 +82,7 @@ class AddRechargeViewModel @Inject constructor(
 
             addRechargeUIState.update {
                 it.copy(
-                    rechargeDescriptionError = RechargeDescriptionValidator.validate(
+                    rechargeDescriptionError = rechargeDescriptionValidator.validate(
                         addRechargeUIState.value.rechargeDescription,
                         addRechargeUIState.value.rechargeDescriptionError
                     )

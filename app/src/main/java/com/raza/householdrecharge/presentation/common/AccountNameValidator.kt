@@ -1,8 +1,10 @@
 package com.raza.householdrecharge.presentation.common
 
-object AccountNameValidator {
+import javax.inject.Inject
 
-    fun validateAccountName(accountName: String, accountNameError: String): String {
+class AccountNameValidator @Inject constructor() {
+
+    fun validate(accountName: String, accountNameError: String): String {
         if (accountName.isEmpty()) {
             return "Account Name cannot be empty"
         }

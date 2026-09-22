@@ -1,9 +1,10 @@
 package com.raza.householdrecharge.presentation.common
 
-//remove object, create class
-object MobileNumberValidator {
+import javax.inject.Inject
 
-    fun validateMobileNumber(mobileNumber: String, mobileNumberError: String): String {
+class MobileNumberValidator @Inject constructor() {
+
+    fun validate(mobileNumber: String, mobileNumberError: String): String {
         if(mobileNumber.isEmpty()) {
             return "Mobile Number cannot be empty"
         }

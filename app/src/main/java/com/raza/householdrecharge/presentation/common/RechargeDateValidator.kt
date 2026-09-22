@@ -2,8 +2,9 @@ package com.raza.householdrecharge.presentation.common
 
 import com.raza.householdrecharge.util.isLessThanSpecifiedMonths
 import com.raza.householdrecharge.util.isMoreThanSpecifiedMonths
+import javax.inject.Inject
 
-object RechargeDateValidator {
+class RechargeDateValidator @Inject constructor() {
 
     fun validate(rechargeDateString: String, rechargeDateError: String): String {
         if(rechargeDateString.isEmpty()) {
