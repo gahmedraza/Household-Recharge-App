@@ -3,6 +3,7 @@ package com.raza.householdrecharge.data.remote.datasource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.domain.error.InvitationError
@@ -24,7 +25,11 @@ class InvitationRemoteDataSource @Inject constructor(
 
             val documentReference = firestore
                 .collection(HouseholdCollection.Invitations.description)
-                .document(invitation.code)
+                .document()
+
+            invitation.id = documentReference.id
+
+            documentReference
                 .set(invitation)
                 .await()
 
@@ -94,17 +99,20 @@ class InvitationRemoteDataSource @Inject constructor(
 
             val snapshot = firestore
                 .collection(HouseholdCollection.Invitations.description)
-                .document(code.uppercase())
+                .whereEqualTo(CollectionField.InvitationCode.description, code.uppercase())
+                .limit(1)
                 .get()
                 .await()
 
-            if (!snapshot.exists()) {
+            if (snapshot == null || snapshot.documents.isEmpty()) {
                 return Result.Failure(InvitationError.InvitationCodeNotFound)
             }
 
-            val invitationDto = snapshot.toObject(InvitationDto::class.java)
+            val invitationDto = snapshot
+                .documents[0]
+                .toObject(InvitationDto::class.java)
 
-            if(invitationDto == null) {
+            if (invitationDto == null) {
                 result = Result.Failure(InvitationError.InvitationDataMappingError)
 
             } else {
@@ -130,7 +138,18 @@ class InvitationRemoteDataSource @Inject constructor(
 
             val documentReference = firestore
                 .collection(HouseholdCollection.Invitations.description)
-                .document(invitation.code)
+                //this could also be done using id
+                .whereEqualTo(CollectionField.InvitationCode.description, invitation.code)
+                .limit(1)
+                .get()
+                .await()
+
+            if (documentReference.documents.isEmpty()) {
+                return Result.Failure("error")
+            }
+
+            documentReference.documents[0]
+                .reference
                 .set(invitation)
                 .await()
 

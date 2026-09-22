@@ -1,6 +1,7 @@
 package com.raza.householdrecharge.data.remote.dto
 
 data class InvitationDto(
+    var id: String = "",
     val code: String = "",
     val householdId: String = "",
     val createdBy: String = "",
