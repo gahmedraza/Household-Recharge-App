@@ -19,9 +19,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +42,7 @@ import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.components.getPrintableDate
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RechargeListingScreen(
     memberId: String = "",
@@ -102,6 +105,24 @@ fun RechargeListingScreen(
 
                 item {
                     Spacer(modifier = Modifier.height(20.dp))
+                }
+            }
+        }
+
+        if(rechargeListingUIState.showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewmodel.onShowBottomSheetModified(false)
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text("api response")
+
+                    Text(rechargeListingUIState.apiResponse)
                 }
             }
         }

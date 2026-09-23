@@ -3,7 +3,6 @@ package com.raza.householdrecharge.presentation.account
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
-import com.raza.householdrecharge.core.logging.Logger.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.AccountUseCase
@@ -41,20 +40,39 @@ class AccountViewModel @Inject constructor(
             )
 
             if(validationResult is Result.Failure) {
-                //propogate the error to the composable and to the UI
-                log(validationResult.error.toString())
+                //propagate the error to the composable and to the UI
+
+                Logger.log(validationResult.error.toString())
+
+                accountUIState.update {
+                    it.copy(
+                        apiResponse = validationResult.error.toString(),
+                        showBottomSheet = true
+                    )
+                }
+
                 return@launch
             }
 
             val result = accountUseCase.fetchAccountByAccountId(accountId)
 
             if(result is Result.Failure) {
+
                 Logger.log(result.error.toString())
+
+                accountUIState.update {
+                    it.copy(
+                        apiResponse = result.error.toString(),
+                        showBottomSheet = true
+                    )
+                }
+
                 accountUIState.update {
                     it.copy(
                         isLoading = false
                     )
                 }
+
                 return@launch
             }
 
@@ -67,6 +85,21 @@ class AccountViewModel @Inject constructor(
                     isLoading = false
                 )
             }
+
+            accountUIState.update {
+                it.copy(
+                    apiResponse = "successfully parsed the response",
+                    showBottomSheet = true
+                )
+            }
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        accountUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
+            )
         }
     }
 }

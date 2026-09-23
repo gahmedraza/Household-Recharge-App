@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -38,6 +40,7 @@ import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     viewmodel: LoginViewModel = hiltViewModel(),
@@ -214,6 +217,24 @@ fun LoginScreen(
                     },
                     textAlign = TextAlign.Center
                 )
+            }
+        }
+
+        if(loginUIState.showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewmodel.onShowBottomSheetModified(false)
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text("api response")
+
+                    Text(loginUIState.apiResponse)
+                }
             }
         }
     }

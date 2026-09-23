@@ -49,6 +49,14 @@ class InvitationViewModel @Inject constructor(
 
             if(validationResult is Result.Failure) {
                 log(validationResult.error.toString())
+
+                invitationUIState.update {
+                    it.copy(
+                        apiResponse = validationResult.error.toString(),
+                        showBottomSheet = true
+                    )
+                }
+
                 return@launch
             }
 
@@ -67,6 +75,13 @@ class InvitationViewModel @Inject constructor(
                 onSuccess = { data ->
                     invitationUIState.update {
                         it.copy(
+                            apiResponse = "successfully parsed the response",
+                            showBottomSheet = true
+                        )
+                    }
+
+                    invitationUIState.update {
+                        it.copy(
                             isLoading = false
                         )
                     }
@@ -74,6 +89,13 @@ class InvitationViewModel @Inject constructor(
                     onSuccess(data)
                 },
                 onFailure = { error ->
+                    invitationUIState.update {
+                        it.copy(
+                            apiResponse = error,
+                            showBottomSheet = true
+                        )
+                    }
+
                     invitationUIState.update {
                         it.copy(
                             isLoading = false
@@ -114,6 +136,14 @@ class InvitationViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        invitationUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
+            )
         }
     }
 }

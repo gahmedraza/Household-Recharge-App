@@ -19,7 +19,7 @@ class AccountUseCase @Inject constructor(
         collectionId: String,
         accountDto: AccountDto
 
-    ): Result<Unit, String> {
+    ): Result<Unit, AccountError> {
 
         return accountRepository.createAccount(
             collectionId,

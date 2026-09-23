@@ -44,7 +44,8 @@ class AddMobileNumberViewModel @Inject constructor(
 
             if(addMobileNumberUIState.value.mobileNumberError.isNotEmpty()
             ) {
-
+                //TODO do not add api error
+                //TODO api error only meant for api related
                 return@launch
             }
             //
@@ -70,11 +71,20 @@ class AddMobileNumberViewModel @Inject constructor(
             //user understandable errors should be placed in a class
             if (validationResult is Result.Failure) {
                 onFailure(validationResult.error.toString())
+
+                addMobileNumberUIState.update {
+                    it.copy(
+                        apiResponse = validationResult.error.toString(),
+                        showBottomSheet = true
+                    )
+                }
+
                 addMobileNumberUIState.update {
                     it.copy(
                         isLoading = false
                     )
                 }
+
                 return@launch
             }
             //
@@ -88,18 +98,35 @@ class AddMobileNumberViewModel @Inject constructor(
                 is Result.Success<String> -> {
                     addMobileNumberUIState.update {
                         it.copy(
-                            isLoading = false
+                            apiResponse = "successfully parsed the response",
+                            showBottomSheet = true
                         )
                     }
-                    onSuccess()
-                }
 
-                is Result.Failure<String> -> {
                     addMobileNumberUIState.update {
                         it.copy(
                             isLoading = false
                         )
                     }
+
+                    onSuccess()
+                }
+
+                is Result.Failure<String> -> {
+
+                    addMobileNumberUIState.update {
+                        it.copy(
+                            apiResponse = result.error,
+                            showBottomSheet = true
+                        )
+                    }
+
+                    addMobileNumberUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
+
                     onFailure(result.error)
                 }
             }
@@ -118,6 +145,14 @@ class AddMobileNumberViewModel @Inject constructor(
         addMobileNumberUIState.update {
             it.copy(
                 mobileNumberError = ""
+            )
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        addMobileNumberUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
             )
         }
     }

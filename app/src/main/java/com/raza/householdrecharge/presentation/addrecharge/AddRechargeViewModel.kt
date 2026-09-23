@@ -101,7 +101,6 @@ class AddRechargeViewModel @Inject constructor(
             }
             //
 
-
             addRechargeUIState.update {
                 it.copy(
                     isLoading = true
@@ -130,9 +129,17 @@ class AddRechargeViewModel @Inject constructor(
             if(validationResult is Result.Failure) {
                 addRechargeUIState.update {
                     it.copy(
+                        apiResponse = validationResult.error.toString(),
+                        showBottomSheet = true
+                    )
+                }
+
+                addRechargeUIState.update {
+                    it.copy(
                         isLoading = false
                     )
                 }
+
                 onFailure("failure")
                 return@launch
             }
@@ -147,13 +154,28 @@ class AddRechargeViewModel @Inject constructor(
                 is Result.Success<String> -> {
                     addRechargeUIState.update {
                         it.copy(
+                            apiResponse = "successfully parsed the response",
+                            showBottomSheet = true
+                        )
+                    }
+
+                    addRechargeUIState.update {
+                        it.copy(
                             isLoading = false
                         )
                     }
+
                     onSuccess()
                 }
 
                 is Result.Failure<String> -> {
+                    addRechargeUIState.update {
+                        it.copy(
+                            apiResponse = result.error,
+                            showBottomSheet = true
+                        )
+                    }
+
                     addRechargeUIState.update {
                         it.copy(
                             isLoading = false
@@ -241,6 +263,14 @@ class AddRechargeViewModel @Inject constructor(
         addRechargeUIState.update {
             it.copy(
                 rechargedByError = ""
+            )
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        addRechargeUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
             )
         }
     }

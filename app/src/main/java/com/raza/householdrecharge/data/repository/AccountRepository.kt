@@ -10,24 +10,16 @@ import com.raza.householdrecharge.domain.error.AccountError
 import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
-//TODO Add Dao entries
-//TODO the viewmodelscope.launcher should be background
-//TODO on an explicit basis as the former does not guarantee
-//TODO the execution on a background thread
 class AccountRepository @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
     private val accountDao: AccountDao
 ) {
 
-    /**
-     * Transit Method
-     * No additional code
-     */
     suspend fun createAccount(
         collectionId: String,
         accountDto: AccountDto
 
-    ): Result<Unit, String> {
+    ): Result<Unit, AccountError> {
 
         val result51 = accountRemoteDataSource.createAccount(
             collectionId,
@@ -45,10 +37,6 @@ class AccountRepository @Inject constructor(
         return result51
     }
 
-    /**
-     * Transit Method
-     * No additional code
-     */
     suspend fun updateAccount(
         collectionId: String,
         householdId: String
@@ -69,10 +57,6 @@ class AccountRepository @Inject constructor(
         return result51
     }
 
-    /**
-     * Transit Method
-     * No additional code
-     */
     suspend fun fetchAccountByAccountId(
         accountId: String
 

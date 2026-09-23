@@ -23,9 +23,7 @@ class AccountRemoteDataSource @Inject constructor(
         collectionId: String,
         accountDto: AccountDto
 
-    ): Result<Unit, String> {
-
-        var result : Result<Unit, String>
+    ): Result<Unit, AccountError> {
 
         try {
 
@@ -37,14 +35,13 @@ class AccountRemoteDataSource @Inject constructor(
 
                 .await()
 
-            result = Result.Success(Unit)
+            return Result.Success(Unit)
 
         } catch (e: Exception) {
+            Logger.log(e.message.cleanString())
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(AccountError.Unknown)
         }
-
-        return result
     }
 
     /**
@@ -57,8 +54,6 @@ class AccountRemoteDataSource @Inject constructor(
 
     ): Result<Unit, AccountError> {
 
-        var result : Result<Unit, AccountError>
-
         try {
 
             firestore
@@ -69,15 +64,13 @@ class AccountRemoteDataSource @Inject constructor(
 
                 .await()
 
-            result = Result.Success(Unit)
+            return Result.Success(Unit)
 
         } catch (e: Exception) {
 
             Logger.log(e.message)
-            result = Result.Failure(AccountError.Unknown)
+            return Result.Failure(AccountError.Unknown)
         }
-
-        return result
     }
 
     /**
@@ -88,8 +81,6 @@ class AccountRemoteDataSource @Inject constructor(
         accountId: String
 
     ): Result<AccountDto, AccountError> {
-
-        var result : Result<AccountDto, AccountError>
 
         try {
 
@@ -106,19 +97,17 @@ class AccountRemoteDataSource @Inject constructor(
             val accountDto = document.toObject(AccountDto::class.java)
 
             if(accountDto == null) {
-                result = Result.Failure(AccountError.AccountEmpty)
+                return Result.Failure(AccountError.AccountEmpty)
 
             } else {
-                result = Result.Success(accountDto)
+                return Result.Success(accountDto)
 
             }
 
         } catch (e: Exception) {
+
             Logger.log(e.message)
-            result = Result.Failure(AccountError.Unknown)
-
+            return Result.Failure(AccountError.Unknown)
         }
-
-        return result
     }
 }

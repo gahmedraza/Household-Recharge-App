@@ -15,7 +15,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -39,6 +41,7 @@ import com.raza.householdrecharge.presentation.components.AppDatePicker
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import com.raza.householdrecharge.util.cleanString
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddRechargeScreen(
     mobileNumber: String = "",
@@ -264,6 +267,24 @@ fun AddRechargeScreen(
                     },
                     textAlign = TextAlign.Center
                 )
+            }
+        }
+
+        if(addRechargeUIState.showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewmodel.onShowBottomSheetModified(false)
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text("api response")
+
+                    Text(addRechargeUIState.apiResponse)
+                }
             }
         }
     }

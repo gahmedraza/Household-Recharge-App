@@ -8,5 +8,7 @@ data class RegisterUIState(
     var accountNameError: String = "",
     var mobileNumberError: String = "",
     var passwordError: String = "",
-    var authId: String = ""
+    var authId: String = "",
+    var apiResponse: String = "",
+    var showBottomSheet: Boolean = false
 )

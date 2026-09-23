@@ -44,6 +44,7 @@ class RechargeRepository @Inject constructor(
         }
     }
 
+    //todo error propagation
     suspend fun getAllRecharges(
 
     ) {

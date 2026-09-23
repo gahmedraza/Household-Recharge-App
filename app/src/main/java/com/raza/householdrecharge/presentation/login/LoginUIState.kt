@@ -5,5 +5,7 @@ data class LoginUIState(
     var password: String = "",
     var mobileNumberError: String = "",
     var passwordError: String = "",
-    var isLoading: Boolean = false
+    var isLoading: Boolean = false,
+    var apiResponse: String = "",
+    var showBottomSheet: Boolean = false
 )

@@ -5,5 +5,7 @@ data class HouseholdUIState(
     var invitationCode: String = "",
     var invitationCodeError: String = "",
     var householdName: String = "",
-    var householdNameError: String = ""
+    var householdNameError: String = "",
+    var apiResponse: String = "",
+    var showBottomSheet: Boolean = false
 )

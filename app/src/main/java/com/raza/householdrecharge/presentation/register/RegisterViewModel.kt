@@ -99,11 +99,20 @@ class RegisterViewModel @Inject constructor(
                     }
 
                     registerUIState.value.authId = onBoardingDto.authId.cleanString()
+
                     registerUIState.update {
                         it.copy(
                             isLoading = false
                         )
                     }
+
+                    registerUIState.update {
+                        it.copy(
+                            apiResponse = "successfully parsed the response",
+                            showBottomSheet = true
+                        )
+                    }
+
                     onSuccess(onBoardingDto.authId.cleanString())
                 }
 
@@ -111,9 +120,17 @@ class RegisterViewModel @Inject constructor(
 
                     registerUIState.update {
                         it.copy(
+                            apiResponse = result.error.toString(),
+                            showBottomSheet = true
+                        )
+                    }
+
+                    registerUIState.update {
+                        it.copy(
                             isLoading = false
                         )
                     }
+
                     onFailure(result.error.toString())//todo modify
                 }
             }
@@ -164,6 +181,14 @@ class RegisterViewModel @Inject constructor(
         registerUIState.update {
             it.copy(
                 passwordError = ""
+            )
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        registerUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
             )
         }
     }

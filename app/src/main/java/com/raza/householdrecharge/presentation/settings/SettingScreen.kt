@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(
     viewmodel: SettingViewModel = hiltViewModel(),
@@ -26,6 +31,8 @@ fun SettingScreen(
     onInvitation: () -> Unit = {},
     onAccount: () -> Unit = {}
 ) {
+
+    val settingUIState by viewmodel.settingUIState.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -90,6 +97,24 @@ fun SettingScreen(
             )
 
             HorizontalDivider(modifier = Modifier.height(1.dp))
+        }
+
+        if(settingUIState.showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewmodel.onShowBottomSheetModified(false)
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text("api response")
+
+                    Text(settingUIState.apiResponse)
+                }
+            }
         }
     }
 }

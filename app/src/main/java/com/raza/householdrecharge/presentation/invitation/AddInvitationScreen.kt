@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +34,7 @@ import com.raza.householdrecharge.presentation.components.LargeBodyText
 import com.raza.householdrecharge.presentation.components.LargeDisplayText
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddInvitationScreen(
     viewmodel: InvitationViewModel = hiltViewModel(),
@@ -175,6 +178,24 @@ fun AddInvitationScreen(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                     )
+                }
+            }
+        }
+
+        if(invitationUIState.showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewmodel.onShowBottomSheetModified(false)
+                }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text("api response")
+
+                    Text(invitationUIState.apiResponse)
                 }
             }
         }

@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -63,6 +64,14 @@ class SettingViewModel @Inject constructor(
             } else {
                 onSuccess(name)
             }
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        settingUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
+            )
         }
     }
 }

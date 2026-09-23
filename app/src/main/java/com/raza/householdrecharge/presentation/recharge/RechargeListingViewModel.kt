@@ -58,6 +58,14 @@ class RechargeListingViewModel @Inject constructor(
             //user understandable errors should be placed in a class
             if(validationResult is Result.Failure) {
                 onFailure("failure")
+
+                rechargeListingUIState.update {
+                    it.copy(
+                        apiResponse = validationResult.error.toString(),
+                        showBottomSheet = true
+                    )
+                }
+
                 return@launch
             }
 
@@ -67,6 +75,14 @@ class RechargeListingViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             rechargeUseCase.queryDatabase()
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        rechargeListingUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
+            )
         }
     }
 }

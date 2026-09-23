@@ -6,5 +6,7 @@ import com.raza.householdrecharge.domain.model.Recharge
 data class DashboardUIState(
     var isLoading: Boolean = false,
     var mobileNumberList: List<MobileNumber> = emptyList(),
-    var rechargeList: List<Recharge> = emptyList()
+    var rechargeList: List<Recharge> = emptyList(),
+    var apiResponse: String = "",
+    var showBottomSheet: Boolean = false
 )

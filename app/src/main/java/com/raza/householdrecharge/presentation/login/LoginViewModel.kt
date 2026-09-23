@@ -94,9 +94,25 @@ class LoginViewModel @Inject constructor(
                             isLoading = false
                         )
                     }
+
+                    loginUIState.update {
+                        it.copy(
+                            apiResponse = "successfully parsed the response",
+                            showBottomSheet = true
+                        )
+                    }
+
                     onSuccess(accountDto.accountId.cleanString())
                 }
+
                 is Result.Failure<String> -> {
+
+                    loginUIState.update {
+                        it.copy(
+                            apiResponse = result51.error,
+                            showBottomSheet = true
+                        )
+                    }
 
                     loginUIState.update {
                         it.copy(
@@ -149,6 +165,14 @@ class LoginViewModel @Inject constructor(
         loginUIState.update {
             it.copy(
                 passwordError = ""
+            )
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        loginUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
             )
         }
     }

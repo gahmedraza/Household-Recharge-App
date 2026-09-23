@@ -46,6 +46,9 @@ class MobileNumberRepository @Inject constructor(
         }
     }
 
+    //TODO add error propagation
+    //event bus to post messages to the queue without propagation
+    //chatgpt
     suspend fun getAllMobileNumbers(
     ) {
         val result = mobileNumberRemoteDataSource.getAllMobileNumbers()

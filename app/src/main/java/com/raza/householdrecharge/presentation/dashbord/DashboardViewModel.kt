@@ -67,4 +67,12 @@ class DashboardViewModel @Inject constructor(
             }
         }
     }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        dashboardUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
+            )
+        }
+    }
 }

@@ -72,6 +72,13 @@ class HouseholdViewModel @Inject constructor(
             if (userNotFound) {
                 householdUIState.update {
                     it.copy(
+                        apiResponse = "user not found",
+                        showBottomSheet = true
+                    )
+                }
+
+                householdUIState.update {
+                    it.copy(
                         isLoading = false
                     )
                 }
@@ -85,6 +92,13 @@ class HouseholdViewModel @Inject constructor(
             )
 
             if(validationResult is Result.Failure) {
+                householdUIState.update {
+                    it.copy(
+                        apiResponse = validationResult.error.toString(),
+                        showBottomSheet = true
+                    )
+                }
+
                 log(validationResult.error.toString())
                 return@launch
             }
@@ -120,6 +134,14 @@ class HouseholdViewModel @Inject constructor(
                                 isLoading = false
                             )
                         }
+
+                        householdUIState.update {
+                            it.copy(
+                                apiResponse = "successfully parsed the response",
+                                showBottomSheet = true
+                            )
+                        }
+
                         onSuccess(householdId)
                     }
                 }
@@ -131,6 +153,14 @@ class HouseholdViewModel @Inject constructor(
                             isLoading = false
                         )
                     }
+
+                    householdUIState.update {
+                        it.copy(
+                            apiResponse = result.error,
+                            showBottomSheet = true
+                        )
+                    }
+
                     onFailure(result.error)
                 }
             }
@@ -192,6 +222,13 @@ class HouseholdViewModel @Inject constructor(
                 sessionManager.saveHouseholdId(findHouseholdResponse?.householdId.cleanString())
                 sessionManager.saveHouseholdName(findHouseholdResponse?.householdName.cleanString())
 
+                householdUIState.update {
+                    it.copy(
+                        apiResponse = "successfully parsed the response",
+                        showBottomSheet = true
+                    )
+                }
+
                 onSuccess(result.data)
 
             } else {
@@ -212,6 +249,13 @@ class HouseholdViewModel @Inject constructor(
                     is HouseholdUseCaseError.Unknown -> {
                         onFailure(error.error)
                     }
+                }
+
+                householdUIState.update {
+                    it.copy(
+                        apiResponse = error.toString(),
+                        showBottomSheet = true
+                    )
                 }
             }
         }
@@ -312,6 +356,14 @@ class HouseholdViewModel @Inject constructor(
         householdUIState.update {
             it.copy(
                 householdNameError = ""
+            )
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        householdUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
             )
         }
     }
