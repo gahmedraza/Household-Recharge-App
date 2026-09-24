@@ -6,8 +6,8 @@ sealed class AccountError {
 
     data object InvalidAccountRecord: AccountError()
 
-    data object AccountIdNotGenerated: AccountError()
+    data class AccountIdNotGenerated(val message: String): AccountError()
 
     data object AccountNotEligibleToJoin: AccountError()
-    data object Unknown: AccountError()
+    data class Unknown(val message: String): AccountError()
 }

@@ -29,7 +29,7 @@ class AuthUseCase @Inject constructor(
 
             val onBoardingDto: OnboardingDto
 
-            var accountDto: AccountDto? = null
+            var accountDto: AccountDto?
 
             val registerResult = authRepository.register(authDto = authDto)
 
@@ -60,23 +60,24 @@ class AuthUseCase @Inject constructor(
 
                     } else {
 
-                        Logger.log("account id was not generated in accounts collection")
-                        result = Result.Failure(AccountError.AccountIdNotGenerated)
+                        val error = "account id was not generated in accounts collection"
+                        Logger.log(error)
+                        result = Result.Failure(AccountError.AccountIdNotGenerated(error))
 
                     }
                 }
 
                 is Result.Failure -> {
-
-                    Logger.log(registerResult.error.cleanString())
-                    result = Result.Failure(AccountError.Unknown)
+                    val error = registerResult.error.cleanString()
+                    Logger.log(error)
+                    result = Result.Failure(AccountError.Unknown(error))
                 }
             }
 
         } catch (e: Exception) {
-
-            Logger.log(e.message.cleanString())
-            result = Result.Failure(AccountError.Unknown)
+            val error = e.message.cleanString()
+            Logger.log(error)
+            result = Result.Failure(AccountError.Unknown(error))
         }
 
         return result

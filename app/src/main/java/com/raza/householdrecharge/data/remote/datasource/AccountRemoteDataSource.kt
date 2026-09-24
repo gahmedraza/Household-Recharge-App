@@ -38,9 +38,12 @@ class AccountRemoteDataSource @Inject constructor(
             return Result.Success(Unit)
 
         } catch (e: Exception) {
-            Logger.log(e.message.cleanString())
+            val error = e.message.cleanString()
+            Logger.log(error)
 
-            return Result.Failure(AccountError.Unknown)
+            return Result.Failure(
+                error = AccountError.Unknown(error)
+            )
         }
     }
 
@@ -67,9 +70,12 @@ class AccountRemoteDataSource @Inject constructor(
             return Result.Success(Unit)
 
         } catch (e: Exception) {
+            val error = e.message.cleanString()
+            Logger.log(error)
 
-            Logger.log(e.message)
-            return Result.Failure(AccountError.Unknown)
+            return Result.Failure(
+                error = AccountError.Unknown(error)
+            )
         }
     }
 
@@ -105,9 +111,12 @@ class AccountRemoteDataSource @Inject constructor(
             }
 
         } catch (e: Exception) {
+            val error = e.message.cleanString()
+            Logger.log(error)
 
-            Logger.log(e.message)
-            return Result.Failure(AccountError.Unknown)
+            return Result.Failure(
+                error = AccountError.Unknown(error)
+            )
         }
     }
 }
