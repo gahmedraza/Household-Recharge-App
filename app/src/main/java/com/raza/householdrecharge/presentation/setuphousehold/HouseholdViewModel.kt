@@ -8,13 +8,12 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.data.session.SessionManager
-import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
+import com.raza.householdrecharge.domain.error.usecase.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
-import com.raza.householdrecharge.domain.validator.HouseholdRequestValidator
+import com.raza.householdrecharge.domain.validator.request.HouseholdRequestValidator
 import com.raza.householdrecharge.presentation.common.HouseholdNameValidator
 import com.raza.householdrecharge.presentation.common.InvitationCodeValidator
-import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

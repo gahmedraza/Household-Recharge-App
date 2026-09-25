@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.logging.Logger.log
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.InvitationUseCase
-import com.raza.householdrecharge.domain.validator.InvitationRequestValidator
+import com.raza.householdrecharge.domain.validator.request.InvitationRequestValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first

@@ -7,7 +7,7 @@ import com.raza.householdrecharge.data.remote.datasource.InvitationRemoteDataSou
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.remote.mapper.invitation.InvitationEntityMapper
 import com.raza.householdrecharge.data.remote.mapper.invitation.InvitationMapper
-import com.raza.householdrecharge.domain.error.InvitationError
+import com.raza.householdrecharge.domain.error.response.InvitationResponseError
 import com.raza.householdrecharge.domain.model.Invitation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -83,7 +83,7 @@ class InvitationRepository @Inject constructor(
      */
     suspend fun getInvitationByInvitationCode(
         code: String
-    ): Result<InvitationDto, InvitationError> {
+    ): Result<InvitationDto, InvitationResponseError> {
 
         val result51 = invitationRemoteDataSource.getInvitationByInvitationCode(
             code

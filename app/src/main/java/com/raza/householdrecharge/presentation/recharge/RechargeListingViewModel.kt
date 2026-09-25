@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
-import com.raza.householdrecharge.domain.validator.RechargeRequestValidator
+import com.raza.householdrecharge.domain.validator.request.RechargeRequestValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,7 +49,7 @@ class RechargeListingViewModel @Inject constructor(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             val validationResult = validator.validateRechargeListingApiCall(
-                userId = sessionManager.authId.first(),
+                authId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
                 memberId = memberId,
                 mobileNumber = mobileNumber

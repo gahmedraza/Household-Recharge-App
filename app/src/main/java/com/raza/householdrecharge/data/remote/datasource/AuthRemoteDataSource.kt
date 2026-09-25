@@ -5,7 +5,7 @@ import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.UserDto
-import com.raza.householdrecharge.domain.error.AuthError
+import com.raza.householdrecharge.domain.error.response.AuthResponseError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -17,17 +17,17 @@ class AuthRemoteDataSource @Inject constructor(
     //todo convert to app dto
     fun getUser(
 
-    ): Result<UserDto, AuthError>
+    ): Result<UserDto, AuthResponseError>
     //FirebaseUser?
     {
-        var result: Result<UserDto, AuthError>
+        var result: Result<UserDto, AuthResponseError>
 
         val firebaseUser = firebaseAuth.currentUser
 
         if(firebaseUser == null) {
 
             Logger.log("user is not logged in")
-            result = Result.Failure(AuthError.UserNotLoggedIn)
+            result = Result.Failure(AuthResponseError.UserNotLoggedIn)
 
         } else {
 

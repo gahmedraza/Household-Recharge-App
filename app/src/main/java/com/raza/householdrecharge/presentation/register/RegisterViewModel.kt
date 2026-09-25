@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.OnboardingDto
 import com.raza.householdrecharge.data.session.SessionManager
-import com.raza.householdrecharge.domain.error.AccountError
+import com.raza.householdrecharge.domain.error.response.AccountResponseError
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
@@ -116,7 +116,7 @@ class RegisterViewModel @Inject constructor(
                     onSuccess(onBoardingDto.authId.cleanString())
                 }
 
-                is Result.Failure<AccountError> -> {
+                is Result.Failure<AccountResponseError> -> {
 
                     registerUIState.update {
                         it.copy(

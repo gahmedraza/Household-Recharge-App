@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.AccountUseCase
-import com.raza.householdrecharge.domain.validator.AccountRequestValidator
+import com.raza.householdrecharge.domain.validator.request.AccountRequestValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

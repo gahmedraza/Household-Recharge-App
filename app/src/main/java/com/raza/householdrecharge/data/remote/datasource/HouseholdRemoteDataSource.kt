@@ -6,7 +6,7 @@ import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
-import com.raza.householdrecharge.domain.error.HouseholdError
+import com.raza.householdrecharge.domain.error.response.HouseholdResponseError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -53,7 +53,7 @@ class HouseholdRemoteDataSource @Inject constructor(
 
     suspend fun getHouseholdByHouseholdId(
         householdId: String
-    ): Result<HouseholdDto, HouseholdError>{
+    ): Result<HouseholdDto, HouseholdResponseError>{
 
         val snapshot = firestore
             .collection(HouseholdCollection.Households.description)
@@ -62,14 +62,14 @@ class HouseholdRemoteDataSource @Inject constructor(
             .await()
 
         if(!snapshot.exists()) {
-            return Result.Failure(HouseholdError.NoHouseholdFound)
+            return Result.Failure(HouseholdResponseError.NoHouseholdFound)
         }
 
         val householdDto = snapshot.toObject(HouseholdDto::class.java)
         //householdDto?.householdId = householdId
 
         if(householdDto == null) {
-            return Result.Failure(HouseholdError.HouseholdDataMappingError)
+            return Result.Failure(HouseholdResponseError.HouseholdDataMappingError)
 
         } else {
             return Result.Success(householdDto)

@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
-import com.raza.householdrecharge.domain.validator.RechargeRequestValidator
+import com.raza.householdrecharge.domain.validator.request.RechargeRequestValidator
 import com.raza.householdrecharge.presentation.common.ExpiryDateValidator
 import com.raza.householdrecharge.presentation.common.RechargeAmountValidator
 import com.raza.householdrecharge.presentation.common.RechargeDateValidator
@@ -119,7 +119,7 @@ class AddRechargeViewModel @Inject constructor(
             )
 
             val validationResult = requestValidator.validateAddRechargeApiCall(
-                userId = sessionManager.authId.first(),
+                authId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
                 mobileNumber = mobileNumber,
                 mobileNumberId = mobileNumberId

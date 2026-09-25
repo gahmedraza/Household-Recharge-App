@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
-import com.raza.householdrecharge.domain.error.InvitationError
+import com.raza.householdrecharge.domain.error.response.InvitationResponseError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -91,9 +91,9 @@ class InvitationRemoteDataSource @Inject constructor(
 
     suspend fun getInvitationByInvitationCode(
         code: String
-    ): Result<InvitationDto, InvitationError> {
+    ): Result<InvitationDto, InvitationResponseError> {
 
-        var result: Result<InvitationDto, InvitationError>
+        var result: Result<InvitationDto, InvitationResponseError>
 
         try {
 
@@ -105,7 +105,7 @@ class InvitationRemoteDataSource @Inject constructor(
                 .await()
 
             if (snapshot == null || snapshot.documents.isEmpty()) {
-                return Result.Failure(InvitationError.InvitationCodeNotFound)
+                return Result.Failure(InvitationResponseError.InvitationCodeNotFound)
             }
 
             val invitationDto = snapshot
@@ -113,7 +113,7 @@ class InvitationRemoteDataSource @Inject constructor(
                 .toObject(InvitationDto::class.java)
 
             if (invitationDto == null) {
-                result = Result.Failure(InvitationError.InvitationDataMappingError)
+                result = Result.Failure(InvitationResponseError.InvitationDataMappingError)
 
             } else {
                 result = Result.Success(invitationDto)
@@ -122,7 +122,7 @@ class InvitationRemoteDataSource @Inject constructor(
         } catch (e: Exception) {
 
             Logger.log(e.message)
-            result = Result.Failure(InvitationError.UnknownError)
+            result = Result.Failure(InvitationResponseError.UnknownError)
         }
 
         return result

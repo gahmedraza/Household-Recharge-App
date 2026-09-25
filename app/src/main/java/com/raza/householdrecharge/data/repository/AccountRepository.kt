@@ -6,7 +6,7 @@ import com.raza.householdrecharge.data.remote.datasource.AccountRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.remote.mapper.account.AccountEntityMapper
 import com.raza.householdrecharge.data.remote.mapper.account.AccountMapper
-import com.raza.householdrecharge.domain.error.AccountError
+import com.raza.householdrecharge.domain.error.response.AccountResponseError
 import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class AccountRepository @Inject constructor(
         collectionId: String,
         accountDto: AccountDto
 
-    ): Result<Unit, AccountError> {
+    ): Result<Unit, AccountResponseError> {
 
         val result51 = accountRemoteDataSource.createAccount(
             collectionId,
@@ -41,7 +41,7 @@ class AccountRepository @Inject constructor(
         collectionId: String,
         householdId: String
 
-    ): Result<Unit, AccountError> {
+    ): Result<Unit, AccountResponseError> {
 
         val result51 = accountRemoteDataSource.updateAccount(
             collectionId,
@@ -60,7 +60,7 @@ class AccountRepository @Inject constructor(
     suspend fun fetchAccountByAccountId(
         accountId: String
 
-    ): Result<Account, AccountError> {
+    ): Result<Account, AccountResponseError> {
 
         val result51 = accountRemoteDataSource.fetchAccountByAccountId(
             accountId

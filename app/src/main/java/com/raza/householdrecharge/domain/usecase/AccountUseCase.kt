@@ -3,7 +3,7 @@ package com.raza.householdrecharge.domain.usecase
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AccountDto
 import com.raza.householdrecharge.data.repository.AccountRepository
-import com.raza.householdrecharge.domain.error.AccountError
+import com.raza.householdrecharge.domain.error.response.AccountResponseError
 import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class AccountUseCase @Inject constructor(
         collectionId: String,
         accountDto: AccountDto
 
-    ): Result<Unit, AccountError> {
+    ): Result<Unit, AccountResponseError> {
 
         return accountRepository.createAccount(
             collectionId,
@@ -35,7 +35,7 @@ class AccountUseCase @Inject constructor(
         collectionId: String,
         householdId: String
 
-    ): Result<Unit, AccountError> {
+    ): Result<Unit, AccountResponseError> {
 
         return accountRepository.updateAccount(
             collectionId,
@@ -50,7 +50,7 @@ class AccountUseCase @Inject constructor(
     suspend fun fetchAccountByAccountId(
         accountId: String
 
-    ): Result<Account, AccountError> {
+    ): Result<Account, AccountResponseError> {
 
         return accountRepository.fetchAccountByAccountId(
             accountId

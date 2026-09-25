@@ -1,39 +1,43 @@
-package com.raza.householdrecharge.domain.validator
+package com.raza.householdrecharge.domain.validator.request
 
-import com.raza.householdrecharge.domain.error.AddRechargeValidationError
+import com.raza.householdrecharge.domain.error.request.RechargeRequestError
+import com.raza.householdrecharge.domain.error.request.RechargeRequestError.*
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.domain.error.domain.HouseholdDomainError.*
+import com.raza.householdrecharge.domain.error.domain.MobileNumberDomainError.*
+import com.raza.householdrecharge.domain.error.domain.UserDomainError.*
 import javax.inject.Inject
 
 class RechargeRequestValidator @Inject constructor() {
 
     fun validateAddRechargeApiCall(
-        userId: String,
+        authId: String,
         householdId: String,
         mobileNumber: String,
         mobileNumberId: String
-    ): Result<Unit, AddRechargeValidationError> {
+    ): Result<Unit, RechargeRequestError> {
 
-        if (userId.isEmpty()) {
+        if (authId.isEmpty()) {
             return Result.Failure(
-                AddRechargeValidationError.UserNotFound
+                UserError(AuthIdNotFound)
             )
         }
 
         if (householdId.isEmpty()) {
             return Result.Failure(
-                AddRechargeValidationError.HouseholdNotFound
+                HouseholdError(HouseholdNotFound)
             )
         }
 
         if (mobileNumber.isEmpty()) {
             return Result.Failure(
-                AddRechargeValidationError.MobileNumberNotFound
+                MobileNumberError(MobileNumberNotFound)
             )
         }
 
         if(mobileNumberId.isEmpty()) {
             return Result.Failure(
-                AddRechargeValidationError.MobileNumberIDNotFound
+                MobileNumberError(MobileNumberIdNotFound)
             )
         }
 
@@ -41,21 +45,21 @@ class RechargeRequestValidator @Inject constructor() {
     }
 
     fun validateRechargeListingApiCall(
-        userId: String,
+        authId: String,
         householdId: String,
         memberId: String,
         mobileNumber: String
-    ): Result<Unit, AddRechargeValidationError> {
+    ): Result<Unit, RechargeRequestError> {
 
-        if (userId.isEmpty()) {
+        if (authId.isEmpty()) {
             return Result.Failure(
-                AddRechargeValidationError.UserNotFound
+                UserError(AuthIdNotFound)
             )
         }
 
         if (householdId.isEmpty()) {
             return Result.Failure(
-                AddRechargeValidationError.HouseholdNotFound
+                HouseholdError(HouseholdNotFound)
             )
         }
 

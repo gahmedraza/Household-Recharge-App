@@ -7,7 +7,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.AccountDto
-import com.raza.householdrecharge.domain.error.AccountError
+import com.raza.householdrecharge.domain.error.response.AccountResponseError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 
@@ -23,7 +23,7 @@ class AccountRemoteDataSource @Inject constructor(
         collectionId: String,
         accountDto: AccountDto
 
-    ): Result<Unit, AccountError> {
+    ): Result<Unit, AccountResponseError> {
 
         try {
 
@@ -42,7 +42,7 @@ class AccountRemoteDataSource @Inject constructor(
             Logger.log(error)
 
             return Result.Failure(
-                error = AccountError.Unknown(error)
+                error = AccountResponseError.Unknown(error)
             )
         }
     }
@@ -55,7 +55,7 @@ class AccountRemoteDataSource @Inject constructor(
         collectionId: String,
         householdId: String
 
-    ): Result<Unit, AccountError> {
+    ): Result<Unit, AccountResponseError> {
 
         try {
 
@@ -74,7 +74,7 @@ class AccountRemoteDataSource @Inject constructor(
             Logger.log(error)
 
             return Result.Failure(
-                error = AccountError.Unknown(error)
+                error = AccountResponseError.Unknown(error)
             )
         }
     }
@@ -86,7 +86,7 @@ class AccountRemoteDataSource @Inject constructor(
     suspend fun fetchAccountByAccountId(
         accountId: String
 
-    ): Result<AccountDto, AccountError> {
+    ): Result<AccountDto, AccountResponseError> {
 
         try {
 
@@ -103,7 +103,7 @@ class AccountRemoteDataSource @Inject constructor(
             val accountDto = document.toObject(AccountDto::class.java)
 
             if(accountDto == null) {
-                return Result.Failure(AccountError.AccountEmpty)
+                return Result.Failure(AccountResponseError.AccountEmpty)
 
             } else {
                 return Result.Success(accountDto)
@@ -115,7 +115,7 @@ class AccountRemoteDataSource @Inject constructor(
             Logger.log(error)
 
             return Result.Failure(
-                error = AccountError.Unknown(error)
+                error = AccountResponseError.Unknown(error)
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.raza.householdrecharge.domain.validator
+package com.raza.householdrecharge.domain.validator.response
 
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto

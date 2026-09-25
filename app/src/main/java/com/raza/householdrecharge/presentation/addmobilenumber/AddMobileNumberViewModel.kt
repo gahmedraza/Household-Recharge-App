@@ -6,7 +6,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
-import com.raza.householdrecharge.domain.validator.MobileNumberRequestValidator
+import com.raza.householdrecharge.domain.validator.request.MobileNumberRequestValidator
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +63,7 @@ class AddMobileNumberViewModel @Inject constructor(
             )
 
             val validationResult = requestValidator.validate(
-                userId = sessionManager.authId.first(),
+                authId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
                 mobileNumber = addMobileNumberUIState.value.mobileNumber
             )

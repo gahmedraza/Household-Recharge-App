@@ -9,8 +9,8 @@ import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.UserDto
-import com.raza.householdrecharge.domain.error.AccountError
-import com.raza.householdrecharge.domain.error.AuthError
+import com.raza.householdrecharge.domain.error.response.AccountResponseError
+import com.raza.householdrecharge.domain.error.response.AuthResponseError
 import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
@@ -21,9 +21,9 @@ class AuthUseCase @Inject constructor(
 
     suspend fun registerAndCreateAccount(
         authDto: AuthDto
-    ): Result<OnboardingDto, AccountError> {
+    ): Result<OnboardingDto, AccountResponseError> {
 
-        var result: Result<OnboardingDto, AccountError>
+        var result: Result<OnboardingDto, AccountResponseError>
 
         try {
 
@@ -62,7 +62,7 @@ class AuthUseCase @Inject constructor(
 
                         val error = "account id was not generated in accounts collection"
                         Logger.log(error)
-                        result = Result.Failure(AccountError.AccountIdNotGenerated(error))
+                        result = Result.Failure(AccountResponseError.AccountIdNotGenerated(error))
 
                     }
                 }
@@ -70,14 +70,14 @@ class AuthUseCase @Inject constructor(
                 is Result.Failure -> {
                     val error = registerResult.error.cleanString()
                     Logger.log(error)
-                    result = Result.Failure(AccountError.Unknown(error))
+                    result = Result.Failure(AccountResponseError.Unknown(error))
                 }
             }
 
         } catch (e: Exception) {
             val error = e.message.cleanString()
             Logger.log(error)
-            result = Result.Failure(AccountError.Unknown(error))
+            result = Result.Failure(AccountResponseError.Unknown(error))
         }
 
         return result
@@ -128,7 +128,7 @@ class AuthUseCase @Inject constructor(
      */
     fun getUser(
 
-    ): Result<UserDto, AuthError>
+    ): Result<UserDto, AuthResponseError>
     //FirebaseUser?
     {
         return authRepository.getUser()

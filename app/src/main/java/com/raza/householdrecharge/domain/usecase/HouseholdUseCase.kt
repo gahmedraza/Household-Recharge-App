@@ -10,12 +10,12 @@ import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.AccountRepository
 import com.raza.householdrecharge.data.repository.HouseholdRepository
 import com.raza.householdrecharge.data.repository.InvitationRepository
-import com.raza.householdrecharge.domain.error.HouseholdError
-import com.raza.householdrecharge.domain.error.HouseholdUseCaseError
-import com.raza.householdrecharge.domain.error.InvitationError
+import com.raza.householdrecharge.domain.error.response.InvitationResponseError
+import com.raza.householdrecharge.domain.error.response.HouseholdResponseError
+import com.raza.householdrecharge.domain.error.usecase.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.model.InvitationStatus
-import com.raza.householdrecharge.domain.validator.InvitationResponseValidator
+import com.raza.householdrecharge.domain.validator.response.InvitationResponseValidator
 import javax.inject.Inject
 
 class HouseholdUseCase @Inject constructor(
@@ -64,9 +64,9 @@ class HouseholdUseCase @Inject constructor(
 
     suspend fun isAccountEligibleToJoinHousehold(
         accountId: String
-    ): Result<AccountEligibilityDto, HouseholdError> {
+    ): Result<AccountEligibilityDto, HouseholdResponseError> {
 
-        var result: Result<AccountEligibilityDto, HouseholdError>
+        var result: Result<AccountEligibilityDto, HouseholdResponseError>
 
         try {
 
@@ -76,7 +76,7 @@ class HouseholdUseCase @Inject constructor(
 
             if(accountResult is Result.Failure) {
                 Logger.log("error in fetching account")
-                return Result.Failure(HouseholdError.NoAccountFound)
+                return Result.Failure(HouseholdResponseError.NoAccountFound)
             }
 
             val account = (accountResult as Result.Success).data
@@ -91,13 +91,13 @@ class HouseholdUseCase @Inject constructor(
             } else {
 
                 Logger.log("Account already member of another household")
-                result = Result.Failure(HouseholdError.HouseholdAlreadyAssigned)
+                result = Result.Failure(HouseholdResponseError.HouseholdAlreadyAssigned)
             }
 
         } catch (e: Exception) {
 
             Logger.log(e.message)
-            result = Result.Failure(HouseholdError.Unknown)
+            result = Result.Failure(HouseholdResponseError.Unknown)
         }
 
         return result
@@ -181,20 +181,20 @@ class HouseholdUseCase @Inject constructor(
 
     private fun validateInvitation(
         invitation: InvitationDto?,
-    ): Result<Unit, InvitationError> {
+    ): Result<Unit, InvitationResponseError> {
 
         if(invitation == null) {
-            return Result.Failure(InvitationError.InvitationCodeNotFound)
+            return Result.Failure(InvitationResponseError.InvitationCodeNotFound)
         }
 
         if(invitation.status != InvitationStatus.PENDING.description) {
-            return Result.Failure(InvitationError.InvitationAlreadyUsed)
+            return Result.Failure(InvitationResponseError.InvitationAlreadyUsed)
         }
 
         val invitationExpiry = invitation.expiresAt.toLong()
 
         if(invitationExpiry < System.currentTimeMillis()) {
-            return Result.Failure(InvitationError.InvitationExpired)
+            return Result.Failure(InvitationResponseError.InvitationExpired)
         }
 
         return Result.Success(Unit)
