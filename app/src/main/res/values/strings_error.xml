@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="error_auth_id_not_found">user authentication not found</string>
+    <string name="error_account_id_not_found">user account not found</string>
+    <string name="error_household_not_found">household not found</string>
+    <string name="error_mobile_no_empty">mobile number is empty</string>
+    <string name="error_mobile_id_empty">mobile row id not found</string>
+    <string name="error_unhandled_exception">An unknown error has occurred during api call</string>
+
+</resources>
