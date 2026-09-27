@@ -70,9 +70,14 @@ class InvitationViewModel @Inject constructor(
                 status = "pending"
             )
 
-            invitationUseCase.createInvitation(
-                invitation = invitation,
-                onSuccess = { data ->
+            val result51 = invitationUseCase.createInvitation(
+                invitation = invitation
+            )
+
+            when(result51) {
+                is Result.Success -> {
+                    val data = result51.data
+
                     invitationUIState.update {
                         it.copy(
                             apiResponse = "successfully parsed the response",
@@ -87,8 +92,11 @@ class InvitationViewModel @Inject constructor(
                     }
 
                     onSuccess(data)
-                },
-                onFailure = { error ->
+                }
+
+                is Result.Failure -> {
+                    val error = result51.error
+
                     invitationUIState.update {
                         it.copy(
                             apiResponse = error,
@@ -104,7 +112,7 @@ class InvitationViewModel @Inject constructor(
 
                     onFailure(error)
                 }
-            )
+            }
         }
     }
 

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
-import com.raza.householdrecharge.domain.usecase.AccountUseCase
+import com.raza.householdrecharge.domain.usecase.ProfileUseCase
 import com.raza.householdrecharge.domain.validator.request.AccountRequestValidator
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,13 +19,13 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor(
     private val sessionManager: SessionManager,
-    private val accountUseCase: AccountUseCase,
+    private val profileUseCase: ProfileUseCase,
     private val accountRequestValidator: AccountRequestValidator
 ): ViewModel() {
 
     var accountUIState = MutableStateFlow(AccountUIState())
 
-    fun getAccount() {
+    fun getProfile() {
         viewModelScope.launch(Dispatchers.IO) {
             accountUIState.update {
                 it.copy(
@@ -54,7 +54,7 @@ class AccountViewModel @Inject constructor(
                 return@launch
             }
 
-            val result = accountUseCase.fetchAccountByAccountId(accountId)
+            val result = profileUseCase.fetchProfileByAccountId(accountId)
 
             if(result is Result.Failure) {
 
