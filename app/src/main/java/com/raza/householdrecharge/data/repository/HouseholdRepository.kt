@@ -74,22 +74,4 @@ class HouseholdRepository @Inject constructor(
 
         return Result.Success(household)
     }
-
-    /**
-     * Transit Method
-     * No additional code
-     */
-    suspend fun joinHousehold(
-        userId: String,
-        householdId: String,
-        invitationCode: String
-    ): Result<String, String> {
-
-        //todo dao required
-        return householdRemoteDataSource.joinHousehold(
-            userId,
-            householdId,
-            invitationCode
-        )
-    }
 }

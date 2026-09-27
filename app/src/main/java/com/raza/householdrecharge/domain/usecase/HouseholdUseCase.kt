@@ -202,23 +202,6 @@ class HouseholdUseCase @Inject constructor(
     }
     //
 
-    /**
-     * Transit Method
-     * No additional code
-     */
-    suspend fun joinHousehold(
-        userId: String,
-        householdId: String,
-        invitationCode: String
-    ): Result<String, String> {
-
-        return householdRepository.joinHousehold(
-            userId,
-            householdId,
-            invitationCode
-        )
-    }
-
     //todo get invitation is done 2'ce
     suspend fun validateInvitationAndUpdateAccountAndMarkUsed(
         userId: String,
