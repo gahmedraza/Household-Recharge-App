@@ -45,23 +45,6 @@ class InvitationRepository @Inject constructor(
      * Transit Method
      * No additional code
      */
-    suspend fun createInvitationFacade(
-        invitation: InvitationDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-
-        return invitationRemoteDataSource.createInvitationFacade(
-            invitation,
-            onSuccess,
-            onFailure
-        )
-    }
-
-    /**
-     * Transit Method
-     * No additional code
-     */
     suspend fun getAllInvitations(
     ) {
         val result51 = invitationRemoteDataSource.getAllInvitations()

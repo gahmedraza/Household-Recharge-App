@@ -5,6 +5,7 @@ import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.domain.error.response.InvitationResponseError
 import com.raza.householdrecharge.domain.model.Invitation
+import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -17,29 +18,21 @@ class InvitationUseCase @Inject constructor(
      * No additional code
      */
     suspend fun createInvitation(
-        invitation: InvitationDto
-    ): Result<String, String> {
-
-        return invitationRepository.createInvitation(
-            invitation
-        )
-    }
-
-    /**
-     * Transit Method
-     * No additional code
-     */
-    suspend fun createInvitationFacade(
         invitation: InvitationDto,
         onSuccess: (String) -> Unit,
         onFailure: (String) -> Unit
     ) {
 
-        return invitationRepository.createInvitationFacade(
-            invitation,
-            onSuccess,
-            onFailure
+        val result51 = invitationRepository.createInvitation(
+            invitation
         )
+
+        if(result51 is Result.Failure) {
+            onFailure(result51.error.cleanString())
+        }
+
+        val data = (result51 as Result.Success).data
+        onSuccess(data)
     }
 
     /**

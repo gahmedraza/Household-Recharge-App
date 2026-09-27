@@ -70,7 +70,7 @@ class InvitationViewModel @Inject constructor(
                 status = "pending"
             )
 
-            invitationUseCase.createInvitationFacade(
+            invitationUseCase.createInvitation(
                 invitation = invitation,
                 onSuccess = { data ->
                     invitationUIState.update {

@@ -20,8 +20,6 @@ class HouseholdRemoteDataSource @Inject constructor(
         householdDto: HouseholdDto
     ): Result<String, HouseholdResponseError> {
 
-        var result: Result<String, String>
-
         try {
             householdDto.accountId = appUserDto.authId
 
