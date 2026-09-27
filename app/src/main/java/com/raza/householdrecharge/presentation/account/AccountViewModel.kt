@@ -46,8 +46,7 @@ class AccountViewModel @Inject constructor(
 
                 accountUIState.update {
                     it.copy(
-                        apiResponse = validationResult.error.toString(),
-                        showBottomSheet = true
+                        errorResponse = validationResult.error.toString()
                     )
                 }
 
@@ -62,8 +61,7 @@ class AccountViewModel @Inject constructor(
 
                 accountUIState.update {
                     it.copy(
-                        apiResponse = result.error.toString(),
-                        showBottomSheet = true
+                        errorResponse = result.error.toString()
                     )
                 }
 
@@ -85,21 +83,6 @@ class AccountViewModel @Inject constructor(
                     isLoading = false
                 )
             }
-
-            accountUIState.update {
-                it.copy(
-                    apiResponse = "successfully parsed the response",
-                    showBottomSheet = true
-                )
-            }
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        accountUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
-            )
         }
     }
 }

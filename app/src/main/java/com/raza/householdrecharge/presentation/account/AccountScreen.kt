@@ -44,9 +44,6 @@ fun AccountScreen(
 ) {
 
     val accountUIState by viewmodel.accountUIState.collectAsStateWithLifecycle()
-    var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var apiStatus by rememberSaveable { mutableStateOf("") }
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewmodel.getProfile()
@@ -114,8 +111,8 @@ fun AccountScreen(
                         text = accountUIState.profileHousehold
                     )
 
-                    Spacer(modifier = Modifier.height(20.dp))
-                    //
+                    Spacer(modifier = Modifier.height(40.dp))
+
                     if (accountUIState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier
@@ -126,34 +123,11 @@ fun AccountScreen(
                     Spacer(modifier = Modifier.padding(20.dp))
 
                     Text(
-                        text = apiStatus,
+                        text = accountUIState.errorResponse,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = if (shouldProceed) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.error
-                        },
+                        color = MaterialTheme.colorScheme.error,
                         textAlign = TextAlign.Center
                     )
-                    //
-                }
-            }
-        }
-
-        if(accountUIState.showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    viewmodel.onShowBottomSheetModified(false)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("api response")
-
-                    Text(accountUIState.apiResponse)
                 }
             }
         }
