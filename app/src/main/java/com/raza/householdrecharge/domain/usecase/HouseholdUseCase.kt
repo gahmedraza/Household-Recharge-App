@@ -96,8 +96,9 @@ class HouseholdUseCase @Inject constructor(
 
         } catch (e: Exception) {
 
-            Logger.log(e.message)
-            result = Result.Failure(HouseholdResponseError.Unknown)
+            val error = e.message.cleanString()
+            Logger.log(error)
+            result = Result.Failure(HouseholdResponseError.Unknown(error))
         }
 
         return result

@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.presentation.error
 
 import com.raza.householdrecharge.R
-import com.raza.householdrecharge.domain.error.domain.AppError
+import com.raza.householdrecharge.domain.error.domain.RequestError
 import com.raza.householdrecharge.domain.error.domain.HouseholdDomainError.HouseholdNotFound
 import com.raza.householdrecharge.domain.error.domain.MobileNumberDomainError.MobileNumberIdNotFound
 import com.raza.householdrecharge.domain.error.domain.MobileNumberDomainError.MobileNumberNotFound
@@ -9,10 +9,10 @@ import com.raza.householdrecharge.domain.error.domain.UserDomainError.AccountIdN
 import com.raza.householdrecharge.domain.error.domain.UserDomainError.AuthIdNotFound
 import javax.inject.Inject
 
-class ErrorMessageMapper @Inject constructor(
+class RequestErrorMapper @Inject constructor(
 ) {
 
-    fun map(error: AppError): UiMessage {
+    fun map(error: RequestError): UiMessage {
 
         if(error is AuthIdNotFound) {
             return UiMessage.ResourceId(R.string.error_auth_id_not_found)

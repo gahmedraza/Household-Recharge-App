@@ -18,7 +18,7 @@ class HouseholdRemoteDataSource @Inject constructor(
     suspend fun addHousehold(
         appUserDto: AppUserDto,
         householdDto: HouseholdDto
-    ): Result<String, String> {
+    ): Result<String, HouseholdResponseError> {
 
         var result: Result<String, String>
 
@@ -39,16 +39,15 @@ class HouseholdRemoteDataSource @Inject constructor(
             val householdId = documentReference.id.cleanString()
 
             if (householdId.isEmpty()) {
-                result = Result.Failure("household id was not generated in households collection")
+                return Result.Failure(HouseholdResponseError.HouseholdIdNotGenerated)
             }
 
-            result = Result.Success(householdId)
+            return Result.Success(householdId)
         } catch (e: Exception) {
-
-            result = Result.Failure(e.message.cleanString())
+            val error = e.message.cleanString()
+            return Result.Failure(HouseholdResponseError.Unknown(error))
         }
 
-        return result
     }
 
     suspend fun getHouseholdByHouseholdId(

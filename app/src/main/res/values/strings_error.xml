@@ -7,5 +7,8 @@
     <string name="error_mobile_no_empty">mobile number is empty</string>
     <string name="error_mobile_id_empty">mobile row id not found</string>
     <string name="error_unhandled_exception">An unknown error has occurred during api call</string>
+    <string name="error_101">user id was not created during register</string>
+    <string name="error_102">user is not logged in</string>
+    <string name="error_103">household id was not generated in households collection</string>
 
 </resources>

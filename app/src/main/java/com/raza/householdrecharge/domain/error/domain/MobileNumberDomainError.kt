@@ -1,6 +1,6 @@
 package com.raza.householdrecharge.domain.error.domain
 
-sealed interface MobileNumberDomainError : AppError {
+sealed interface MobileNumberDomainError : RequestError {
     data object MobileNumberNotFound: MobileNumberDomainError
     data object MobileNumberIdNotFound: MobileNumberDomainError
 }

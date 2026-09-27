@@ -68,7 +68,7 @@ class AuthUseCase @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    val error = registerResult.error.cleanString()
+                    val error = registerResult.error.toString()
                     Logger.log(error)
                     result = Result.Failure(AccountResponseError.Unknown(error))
                 }

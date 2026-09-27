@@ -23,7 +23,7 @@ class HouseholdRepository @Inject constructor(
     suspend fun addHousehold(
         appUserDto: AppUserDto,
         householdDto: HouseholdDto
-    ): Result<String, String> {
+    ): Result<String, HouseholdResponseError> {
 
         val result51 = householdRemoteDataSource.addHousehold(
             appUserDto,

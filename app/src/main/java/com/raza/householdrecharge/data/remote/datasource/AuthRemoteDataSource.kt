@@ -16,19 +16,14 @@ class AuthRemoteDataSource @Inject constructor(
 
     //todo convert to app dto
     fun getUser(
-
-    ): Result<UserDto, AuthResponseError>
-    //FirebaseUser?
-    {
-        var result: Result<UserDto, AuthResponseError>
+    ): Result<UserDto, AuthResponseError> {
 
         val firebaseUser = firebaseAuth.currentUser
 
         if(firebaseUser == null) {
 
-            Logger.log("user is not logged in")
-            result = Result.Failure(AuthResponseError.UserNotLoggedIn)
-
+            Logger.log("user is not logged in")//todo logging framework
+            return Result.Failure(AuthResponseError.UserNotLoggedIn)
         } else {
 
             val userDto = UserDto()
@@ -36,60 +31,54 @@ class AuthRemoteDataSource @Inject constructor(
             userDto.email = firebaseUser.email.cleanString()
             userDto.photoUrl = firebaseUser.photoUrl.toString()
 
-            result = Result.Success(userDto)
+            return Result.Success(userDto)
         }
-
-        return result
     }
 
     suspend fun register(
         authDto: AuthDto
-    ): Result<String, String> {
-
-        var result: Result<String, String>
+    ): Result<String, AuthResponseError> {
 
         try {
             val documentReference = firebaseAuth
-                .createUserWithEmailAndPassword(
-                    authDto.mobileNumber,
-                    authDto.password
-                )
+                .createUserWithEmailAndPassword(authDto.mobileNumber,authDto.password)
                 .await()
 
             val userId = documentReference.user?.uid.cleanString()
 
             if (userId.isEmpty()) {
-                result = Result.Failure<String>("user id was not created during register")
+                return Result.Failure(AuthResponseError.UserNotCreated)
+                //user id was not created during register
             }
 
-            result = Result.Success<String>(userId)
-
+            return Result.Success(userId)
         } catch (e: Exception) {
-            result = Result.Failure<String>(e.message.cleanString())
-        }
 
-        return result
+            val error = e.message.cleanString()
+            Logger.log(error)
+
+            return Result.Failure(AuthResponseError.Unknown(error))
+        }
     }
 
     suspend fun login(
         authDto: AuthDto
     ): Result<String, String> {
 
-        var result: Result<String, String>
-
         try {
             val documentReference = firebaseAuth
-                .signInWithEmailAndPassword(authDto.mobileNumber, authDto.password)
+                .signInWithEmailAndPassword(authDto.mobileNumber,authDto.password)
                 .await()
 
             val userId = documentReference?.user?.uid.cleanString()
-            result = Result.Success(userId)
 
+            return Result.Success(userId)
+        } catch (e: Exception) {
 
-        } catch(e: Exception) {
-            result = Result.Failure(e.message.cleanString())
+            val error = e.message.cleanString()
+            Logger.log(error)
+
+            return Result.Failure(error)
         }
-
-        return result
     }
 }
