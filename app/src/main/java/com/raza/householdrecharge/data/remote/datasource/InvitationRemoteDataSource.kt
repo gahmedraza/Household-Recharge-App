@@ -19,8 +19,6 @@ class InvitationRemoteDataSource @Inject constructor(
         invitation: InvitationDto
     ): Result<String, String> {
 
-        var result: Result<String, String>
-
         try {
 
             val documentReference = firestore
@@ -33,14 +31,12 @@ class InvitationRemoteDataSource @Inject constructor(
                 .set(invitation)
                 .await()
 
-            result = Result.Success("success")
+            return Result.Success("success")
 
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(e.message.cleanString())
         }
-
-        return result
     }
 
     /**
@@ -66,8 +62,6 @@ class InvitationRemoteDataSource @Inject constructor(
     suspend fun getAllInvitations(
     ): Result<List<InvitationDto>, String> {
 
-        var result: Result<List<InvitationDto>, String>
-
         try {
             val documentSnapshot = firestore
                 .collection(HouseholdCollection.Invitations.description)
@@ -78,22 +72,17 @@ class InvitationRemoteDataSource @Inject constructor(
                 document.toObject(InvitationDto::class.java)
             }
 
-            result = Result.Success(invitationList)
+            return Result.Success(invitationList)
 
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(e.message.cleanString())
         }
-
-
-        return result
     }
 
     suspend fun getInvitationByInvitationCode(
         code: String
     ): Result<InvitationDto, InvitationResponseError> {
-
-        var result: Result<InvitationDto, InvitationResponseError>
 
         try {
 
@@ -113,26 +102,22 @@ class InvitationRemoteDataSource @Inject constructor(
                 .toObject(InvitationDto::class.java)
 
             if (invitationDto == null) {
-                result = Result.Failure(InvitationResponseError.InvitationDataMappingError)
+                return Result.Failure(InvitationResponseError.InvitationDataMappingError)
 
             } else {
-                result = Result.Success(invitationDto)
+                return Result.Success(invitationDto)
             }
 
         } catch (e: Exception) {
 
             Logger.log(e.message)
-            result = Result.Failure(InvitationResponseError.UnknownError)
+            return Result.Failure(InvitationResponseError.UnknownError)
         }
-
-        return result
     }
 
     suspend fun updateInvitation(
         invitation: InvitationDto
     ): Result<String, String> {
-
-        var result: Result<String, String>
 
         try {
 
@@ -153,13 +138,11 @@ class InvitationRemoteDataSource @Inject constructor(
                 .set(invitation)
                 .await()
 
-            result = Result.Success("success")
+            return Result.Success("success")
 
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(e.message.cleanString())
         }
-
-        return result
     }
 }

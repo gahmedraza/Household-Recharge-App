@@ -82,8 +82,6 @@ class HouseholdRemoteDataSource @Inject constructor(
         invitationCode: String
     ): Result<String, String> {
 
-        var result: Result<String, String>
-
         try {
 
             firestore.runTransaction { transaction ->
@@ -99,25 +97,25 @@ class HouseholdRemoteDataSource @Inject constructor(
                 val invitationSnapshot = transaction.get(invitationReference)
 
                 if(!invitationSnapshot.exists()) {
-                    result = Result.Failure("invitation does not exist")//
+                    return@runTransaction Result.Failure("invitation does not exist")//
                 }
 
                 val status = invitationSnapshot.getString("status")
 
                 if(status != "pending") {//
-                    result = Result.Failure("invitation has already been used")//
+                    return@runTransaction Result.Failure("invitation has already been used")//
                 }
 
                 val invitationHouseholdId = invitationSnapshot.getString("householdId")
 
                 if(invitationHouseholdId != householdId) {//
-                    result = Result.Failure("invalid invitation")//
+                    return@runTransaction Result.Failure("invalid invitation")//
                 }
 
                 val expiresAt = invitationSnapshot.getString("expiresAt")?.toLong()
 
                 if(expiresAt != null && expiresAt < System.currentTimeMillis()) {//
-                    result = Result.Failure("invitation has expired")//
+                    return@runTransaction Result.Failure("invitation has expired")//
                 }
 
                 transaction.update(
@@ -136,13 +134,11 @@ class HouseholdRemoteDataSource @Inject constructor(
                 )
             }.await()
 
-            result = Result.Success("success")
+            return Result.Success("success")
 
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(e.message.cleanString())
         }
-
-        return result
     }
 }
