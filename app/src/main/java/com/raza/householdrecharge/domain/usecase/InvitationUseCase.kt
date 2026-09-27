@@ -18,21 +18,12 @@ class InvitationUseCase @Inject constructor(
      * No additional code
      */
     suspend fun createInvitation(
-        invitation: InvitationDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
+        invitation: InvitationDto
+    ) : Result<String, String> {
 
-        val result51 = invitationRepository.createInvitation(
+        return invitationRepository.createInvitation(
             invitation
         )
-
-        if(result51 is Result.Failure) {
-            onFailure(result51.error.cleanString())
-        }
-
-        val data = (result51 as Result.Success).data
-        onSuccess(data)
     }
 
     /**

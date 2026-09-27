@@ -104,11 +104,6 @@ class HouseholdUseCase @Inject constructor(
         return result
     }
 
-    suspend fun `join_household_if_not_already`() {
-
-    }
-
-    //
     suspend fun validateInvitationAndFindLinkedHousehold(
         authId: String,
         invitationCode: String
@@ -158,8 +153,6 @@ class HouseholdUseCase @Inject constructor(
 
             val household = (result4 as Result.Success).data
 
-            //household.invitationCode = invitationCode
-
             val findHouseholdResponse = FindHouseholdResponse(
                 householdId = invitation.householdId,
                 householdName = household.householdName.cleanString(),
@@ -200,7 +193,6 @@ class HouseholdUseCase @Inject constructor(
 
         return Result.Success(Unit)
     }
-    //
 
     //todo get invitation is done 2'ce
     suspend fun validateInvitationAndUpdateAccountAndMarkUsed(
