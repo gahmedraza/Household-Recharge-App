@@ -65,7 +65,6 @@ class HouseholdRemoteDataSource @Inject constructor(
         }
 
         val householdDto = snapshot.toObject(HouseholdDto::class.java)
-        //householdDto?.householdId = householdId
 
         if(householdDto == null) {
             return Result.Failure(HouseholdResponseError.HouseholdDataMappingError)
