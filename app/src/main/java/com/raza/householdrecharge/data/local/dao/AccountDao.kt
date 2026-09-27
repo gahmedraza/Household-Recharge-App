@@ -13,4 +13,7 @@ interface AccountDao {
 
     @Query("update accounts set householdId = :householdId where accountId = :accountId")
     fun updateAccount(accountId: String, householdId: String)
+
+    @Query("select * from accounts where accountId = :accountId")
+    fun getAccountByAccountId(accountId: String): AccountEntity?
 }

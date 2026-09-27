@@ -49,6 +49,7 @@ fun LoginScreen(
     onBoardingNotComplete: () -> Unit = {}
 ) {
     val loginUIState by viewmodel.loginUIState.collectAsStateWithLifecycle()
+    //todo extract to common
     var shouldProceed by rememberSaveable { mutableStateOf(false) }
     var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()

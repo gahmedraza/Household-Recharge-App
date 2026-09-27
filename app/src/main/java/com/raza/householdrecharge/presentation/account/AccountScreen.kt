@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -21,8 +22,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -38,6 +44,9 @@ fun AccountScreen(
 ) {
 
     val accountUIState by viewmodel.accountUIState.collectAsStateWithLifecycle()
+    var shouldProceed by rememberSaveable { mutableStateOf(false) }
+    var apiStatus by rememberSaveable { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewmodel.getProfile()
@@ -106,6 +115,27 @@ fun AccountScreen(
                     )
 
                     Spacer(modifier = Modifier.height(20.dp))
+                    //
+                    if (accountUIState.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(24.dp)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(20.dp))
+
+                    Text(
+                        text = apiStatus,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (shouldProceed) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        },
+                        textAlign = TextAlign.Center
+                    )
+                    //
                 }
             }
         }
