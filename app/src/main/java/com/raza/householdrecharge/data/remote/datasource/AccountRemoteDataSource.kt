@@ -1,7 +1,6 @@
 package com.raza.householdrecharge.data.remote.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.raza.householdrecharge.core.logging.Logger
 import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.CollectionField
@@ -15,10 +14,6 @@ class AccountRemoteDataSource @Inject constructor(
     private val firestore: FirebaseFirestore
 ) {
 
-    /**
-     * Create an account record
-     * with provided collection ID
-     */
     suspend fun createAccount(
         collectionId: String,
         accountDto: AccountDto
@@ -39,18 +34,12 @@ class AccountRemoteDataSource @Inject constructor(
 
         } catch (e: Exception) {
             val error = e.message.cleanString()
-            Logger.log(error)
+            //Logger.log(error) //todo framework
 
-            return Result.Failure(
-                error = AccountResponseError.Unknown(error)
-            )
+            return Result.Failure(AccountResponseError.Unknown(error))
         }
     }
 
-    /**
-     * update household ID
-     * in the account record
-     */
     suspend fun updateAccount(
         collectionId: String,
         householdId: String
@@ -71,18 +60,12 @@ class AccountRemoteDataSource @Inject constructor(
 
         } catch (e: Exception) {
             val error = e.message.cleanString()
-            Logger.log(error)
+            //Logger.log(error)//todo
 
-            return Result.Failure(
-                error = AccountResponseError.Unknown(error)
-            )
+            return Result.Failure(AccountResponseError.Unknown(error))
         }
     }
 
-    /**
-     * Fetch the account record
-     * with the record ID
-     */
     suspend fun fetchAccountByAccountId(
         accountId: String
 
@@ -91,7 +74,6 @@ class AccountRemoteDataSource @Inject constructor(
         try {
 
             val document =
-
                 firestore
 
                     .collection(HouseholdCollection.Accounts.description)
@@ -101,13 +83,13 @@ class AccountRemoteDataSource @Inject constructor(
                     .await()
 
             if(document == null) {
-                return Result.Failure(AccountResponseError.AccountEmptyInRemote)
+                return Result.Failure(AccountResponseError.NoRecordFound)
             }
 
             val accountDto = document.toObject(AccountDto::class.java)
 
             if(accountDto == null) {
-                return Result.Failure(AccountResponseError.AccountParsingError)
+                return Result.Failure(AccountResponseError.DataParsingError)
 
             } else {
                 return Result.Success(accountDto)
