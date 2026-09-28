@@ -121,10 +121,10 @@ fun AccountScreen(
 
                     Spacer(modifier = Modifier.padding(20.dp))
 
-                    if (accountUIState.errorResource != 0) {
+                    if (accountUIState.errorMessage.isNotEmpty()) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = stringResource(accountUIState.errorResource),
+                            text = accountUIState.errorMessage,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.error,
 

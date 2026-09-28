@@ -1,39 +1,42 @@
 package com.raza.householdrecharge.presentation.error
 
+import android.content.Context
 import com.raza.householdrecharge.R
-import com.raza.householdrecharge.domain.error.domain.RequestError
-import com.raza.householdrecharge.domain.error.domain.HouseholdDomainError.HouseholdNotFound
-import com.raza.householdrecharge.domain.error.domain.MobileNumberDomainError.MobileNumberIdNotFound
-import com.raza.householdrecharge.domain.error.domain.MobileNumberDomainError.MobileNumberNotFound
-import com.raza.householdrecharge.domain.error.domain.UserDomainError.AccountIdNotFound
-import com.raza.householdrecharge.domain.error.domain.UserDomainError.AuthIdNotFound
+import com.raza.householdrecharge.domain.error.request.RequestError
+import com.raza.householdrecharge.domain.error.request.HouseholdRequestError.HouseholdNotFound
+import com.raza.householdrecharge.domain.error.request.MobileNumberRequestError.MobileNumberIdNotFound
+import com.raza.householdrecharge.domain.error.request.MobileNumberRequestError.MobileNumberNotFound
+import com.raza.householdrecharge.domain.error.request.UserRequestError.AccountIdNotFound
+import com.raza.householdrecharge.domain.error.request.UserRequestError.AuthIdNotFound
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class RequestErrorMapper @Inject constructor(
+    @param:ApplicationContext private val context: Context
 ) {
 
-    fun map(error: RequestError): UiMessage {
+    fun map(error: RequestError): String {
 
         if(error is AuthIdNotFound) {
-            return UiMessage.ResourceId(R.string.error_auth_id_not_found)
+            return context.getString(R.string.error_auth_id_not_found)
         }
 
         if(error is AccountIdNotFound) {
-            return UiMessage.ResourceId(R.string.error_account_id_not_found)
+            return context.getString(R.string.error_account_id_not_found)
         }
 
         if(error is HouseholdNotFound) {
-            return UiMessage.ResourceId(R.string.error_household_not_found)
+            return context.getString(R.string.error_household_not_found)
         }
 
         if(error is MobileNumberNotFound) {
-            return UiMessage.ResourceId(R.string.error_mobile_no_empty)
+            return context.getString(R.string.error_mobile_no_empty)
         }
 
         if(error is MobileNumberIdNotFound) {
-            return UiMessage.ResourceId(R.string.error_mobile_id_empty)
+            return context.getString(R.string.error_mobile_id_empty)
         }
 
-        return UiMessage.ResourceId(R.string.error_unhandled_exception)
+        return context.getString(R.string.error_unhandled_exception)
     }
 }

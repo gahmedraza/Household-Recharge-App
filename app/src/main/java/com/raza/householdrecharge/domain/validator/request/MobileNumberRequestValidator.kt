@@ -1,11 +1,10 @@
 package com.raza.householdrecharge.domain.validator.request
 
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.domain.error.domain.HouseholdDomainError.*
-import com.raza.householdrecharge.domain.error.domain.MobileNumberDomainError.*
-import com.raza.householdrecharge.domain.error.domain.UserDomainError.*
+import com.raza.householdrecharge.domain.error.request.HouseholdRequestError
 import com.raza.householdrecharge.domain.error.request.MobileNumberRequestError
-import com.raza.householdrecharge.domain.error.request.MobileNumberRequestError.*
+import com.raza.householdrecharge.domain.error.request.RequestError
+import com.raza.householdrecharge.domain.error.request.UserRequestError
 import javax.inject.Inject
 
 class MobileNumberRequestValidator @Inject constructor(
@@ -15,24 +14,18 @@ class MobileNumberRequestValidator @Inject constructor(
         authId: String,
         householdId: String,
         mobileNumber: String
-    ): Result<Unit, MobileNumberRequestError> {
+    ): Result<Unit, RequestError> {
 
         if (authId.isEmpty()) {
-            return Result.Failure(
-                UserError(AuthIdNotFound)
-            )
+            return Result.Failure(UserRequestError.AuthIdNotFound)
         }
 
         if (householdId.isEmpty()) {
-            return Result.Failure(
-                HouseholdError(HouseholdNotFound)
-            )
+            return Result.Failure(HouseholdRequestError.HouseholdNotFound)
         }
 
         if (mobileNumber.isEmpty()) {
-            return Result.Failure(
-                MobileNumberError(MobileNumberNotFound)
-            )
+            return Result.Failure(MobileNumberRequestError.MobileNumberNotFound)
         }
 
         return Result.Success(Unit)
