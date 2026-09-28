@@ -63,7 +63,7 @@ class AuthRepository @Inject constructor(
      */
     suspend fun login(
         authDto: AuthDto
-    ): Result<String, String> {
+    ): Result<String, AuthResponseError> {
 
         val result51 = authRemoteDataSource.login(
             authDto

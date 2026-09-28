@@ -15,6 +15,7 @@ class AuthRemoteDataSource @Inject constructor(
 ) {
 
     //todo convert to app dto
+    //does this method belong to remote data source
     fun getUser(
     ): Result<UserDto, AuthResponseError> {
 
@@ -22,7 +23,7 @@ class AuthRemoteDataSource @Inject constructor(
 
         if(firebaseUser == null) {
 
-            Logger.log("user is not logged in")//todo logging framework
+            //Logger.log("user is not logged in")//todo logging framework
             return Result.Failure(AuthResponseError.UserNotLoggedIn)
         } else {
 
@@ -48,22 +49,22 @@ class AuthRemoteDataSource @Inject constructor(
 
             if (userId.isEmpty()) {
                 return Result.Failure(AuthResponseError.UserNotCreated)
-                //user id was not created during register
             }
 
             return Result.Success(userId)
         } catch (e: Exception) {
 
             val error = e.message.cleanString()
-            Logger.log(error)
+            //Logger.log(error)
 
             return Result.Failure(AuthResponseError.Unknown(error))
         }
     }
 
+    //todo additional errors to be found
     suspend fun login(
         authDto: AuthDto
-    ): Result<String, String> {
+    ): Result<String, AuthResponseError> {
 
         try {
             val documentReference = firebaseAuth
@@ -72,13 +73,17 @@ class AuthRemoteDataSource @Inject constructor(
 
             val userId = documentReference?.user?.uid.cleanString()
 
+            if (userId.isEmpty()) {
+                return Result.Failure(AuthResponseError.UserNotCreated)
+            }
+
             return Result.Success(userId)
         } catch (e: Exception) {
 
             val error = e.message.cleanString()
-            Logger.log(error)
+            //Logger.log(error)
 
-            return Result.Failure(error)
+            return Result.Failure(AuthResponseError.Unknown(error))
         }
     }
 }

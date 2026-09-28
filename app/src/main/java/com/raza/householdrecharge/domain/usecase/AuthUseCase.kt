@@ -115,7 +115,7 @@ class AuthUseCase @Inject constructor(
      */
     suspend fun login(
         authDto: AuthDto
-    ): Result<String, String> {
+    ): Result<String, AuthResponseError> {
 
         return authRepository.login(
             authDto
