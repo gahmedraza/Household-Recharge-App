@@ -66,10 +66,9 @@ class AccountRepository @Inject constructor(
 
         if(cachedAccount != null) {
             val cachedAccountModel = AccountMapper.map(cachedAccount)
-
             return Result.Success(cachedAccountModel)
+
         }
-        //
 
         val result51 = accountRemoteDataSource.fetchAccountByAccountId(
             accountId

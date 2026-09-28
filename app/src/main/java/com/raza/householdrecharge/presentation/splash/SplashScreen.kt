@@ -29,7 +29,7 @@ fun SplashScreen(
 ) {
 
     LaunchedEffect(Unit) {
-        delay(2000.milliseconds)
+        delay(200.milliseconds)
 
         val destination = viewmodel.getStartDestination()
 

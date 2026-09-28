@@ -100,10 +100,14 @@ class AccountRemoteDataSource @Inject constructor(
 
                     .await()
 
+            if(document == null) {
+                return Result.Failure(AccountResponseError.AccountEmptyInRemote)
+            }
+
             val accountDto = document.toObject(AccountDto::class.java)
 
             if(accountDto == null) {
-                return Result.Failure(AccountResponseError.AccountEmpty)
+                return Result.Failure(AccountResponseError.AccountParsingError)
 
             } else {
                 return Result.Success(accountDto)
@@ -112,11 +116,9 @@ class AccountRemoteDataSource @Inject constructor(
 
         } catch (e: Exception) {
             val error = e.message.cleanString()
-            Logger.log(error)
+            //Logger.log(error)
 
-            return Result.Failure(
-                error = AccountResponseError.Unknown(error)
-            )
+            return Result.Failure(AccountResponseError.Unknown(error))
         }
     }
 }

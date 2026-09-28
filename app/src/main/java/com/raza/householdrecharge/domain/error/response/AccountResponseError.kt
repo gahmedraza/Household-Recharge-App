@@ -1,13 +1,9 @@
 package com.raza.householdrecharge.domain.error.response
 
-sealed class AccountResponseError : ResponseError {
-    data object AccountNotFound : AccountResponseError()
-    data object AccountEmpty : AccountResponseError()
+sealed interface AccountResponseError : ResponseError {
+    data object AccountEmptyInRemote : AccountResponseError
+    data object AccountParsingError : AccountResponseError
+    data class AccountIdNotGenerated(val message: String) : AccountResponseError
+    data class Unknown(val message: String) : AccountResponseError
 
-    data object InvalidAccountRecord : AccountResponseError()
-
-    data class AccountIdNotGenerated(val message: String) : AccountResponseError()
-
-    data object AccountNotEligibleToJoin : AccountResponseError()
-    data class Unknown(val message: String) : AccountResponseError()
 }

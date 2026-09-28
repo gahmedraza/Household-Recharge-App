@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
+import com.raza.householdrecharge.domain.error.request.AccountRequestError
 import com.raza.householdrecharge.domain.usecase.ProfileUseCase
 import com.raza.householdrecharge.domain.validator.request.AccountRequestValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
+import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
+import com.raza.householdrecharge.presentation.error.UiMessage
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +24,9 @@ import javax.inject.Inject
 class AccountViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val profileUseCase: ProfileUseCase,
-    private val accountRequestValidator: AccountRequestValidator
+    private val accountRequestValidator: AccountRequestValidator,
+    private val requestErrorMapper: RequestErrorMapper,
+    private val responseErrorMapper: ResponseErrorMapper
 ): ViewModel() {
 
     var accountUIState = MutableStateFlow(AccountUIState())
@@ -42,11 +48,15 @@ class AccountViewModel @Inject constructor(
             if(validationResult is Result.Failure) {
                 //propagate the error to the composable and to the UI
 
-                Logger.log(validationResult.error.toString())
+                val errorResource = getErrorResource(validationResult.error)
+
+
+                //Logger.log(errorMessage.)
 
                 accountUIState.update {
                     it.copy(
-                        errorResponse = validationResult.error.toString()
+                        isLoading = false,
+                        errorResource = errorResource
                     )
                 }
 
@@ -56,18 +66,16 @@ class AccountViewModel @Inject constructor(
             val result = profileUseCase.fetchProfileByAccountId(accountId)
 
             if(result is Result.Failure) {
+                val accountResponseError = result.error
+                val uiMessage = responseErrorMapper.map(accountResponseError)
+                val errorResource = (uiMessage as UiMessage.ResourceId).id
 
-                Logger.log(result.error.toString())
-
-                accountUIState.update {
-                    it.copy(
-                        errorResponse = result.error.toString()
-                    )
-                }
+                //Logger.log(result.error.toString())
 
                 accountUIState.update {
                     it.copy(
-                        isLoading = false
+                        isLoading = false,
+                        errorResource = errorResource
                     )
                 }
 
@@ -84,5 +92,21 @@ class AccountViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun getErrorResource(
+        error: AccountRequestError
+    ): Int {
+        val userError = error as AccountRequestError.UserError
+        val userDomainError = userError.error
+
+        val errorMessage = requestErrorMapper.map(
+            userDomainError
+        )
+
+        val message51 = errorMessage as UiMessage.ResourceId
+        val message52 = message51.id
+
+        return message52
     }
 }

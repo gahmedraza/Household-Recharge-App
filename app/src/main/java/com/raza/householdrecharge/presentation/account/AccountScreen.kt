@@ -1,6 +1,7 @@
 package com.raza.householdrecharge.presentation.account
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,18 +17,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -111,23 +109,30 @@ fun AccountScreen(
                         text = accountUIState.profileHousehold
                     )
 
-                    Spacer(modifier = Modifier.height(40.dp))
+                    Spacer(modifier = Modifier.weight(1f))
 
                     if (accountUIState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .size(24.dp)
+                                .align(Alignment.CenterHorizontally)
                         )
                     }
 
                     Spacer(modifier = Modifier.padding(20.dp))
 
-                    Text(
-                        text = accountUIState.errorResponse,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.error,
-                        textAlign = TextAlign.Center
-                    )
+                    if (accountUIState.errorResource != 0) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(accountUIState.errorResource),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.error,
+
+                            textAlign = TextAlign.Center
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.padding(20.dp))
                 }
             }
         }
