@@ -12,6 +12,7 @@ import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.request.HouseholdRequestValidator
 import com.raza.householdrecharge.presentation.common.HouseholdNameValidator
 import com.raza.householdrecharge.presentation.common.InvitationCodeValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +30,8 @@ class HouseholdViewModel @Inject constructor(
     private val householdRequestValidator: HouseholdRequestValidator,
     private val householdNameValidator: HouseholdNameValidator,
     private val invitationCodeValidator: InvitationCodeValidator,
-    private val responseErrorMapper: ResponseErrorMapper
+    private val responseErrorMapper: ResponseErrorMapper,
+    private val requestErrorMapper: RequestErrorMapper
 ) : ViewModel() {
 
     var householdUIState = MutableStateFlow(HouseholdUIState())
@@ -84,7 +86,7 @@ class HouseholdViewModel @Inject constructor(
             if(validationResult is Result.Failure) {
                 householdUIState.update {
                     it.copy(
-                        apiResponse = validationResult.error.toString(),
+                        apiResponse = requestErrorMapper.map(validationResult.error),
                     )
                 }
 

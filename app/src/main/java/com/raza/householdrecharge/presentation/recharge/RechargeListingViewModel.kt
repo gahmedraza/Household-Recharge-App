@@ -7,6 +7,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.request.RechargeRequestValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class RechargeListingViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val rechargeUseCase: RechargeUseCase,
-    private val validator: RechargeRequestValidator
+    private val validator: RechargeRequestValidator,
+    private val requestErrorMapper: RequestErrorMapper
 ) : ViewModel() {
 
     var rechargeListingUIState = MutableStateFlow(RechargeListingUIState())
@@ -61,8 +63,8 @@ class RechargeListingViewModel @Inject constructor(
 
                 rechargeListingUIState.update {
                     it.copy(
-                        apiResponse = validationResult.error.toString(),
-                        showBottomSheet = true
+                        apiResponse = requestErrorMapper.map(validationResult.error),
+                        shouldProceed = true,
                     )
                 }
 
@@ -71,14 +73,6 @@ class RechargeListingViewModel @Inject constructor(
 
             rechargeUseCase.getAllRecharges()
 
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        rechargeListingUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
-            )
         }
     }
 }

@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import kotlinx.coroutines.Dispatchers
 
@@ -23,7 +24,8 @@ class InvitationViewModel @Inject constructor(
     val sessionManager: SessionManager,
     private val invitationUseCase: InvitationUseCase,
     private val invitationRequestValidator: InvitationRequestValidator,
-    private val responseErrorMapper: ResponseErrorMapper
+    private val responseErrorMapper: ResponseErrorMapper,
+    private val requestErrorMapper: RequestErrorMapper
 ): ViewModel() {
 
     var invitationUIState = MutableStateFlow(InvitationUIState())
@@ -52,7 +54,7 @@ class InvitationViewModel @Inject constructor(
 
                 invitationUIState.update {
                     it.copy(
-                        apiResponse = validationResult.error.toString(),
+                        apiResponse = requestErrorMapper.map(validationResult.error),
                         shouldProceed = false,
                         isLoading = false
                     )

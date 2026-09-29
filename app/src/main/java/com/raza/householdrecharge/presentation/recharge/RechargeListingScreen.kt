@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -105,24 +104,6 @@ fun RechargeListingScreen(
 
                 item {
                     Spacer(modifier = Modifier.height(20.dp))
-                }
-            }
-        }
-
-        if(rechargeListingUIState.showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    viewmodel.onShowBottomSheetModified(false)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("api response")
-
-                    Text(rechargeListingUIState.apiResponse)
                 }
             }
         }

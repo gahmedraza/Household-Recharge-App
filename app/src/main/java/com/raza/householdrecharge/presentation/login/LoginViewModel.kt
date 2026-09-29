@@ -9,6 +9,7 @@ import com.raza.householdrecharge.domain.model.Account
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,7 @@ class LoginViewModel @Inject constructor(
     private val authUseCase: AuthUseCase,
     private val mobileNumberValidator: MobileNumberValidator,
     private val passwordValidator: PasswordValidator,
-    private val responseErrorMapper: ResponseErrorMapper
+    private val responseErrorMapper: ResponseErrorMapper,
 ): ViewModel() {
 
     var loginUIState = MutableStateFlow(LoginUIState())

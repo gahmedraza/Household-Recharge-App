@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.factory.RechargeDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
+import com.raza.householdrecharge.domain.error.request.RequestError
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import com.raza.householdrecharge.domain.validator.request.RechargeRequestValidator
 import com.raza.householdrecharge.presentation.common.ExpiryDateValidator
@@ -12,6 +13,7 @@ import com.raza.householdrecharge.presentation.common.RechargeAmountValidator
 import com.raza.householdrecharge.presentation.common.RechargeDateValidator
 import com.raza.householdrecharge.presentation.common.RechargeDescriptionValidator
 import com.raza.householdrecharge.presentation.common.RechargedByValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +33,8 @@ class AddRechargeViewModel @Inject constructor(
     private val expiryDateValidator: ExpiryDateValidator,
     private val rechargedByValidator: RechargedByValidator,
     private val rechargeDescriptionValidator: RechargeDescriptionValidator,
-    private val responseErrorMapper: ResponseErrorMapper
+    private val responseErrorMapper: ResponseErrorMapper,
+    private val requestErrorMapper: RequestErrorMapper
 ) : ViewModel() {
 
     var addRechargeUIState = MutableStateFlow(AddRechargeUIState())
@@ -111,7 +114,7 @@ class AddRechargeViewModel @Inject constructor(
             if(validationResult is Result.Failure) {
                 addRechargeUIState.update {
                     it.copy(
-                        apiResponse = validationResult.error.toString(),
+                        apiResponse = requestErrorMapper.map(validationResult.error),
                         isLoading = false,
                         shouldProceed = false,
                     )
