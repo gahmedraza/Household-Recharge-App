@@ -33,9 +33,7 @@ class InvitationViewModel @Inject constructor(
     }
 
     fun createInvitation(
-        code: String,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
+        code: String
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             invitationUIState.update {
@@ -55,7 +53,8 @@ class InvitationViewModel @Inject constructor(
                 invitationUIState.update {
                     it.copy(
                         apiResponse = validationResult.error.toString(),
-                        showBottomSheet = true
+                        shouldProceed = false,
+                        isLoading = false
                     )
                 }
 
@@ -78,39 +77,23 @@ class InvitationViewModel @Inject constructor(
 
             when(result51) {
                 is Result.Success -> {
-                    val data = result51.data
-
                     invitationUIState.update {
                         it.copy(
-                            apiResponse = "successfully parsed the response",
-                            showBottomSheet = true
-                        )
-                    }
-
-                    invitationUIState.update {
-                        it.copy(
+                            apiResponse = result51.data,
+                            shouldProceed = true,
                             isLoading = false
                         )
                     }
-
-                    onSuccess(data)
                 }
 
                 is Result.Failure -> {
                     invitationUIState.update {
                         it.copy(
                             apiResponse = responseErrorMapper.map(result51.error),
-                            showBottomSheet = true
-                        )
-                    }
-
-                    invitationUIState.update {
-                        it.copy(
+                            shouldProceed = false,
                             isLoading = false
                         )
                     }
-
-                    onFailure(responseErrorMapper.map(result51.error))
                 }
             }
         }
@@ -144,14 +127,6 @@ class InvitationViewModel @Inject constructor(
                     )
                 }
             }
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        invitationUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
-            )
         }
     }
 }

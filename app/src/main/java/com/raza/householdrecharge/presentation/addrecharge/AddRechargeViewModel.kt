@@ -40,50 +40,37 @@ class AddRechargeViewModel @Inject constructor(
     fun addRecharge(
         mobileNumber: String,
         mobileNumberId: String,
-        onSuccess: () -> Unit,
-        onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //
+            addRechargeUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
             //validate the input fields
             addRechargeUIState.update {
                 it.copy(
                     amountError = rechargeAmountValidator.validate(
                         addRechargeUIState.value.amount,
                         addRechargeUIState.value.amountError
-                    )
-                )
-            }
+                    ),
 
-            addRechargeUIState.update {
-                it.copy(
                     dateError = rechargeDateValidator.validate(
                         addRechargeUIState.value.date,
                         addRechargeUIState.value.dateError
-                    )
-                )
-            }
+                    ),
 
-            addRechargeUIState.update {
-                it.copy(
                     planExpiryDateError = expiryDateValidator.validate(
                         addRechargeUIState.value.planExpiryDate,
                         addRechargeUIState.value.planExpiryDateError
-                    )
-                )
-            }
+                    ),
 
-            addRechargeUIState.update {
-                it.copy(
                     rechargedByError = rechargedByValidator.validate(
                         addRechargeUIState.value.rechargedBy,
                         addRechargeUIState.value.rechargedByError
-                    )
-                )
-            }
+                    ),
 
-            addRechargeUIState.update {
-                it.copy(
                     rechargeDescriptionError = rechargeDescriptionValidator.validate(
                         addRechargeUIState.value.rechargeDescription,
                         addRechargeUIState.value.rechargeDescriptionError
@@ -100,13 +87,6 @@ class AddRechargeViewModel @Inject constructor(
             ) {
 
                 return@launch
-            }
-            //
-
-            addRechargeUIState.update {
-                it.copy(
-                    isLoading = true
-                )
             }
 
             val rechargeDto = RechargeDtoFactory(
@@ -132,17 +112,11 @@ class AddRechargeViewModel @Inject constructor(
                 addRechargeUIState.update {
                     it.copy(
                         apiResponse = validationResult.error.toString(),
-                        showBottomSheet = true
+                        isLoading = false,
+                        shouldProceed = false,
                     )
                 }
 
-                addRechargeUIState.update {
-                    it.copy(
-                        isLoading = false
-                    )
-                }
-
-                onFailure("failure")
                 return@launch
             }
 
@@ -156,18 +130,11 @@ class AddRechargeViewModel @Inject constructor(
                 is Result.Success -> {
                     addRechargeUIState.update {
                         it.copy(
-                            apiResponse = "successfully parsed the response",
-                            showBottomSheet = true
+                            apiResponse = "recharge has been added",
+                            isLoading = false,
+                            shouldProceed = true
                         )
                     }
-
-                    addRechargeUIState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
-
-                    onSuccess()
                 }
 
                 is Result.Failure -> {
@@ -175,16 +142,10 @@ class AddRechargeViewModel @Inject constructor(
                     addRechargeUIState.update {
                         it.copy(
                             apiResponse = responseErrorMapper.map(result.error),
-                            showBottomSheet = true
+                            isLoading = false,
+                            shouldProceed = false
                         )
                     }
-
-                    addRechargeUIState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
-                    onFailure(responseErrorMapper.map(result.error))
                 }
             }
         }
@@ -266,14 +227,6 @@ class AddRechargeViewModel @Inject constructor(
         addRechargeUIState.update {
             it.copy(
                 rechargedByError = ""
-            )
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        addRechargeUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
             )
         }
     }

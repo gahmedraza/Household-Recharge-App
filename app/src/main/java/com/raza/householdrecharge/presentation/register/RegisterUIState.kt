@@ -10,5 +10,5 @@ data class RegisterUIState(
     var passwordError: String = "",
     var authId: String = "",
     var apiResponse: String = "",
-    var showBottomSheet: Boolean = false
+    var shouldProceed: Boolean = false
 )

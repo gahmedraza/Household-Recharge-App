@@ -8,8 +8,6 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
 import com.raza.householdrecharge.data.session.SessionManager
-import com.raza.householdrecharge.domain.error.usecase.HouseholdUseCaseError
-import com.raza.householdrecharge.domain.model.FindHouseholdResponse
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.request.HouseholdRequestValidator
 import com.raza.householdrecharge.presentation.common.HouseholdNameValidator
@@ -38,11 +36,14 @@ class HouseholdViewModel @Inject constructor(
 
     fun onAddHousehold(
         householdName: String,
-        onSuccess: (String?) -> Unit,
-        onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //
+            householdUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
             //validate the input fields
             householdUIState.update {
                 it.copy(
@@ -57,13 +58,6 @@ class HouseholdViewModel @Inject constructor(
 
                 return@launch
             }
-            //
-
-            householdUIState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
 
             val userId = sessionManager.authId.first()
             val accountId = sessionManager.accountId.first()
@@ -74,16 +68,11 @@ class HouseholdViewModel @Inject constructor(
                 householdUIState.update {
                     it.copy(
                         apiResponse = "user not found",
-                        showBottomSheet = true
-                    )
-                }
-
-                householdUIState.update {
-                    it.copy(
+                        shouldProceed = false,
                         isLoading = false
                     )
                 }
-                onFailure("user not found")
+
                 return@launch
             }
 
@@ -96,7 +85,6 @@ class HouseholdViewModel @Inject constructor(
                 householdUIState.update {
                     it.copy(
                         apiResponse = validationResult.error.toString(),
-                        showBottomSheet = true
                     )
                 }
 
@@ -116,7 +104,6 @@ class HouseholdViewModel @Inject constructor(
 
             val result = householdUseCase.createHouseholdAndUpdateAccount(
                 appUserDto = appUserDto,
-
                 householdDto = householdDto
             )
 
@@ -132,18 +119,11 @@ class HouseholdViewModel @Inject constructor(
 
                         householdUIState.update {
                             it.copy(
+                                apiResponse = "household created with id: householdId",
+                                shouldProceed = true,
                                 isLoading = false
                             )
                         }
-
-                        householdUIState.update {
-                            it.copy(
-                                apiResponse = "successfully parsed the response",
-                                showBottomSheet = true
-                            )
-                        }
-
-                        onSuccess(householdId)
                     }
                 }
 
@@ -151,18 +131,11 @@ class HouseholdViewModel @Inject constructor(
 
                     householdUIState.update {
                         it.copy(
+                            apiResponse = "household creation failure\n${responseErrorMapper.map(result.error)}",
+                            shouldProceed = false,
                             isLoading = false
                         )
                     }
-
-                    householdUIState.update {
-                        it.copy(
-                            apiResponse = responseErrorMapper.map(result.error),
-                            showBottomSheet = true
-                        )
-                    }
-
-                    onFailure(responseErrorMapper.map(result.error))
                 }
             }
         }
@@ -177,8 +150,6 @@ class HouseholdViewModel @Inject constructor(
      */
     fun findHousehold(
         invitationCode: String,
-        onSuccess: (FindHouseholdResponse?) -> Unit,
-        onFailure: (String?) -> Unit
     ) {
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -214,11 +185,6 @@ class HouseholdViewModel @Inject constructor(
 
             when(result) {
                 is Result.Success -> {
-                    householdUIState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
 
                     val findHouseholdResponse = result.data
                     sessionManager.saveHouseholdId(findHouseholdResponse?.householdId.cleanString())
@@ -226,25 +192,21 @@ class HouseholdViewModel @Inject constructor(
 
                     householdUIState.update {
                         it.copy(
-                            apiResponse = "successfully parsed the response",
-                            showBottomSheet = true
+                            apiResponse = "invitation code found: ${result.data}",
+                            shouldProceed = true,
+                            isLoading = false,
+                            findHouseholdResponse = result.data
                         )
                     }
-
-                    onSuccess(result.data)
                 }
 
                 is Result.Failure -> {
-                    householdUIState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
 
                     householdUIState.update {
                         it.copy(
                             apiResponse = responseErrorMapper.map(result.error),
-                            showBottomSheet = true
+                            shouldProceed = false,
+                            isLoading = false
                         )
                     }
                 }
@@ -257,8 +219,6 @@ class HouseholdViewModel @Inject constructor(
     fun onJoinHousehold(
         householdId: String,
         invitationCode: String,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             householdUIState.update {
@@ -287,22 +247,22 @@ class HouseholdViewModel @Inject constructor(
 
                         householdUIState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
+                                shouldProceed = true,
+                                apiResponse = "you have been added to the household"
                             )
                         }
-
-                        onSuccess("you have been added to the household")
                     }
 
                     is Result.Failure -> {
 
                         householdUIState.update {
                             it.copy(
-                                isLoading = false
+                                isLoading = false,
+                                shouldProceed = false,
+                                apiResponse = "unable to add you to the household"
                             )
                         }
-
-                        onFailure("unable to add you to the household")
                     }
                 }
 
@@ -310,11 +270,11 @@ class HouseholdViewModel @Inject constructor(
 
                 householdUIState.update {
                     it.copy(
-                        isLoading = false
+                        isLoading = false,
+                        apiResponse = "unable to join household",
+                        shouldProceed = false
                     )
                 }
-                onFailure("unable to join household")
-
             }
         }
     }
@@ -347,14 +307,6 @@ class HouseholdViewModel @Inject constructor(
         householdUIState.update {
             it.copy(
                 householdNameError = ""
-            )
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        householdUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
             )
         }
     }

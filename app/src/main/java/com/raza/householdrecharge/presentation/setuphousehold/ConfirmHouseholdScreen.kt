@@ -14,14 +14,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -43,13 +39,10 @@ fun ConfirmHouseholdScreen(
     householdId: String? = "",
     invitationCode: String? = "",
     viewmodel: HouseholdViewModel = hiltViewModel(),
-    onSuccess:() -> Unit = {},
-    onFailure:() -> Unit = {}
+    onSuccess:() -> Unit = {}
 ) {
 
     val householdUIState by viewmodel.householdUIState.collectAsStateWithLifecycle()
-    var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var apiStatus by rememberSaveable { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -114,25 +107,13 @@ fun ConfirmHouseholdScreen(
                             start = 20.dp,
                             end = 20.dp),
 
-                    enabled = !shouldProceed,
+                    enabled = !householdUIState.shouldProceed,
 
                     onClick = {
 
                         viewmodel.onJoinHousehold(
                             invitationCode = invitationCode.cleanString(),
-                            householdId = householdId.cleanString(),
-                            onSuccess = {
-
-                                apiStatus = "You have been added to the household"
-                                shouldProceed = true
-                            },
-                            onFailure = {
-
-                                apiStatus = "Failure"
-                                shouldProceed = false
-
-                                onFailure()
-                            }
+                            householdId = householdId.cleanString()
                         )
                     }
                 ) {
@@ -150,10 +131,10 @@ fun ConfirmHouseholdScreen(
                             start = 20.dp,
                             end = 20.dp),
 
-                    enabled = shouldProceed,
+                    enabled = householdUIState.shouldProceed,
 
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if(shouldProceed) {
+                        containerColor = if(householdUIState.shouldProceed) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
@@ -185,9 +166,9 @@ fun ConfirmHouseholdScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.CenterHorizontally),
-                    text = apiStatus,
+                    text = householdUIState.apiResponse,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (shouldProceed) {
+                    color = if (householdUIState.shouldProceed) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.error
@@ -196,24 +177,6 @@ fun ConfirmHouseholdScreen(
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
-            }
-        }
-
-        if(householdUIState.showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    viewmodel.onShowBottomSheetModified(false)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("api response")
-
-                    Text(householdUIState.apiResponse)
-                }
             }
         }
     }

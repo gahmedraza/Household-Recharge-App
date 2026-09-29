@@ -7,5 +7,5 @@ data class InvitationUIState(
     var invitationCode: String = "",
     var invitationList: List<Invitation> = emptyList(),
     var apiResponse: String = "",
-    var showBottomSheet: Boolean = false
+    var shouldProceed: Boolean = false
 )

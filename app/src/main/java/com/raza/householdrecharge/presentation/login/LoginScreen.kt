@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.R
-import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.launch
@@ -138,21 +137,7 @@ fun LoginScreen(
                     onClick = {
 
                         //make the api call
-                        viewmodel.login(
-                            onSuccess = { userId ->
-
-                                apiStatus = "login success"
-                                shouldProceed = true
-
-                                Logger.log("user logged in with id= $userId")
-                            },
-                            onFailure = { message ->
-
-                                apiStatus = "login failure\n$message"
-                                shouldProceed = false
-
-                                Logger.log("response= $message")
-                            })
+                        viewmodel.login()
                     }
                 ) {
                     Text(stringResource(R.string.login))

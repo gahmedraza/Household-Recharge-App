@@ -51,7 +51,7 @@ class AccountViewModel @Inject constructor(
                 accountUIState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = errorMessage
+                        apiStatus = errorMessage
                     )
                 }
 
@@ -60,29 +60,32 @@ class AccountViewModel @Inject constructor(
 
             val result = profileUseCase.fetchProfileByAccountId(accountId)
 
-            if(result is Result.Failure) {
-                val error = responseErrorMapper.map(result.error)
+            when(result) {
+                is Result.Failure -> {
+                    //Logger.log(error)
 
-                //Logger.log(error)
+                    accountUIState.update {
+                        it.copy(
+                            isLoading = false,
+                            apiStatus = "failure: ${responseErrorMapper.map(result.error)}",
+                            shouldProceed = false
+                        )
+                    }
 
-                accountUIState.update {
-                    it.copy(
-                        isLoading = false,
-                        errorMessage = error
-                    )
+                    return@launch
                 }
 
-                return@launch
-            }
+                is Result.Success -> {
 
-            val account = (result as Result.Success).data
-
-            accountUIState.update {
-                it.copy(
-                    profileName = account.accountName.cleanString(),
-                    profileHousehold = sessionManager.householdName.first(),
-                    isLoading = false
-                )
+                    accountUIState.update {
+                        it.copy(
+                            profileName = "success: ${result.data.accountName.cleanString()}",
+                            profileHousehold = sessionManager.householdName.first(),
+                            isLoading = false,
+                            shouldProceed = true
+                        )
+                    }
+                }
             }
         }
     }

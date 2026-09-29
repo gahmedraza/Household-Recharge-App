@@ -135,10 +135,6 @@ fun DashboardNavigationRoot() {
                     onSuccess = {
 
                         navController.navigate(ComposeScreen.Dashboard.description)
-                    },
-
-                    onFailure = {
-
                     }
                 )
             }
@@ -152,10 +148,6 @@ fun DashboardNavigationRoot() {
                     onSuccess = {
 
                         navController.navigate(ComposeScreen.Dashboard.description)
-                    },
-
-                    onFailure = {
-
                     }
                 )
             }

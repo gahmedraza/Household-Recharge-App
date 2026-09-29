@@ -43,14 +43,10 @@ import com.raza.householdrecharge.util.cleanString
 fun AddMobileNumberScreen(
     viewmodel: AddMobileNumberViewModel = hiltViewModel(),
     onSuccess: () -> Unit = {},
-    onFailure: () -> Unit = {}
 ) {
 
     val addMobileNumberUIState by viewmodel.addMobileNumberUIState.collectAsStateWithLifecycle()
     val modifier = Modifier.fillMaxWidth()
-
-    var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var apiStatus by rememberSaveable { mutableStateOf("") }
 
     AppCard {
 
@@ -98,23 +94,10 @@ fun AddMobileNumberScreen(
                 OutlinedButton(
                     modifier = modifier,
 
-                    enabled = !shouldProceed,
+                    enabled = !addMobileNumberUIState.shouldProceed,
 
                     onClick = {
-                        viewmodel.addMobileNumber(
-
-                            onSuccess = {
-                                apiStatus = "mobile number has been added"
-                                shouldProceed = true
-                            },
-
-                            onFailure = { message ->
-                                apiStatus = message.cleanString()
-                                shouldProceed = false
-
-                                onFailure()
-                            }
-                        )
+                        viewmodel.addMobileNumber()
                     }
                 ) {
                     Text("Add Mobile Number")
@@ -125,10 +108,10 @@ fun AddMobileNumberScreen(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
-                    enabled = shouldProceed,
+                    enabled = addMobileNumberUIState.shouldProceed,
 
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if(shouldProceed) {
+                        containerColor = if(addMobileNumberUIState.shouldProceed) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
@@ -154,33 +137,15 @@ fun AddMobileNumberScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = apiStatus,
+                    text = addMobileNumberUIState.apiResponse,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (shouldProceed) {
+                    color = if (addMobileNumberUIState.shouldProceed) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.error
                     },
                     textAlign = TextAlign.Center
                 )
-            }
-        }
-
-        if(addMobileNumberUIState.showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    viewmodel.onShowBottomSheetModified(false)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("api response")
-
-                    Text(addMobileNumberUIState.apiResponse)
-                }
             }
         }
     }

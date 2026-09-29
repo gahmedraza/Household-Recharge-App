@@ -8,6 +8,7 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.validator.request.MobileNumberRequestValidator
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,17 +24,21 @@ class AddMobileNumberViewModel @Inject constructor(
     private val mobileNumberUseCase: MobileNumberUseCase,
     private val requestValidator: MobileNumberRequestValidator,
     private val mobileNumberValidator: MobileNumberValidator,
-    private val responseErrorMapper: ResponseErrorMapper
+    private val responseErrorMapper: ResponseErrorMapper,
+    private val requestErrorMapper: RequestErrorMapper
 ) : ViewModel() {
 
     var addMobileNumberUIState = MutableStateFlow(AddMobileNumberUIState())
 
     fun addMobileNumber(
-        onSuccess: () -> Unit,
-        onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //
+            addMobileNumberUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
             //validate the input fields
             addMobileNumberUIState.update {
                 it.copy(
@@ -50,14 +55,7 @@ class AddMobileNumberViewModel @Inject constructor(
                 //TODO api error only meant for api related
                 return@launch
             }
-            //
 
-            addMobileNumberUIState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-            //
             val mobileNumberDto = MobileNumberDtoFactory(
                 sessionManager = sessionManager
             ).create(
@@ -72,18 +70,12 @@ class AddMobileNumberViewModel @Inject constructor(
 
             //user understandable errors should be placed in a class
             if (validationResult is Result.Failure) {
-                onFailure(validationResult.error.toString())
 
                 addMobileNumberUIState.update {
                     it.copy(
-                        apiResponse = validationResult.error.toString(),
-                        showBottomSheet = true
-                    )
-                }
-
-                addMobileNumberUIState.update {
-                    it.copy(
-                        isLoading = false
+                        apiResponse = "failure: ${requestErrorMapper.map(validationResult.error)}",
+                        isLoading = false,
+                        shouldProceed = false
                     )
                 }
 
@@ -100,36 +92,22 @@ class AddMobileNumberViewModel @Inject constructor(
                 is Result.Success<String> -> {
                     addMobileNumberUIState.update {
                         it.copy(
-                            apiResponse = "successfully parsed the response",
-                            showBottomSheet = true
+                            apiResponse = "mobile number has been added",
+                            isLoading = false,
+                            shouldProceed = true
                         )
                     }
-
-                    addMobileNumberUIState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
-
-                    onSuccess()
                 }
 
                 is Result.Failure -> {
 
                     addMobileNumberUIState.update {
                         it.copy(
-                            apiResponse = responseErrorMapper.map(result.error),
-                            showBottomSheet = true
-                        )
-                    }
-
-                    addMobileNumberUIState.update {
-                        it.copy(
+                            apiResponse = "failure: ${responseErrorMapper.map(result.error)}",
+                            shouldProceed = false,
                             isLoading = false
                         )
                     }
-
-                    onFailure(responseErrorMapper.map(result.error))
                 }
             }
         }
@@ -147,14 +125,6 @@ class AddMobileNumberViewModel @Inject constructor(
         addMobileNumberUIState.update {
             it.copy(
                 mobileNumberError = ""
-            )
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        addMobileNumberUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
             )
         }
     }

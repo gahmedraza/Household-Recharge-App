@@ -47,13 +47,10 @@ fun AddRechargeScreen(
     mobileNumber: String = "",
     id: String = "",
     viewmodel: AddRechargeViewModel = hiltViewModel(),
-    onSuccess: () -> Unit = {},
-    onFailure: () -> Unit = {}
+    onSuccess: () -> Unit = {}
 ) {
 
     val addRechargeUIState by viewmodel.addRechargeUIState.collectAsStateWithLifecycle()
-    var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var apiStatus by rememberSaveable { mutableStateOf("") }
     val modifier = Modifier.fillMaxWidth()
 
     AppCard {
@@ -200,24 +197,12 @@ fun AddRechargeScreen(
                 OutlinedButton(
                     modifier = modifier,
 
-                    enabled = !shouldProceed,
+                    enabled = !addRechargeUIState.shouldProceed,
 
                     onClick = {
                         viewmodel.addRecharge(
                             mobileNumber = mobileNumber,
-                            mobileNumberId = id,
-                            onSuccess = {
-
-                                apiStatus = "recharge has been added"
-                                shouldProceed = true
-
-                            },
-                            onFailure = { message ->
-
-                                apiStatus = message.cleanString()
-                                shouldProceed = false
-                                onFailure()
-                            }
+                            mobileNumberId = id
                         )
                     }
                 ) {
@@ -229,10 +214,10 @@ fun AddRechargeScreen(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
-                    enabled = shouldProceed,
+                    enabled = addRechargeUIState.shouldProceed,
 
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if(shouldProceed) {
+                        containerColor = if(addRechargeUIState.shouldProceed) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
@@ -258,33 +243,15 @@ fun AddRechargeScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = apiStatus,
+                    text = addRechargeUIState.apiResponse,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (shouldProceed) {
+                    color = if (addRechargeUIState.shouldProceed) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.error
                     },
                     textAlign = TextAlign.Center
                 )
-            }
-        }
-
-        if(addRechargeUIState.showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    viewmodel.onShowBottomSheetModified(false)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("api response")
-
-                    Text(addRechargeUIState.apiResponse)
-                }
             }
         }
     }

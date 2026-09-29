@@ -31,23 +31,22 @@ class LoginViewModel @Inject constructor(
     var loginUIState = MutableStateFlow(LoginUIState())
 
     fun login(
-        onSuccess: (String?) -> Unit,
-        onFailure: (String?) -> Unit
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //
+            loginUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
             //validate the input fields
             loginUIState.update {
                 it.copy(
                     mobileNumberError = mobileNumberValidator.validate(
                         loginUIState.value.mobileNumber,
                         loginUIState.value.mobileNumberError
-                    )
-                )
-            }
+                    ),
 
-            loginUIState.update {
-                it.copy(
                     passwordError = passwordValidator.validate(
                         loginUIState.value.password,
                         loginUIState.value.passwordError
@@ -60,13 +59,6 @@ class LoginViewModel @Inject constructor(
                 ) {
 
                 return@launch
-            }
-            //
-
-            loginUIState.update {
-                it.copy(
-                    isLoading = true
-                )
             }
 
             val authDto = AuthDto(
@@ -93,18 +85,12 @@ class LoginViewModel @Inject constructor(
 
                     loginUIState.update {
                         it.copy(
-                            isLoading = false
+                            apiResponse = "login success: ${accountDto.accountId.cleanString()}",
+                            showBottomSheet = true,
+                            isLoading = false,
+                            shouldProceed = true
                         )
                     }
-
-                    loginUIState.update {
-                        it.copy(
-                            apiResponse = "successfully parsed the response",
-                            showBottomSheet = true
-                        )
-                    }
-
-                    onSuccess(accountDto.accountId.cleanString())
                 }
 
                 is Result.Failure -> {
@@ -112,17 +98,12 @@ class LoginViewModel @Inject constructor(
                     loginUIState.update {
 
                         it.copy(
-                            apiResponse = responseErrorMapper.map(result51.error),
-                            showBottomSheet = true
+                            apiResponse = "login failure\n${responseErrorMapper.map(result51.error)}",
+                            showBottomSheet = true,
+                            isLoading = false,
+                            shouldProceed = false
                         )
                     }
-
-                    loginUIState.update {
-                        it.copy(
-                            isLoading = false
-                        )
-                    }
-                    onFailure(responseErrorMapper.map(result51.error))
                 }
             }
 

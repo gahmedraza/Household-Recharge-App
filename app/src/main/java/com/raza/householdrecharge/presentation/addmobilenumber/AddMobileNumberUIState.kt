@@ -5,5 +5,5 @@ data class AddMobileNumberUIState(
     var mobileNumber: String = "",
     var mobileNumberError: String = "",
     var apiResponse: String = "",
-    var showBottomSheet: Boolean = false
+    var shouldProceed: Boolean = false
 )

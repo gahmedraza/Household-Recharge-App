@@ -4,5 +4,6 @@ data class AccountUIState(
     var isLoading: Boolean = false,
     var profileName: String = "",
     var profileHousehold: String = "",
-    var errorMessage: String = "",
+    var apiStatus: String = "",
+    var shouldProceed: Boolean = false
 )

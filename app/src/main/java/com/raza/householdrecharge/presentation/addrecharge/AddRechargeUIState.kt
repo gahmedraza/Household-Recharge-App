@@ -12,6 +12,6 @@ data class AddRechargeUIState(
     var amountError: String = "",
     var dateError: String = "",
     var rechargedByError: String = "",
-    var apiResponse: String = "",
-    var showBottomSheet: Boolean = false
+    var shouldProceed: Boolean = false,
+    var apiResponse: String = ""
 )

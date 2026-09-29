@@ -15,15 +15,11 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -32,7 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.presentation.components.AppCard
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
@@ -44,8 +39,6 @@ fun RegisterScreen(
     onLogin: () -> Unit = {}
 ) {
     val registerUIState by viewmodel.registerUIState.collectAsStateWithLifecycle()
-    var shouldProceed by remember { mutableStateOf(false) }
-    var apiStatus by remember { mutableStateOf("") }
 
     AppCard {
 
@@ -151,26 +144,11 @@ fun RegisterScreen(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
-                    enabled = !shouldProceed,
+                    enabled = !registerUIState.shouldProceed,
 
                     onClick = {
 
-                        viewmodel.registerAndAddAccount(
-                            onSuccess = { userId ->
-
-                                apiStatus = "account creation success"
-                                shouldProceed = true
-
-                                Logger.log("user created with id= $userId")
-                            },
-                            onFailure = { message ->
-
-                                apiStatus = "account creation failure\n$message"
-                                shouldProceed = false
-
-                                Logger.log("response= $message")
-                            }
-                        )
+                        viewmodel.registerAndAddAccount()
                     }
                 ) {
                     Text("Create")
@@ -181,10 +159,10 @@ fun RegisterScreen(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
-                    enabled = shouldProceed,
+                    enabled = registerUIState.shouldProceed,
 
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if(shouldProceed) {
+                        containerColor = if(registerUIState.shouldProceed) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
@@ -220,33 +198,15 @@ fun RegisterScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = apiStatus,
+                    text = registerUIState.apiResponse,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (shouldProceed) {
+                    color = if (registerUIState.shouldProceed) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.error
                     },
                     textAlign = TextAlign.Center
                 )
-            }
-        }
-
-        if(registerUIState.showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    viewmodel.onShowBottomSheetModified(false)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("api response")
-
-                    Text(registerUIState.apiResponse)
-                }
             }
         }
     }

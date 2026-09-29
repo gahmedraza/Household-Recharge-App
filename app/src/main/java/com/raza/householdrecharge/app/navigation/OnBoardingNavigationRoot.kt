@@ -93,9 +93,7 @@ fun OnboardingNavigation() {
                 onSuccess = { findHouseholdResponse ->
 
                     navController.navigate("${ComposeScreen.ConfirmHousehold.description}/${findHouseholdResponse?.householdName}/${findHouseholdResponse?.householdId}/${findHouseholdResponse?.invitationCode}")
-                },
-
-                onFailure = {}
+                }
             )
         }
 
@@ -114,9 +112,7 @@ fun OnboardingNavigation() {
 
                 onSuccess = {
                     navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
-                },
-
-                onFailure = {}
+                }
             )
         }
 
@@ -124,9 +120,7 @@ fun OnboardingNavigation() {
             CreateHouseholdScreen(
                 onSuccess = {
                     navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
-                },
-
-                onFailure = {}
+                }
             )
         }
 

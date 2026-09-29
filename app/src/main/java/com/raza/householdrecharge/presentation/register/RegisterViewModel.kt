@@ -33,30 +33,28 @@ class RegisterViewModel @Inject constructor(
 
     var registerUIState = MutableStateFlow(RegisterUIState())
 
-    fun registerAndAddAccount(onSuccess: (String?) -> Unit, onFailure: (String?) -> Unit) {
+    fun registerAndAddAccount(
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            //
+            registerUIState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
+
             //validate the input fields
             registerUIState.update {
                 it.copy(
                     accountNameError = accountNameValidator.validate(
                         registerUIState.value.accountName,
                         registerUIState.value.accountNameError
-                    )
-                )
-            }
+                    ),
 
-            registerUIState.update {
-                it.copy(
                     mobileNumberError = mobileNumberValidator.validate(
                         registerUIState.value.mobileNumber,
                         registerUIState.value.mobileNumberError
-                    )
-                )
-            }
+                    ),
 
-            registerUIState.update {
-                it.copy(
                     passwordError = passwordValidator.validate(
                         registerUIState.value.password,
                         registerUIState.value.passwordError
@@ -70,13 +68,6 @@ class RegisterViewModel @Inject constructor(
             ) {
 
                 return@launch
-            }
-            //
-
-            registerUIState.update {
-                it.copy(
-                    isLoading = true
-                )
             }
 
             //todo factory required
@@ -105,36 +96,21 @@ class RegisterViewModel @Inject constructor(
 
                     registerUIState.update {
                         it.copy(
+                            apiResponse = "account creation success: ${onBoardingDto.authId.cleanString()}",
+                            shouldProceed = true,
                             isLoading = false
                         )
                     }
-
-                    registerUIState.update {
-                        it.copy(
-                            apiResponse = "successfully parsed the response",
-                            showBottomSheet = true
-                        )
-                    }
-
-                    onSuccess(onBoardingDto.authId.cleanString())
                 }
 
                 is Result.Failure -> {
 
                     registerUIState.update {
                         it.copy(
-                            apiResponse = responseErrorMapper.map(result.error),
-                            showBottomSheet = true
-                        )
-                    }
-
-                    registerUIState.update {
-                        it.copy(
+                            apiResponse = "account creation failure ${responseErrorMapper.map(result.error)}",
                             isLoading = false
                         )
                     }
-
-                    onFailure(responseErrorMapper.map(result.error))//todo modify
                 }
             }
         }
@@ -184,14 +160,6 @@ class RegisterViewModel @Inject constructor(
         registerUIState.update {
             it.copy(
                 passwordError = ""
-            )
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        registerUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
             )
         }
     }
