@@ -17,7 +17,7 @@ class InvitationRemoteDataSource @Inject constructor(
 
     suspend fun createInvitation(
         invitation: InvitationDto
-    ): Result<String, String> {
+    ): Result<String, InvitationResponseError> {
 
         try {
 
@@ -31,36 +31,22 @@ class InvitationRemoteDataSource @Inject constructor(
                 .set(invitation)
                 .await()
 
-            return Result.Success("success")
+            return Result.Success(
+                "success"
+            )
 
         } catch (e: Exception) {
 
-            return Result.Failure(e.message.cleanString())
-        }
-    }
-
-    /**
-     * TODO remove method
-     */
-    suspend fun createInvitationFacade(
-        invitation: InvitationDto,
-        onSuccess: (String) -> Unit,
-        onFailure: (String) -> Unit
-    ) {
-        val invitationResult = createInvitation(invitation)
-
-        when(invitationResult) {
-            is Result.Success -> {
-                onSuccess("success")
-            }
-            is Result.Failure -> {
-                onFailure("failure")
-            }
+            return Result.Failure(
+                InvitationResponseError.UnknownError(
+                    e.message.cleanString()
+                )
+            )
         }
     }
 
     suspend fun getAllInvitations(
-    ): Result<List<InvitationDto>, String> {
+    ): Result<List<InvitationDto>, InvitationResponseError> {
 
         try {
             val documentSnapshot = firestore
@@ -72,11 +58,17 @@ class InvitationRemoteDataSource @Inject constructor(
                 document.toObject(InvitationDto::class.java)
             }
 
-            return Result.Success(invitationList)
+            return Result.Success(
+                invitationList
+            )
 
         } catch (e: Exception) {
 
-            return Result.Failure(e.message.cleanString())
+            return Result.Failure(
+                InvitationResponseError.UnknownError(
+                    e.message.cleanString()
+                )
+            )
         }
     }
 
@@ -94,7 +86,9 @@ class InvitationRemoteDataSource @Inject constructor(
                 .await()
 
             if (snapshot == null || snapshot.documents.isEmpty()) {
-                return Result.Failure(InvitationResponseError.InvitationCodeNotFound)
+                return Result.Failure(
+                    InvitationResponseError.InvitationCodeNotFound
+                )
             }
 
             val invitationDto = snapshot
@@ -102,22 +96,30 @@ class InvitationRemoteDataSource @Inject constructor(
                 .toObject(InvitationDto::class.java)
 
             if (invitationDto == null) {
-                return Result.Failure(InvitationResponseError.InvitationDataMappingError)
+                return Result.Failure(
+                    InvitationResponseError.InvitationDataMappingError
+                )
 
             } else {
-                return Result.Success(invitationDto)
+                return Result.Success(
+                    invitationDto
+                )
             }
 
         } catch (e: Exception) {
 
-            Logger.log(e.message)
-            return Result.Failure(InvitationResponseError.UnknownError)
+            //Logger.log() //todo
+            return Result.Failure(
+                InvitationResponseError.UnknownError(
+                    e.message.cleanString()
+                )
+            )
         }
     }
 
     suspend fun updateInvitation(
         invitation: InvitationDto
-    ): Result<String, String> {
+    ): Result<String, InvitationResponseError> {
 
         try {
 
@@ -130,7 +132,9 @@ class InvitationRemoteDataSource @Inject constructor(
                 .await()
 
             if (documentReference.documents.isEmpty()) {
-                return Result.Failure("error")
+                return Result.Failure(
+                    InvitationResponseError.InvitationCodeNotFound
+                )
             }
 
             documentReference.documents[0]
@@ -142,7 +146,11 @@ class InvitationRemoteDataSource @Inject constructor(
 
         } catch (e: Exception) {
 
-            return Result.Failure(e.message.cleanString())
+            return Result.Failure(
+                InvitationResponseError.UnknownError(
+                    e.message.cleanString()
+                )
+            )
         }
     }
 }

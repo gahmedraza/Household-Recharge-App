@@ -14,6 +14,7 @@ import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.domain.validator.request.HouseholdRequestValidator
 import com.raza.householdrecharge.presentation.common.HouseholdNameValidator
 import com.raza.householdrecharge.presentation.common.InvitationCodeValidator
+import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,8 @@ class HouseholdViewModel @Inject constructor(
     private val householdUseCase: HouseholdUseCase,
     private val householdRequestValidator: HouseholdRequestValidator,
     private val householdNameValidator: HouseholdNameValidator,
-    private val invitationCodeValidator: InvitationCodeValidator
+    private val invitationCodeValidator: InvitationCodeValidator,
+    private val responseErrorMapper: ResponseErrorMapper
 ) : ViewModel() {
 
     var householdUIState = MutableStateFlow(HouseholdUIState())
@@ -145,7 +147,7 @@ class HouseholdViewModel @Inject constructor(
                     }
                 }
 
-                is Result.Failure<String> -> {
+                is Result.Failure -> {
 
                     householdUIState.update {
                         it.copy(
@@ -155,12 +157,12 @@ class HouseholdViewModel @Inject constructor(
 
                     householdUIState.update {
                         it.copy(
-                            apiResponse = result.error,
+                            apiResponse = responseErrorMapper.map(result.error),
                             showBottomSheet = true
                         )
                     }
 
-                    onFailure(result.error)
+                    onFailure(responseErrorMapper.map(result.error))
                 }
             }
         }
@@ -210,51 +212,41 @@ class HouseholdViewModel @Inject constructor(
                 authId = authId
             )
 
-            if(result is Result.Success) {
-                householdUIState.update {
-                    it.copy(
-                        isLoading = false
-                    )
-                }
-
-                val findHouseholdResponse = result.data
-                sessionManager.saveHouseholdId(findHouseholdResponse?.householdId.cleanString())
-                sessionManager.saveHouseholdName(findHouseholdResponse?.householdName.cleanString())
-
-                householdUIState.update {
-                    it.copy(
-                        apiResponse = "successfully parsed the response",
-                        showBottomSheet = true
-                    )
-                }
-
-                onSuccess(result.data)
-
-            } else {
-                householdUIState.update {
-                    it.copy(
-                        isLoading = false
-                    )
-                }
-                val error = (result as Result.Failure).error
-
-                when(error) {
-                    is HouseholdUseCaseError.Invitation -> {
-                        onFailure(error.error.toString())
+            when(result) {
+                is Result.Success -> {
+                    householdUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
                     }
-                    is HouseholdUseCaseError.Household -> {
-                        onFailure(error.error.toString())
+
+                    val findHouseholdResponse = result.data
+                    sessionManager.saveHouseholdId(findHouseholdResponse?.householdId.cleanString())
+                    sessionManager.saveHouseholdName(findHouseholdResponse?.householdName.cleanString())
+
+                    householdUIState.update {
+                        it.copy(
+                            apiResponse = "successfully parsed the response",
+                            showBottomSheet = true
+                        )
                     }
-                    is HouseholdUseCaseError.Unknown -> {
-                        onFailure(error.error)
-                    }
+
+                    onSuccess(result.data)
                 }
 
-                householdUIState.update {
-                    it.copy(
-                        apiResponse = error.toString(),
-                        showBottomSheet = true
-                    )
+                is Result.Failure -> {
+                    householdUIState.update {
+                        it.copy(
+                            isLoading = false
+                        )
+                    }
+
+                    householdUIState.update {
+                        it.copy(
+                            apiResponse = responseErrorMapper.map(result.error),
+                            showBottomSheet = true
+                        )
+                    }
                 }
             }
         }
@@ -302,7 +294,7 @@ class HouseholdViewModel @Inject constructor(
                         onSuccess("you have been added to the household")
                     }
 
-                    is Result.Failure<String> -> {
+                    is Result.Failure -> {
 
                         householdUIState.update {
                             it.copy(

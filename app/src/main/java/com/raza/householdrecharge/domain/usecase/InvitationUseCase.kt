@@ -4,6 +4,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.InvitationDto
 import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.domain.error.response.InvitationResponseError
+import com.raza.householdrecharge.domain.error.usecase.InvitationUseCaseError
 import com.raza.householdrecharge.domain.model.Invitation
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +20,7 @@ class InvitationUseCase @Inject constructor(
      */
     suspend fun createInvitation(
         invitation: InvitationDto
-    ) : Result<String, String> {
+    ) : Result<String, InvitationUseCaseError> {
 
         return invitationRepository.createInvitation(
             invitation
@@ -42,7 +43,7 @@ class InvitationUseCase @Inject constructor(
      */
     suspend fun getInvitationByInvitationCode(
         code: String
-    ): Result<InvitationDto, InvitationResponseError> {
+    ): Result<InvitationDto, InvitationUseCaseError> {
 
         return invitationRepository.getInvitationByInvitationCode(
             code

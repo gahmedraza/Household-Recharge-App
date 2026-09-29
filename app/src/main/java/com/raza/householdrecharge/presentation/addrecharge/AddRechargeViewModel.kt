@@ -12,6 +12,7 @@ import com.raza.householdrecharge.presentation.common.RechargeAmountValidator
 import com.raza.householdrecharge.presentation.common.RechargeDateValidator
 import com.raza.householdrecharge.presentation.common.RechargeDescriptionValidator
 import com.raza.householdrecharge.presentation.common.RechargedByValidator
+import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,7 +30,8 @@ class AddRechargeViewModel @Inject constructor(
     private val rechargeDateValidator: RechargeDateValidator,
     private val expiryDateValidator: ExpiryDateValidator,
     private val rechargedByValidator: RechargedByValidator,
-    private val rechargeDescriptionValidator: RechargeDescriptionValidator
+    private val rechargeDescriptionValidator: RechargeDescriptionValidator,
+    private val responseErrorMapper: ResponseErrorMapper
 ) : ViewModel() {
 
     var addRechargeUIState = MutableStateFlow(AddRechargeUIState())
@@ -151,7 +153,7 @@ class AddRechargeViewModel @Inject constructor(
 
             when (result) {
 
-                is Result.Success<String> -> {
+                is Result.Success -> {
                     addRechargeUIState.update {
                         it.copy(
                             apiResponse = "successfully parsed the response",
@@ -168,10 +170,11 @@ class AddRechargeViewModel @Inject constructor(
                     onSuccess()
                 }
 
-                is Result.Failure<String> -> {
+                is Result.Failure -> {
+
                     addRechargeUIState.update {
                         it.copy(
-                            apiResponse = result.error,
+                            apiResponse = responseErrorMapper.map(result.error),
                             showBottomSheet = true
                         )
                     }
@@ -181,7 +184,7 @@ class AddRechargeViewModel @Inject constructor(
                             isLoading = false
                         )
                     }
-                    onFailure(result.error)
+                    onFailure(responseErrorMapper.map(result.error))
                 }
             }
         }

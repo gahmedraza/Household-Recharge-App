@@ -9,6 +9,7 @@ import com.raza.householdrecharge.domain.model.Account
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
+import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,8 @@ class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val authUseCase: AuthUseCase,
     private val mobileNumberValidator: MobileNumberValidator,
-    private val passwordValidator: PasswordValidator
+    private val passwordValidator: PasswordValidator,
+    private val responseErrorMapper: ResponseErrorMapper
 ): ViewModel() {
 
     var loginUIState = MutableStateFlow(LoginUIState())
@@ -77,7 +79,7 @@ class LoginViewModel @Inject constructor(
             )
 
             when(result51) {
-                is Result.Success<Account> -> {
+                is Result.Success -> {
                     val accountDto = result51.data
 
                     sessionManager.saveUserId(accountDto.accountId.cleanString())
@@ -105,11 +107,12 @@ class LoginViewModel @Inject constructor(
                     onSuccess(accountDto.accountId.cleanString())
                 }
 
-                is Result.Failure<String> -> {
+                is Result.Failure -> {
 
                     loginUIState.update {
+
                         it.copy(
-                            apiResponse = result51.error,
+                            apiResponse = responseErrorMapper.map(result51.error),
                             showBottomSheet = true
                         )
                     }
@@ -119,7 +122,7 @@ class LoginViewModel @Inject constructor(
                             isLoading = false
                         )
                     }
-                    onFailure(result51.error)
+                    onFailure(responseErrorMapper.map(result51.error))
                 }
             }
 

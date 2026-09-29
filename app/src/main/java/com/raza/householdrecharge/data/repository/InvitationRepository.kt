@@ -24,7 +24,7 @@ class InvitationRepository @Inject constructor(
      */
     suspend fun createInvitation(
         invitation: InvitationDto
-    ): Result<String, String> {
+    ): Result<String, InvitationResponseError> {
 
         val result51 = invitationRemoteDataSource.createInvitation(
             invitation
@@ -50,7 +50,7 @@ class InvitationRepository @Inject constructor(
         val result51 = invitationRemoteDataSource.getAllInvitations()
 
         if(result51 is Result.Failure) {
-            Logger.log(result51.error)
+            //Logger.log(result51.error) //todo
         }
 
         val invitationDtoList = (result51 as Result.Success).data
@@ -94,7 +94,7 @@ class InvitationRepository @Inject constructor(
     suspend fun updateInvitation(
         invitation: InvitationDto
 
-    ): Result<String, String> {
+    ): Result<String, InvitationResponseError> {
 
         val result51 = invitationRemoteDataSource.updateInvitation(
             invitation

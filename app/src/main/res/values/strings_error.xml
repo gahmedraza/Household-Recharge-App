@@ -10,5 +10,10 @@
     <string name="error_101">user id was not created during register</string>
     <string name="error_102">user is not logged in</string>
     <string name="error_103">household id was not generated in households collection</string>
+    <string name="error_invitation_101">invitation has already been used</string>
+    <string name="error_invitation_102">invalid invitation</string>
+    <string name="error_invitation_103">invitation has expired</string>
+    <string name="error_household_101">Account already member of another household</string>
+    <string name="error_household_102">Invitation Household Mismatch</string>
 
 </resources>

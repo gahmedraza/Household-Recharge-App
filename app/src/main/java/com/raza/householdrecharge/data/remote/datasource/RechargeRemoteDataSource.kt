@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
+import com.raza.householdrecharge.domain.error.response.RechargeResponseError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -14,9 +15,7 @@ class RechargeRemoteDataSource @Inject constructor(
 
     suspend fun addRecharge(
         rechargeDto: RechargeDto
-    ): Result<RechargeDto, String> {
-
-        var result: Result<RechargeDto, String>
+    ): Result<RechargeDto, RechargeResponseError> {
 
         try {
 
@@ -35,19 +34,21 @@ class RechargeRemoteDataSource @Inject constructor(
                 .set(rechargeDto)
                 .await()
 
-            result = Result.Success(rechargeDto)
+            return Result.Success(
+                rechargeDto
+            )
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(
+                RechargeResponseError.Unknown(
+                    e.message.cleanString()
+                )
+            )
         }
-
-        return result
     }
 
     suspend fun getAllRecharges(
-    ): Result<List<RechargeDto>, String> {
-
-        var result: Result<List<RechargeDto>, String>
+    ): Result<List<RechargeDto>, RechargeResponseError> {
 
         try {
 
@@ -61,12 +62,16 @@ class RechargeRemoteDataSource @Inject constructor(
                 document.toObject(RechargeDto::class.java)
             }
 
-            result = Result.Success(rechargeList)
+            return Result.Success(
+                rechargeList
+            )
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(
+                RechargeResponseError.Unknown(
+                    e.message.cleanString()
+                )
+            )
         }
-
-        return result
     }
 }

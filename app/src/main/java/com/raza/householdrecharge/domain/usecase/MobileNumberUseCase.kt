@@ -1,9 +1,9 @@
 package com.raza.householdrecharge.domain.usecase
 
 import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
+import com.raza.householdrecharge.domain.error.usecase.MobileNumberUseCaseError
 import com.raza.householdrecharge.domain.model.MobileNumber
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -15,7 +15,7 @@ class MobileNumberUseCase @Inject constructor(
     suspend fun addMobileNumber(
         mobileNumberDto: MobileNumberDto
 
-    ): Result<String, String> {
+    ): Result<String, MobileNumberUseCaseError> {
 
         return mobileNumberRepository.addMobileNumber(
             mobileNumberDto
@@ -37,7 +37,7 @@ class MobileNumberUseCase @Inject constructor(
     suspend fun updateMobileNumber(
         mobileNumberId: String,
         rechargeId: String
-    ): Result<Boolean, String> {
+    ): Result<Boolean, MobileNumberUseCaseError> {
 
         return mobileNumberRepository.updateMobileNumber(
             mobileNumberId,

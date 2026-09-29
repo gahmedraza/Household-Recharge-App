@@ -7,6 +7,7 @@ import com.raza.householdrecharge.data.remote.datasource.RechargeRemoteDataSourc
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeEntityMapper
 import com.raza.householdrecharge.data.remote.mapper.recharge.RechargeMapper
+import com.raza.householdrecharge.domain.error.response.RechargeResponseError
 import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
@@ -20,12 +21,13 @@ class RechargeRepository @Inject constructor(
 
     suspend fun addRecharge(
         rechargeDto: RechargeDto
-    ): Result<String, String> {
+    ): Result<String, RechargeResponseError> {
         val result = rechargeRemoteDataSource.addRecharge(rechargeDto)
 
         if(result is Result.Failure) {
-            Logger.log(result.error.cleanString())
-            return Result.Failure(result.error.cleanString())
+            //Logger.log(result.error.cleanString())
+            //return Result.Failure(result.error.cleanString())
+            return result
         }
 
         val rechargeDto = (result as Result.Success).data
@@ -47,25 +49,23 @@ class RechargeRepository @Inject constructor(
     //todo error propagation
     suspend fun getAllRecharges(
 
-    ) {
+    ): Result<Unit, RechargeResponseError> {
         val result = rechargeRemoteDataSource.getAllRecharges()
 
         if(result is Result.Failure) {
-            Logger.log(result.error.cleanString())
+
+            //Logger.log(result.error.cleanString()) //todo
+            return result
         }
 
         val rechargeList = (result as Result.Success).data
 
         val rechargeEntityList = RechargeEntityMapper.map(rechargeList)
 
-        Logger.log("RechargeEntityList2", rechargeEntityList.toString())
+        //Logger.log("RechargeEntityList2", rechargeEntityList.toString())
 
         rechargeDao.upsertRecharges(rechargeEntityList)
-    }
 
-    suspend fun queryDatabase() {
-        val rechargeEntityList2 = rechargeDao.getAllRecharges()
-        Logger.log("RechargeEntityList", rechargeEntityList2.toString())
+        return Result.Success(Unit)
     }
-
 }

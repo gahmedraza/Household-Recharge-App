@@ -2,7 +2,7 @@ package com.raza.householdrecharge.domain.usecase
 
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.repository.AccountRepository
-import com.raza.householdrecharge.domain.error.response.AccountResponseError
+import com.raza.householdrecharge.domain.error.usecase.ProfileUseCaseError
 import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class ProfileUseCase @Inject constructor(
     suspend fun fetchProfileByAccountId(
         accountId: String
 
-    ): Result<Account, AccountResponseError> {
+    ): Result<Account, ProfileUseCaseError> {
 
         return accountRepository.fetchAccountByAccountId(
             accountId

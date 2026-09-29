@@ -1,15 +1,13 @@
 package com.raza.householdrecharge.data.repository
 
-import com.raza.householdrecharge.core.logging.Logger
+import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.local.dao.MobileNumberDao
 import com.raza.householdrecharge.data.remote.datasource.MobileNumberRemoteDataSource
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
-import com.raza.householdrecharge.core.result.Result
-import com.raza.householdrecharge.data.local.entity.MobileNumberEntity
 import com.raza.householdrecharge.data.remote.mapper.mobilenumber.MobileNumberEntityMapper
 import com.raza.householdrecharge.data.remote.mapper.mobilenumber.MobileNumberMapper
+import com.raza.householdrecharge.domain.error.response.MobileNumberResponseError
 import com.raza.householdrecharge.domain.model.MobileNumber
-import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -22,12 +20,13 @@ class MobileNumberRepository @Inject constructor(
     suspend fun addMobileNumber(
         mobileNumberDto: MobileNumberDto
 
-    ): Result<String, String> {
+    ): Result<String, MobileNumberResponseError> {
         val result = mobileNumberRemoteDataSource.addMobileNumber(mobileNumberDto)
 
         if(result is Result.Failure) {
-            Logger.log(result.error.cleanString())
-            return Result.Failure(result.error.cleanString())
+            //Logger.log(result.error.cleanString()) //todo
+            //return Result.Failure(result.error.cleanString())
+            return result
         }
 
         val mobileNumberDto = (result as Result.Success).data
@@ -54,7 +53,7 @@ class MobileNumberRepository @Inject constructor(
         val result = mobileNumberRemoteDataSource.getAllMobileNumbers()
 
         if(result is Result.Failure) {
-            Logger.log(result.error.cleanString())
+            //Logger.log(result.error.cleanString())
         }
 
         val mobileNumberList = (result as Result.Success).data
@@ -67,19 +66,20 @@ class MobileNumberRepository @Inject constructor(
     suspend fun updateMobileNumber(
         mobileNumberId: String,
         rechargeId: String
-    ): Result<Boolean, String> {
+    ): Result<Boolean, MobileNumberResponseError> {
 
         val result = mobileNumberRemoteDataSource.updateMobileNumber(mobileNumberId, rechargeId)
 
         if(result is Result.Failure) {
-            return Result.Failure(result.error.cleanString())
+            //return Result.Failure(result.error.cleanString())
+            return result
         }
 
         val isSuccess = (result as Result.Success).data
 
-        if(!isSuccess) {
+        /*if(!isSuccess) {
             return Result.Failure("failure")
-        }
+        }*/ //todo such a result in never returned from the data source
 
         mobileNumberDao.updateMobileNumber(mobileNumberId, rechargeId)
 

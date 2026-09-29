@@ -8,6 +8,7 @@ import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.validator.request.MobileNumberRequestValidator
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
+import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,7 +22,8 @@ class AddMobileNumberViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val mobileNumberUseCase: MobileNumberUseCase,
     private val requestValidator: MobileNumberRequestValidator,
-    private val mobileNumberValidator: MobileNumberValidator
+    private val mobileNumberValidator: MobileNumberValidator,
+    private val responseErrorMapper: ResponseErrorMapper
 ) : ViewModel() {
 
     var addMobileNumberUIState = MutableStateFlow(AddMobileNumberUIState())
@@ -112,11 +114,11 @@ class AddMobileNumberViewModel @Inject constructor(
                     onSuccess()
                 }
 
-                is Result.Failure<String> -> {
+                is Result.Failure -> {
 
                     addMobileNumberUIState.update {
                         it.copy(
-                            apiResponse = result.error,
+                            apiResponse = responseErrorMapper.map(result.error),
                             showBottomSheet = true
                         )
                     }
@@ -127,7 +129,7 @@ class AddMobileNumberViewModel @Inject constructor(
                         )
                     }
 
-                    onFailure(result.error)
+                    onFailure(responseErrorMapper.map(result.error))
                 }
             }
         }

@@ -1,6 +1,8 @@
 package com.raza.householdrecharge.domain.error.response
 
-sealed class AuthResponseError : ResponseError {
+import com.raza.householdrecharge.domain.error.usecase.AuthUseCaseError
+
+sealed class AuthResponseError : ResponseError, AuthUseCaseError {
     data object UserNotLoggedIn : AuthResponseError()
 
     data object UserNotCreated : AuthResponseError()

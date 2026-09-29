@@ -72,10 +72,6 @@ class RechargeListingViewModel @Inject constructor(
             rechargeUseCase.getAllRecharges()
 
         }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            rechargeUseCase.queryDatabase()
-        }
     }
 
     fun onShowBottomSheetModified(showBottomSheet: Boolean) {

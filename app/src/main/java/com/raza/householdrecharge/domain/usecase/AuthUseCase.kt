@@ -11,6 +11,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.UserDto
 import com.raza.householdrecharge.domain.error.response.AccountResponseError
 import com.raza.householdrecharge.domain.error.response.AuthResponseError
+import com.raza.householdrecharge.domain.error.usecase.AuthUseCaseError
 import com.raza.householdrecharge.domain.model.Account
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class AuthUseCase @Inject constructor(
 
     suspend fun registerAndCreateAccount(
         authDto: AuthDto
-    ): Result<OnboardingDto, AccountResponseError> {
+    ): Result<OnboardingDto, AuthUseCaseError> {
 
         var result: Result<OnboardingDto, AccountResponseError>
 
@@ -85,12 +86,13 @@ class AuthUseCase @Inject constructor(
 
     suspend fun loginAndRetrieveAccount(
         authDto: AuthDto
-    ): Result<Account, String> {
+    ): Result<Account, AuthUseCaseError> {
         //login to firebase
         val result1 = authRepository.login(authDto)
 
         if(result1 is Result.Failure) {
-            return Result.Failure("error")
+            //return Result.Failure("error")
+            return result1
         }
 
         val authenticationId = (result1 as Result.Success).data
@@ -101,7 +103,8 @@ class AuthUseCase @Inject constructor(
         )
 
         if(result2 is Result.Failure) {
-            return Result.Failure("error")
+            //return Result.Failure("error")
+            return result2
         }
 
         val accountDto = (result2 as Result.Success).data
@@ -115,7 +118,7 @@ class AuthUseCase @Inject constructor(
      */
     suspend fun login(
         authDto: AuthDto
-    ): Result<String, AuthResponseError> {
+    ): Result<String, AuthUseCaseError> {
 
         return authRepository.login(
             authDto
@@ -128,7 +131,7 @@ class AuthUseCase @Inject constructor(
      */
     fun getUser(
 
-    ): Result<UserDto, AuthResponseError>
+    ): Result<UserDto, AuthUseCaseError>
     //FirebaseUser?
     {
         return authRepository.getUser()

@@ -1,6 +1,8 @@
 package com.raza.householdrecharge.domain.error.response
 
-sealed class HouseholdResponseError : ResponseError {
+import com.raza.householdrecharge.domain.error.usecase.HouseholdUseCaseError
+
+sealed class HouseholdResponseError : ResponseError, HouseholdUseCaseError {
     data object NoHouseholdFound : HouseholdResponseError()
 
     data object HouseholdAlreadyAssigned : HouseholdResponseError()

@@ -5,6 +5,8 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.data.repository.MobileNumberRepository
 import com.raza.householdrecharge.data.repository.RechargeRepository
+import com.raza.householdrecharge.domain.error.response.RechargeResponseError
+import com.raza.householdrecharge.domain.error.usecase.RechargeUseCaseError
 import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.flow.Flow
@@ -18,15 +20,15 @@ class RechargeUseCase @Inject constructor(
     suspend fun addRechargeAndUpdateMobileNumber(
         rechargeDto: RechargeDto,
         mobileNumberId: String
-    ): Result<String, String> {
+    ): Result<String, RechargeUseCaseError> {
 
         val result = rechargeRepository.addRecharge(
             rechargeDto = rechargeDto
         )
 
         if(result is Result.Failure) {
-            Logger.log(result.error.cleanString())
-            return Result.Failure(result.error.cleanString())
+            //Logger.log(result.error.cleanString())
+            return result
         }
 
         val rechargeId = (result as Result.Success).data
@@ -37,8 +39,8 @@ class RechargeUseCase @Inject constructor(
         )
 
         if(result2 is Result.Failure) {
-            Logger.log(result2.error)
-            return Result.Failure(result2.error.cleanString())
+            //Logger.log(result2.error)
+            return result2
         }
 
         return Result.Success("")
@@ -60,16 +62,7 @@ class RechargeUseCase @Inject constructor(
      */
     suspend fun getAllRecharges(
 
-    ) {
+    ): Result<Unit, RechargeUseCaseError> {
         return rechargeRepository.getAllRecharges()
-    }
-
-    /**
-     * Transit Method
-     * No additional code
-     */
-    suspend fun queryDatabase() {
-
-        return rechargeRepository.queryDatabase()
     }
 }

@@ -7,10 +7,12 @@ import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.OnboardingDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.response.AccountResponseError
+import com.raza.householdrecharge.domain.error.response.ResponseError
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
 import com.raza.householdrecharge.presentation.common.AccountNameValidator
+import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +27,8 @@ class RegisterViewModel @Inject constructor(
     private val authUseCase: AuthUseCase,
     private val accountNameValidator: AccountNameValidator,
     private val mobileNumberValidator: MobileNumberValidator,
-    private val passwordValidator: PasswordValidator
+    private val passwordValidator: PasswordValidator,
+    private val responseErrorMapper: ResponseErrorMapper
 ) : ViewModel() {
 
     var registerUIState = MutableStateFlow(RegisterUIState())
@@ -88,7 +91,7 @@ class RegisterViewModel @Inject constructor(
             )
 
             when(result) {
-                is Result.Success<OnboardingDto> -> {
+                is Result.Success -> {
 
                     val onBoardingDto = result.data
 
@@ -116,11 +119,11 @@ class RegisterViewModel @Inject constructor(
                     onSuccess(onBoardingDto.authId.cleanString())
                 }
 
-                is Result.Failure<AccountResponseError> -> {
+                is Result.Failure -> {
 
                     registerUIState.update {
                         it.copy(
-                            apiResponse = result.error.toString(),
+                            apiResponse = responseErrorMapper.map(result.error),
                             showBottomSheet = true
                         )
                     }
@@ -131,7 +134,7 @@ class RegisterViewModel @Inject constructor(
                         )
                     }
 
-                    onFailure(result.error.toString())//todo modify
+                    onFailure(responseErrorMapper.map(result.error))//todo modify
                 }
             }
         }

@@ -6,6 +6,7 @@ import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.MobileNumberDto
+import com.raza.householdrecharge.domain.error.response.MobileNumberResponseError
 import com.raza.householdrecharge.util.cleanString
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -16,9 +17,7 @@ class MobileNumberRemoteDataSource @Inject constructor(
 
     suspend fun addMobileNumber(
         mobileNumberDto: MobileNumberDto,
-    ): Result<MobileNumberDto, String> {
-
-        var result: Result<MobileNumberDto, String>
+    ): Result<MobileNumberDto, MobileNumberResponseError> {
 
         try {
 
@@ -34,19 +33,19 @@ class MobileNumberRemoteDataSource @Inject constructor(
                 .set(mobileNumberDto)
                 .await()
 
-            result = Result.Success(mobileNumberDto)
+            return Result.Success(mobileNumberDto)
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(
+                MobileNumberResponseError.Unknown(
+                    e.message.cleanString()
+                )
+            )
         }
-
-        return result
     }
 
     suspend fun getAllMobileNumbers(
-    ): Result<List<MobileNumberDto>, String> {
-
-        var result: Result<List<MobileNumberDto>, String>
+    ): Result<List<MobileNumberDto>, MobileNumberResponseError> {
 
         try {
 
@@ -68,20 +67,24 @@ class MobileNumberRemoteDataSource @Inject constructor(
                 mobileNumberDto
             }
 
-            result = Result.Success(mobileNumberList)
+            return Result.Success(
+                mobileNumberList
+            )
 
         } catch (e: Exception) {
 
-            result = Result.Failure(e.message.cleanString())
+            return Result.Failure(
+                MobileNumberResponseError.Unknown(
+                    e.message.cleanString()
+                )
+            )
         }
-
-        return result
     }
 
     suspend fun updateMobileNumber(
         mobileNumberId: String,
         rechargeId: String
-    ): Result<Boolean, String> {
+    ): Result<Boolean, MobileNumberResponseError> {
 
         try {
 
@@ -91,10 +94,16 @@ class MobileNumberRemoteDataSource @Inject constructor(
                 .update(CollectionField.LastRechargeID.description, rechargeId)
                 .await()
 
-            return Result.Success(true)
+            return Result.Success(
+                true
+            )
         } catch(e: Exception) {
 
-            return Result.Failure(e.message.cleanString())
+            return Result.Failure(
+                MobileNumberResponseError.Unknown(
+                    e.message.cleanString()
+                )
+            )
         }
     }
 }

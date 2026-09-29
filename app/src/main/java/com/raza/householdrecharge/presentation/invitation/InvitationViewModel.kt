@@ -15,13 +15,15 @@ import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import kotlinx.coroutines.Dispatchers
 
 @HiltViewModel
 class InvitationViewModel @Inject constructor(
     val sessionManager: SessionManager,
     private val invitationUseCase: InvitationUseCase,
-    private val invitationRequestValidator: InvitationRequestValidator
+    private val invitationRequestValidator: InvitationRequestValidator,
+    private val responseErrorMapper: ResponseErrorMapper
 ): ViewModel() {
 
     var invitationUIState = MutableStateFlow(InvitationUIState())
@@ -95,11 +97,9 @@ class InvitationViewModel @Inject constructor(
                 }
 
                 is Result.Failure -> {
-                    val error = result51.error
-
                     invitationUIState.update {
                         it.copy(
-                            apiResponse = error,
+                            apiResponse = responseErrorMapper.map(result51.error),
                             showBottomSheet = true
                         )
                     }
@@ -110,7 +110,7 @@ class InvitationViewModel @Inject constructor(
                         )
                     }
 
-                    onFailure(error)
+                    onFailure(responseErrorMapper.map(result51.error))
                 }
             }
         }
