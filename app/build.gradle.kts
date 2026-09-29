@@ -72,6 +72,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.appdistribution.api)
+    add("qaImplementation", libs.firebase.appdistribution)
     //Firebase Ends
 
     //Dagger Hilt Begins
