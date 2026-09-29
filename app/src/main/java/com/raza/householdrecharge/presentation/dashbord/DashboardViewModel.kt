@@ -3,17 +3,20 @@ package com.raza.householdrecharge.presentation.dashbord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
+import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DashboardViewModel @Inject constructor(
+    private val sessionManager: SessionManager,
     private val mobileNumberUseCase: MobileNumberUseCase,
     private val rechargeUseCase: RechargeUseCase
 ) : ViewModel() {
@@ -29,14 +32,18 @@ class DashboardViewModel @Inject constructor(
     fun getAllMobileNumbers(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            mobileNumberUseCase.getAllMobileNumbers()
+            mobileNumberUseCase.getAllMobileNumbers(
+                householdId = sessionManager.householdId.first()
+            )
         }
     }
 
     fun getAllRecharges(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            rechargeUseCase.getAllRecharges()
+            rechargeUseCase.getAllRecharges(
+                householdId = sessionManager.householdId.first()
+            )
         }
     }
 

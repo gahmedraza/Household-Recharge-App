@@ -61,8 +61,10 @@ class RechargeUseCase @Inject constructor(
      * No additional code
      */
     suspend fun getAllRecharges(
-
+        householdId: String
     ): Result<Unit, RechargeUseCaseError> {
-        return rechargeRepository.getAllRecharges()
+        return rechargeRepository.getAllRecharges(
+            householdId = householdId
+        )
     }
 }

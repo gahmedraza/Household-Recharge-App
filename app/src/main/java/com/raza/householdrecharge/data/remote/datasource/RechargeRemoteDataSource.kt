@@ -2,6 +2,7 @@ package com.raza.householdrecharge.data.remote.datasource
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
 import com.raza.householdrecharge.data.remote.dto.RechargeDto
 import com.raza.householdrecharge.domain.error.response.RechargeResponseError
@@ -48,6 +49,7 @@ class RechargeRemoteDataSource @Inject constructor(
     }
 
     suspend fun getAllRecharges(
+        householdId: String
     ): Result<List<RechargeDto>, RechargeResponseError> {
 
         try {
@@ -55,6 +57,7 @@ class RechargeRemoteDataSource @Inject constructor(
             val documentSnapshot = firestore
 
                 .collection(HouseholdCollection.Recharges.description)
+                .whereEqualTo(CollectionField.HouseholdID.description, householdId)
                 .get()
                 .await()
 

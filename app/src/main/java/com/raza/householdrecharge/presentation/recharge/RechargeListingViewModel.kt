@@ -71,7 +71,9 @@ class RechargeListingViewModel @Inject constructor(
                 return@launch
             }
 
-            rechargeUseCase.getAllRecharges()
+            rechargeUseCase.getAllRecharges(
+                householdId = sessionManager.householdId.first()
+            )
 
         }
     }

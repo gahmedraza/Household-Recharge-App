@@ -45,6 +45,7 @@ class MobileNumberRemoteDataSource @Inject constructor(
     }
 
     suspend fun getAllMobileNumbers(
+        householdId: String
     ): Result<List<MobileNumberDto>, MobileNumberResponseError> {
 
         try {
@@ -52,6 +53,7 @@ class MobileNumberRemoteDataSource @Inject constructor(
             val documentSnapshot = firestore
 
                 .collection(HouseholdCollection.MobileNumbers.description)
+                .whereEqualTo(CollectionField.HouseholdID.description, householdId)
                 .get()
 
                 .await()

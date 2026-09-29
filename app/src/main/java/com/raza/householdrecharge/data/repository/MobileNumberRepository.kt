@@ -49,8 +49,9 @@ class MobileNumberRepository @Inject constructor(
     //event bus to post messages to the queue without propagation
     //chatgpt
     suspend fun getAllMobileNumbers(
+        householdId: String
     ) {
-        val result = mobileNumberRemoteDataSource.getAllMobileNumbers()
+        val result = mobileNumberRemoteDataSource.getAllMobileNumbers(householdId)
 
         if(result is Result.Failure) {
             //Logger.log(result.error.cleanString())

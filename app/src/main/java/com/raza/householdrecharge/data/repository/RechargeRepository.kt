@@ -48,9 +48,11 @@ class RechargeRepository @Inject constructor(
 
     //todo error propagation
     suspend fun getAllRecharges(
-
+        householdId: String
     ): Result<Unit, RechargeResponseError> {
-        val result = rechargeRemoteDataSource.getAllRecharges()
+        val result = rechargeRemoteDataSource.getAllRecharges(
+            householdId = householdId
+        )
 
         if(result is Result.Failure) {
 

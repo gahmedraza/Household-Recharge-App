@@ -29,9 +29,10 @@ class MobileNumberUseCase @Inject constructor(
     }
 
     suspend fun getAllMobileNumbers(
+        householdId: String
     ) {
 
-        return mobileNumberRepository.getAllMobileNumbers()
+        return mobileNumberRepository.getAllMobileNumbers(householdId)
     }
 
     suspend fun updateMobileNumber(
