@@ -121,7 +121,7 @@ class HouseholdViewModel @Inject constructor(
 
                         householdUIState.update {
                             it.copy(
-                                apiResponse = "household created with id: householdId",
+                                apiResponse = "household creation success",
                                 shouldProceed = true,
                                 isLoading = false
                             )
@@ -194,7 +194,7 @@ class HouseholdViewModel @Inject constructor(
 
                     householdUIState.update {
                         it.copy(
-                            apiResponse = "invitation code found: ${result.data}",
+                            apiResponse = "invitation code found",
                             shouldProceed = true,
                             isLoading = false,
                             findHouseholdResponse = result.data

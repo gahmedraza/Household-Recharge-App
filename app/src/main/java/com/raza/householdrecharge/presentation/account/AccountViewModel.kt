@@ -2,6 +2,7 @@ package com.raza.householdrecharge.presentation.account
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.ProfileUseCase
@@ -77,10 +78,13 @@ class AccountViewModel @Inject constructor(
 
                 is Result.Success -> {
 
+                    val householdName = sessionManager.householdName.first()
+                    Logger.log("AccountViewModel", "householdName = $householdName")
+
                     accountUIState.update {
                         it.copy(
                             profileName = result.data.accountName.cleanString(),
-                            profileHousehold = sessionManager.householdName.first(),
+                            profileHousehold = householdName,
                             isLoading = false,
                             shouldProceed = true
                         )

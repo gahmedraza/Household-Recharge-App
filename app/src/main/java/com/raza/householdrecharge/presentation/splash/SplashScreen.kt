@@ -9,12 +9,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.R
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 import kotlinx.coroutines.delay
@@ -28,25 +30,11 @@ fun SplashScreen(
     viewmodel: SplashViewModel = hiltViewModel()
 ) {
 
+    val splashUIState by viewmodel.splashUIState.collectAsStateWithLifecycle()
+
     LaunchedEffect(Unit) {
+        viewmodel.getStartDestination()
         delay(200.milliseconds)
-
-        val destination = viewmodel.getStartDestination()
-
-        when(destination) {
-
-            is SplashDestination.Login -> {
-                openLogin()
-            }
-
-            is SplashDestination.SetupHousehold -> {
-                openSetupHousehold()
-            }
-
-            is SplashDestination.Dashboard -> {
-                openDashboard()
-            }
-        }
     }
 
     Box(
@@ -62,6 +50,24 @@ fun SplashScreen(
             color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.displayLarge
         )
+
+        splashUIState.destination?.let { destination ->
+
+            when(destination) {
+
+                is SplashDestination.Login -> {
+                    openLogin()
+                }
+
+                is SplashDestination.SetupHousehold -> {
+                    openSetupHousehold()
+                }
+
+                is SplashDestination.Dashboard -> {
+                    openDashboard()
+                }
+            }
+        }
     }
 }
 

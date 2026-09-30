@@ -98,7 +98,7 @@ class RegisterViewModel @Inject constructor(
 
                     registerUIState.update {
                         it.copy(
-                            apiResponse = "account creation success: ${onBoardingDto.authId.cleanString()}",
+                            apiResponse = "account creation success",
                             shouldProceed = true,
                             isLoading = false
                         )

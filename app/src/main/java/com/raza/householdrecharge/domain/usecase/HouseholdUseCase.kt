@@ -11,6 +11,7 @@ import com.raza.householdrecharge.data.repository.InvitationRepository
 import com.raza.householdrecharge.domain.error.response.HouseholdResponseError
 import com.raza.householdrecharge.domain.error.usecase.HouseholdUseCaseError
 import com.raza.householdrecharge.domain.model.FindHouseholdResponse
+import com.raza.householdrecharge.domain.model.Household
 import com.raza.householdrecharge.domain.validator.response.InvitationResponseValidator
 import com.raza.householdrecharge.util.cleanString
 import javax.inject.Inject
@@ -89,7 +90,11 @@ class HouseholdUseCase @Inject constructor(
             } else {
 
                 //Logger.log("Account already member of another household") //todo
-                return Result.Failure(HouseholdResponseError.HouseholdAlreadyAssigned)
+                //return Result.Failure(HouseholdResponseError.HouseholdAlreadyAssigned)
+                return Result.Success(AccountEligibilityDto(
+                    isEligible = false,
+                    account = account
+                ))
             }
 
         } catch (e: Exception) {
@@ -192,5 +197,14 @@ class HouseholdUseCase @Inject constructor(
         invitationRepository.updateInvitation(updatedInvitationDto)
 
         return Result.Success("success")
+    }
+
+    suspend fun getHouseholdByHouseholdId(
+        householdId: String
+    ): Result<Household, HouseholdResponseError>{
+
+        return householdRepository.getHouseholdByHouseholdId(
+            householdId
+        )
     }
 }

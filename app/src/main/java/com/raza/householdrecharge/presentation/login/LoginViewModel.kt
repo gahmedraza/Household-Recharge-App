@@ -2,11 +2,13 @@ package com.raza.householdrecharge.presentation.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.model.Account
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
+import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
 import com.raza.householdrecharge.presentation.error.RequestErrorMapper
@@ -24,6 +26,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val authUseCase: AuthUseCase,
+    private val householdUseCase: HouseholdUseCase,
     private val mobileNumberValidator: MobileNumberValidator,
     private val passwordValidator: PasswordValidator,
     private val responseErrorMapper: ResponseErrorMapper,
@@ -72,39 +75,55 @@ class LoginViewModel @Inject constructor(
                 authDto = authDto
             )
 
-            when(result51) {
+            if (result51 is Result.Failure) {
+
+                loginUIState.update {
+                    it.copy(
+                        apiResponse = "account login failure\n${responseErrorMapper.map(result51.error)}",
+                        isLoading = false,
+                        shouldProceed = false
+                    )
+                }
+
+                return@launch
+            }
+
+            val accountDto = (result51 as Result.Success).data
+
+            //
+            val result54 = householdUseCase.getHouseholdByHouseholdId(
+                accountDto.householdId.cleanString()
+            )
+
+            when(result54) {
                 is Result.Success -> {
-                    val accountDto = result51.data
-
-                    sessionManager.saveUserId(accountDto.accountId.cleanString())
-
-                    if(accountDto.householdId == null) {
-                        sessionManager.saveHouseholdLinkStatus(false)
-                    } else {
-                        sessionManager.saveHouseholdLinkStatus(true)
-                        sessionManager.saveHouseholdId(accountDto.householdId.cleanString())
-                    }
-
-                    loginUIState.update {
-                        it.copy(
-                            apiResponse = "login success: ${accountDto.accountId.cleanString()}",
-                            isLoading = false,
-                            shouldProceed = true
-                        )
+                    viewModelScope.launch(Dispatchers.IO) {
+                        sessionManager.saveHouseholdName(result54.data.householdName.cleanString())
+                        sessionManager.saveHouseholdId(result54.data.householdId.cleanString())
                     }
                 }
 
                 is Result.Failure -> {
-
-                    loginUIState.update {
-
-                        it.copy(
-                            apiResponse = "login failure\n${responseErrorMapper.map(result51.error)}",
-                            isLoading = false,
-                            shouldProceed = false
-                        )
-                    }
+                    //todo
                 }
+            }
+            //
+
+            sessionManager.saveUserId(accountDto.accountId.cleanString())
+
+            if (accountDto.householdId == null) {
+                sessionManager.saveHouseholdLinkStatus(false)
+            } else {
+                sessionManager.saveHouseholdLinkStatus(true)
+                //sessionManager.saveHouseholdId(accountDto.householdId.cleanString())
+            }
+
+            loginUIState.update {
+                it.copy(
+                    apiResponse = "account login success",
+                    isLoading = false,
+                    shouldProceed = true
+                )
             }
 
         }
