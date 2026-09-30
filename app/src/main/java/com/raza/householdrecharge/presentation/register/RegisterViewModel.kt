@@ -75,7 +75,7 @@ class RegisterViewModel @Inject constructor(
             //todo factory required
             val authDto = AuthDto(
                 accountName = registerUIState.value.accountName,
-                mobileNumber = "${registerUIState.value.mobileNumber}@householdrecharge.local",
+                mobileNumber = registerUIState.value.mobileNumber,
                 password = registerUIState.value.password
             )
 

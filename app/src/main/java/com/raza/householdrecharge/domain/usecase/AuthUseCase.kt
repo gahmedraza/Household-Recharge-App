@@ -39,7 +39,8 @@ class AuthUseCase @Inject constructor(
 
                     accountDto = AccountDto(
                         accountName = authDto.accountName,
-                        accountId = registerResult.data.cleanString()
+                        accountId = registerResult.data.cleanString(),
+                        primaryMobileNumber = authDto.mobileNumber
                     )
 
                     val addAccountResult = accountRepository

@@ -8,5 +8,6 @@ data class AccountEntity(
     @PrimaryKey
     val accountId: String,
     val accountName: String,
+    val primaryMobileNumber: String,
     val householdId: String
 )

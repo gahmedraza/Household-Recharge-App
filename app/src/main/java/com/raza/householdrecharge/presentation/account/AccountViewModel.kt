@@ -85,6 +85,7 @@ class AccountViewModel @Inject constructor(
                         it.copy(
                             profileName = result.data.accountName.cleanString(),
                             profileHousehold = householdName,
+                            primaryMobileNumber = result.data.primaryMobileNumber.cleanString(),
                             isLoading = false,
                             shouldProceed = true
                         )

@@ -10,6 +10,7 @@ object AccountEntityMapper {
         return AccountEntity(
             accountId = accountDto.accountId.cleanString(),
             accountName = accountDto.accountName.cleanString(),
+            primaryMobileNumber = accountDto.primaryMobileNumber.cleanString(),
             householdId = accountDto.householdId.cleanString()
         )
     }

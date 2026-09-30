@@ -96,6 +96,21 @@ fun AccountScreen(
 
                     Spacer(modifier = Modifier.height(20.dp))
 
+                    //
+                    Text(
+                        text = "Primary Mobile Number"
+                    )
+
+                    Spacer(modifier = Modifier.height(5.dp))
+
+                    Text(
+                        text = accountUIState.primaryMobileNumber
+                    )
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    //
+
                     Text(
                         text = "Household Name"
                     )

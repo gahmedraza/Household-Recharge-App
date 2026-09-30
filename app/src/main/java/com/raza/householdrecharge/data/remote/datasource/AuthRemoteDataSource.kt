@@ -24,7 +24,9 @@ class AuthRemoteDataSource @Inject constructor(
         if(firebaseUser == null) {
 
             //Logger.log("user is not logged in")//todo logging framework
-            return Result.Failure(AuthResponseError.UserNotLoggedIn)
+            return Result.Failure(
+                AuthResponseError.UserNotLoggedIn
+            )
         } else {
 
             val userDto = UserDto()
@@ -42,7 +44,10 @@ class AuthRemoteDataSource @Inject constructor(
 
         try {
             val documentReference = firebaseAuth
-                .createUserWithEmailAndPassword(authDto.mobileNumber,authDto.password)
+                .createUserWithEmailAndPassword(
+                    "${authDto.mobileNumber}@householdrecharge.local",
+                    authDto.password
+                )
                 .await()
 
             val userId = documentReference.user?.uid.cleanString()
@@ -68,7 +73,10 @@ class AuthRemoteDataSource @Inject constructor(
 
         try {
             val documentReference = firebaseAuth
-                .signInWithEmailAndPassword(authDto.mobileNumber,authDto.password)
+                .signInWithEmailAndPassword(
+                    "${authDto.mobileNumber}@householdrecharge.local",
+                    authDto.password
+                )
                 .await()
 
             val userId = documentReference?.user?.uid.cleanString()

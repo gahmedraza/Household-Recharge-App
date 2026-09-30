@@ -67,7 +67,7 @@ class LoginViewModel @Inject constructor(
             }
 
             val authDto = AuthDto(
-                mobileNumber = "${loginUIState.value.mobileNumber}@householdrecharge.local",
+                mobileNumber = loginUIState.value.mobileNumber,
                 password = loginUIState.value.password
             )
 

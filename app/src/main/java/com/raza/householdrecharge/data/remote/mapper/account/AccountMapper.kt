@@ -10,15 +10,17 @@ object AccountMapper {
         return Account(
             accountId = accountDto.accountId,
             accountName = accountDto.accountName,
+            primaryMobileNumber = accountDto.primaryMobileNumber,
             householdId = accountDto.householdId
         )
     }
 
-    fun map(accountDto: AccountEntity): Account {
+    fun map(accountEntity: AccountEntity): Account {
         return Account(
-            accountId = accountDto.accountId,
-            accountName = accountDto.accountName,
-            householdId = accountDto.householdId
+            accountId = accountEntity.accountId,
+            accountName = accountEntity.accountName,
+            primaryMobileNumber = accountEntity.primaryMobileNumber,
+            householdId = accountEntity.householdId
         )
     }
 }

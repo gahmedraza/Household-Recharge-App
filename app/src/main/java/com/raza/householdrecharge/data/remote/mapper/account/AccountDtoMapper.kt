@@ -9,6 +9,7 @@ object AccountDtoMapper {
         return AccountDto(
             accountId = accountEntity.accountId,
             accountName = accountEntity.accountName,
+            primaryMobileNumber = accountEntity.primaryMobileNumber,
             householdId = accountEntity.householdId
         )
     }
