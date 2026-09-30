@@ -15,16 +15,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -49,8 +45,6 @@ fun LoginScreen(
 ) {
     val loginUIState by viewmodel.loginUIState.collectAsStateWithLifecycle()
     //todo extract to common
-    var shouldProceed by rememberSaveable { mutableStateOf(false) }
-    var apiStatus by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
     AppCard {
@@ -99,7 +93,9 @@ fun LoginScreen(
                         if(loginUIState.mobileNumberError.isNotEmpty()) {
                             Text(loginUIState.mobileNumberError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -124,7 +120,9 @@ fun LoginScreen(
                         if(loginUIState.passwordError.isNotEmpty()) {
                             Text(loginUIState.passwordError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.padding(60.dp))
@@ -132,7 +130,7 @@ fun LoginScreen(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
-                    enabled = !shouldProceed,
+                    enabled = !loginUIState.shouldProceed,
 
                     onClick = {
 
@@ -148,10 +146,10 @@ fun LoginScreen(
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
 
-                    enabled = shouldProceed,
+                    enabled = loginUIState.shouldProceed,
 
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if(shouldProceed) {
+                        containerColor = if(loginUIState.shouldProceed) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.surfaceVariant
@@ -194,33 +192,15 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.padding(20.dp))
 
                 Text(
-                    text = apiStatus,
+                    text = loginUIState.apiResponse,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = if (shouldProceed) {
+                    color = if (loginUIState.shouldProceed) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.error
                     },
                     textAlign = TextAlign.Center
                 )
-            }
-        }
-
-        if(loginUIState.showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    viewmodel.onShowBottomSheetModified(false)
-                }
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text("api response")
-
-                    Text(loginUIState.apiResponse)
-                }
             }
         }
     }

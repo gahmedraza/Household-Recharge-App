@@ -32,6 +32,7 @@ fun AppDatePicker(
     onDateSelected: (Long) -> Unit,
     label: String,
     isError: Boolean = false,
+    singleLine: Boolean = true,
     supportingText: @Composable () -> Unit = {}
 ) {
 
@@ -69,7 +70,9 @@ fun AppDatePicker(
 
         isError = isError,
 
-        supportingText = supportingText
+        supportingText = supportingText,
+
+        singleLine = singleLine
     )
 
     if (showDatePicker) {

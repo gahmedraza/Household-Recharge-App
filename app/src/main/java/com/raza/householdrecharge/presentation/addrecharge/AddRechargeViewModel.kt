@@ -45,12 +45,6 @@ class AddRechargeViewModel @Inject constructor(
         mobileNumberId: String,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            addRechargeUIState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-
             //validate the input fields
             addRechargeUIState.update {
                 it.copy(
@@ -90,6 +84,13 @@ class AddRechargeViewModel @Inject constructor(
             ) {
 
                 return@launch
+            }
+
+            //isLoading intentionally placed after validation
+            addRechargeUIState.update {
+                it.copy(
+                    isLoading = true
+                )
             }
 
             val rechargeDto = RechargeDtoFactory(

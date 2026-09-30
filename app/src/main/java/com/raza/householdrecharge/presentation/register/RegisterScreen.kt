@@ -82,7 +82,9 @@ fun RegisterScreen(
                         if(registerUIState.accountNameError.isNotEmpty()) {
                             Text(registerUIState.accountNameError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -111,7 +113,9 @@ fun RegisterScreen(
                         if(registerUIState.mobileNumberError.isNotEmpty()) {
                             Text(registerUIState.mobileNumberError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))
@@ -136,7 +140,9 @@ fun RegisterScreen(
                         if(registerUIState.passwordError.isNotEmpty()) {
                             Text(registerUIState.passwordError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.padding(20.dp))

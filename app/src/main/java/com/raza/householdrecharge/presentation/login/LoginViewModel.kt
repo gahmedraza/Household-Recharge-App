@@ -34,12 +34,6 @@ class LoginViewModel @Inject constructor(
     fun login(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            loginUIState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-
             //validate the input fields
             loginUIState.update {
                 it.copy(
@@ -60,6 +54,13 @@ class LoginViewModel @Inject constructor(
                 ) {
 
                 return@launch
+            }
+
+            //isLoading intentionally placed after validation
+            loginUIState.update {
+                it.copy(
+                    isLoading = true
+                )
             }
 
             val authDto = AuthDto(
@@ -87,7 +88,6 @@ class LoginViewModel @Inject constructor(
                     loginUIState.update {
                         it.copy(
                             apiResponse = "login success: ${accountDto.accountId.cleanString()}",
-                            showBottomSheet = true,
                             isLoading = false,
                             shouldProceed = true
                         )
@@ -100,7 +100,6 @@ class LoginViewModel @Inject constructor(
 
                         it.copy(
                             apiResponse = "login failure\n${responseErrorMapper.map(result51.error)}",
-                            showBottomSheet = true,
                             isLoading = false,
                             shouldProceed = false
                         )
@@ -150,14 +149,6 @@ class LoginViewModel @Inject constructor(
         loginUIState.update {
             it.copy(
                 passwordError = ""
-            )
-        }
-    }
-
-    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
-        loginUIState.update {
-            it.copy(
-                showBottomSheet = showBottomSheet
             )
         }
     }

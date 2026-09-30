@@ -33,12 +33,6 @@ class AddMobileNumberViewModel @Inject constructor(
     fun addMobileNumber(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            addMobileNumberUIState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-
             //validate the input fields
             addMobileNumberUIState.update {
                 it.copy(
@@ -54,6 +48,13 @@ class AddMobileNumberViewModel @Inject constructor(
                 //TODO do not add api error
                 //TODO api error only meant for api related
                 return@launch
+            }
+
+            //isLoading intentionally placed after validation
+            addMobileNumberUIState.update {
+                it.copy(
+                    isLoading = true
+                )
             }
 
             val mobileNumberDto = MobileNumberDtoFactory(

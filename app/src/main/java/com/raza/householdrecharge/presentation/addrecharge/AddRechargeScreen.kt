@@ -89,7 +89,9 @@ fun AddRechargeScreen(
                         if(addRechargeUIState.rechargeDescriptionError.isNotEmpty()) {
                             Text(addRechargeUIState.rechargeDescriptionError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -118,7 +120,9 @@ fun AddRechargeScreen(
                         if(addRechargeUIState.amountError.isNotEmpty()) {
                             Text(addRechargeUIState.amountError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -141,7 +145,9 @@ fun AddRechargeScreen(
                         if(addRechargeUIState.dateError.isNotEmpty()) {
                             Text(addRechargeUIState.dateError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -164,7 +170,9 @@ fun AddRechargeScreen(
                         if(addRechargeUIState.planExpiryDateError.isNotEmpty()) {
                             Text(addRechargeUIState.planExpiryDateError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(Modifier.height(20.dp))
@@ -189,7 +197,9 @@ fun AddRechargeScreen(
                         if(addRechargeUIState.rechargedByError.isNotEmpty()) {
                             Text(addRechargeUIState.rechargedByError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(Modifier.height(40.dp))

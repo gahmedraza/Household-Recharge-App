@@ -79,7 +79,7 @@ class AccountViewModel @Inject constructor(
 
                     accountUIState.update {
                         it.copy(
-                            profileName = "success: ${result.data.accountName.cleanString()}",
+                            profileName = result.data.accountName.cleanString(),
                             profileHousehold = sessionManager.householdName.first(),
                             isLoading = false,
                             shouldProceed = true

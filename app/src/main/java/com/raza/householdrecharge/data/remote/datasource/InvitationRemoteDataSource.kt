@@ -46,11 +46,13 @@ class InvitationRemoteDataSource @Inject constructor(
     }
 
     suspend fun getAllInvitations(
+        householdId: String
     ): Result<List<InvitationDto>, InvitationResponseError> {
 
         try {
             val documentSnapshot = firestore
                 .collection(HouseholdCollection.Invitations.description)
+                .whereEqualTo(CollectionField.HouseholdID.description, householdId)
                 .get()
                 .await()
 

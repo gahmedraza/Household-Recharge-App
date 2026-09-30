@@ -86,7 +86,9 @@ fun AddMobileNumberScreen(
                         if(addMobileNumberUIState.mobileNumberError.isNotEmpty()) {
                             Text(addMobileNumberUIState.mobileNumberError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(Modifier.height(40.dp))

@@ -103,7 +103,9 @@ fun FindHouseholdScreen(
                             if(householdUIState.invitationCodeError.isNotEmpty()) {
                                 Text(householdUIState.invitationCodeError)
                             }
-                        }
+                        },
+
+                        singleLine = true
                     )
 
                     Spacer(modifier = Modifier.height(42.dp))

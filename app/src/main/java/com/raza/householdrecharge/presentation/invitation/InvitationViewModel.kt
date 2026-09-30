@@ -115,7 +115,9 @@ class InvitationViewModel @Inject constructor(
     fun fetchInvitationList(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            invitationUseCase.getAllInvitations()
+            invitationUseCase.getAllInvitations(
+                householdId = sessionManager.householdId.first()
+            )
         }
     }
 

@@ -7,6 +7,5 @@ data class LoginUIState(
     var passwordError: String = "",
     var isLoading: Boolean = false,
     var apiResponse: String = "",
-    var showBottomSheet: Boolean = false,
     var shouldProceed: Boolean = false
 )

@@ -37,12 +37,6 @@ class RegisterViewModel @Inject constructor(
     fun registerAndAddAccount(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            registerUIState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-
             //validate the input fields
             registerUIState.update {
                 it.copy(
@@ -69,6 +63,13 @@ class RegisterViewModel @Inject constructor(
             ) {
 
                 return@launch
+            }
+
+            //isLoading intentionally placed after validation
+            registerUIState.update {
+                it.copy(
+                    isLoading = true
+                )
             }
 
             //todo factory required

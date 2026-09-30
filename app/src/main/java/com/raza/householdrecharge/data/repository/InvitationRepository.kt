@@ -46,8 +46,11 @@ class InvitationRepository @Inject constructor(
      * No additional code
      */
     suspend fun getAllInvitations(
+        householdId: String
     ) {
-        val result51 = invitationRemoteDataSource.getAllInvitations()
+        val result51 = invitationRemoteDataSource.getAllInvitations(
+            householdId = householdId
+        )
 
         if(result51 is Result.Failure) {
             //Logger.log(result51.error) //todo

@@ -40,12 +40,6 @@ class HouseholdViewModel @Inject constructor(
         householdName: String,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            householdUIState.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
-
             //validate the input fields
             householdUIState.update {
                 it.copy(
@@ -59,6 +53,12 @@ class HouseholdViewModel @Inject constructor(
             if(householdUIState.value.householdNameError.isNotEmpty()) {
 
                 return@launch
+            }
+
+            householdUIState.update {
+                it.copy(
+                    isLoading = true
+                )
             }
 
             val userId = sessionManager.authId.first()

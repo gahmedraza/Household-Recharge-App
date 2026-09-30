@@ -32,9 +32,12 @@ class InvitationUseCase @Inject constructor(
      * No additional code
      */
     suspend fun getAllInvitations(
+        householdId: String
     ) {
 
-        return invitationRepository.getAllInvitations()
+        return invitationRepository.getAllInvitations(
+            householdId = householdId
+        )
     }
 
     /**

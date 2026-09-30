@@ -91,7 +91,9 @@ fun CreateHouseholdScreen(
                         if(householdUIState.householdNameError.isNotEmpty()) {
                             Text(householdUIState.householdNameError)
                         }
-                    }
+                    },
+
+                    singleLine = true
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
