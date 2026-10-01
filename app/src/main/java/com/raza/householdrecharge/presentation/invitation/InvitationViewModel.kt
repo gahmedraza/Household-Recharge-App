@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import java.security.SecureRandom
 import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
+import com.raza.householdrecharge.domain.validator.request.RechargeRequestValidator
 import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import com.raza.householdrecharge.presentation.error.ResponseErrorMapper
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +26,7 @@ class InvitationViewModel @Inject constructor(
     private val invitationUseCase: InvitationUseCase,
     private val invitationRequestValidator: InvitationRequestValidator,
     private val responseErrorMapper: ResponseErrorMapper,
-    private val requestErrorMapper: RequestErrorMapper
+    private val requestErrorMapper: RequestErrorMapper,
 ): ViewModel() {
 
     var invitationUIState = MutableStateFlow(InvitationUIState())
@@ -115,6 +116,25 @@ class InvitationViewModel @Inject constructor(
     fun fetchInvitationList(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            //
+            val validationResult = invitationRequestValidator.validate(
+                accountId = sessionManager.authId.first(),
+                householdId = sessionManager.householdId.first(),
+            )
+
+            if(validationResult is Result.Failure) {
+
+                invitationUIState.update {
+                    it.copy(
+                        apiResponse = requestErrorMapper.map(validationResult.error),
+                        showBottomSheet = true
+                    )
+                }
+
+                return@launch
+            }
+            //
+
             invitationUseCase.getAllInvitations(
                 householdId = sessionManager.householdId.first()
             )
@@ -131,6 +151,14 @@ class InvitationViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        invitationUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
+            )
         }
     }
 }

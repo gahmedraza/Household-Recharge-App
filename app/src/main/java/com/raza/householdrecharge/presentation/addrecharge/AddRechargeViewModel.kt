@@ -104,7 +104,7 @@ class AddRechargeViewModel @Inject constructor(
                 mobileNumber = mobileNumber.toLong()
             )
 
-            val validationResult = requestValidator.validateAddRechargeApiCall(
+            val validationResult = requestValidator.validate(
                 authId = sessionManager.authId.first(),
                 householdId = sessionManager.householdId.first(),
                 mobileNumber = mobileNumber,

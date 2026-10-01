@@ -3,10 +3,14 @@ package com.raza.householdrecharge.presentation.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
+import com.raza.householdrecharge.core.logging.Logger.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
+import com.raza.householdrecharge.domain.validator.request.InvitationRequestValidator
+import com.raza.householdrecharge.domain.validator.request.SplashRequestValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +23,9 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase,
-    private val authUseCase: AuthUseCase
+    private val authUseCase: AuthUseCase,
+    private val requestValidator: SplashRequestValidator,
+    private val requestErrorMapper: RequestErrorMapper
 ): ViewModel() {
 
     var splashUIState = MutableStateFlow(SplashUIState())
@@ -42,6 +48,23 @@ class SplashViewModel @Inject constructor(
             }
 
             val user = (result51 as Result.Success).data
+
+            //
+            val validationResult = requestValidator.validate(
+                accountId = user.userId,
+            )
+
+            if(validationResult is Result.Failure) {
+                splashUIState.update {
+                    it.copy(
+                        apiResponse = requestErrorMapper.map(validationResult.error),
+                    )
+                }
+
+                log(validationResult.error.toString())
+                return@launch
+            }
+            //
 
             val result53 = householdUseCase.isAccountEligibleToJoinHousehold(
                 accountId = user.userId
@@ -74,6 +97,23 @@ class SplashViewModel @Inject constructor(
 
                 return@launch
             }
+
+            //
+            val validationResult2 = requestValidator.validate2(
+                householdId = accountEligibilityDto.account.householdId.cleanString(),
+            )
+
+            if(validationResult2 is Result.Failure) {
+                splashUIState.update {
+                    it.copy(
+                        apiResponse = requestErrorMapper.map(validationResult2.error),
+                    )
+                }
+
+                log(validationResult2.error.toString())
+                return@launch
+            }
+            //
 
             val result54 = householdUseCase.getHouseholdByHouseholdId(
                 accountEligibilityDto.account.householdId.cleanString()

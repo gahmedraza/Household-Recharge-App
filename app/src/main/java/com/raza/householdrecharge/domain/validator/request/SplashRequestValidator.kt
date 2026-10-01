@@ -1,33 +1,31 @@
 package com.raza.householdrecharge.domain.validator.request
 
-import javax.inject.Inject
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.domain.error.request.RequestError
 import com.raza.householdrecharge.domain.validator.helpers.HouseholdRequestValidator2
 import com.raza.householdrecharge.domain.validator.helpers.UserRequestValidator2
+import javax.inject.Inject
 
-class InvitationRequestValidator @Inject constructor(
-    private val userRequestValidator2: UserRequestValidator2,
-    private val householdRequestValidator2: HouseholdRequestValidator2,
+class SplashRequestValidator @Inject constructor(
+    private val accountRequestValidator2: UserRequestValidator2,
+    private val householdRequestValidator2: HouseholdRequestValidator2
 ) {
 
     fun validate(
-        householdId: String,
         accountId: String
     ): Result<Unit, RequestError> {
 
-        val result51 = userRequestValidator2.validateAccountId(
+        return accountRequestValidator2.validateAccountId(
             accountId = accountId
         )
+    }
 
-        if (result51 is Result.Failure) {
-            return result51
-        }
+    fun validate2(
+        householdId: String,
+    ): Result<Unit, RequestError> {
 
-        val result52 = householdRequestValidator2.validateHouseholdId(
+        return householdRequestValidator2.validateHouseholdId(
             householdId = householdId
         )
-
-        return Result.Success(Unit)
     }
 }

@@ -65,18 +65,8 @@ fun DashboardNavigationRoot() {
                 )
             }
 
-            composable(
-                route = "${ComposeScreen.RechargeListing.description}/{memberId}/{mobileNumber}"
-            ) { backStackEntry ->
-
-                val memberId = backStackEntry.arguments?.getString("memberId") ?: ""
-                val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
-
-                RechargeListingScreen(
-                    memberId = memberId,
-
-                    mobileNumber = mobileNumber
-                )
+            composable(ComposeScreen.RechargeListing.description) {
+                RechargeListingScreen()
             }
 
             composable(ComposeScreen.Setting.description) {
@@ -114,7 +104,6 @@ fun DashboardNavigationRoot() {
                 AddInvitationScreen(
                     onInvitationCreated = {
 
-                        //navController.navigate(ComposeScreen.Invitation.description)
                         navController.popBackStack()
                     }
                 )
@@ -139,7 +128,6 @@ fun DashboardNavigationRoot() {
                 )
             }
 
-            //
             composable(
                 ComposeScreen.AddMobileNumber.description
             ) {
@@ -151,76 +139,6 @@ fun DashboardNavigationRoot() {
                     }
                 )
             }
-            //
         }
     }
 }
-
-@Composable
-fun BottomNavigationBar(
-    navController: NavHostController
-) {
-    NavigationBar {
-
-        NavigationBarItem(
-            selected = false,
-
-            onClick = {
-                navController.navigate(ComposeScreen.Dashboard.description) {
-
-                    popUpTo(navController.graph.findStartDestination().id)
-                    launchSingleTop = true
-                }
-            },
-
-            icon = {
-                Icon(
-                    Icons.Default.Home,
-                    contentDescription = ComposeScreen.Dashboard.description
-                )
-            },
-
-            label = {
-                Text(ComposeScreen.Dashboard.description)
-            }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {
-                navController.navigate("${ComposeScreen.RechargeListing.description}//")
-            },
-            icon = {
-                Icon(
-                    Icons.Default.History,
-                    contentDescription = ComposeScreen.RechargeListing.description
-                )
-            },
-            label = {
-                Text(ComposeScreen.RechargeListing.description)
-            }
-        )
-
-        NavigationBarItem(
-            selected = false,
-            onClick = {
-                navController.navigate(ComposeScreen.Setting.description)
-            },
-            icon = {
-                Icon(
-                    Icons.Default.Settings,
-                    contentDescription = ComposeScreen.Setting.description
-                )
-            },
-            label = {
-                Text(ComposeScreen.Setting.description)
-            }
-        )
-    }
-}
-
-val bottomBarRoutes = listOf(
-    ComposeScreen.Dashboard.description,
-    "${ComposeScreen.RechargeListing.description}/{memberId}/{mobileNumber}",
-    ComposeScreen.Setting.description
-)

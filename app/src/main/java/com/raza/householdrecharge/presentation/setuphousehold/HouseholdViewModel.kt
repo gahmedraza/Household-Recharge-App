@@ -180,6 +180,22 @@ class HouseholdViewModel @Inject constructor(
 
             val authId = sessionManager.authId.first()
 
+            val validationResult = householdRequestValidator.validate2(
+                authId = authId,
+                invitationCode = invitationCode
+            )
+
+            if(validationResult is Result.Failure) {
+                householdUIState.update {
+                    it.copy(
+                        apiResponse = requestErrorMapper.map(validationResult.error),
+                    )
+                }
+
+                log(validationResult.error.toString())
+                return@launch
+            }
+
             val result = householdUseCase.validateInvitationAndFindLinkedHousehold(
                 invitationCode = invitationCode,
                 authId = authId
@@ -236,6 +252,23 @@ class HouseholdViewModel @Inject constructor(
                     .currentUser
                     ?.uid
                     .cleanString()
+
+                val validationResult = householdRequestValidator.validate(
+                    authId = userId,
+                    householdId = householdId,
+                    invitationCode = invitationCode
+                )
+
+                if(validationResult is Result.Failure) {
+                    householdUIState.update {
+                        it.copy(
+                            apiResponse = requestErrorMapper.map(validationResult.error),
+                        )
+                    }
+
+                    log(validationResult.error.toString())
+                    return@launch
+                }
 
                 val result = householdUseCase.validateInvitationAndUpdateAccountAndMarkUsed(
                     userId = userId,

@@ -44,24 +44,12 @@ import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RechargeListingScreen(
-    memberId: String = "",
-    mobileNumber: String = "",
     viewmodel: RechargeListingViewModel = hiltViewModel()
 ) {
     val rechargeListingUIState by viewmodel.rechargeListingUIState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewmodel.getAllRecharges(
-            memberId = memberId,
-            mobileNumber = mobileNumber,
-
-            onSuccess = {
-
-            },
-            onFailure = {
-
-            }
-        )
+        viewmodel.getAllRecharges()
     }
 
     Scaffold(

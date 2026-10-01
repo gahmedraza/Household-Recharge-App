@@ -90,7 +90,6 @@ class LoginViewModel @Inject constructor(
 
             val accountDto = (result51 as Result.Success).data
 
-            //
             val result54 = householdUseCase.getHouseholdByHouseholdId(
                 accountDto.householdId.cleanString()
             )
@@ -107,7 +106,6 @@ class LoginViewModel @Inject constructor(
                     //todo
                 }
             }
-            //
 
             sessionManager.saveUserId(accountDto.accountId.cleanString())
 
@@ -115,7 +113,6 @@ class LoginViewModel @Inject constructor(
                 sessionManager.saveHouseholdLinkStatus(false)
             } else {
                 sessionManager.saveHouseholdLinkStatus(true)
-                //sessionManager.saveHouseholdId(accountDto.householdId.cleanString())
             }
 
             loginUIState.update {
@@ -127,15 +124,6 @@ class LoginViewModel @Inject constructor(
             }
 
         }
-    }
-
-    fun loginAndFetchAccount() {
-        //user provides mobile number and password
-        //login using firebase auth
-        //when login is done you receive authid from firebase auth collection
-        //fetch account using fire store
-        //save the details in the session manager
-        //allow user to proceed
     }
 
     suspend fun isOnboardingComplete() = sessionManager.isUserLinkedToAHousehold.first()

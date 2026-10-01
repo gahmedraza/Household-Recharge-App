@@ -3,9 +3,13 @@ package com.raza.householdrecharge.presentation.dashbord
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.logging.Logger
+import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.usecase.RechargeUseCase
+import com.raza.householdrecharge.domain.validator.request.MobileNumberRequestValidator
+import com.raza.householdrecharge.domain.validator.request.RechargeRequestValidator
+import com.raza.householdrecharge.presentation.error.RequestErrorMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +22,10 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val mobileNumberUseCase: MobileNumberUseCase,
-    private val rechargeUseCase: RechargeUseCase
+    private val rechargeUseCase: RechargeUseCase,
+    private val rechargeRequestValidator: RechargeRequestValidator,
+    private val mobileNumberRequestValidator: MobileNumberRequestValidator,
+    private val requestErrorMapper: RequestErrorMapper
 ) : ViewModel() {
 
     var dashboardUIState = MutableStateFlow(DashboardUIState())
@@ -32,6 +39,23 @@ class DashboardViewModel @Inject constructor(
     fun getAllMobileNumbers(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            val validationResult = mobileNumberRequestValidator.validate(
+                authId = sessionManager.authId.first(),
+                householdId = sessionManager.householdId.first(),
+            )
+
+            if(validationResult is Result.Failure) {
+
+                dashboardUIState.update {
+                    it.copy(
+                        apiResponse = requestErrorMapper.map(validationResult.error),
+                        showBottomSheet = true
+                    )
+                }
+
+                return@launch
+            }
+
             mobileNumberUseCase.getAllMobileNumbers(
                 householdId = sessionManager.householdId.first()
             )
@@ -41,6 +65,23 @@ class DashboardViewModel @Inject constructor(
     fun getAllRecharges(
     ) {
         viewModelScope.launch(Dispatchers.IO) {
+            val validationResult = rechargeRequestValidator.validate(
+                authId = sessionManager.authId.first(),
+                householdId = sessionManager.householdId.first(),
+            )
+
+            if(validationResult is Result.Failure) {
+
+                dashboardUIState.update {
+                    it.copy(
+                        apiResponse = requestErrorMapper.map(validationResult.error),
+                        showBottomSheet = true
+                    )
+                }
+
+                return@launch
+            }
+
             rechargeUseCase.getAllRecharges(
                 householdId = sessionManager.householdId.first()
             )
