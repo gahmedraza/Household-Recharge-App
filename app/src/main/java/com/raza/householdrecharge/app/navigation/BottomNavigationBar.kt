@@ -20,7 +20,6 @@ fun BottomNavigationBar(
 
         NavigationBarItem(
             selected = false,
-
             onClick = {
                 navController.navigate(ComposeScreen.Dashboard.description) {
 

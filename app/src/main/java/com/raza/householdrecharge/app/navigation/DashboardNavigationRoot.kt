@@ -29,6 +29,7 @@ fun DashboardNavigationRoot() {
     Scaffold(
         bottomBar = {
             if(currentRoute in bottomBarRoutes) {
+
                 BottomNavigationBar(
                     navController = navController
                 )
@@ -44,8 +45,8 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.Dashboard.description) {
                 DashboardScreen(
-                    onAddRecharge = { mobileNumber, id ->
 
+                    onAddRecharge = { mobileNumber, id ->
                         navController.navigate("${ComposeScreen.AddRecharge}/$mobileNumber/$id")
                     },
 
@@ -61,12 +62,15 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.Setting.description) {
                 SettingScreen(
+
                     onLogout = {
                         navController.navigate(ComposeScreen.OnboardingNavigationRoot.description)
                     },
+
                     onInvitation = {
                         navController.navigate(ComposeScreen.InvitationListing.description)
                     },
+
                     onAccount = {
                         navController.navigate(ComposeScreen.Account.description)
                     }
@@ -82,8 +86,8 @@ fun DashboardNavigationRoot() {
             }
 
             composable(ComposeScreen.InvitationListing.description) {
-
                 InvitationListingScreen(
+
                     onAddInvitation = {
                         navController.navigate(ComposeScreen.AddInvitation.description)
                     }
@@ -92,8 +96,8 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.AddInvitation.description) {
                 AddInvitationScreen(
-                    onInvitationCreated = {
 
+                    onInvitationCreated = {
                         navController.popBackStack()
                     }
                 )
@@ -108,11 +112,9 @@ fun DashboardNavigationRoot() {
 
                 AddRechargeScreen(
                     mobileNumber = mobileNumber,
-
                     id = id,
 
                     onSuccess = {
-
                         navigate(navController, ComposeScreen.Dashboard.description)
                     }
                 )
@@ -123,8 +125,8 @@ fun DashboardNavigationRoot() {
             ) {
 
                 AddMobileNumberScreen(
-                    onSuccess = {
 
+                    onSuccess = {
                         navigate(navController, ComposeScreen.Dashboard.description)
                     }
                 )
