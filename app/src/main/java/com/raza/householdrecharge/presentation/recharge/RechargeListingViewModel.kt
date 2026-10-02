@@ -58,6 +58,7 @@ class RechargeListingViewModel @Inject constructor(
                 rechargeListingUIState.update {
                     it.copy(
                         apiResponse = requestErrorMapper.map(validationResult.error),
+                        showBottomSheet = true
                     )
                 }
 
@@ -68,6 +69,14 @@ class RechargeListingViewModel @Inject constructor(
                 householdId = sessionManager.householdId.first()
             )
 
+        }
+    }
+
+    fun onShowBottomSheetModified(showBottomSheet: Boolean) {
+        rechargeListingUIState.update {
+            it.copy(
+                showBottomSheet = showBottomSheet
+            )
         }
     }
 }

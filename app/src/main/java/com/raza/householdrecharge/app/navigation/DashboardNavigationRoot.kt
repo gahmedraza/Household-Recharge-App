@@ -1,20 +1,10 @@
 package com.raza.householdrecharge.app.navigation
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -54,7 +44,7 @@ fun DashboardNavigationRoot() {
 
             composable(ComposeScreen.Dashboard.description) {
                 DashboardScreen(
-                    onDashboardCardClick = { mobileNumber, id ->
+                    onAddRecharge = { mobileNumber, id ->
 
                         navController.navigate("${ComposeScreen.AddRecharge}/$mobileNumber/$id")
                     },
@@ -75,7 +65,7 @@ fun DashboardNavigationRoot() {
                         navController.navigate(ComposeScreen.OnboardingNavigationRoot.description)
                     },
                     onInvitation = {
-                        navController.navigate(ComposeScreen.Invitation.description)
+                        navController.navigate(ComposeScreen.InvitationListing.description)
                     },
                     onAccount = {
                         navController.navigate(ComposeScreen.Account.description)
@@ -91,7 +81,7 @@ fun DashboardNavigationRoot() {
                 OnboardingNavigation()
             }
 
-            composable(ComposeScreen.Invitation.description) {
+            composable(ComposeScreen.InvitationListing.description) {
 
                 InvitationListingScreen(
                     onAddInvitation = {
@@ -123,7 +113,7 @@ fun DashboardNavigationRoot() {
 
                     onSuccess = {
 
-                        navController.navigate(ComposeScreen.Dashboard.description)
+                        navigate(navController, ComposeScreen.Dashboard.description)
                     }
                 )
             }
@@ -135,7 +125,7 @@ fun DashboardNavigationRoot() {
                 AddMobileNumberScreen(
                     onSuccess = {
 
-                        navController.navigate(ComposeScreen.Dashboard.description)
+                        navigate(navController, ComposeScreen.Dashboard.description)
                     }
                 )
             }

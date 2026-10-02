@@ -42,7 +42,7 @@ const val TAG2 = "Dashboard"
 @Composable
 fun DashboardScreen(
     viewmodel: DashboardViewModel = hiltViewModel(),
-    onDashboardCardClick: (String, String) -> Unit = { a,b -> },
+    onAddRecharge: (String, String) -> Unit = { a, b -> },
     onAddMobileNumber: () -> Unit = {}
 ) {
 
@@ -94,7 +94,7 @@ fun DashboardScreen(
                 else if (dashboardUIState.mobileNumberList.isEmpty()) {
                     item {
                         Text(
-                            text = "No mobile numbers added",
+                            text = "no mobile numbers found",
                             style = MaterialTheme.typography.titleLarge,
                             textAlign = TextAlign.Center
                         )
@@ -124,7 +124,7 @@ fun DashboardScreen(
                             item = item,
                             recharge = rechargeDto,
                             onClick = {
-                                onDashboardCardClick(item.mobileNumber.toString(), item.id)
+                                onAddRecharge(item.mobileNumber.toString(), item.id)
                             }
                         )
                     }

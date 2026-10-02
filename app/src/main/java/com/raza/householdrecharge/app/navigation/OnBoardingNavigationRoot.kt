@@ -27,15 +27,15 @@ fun OnboardingNavigation() {
             SplashScreen(
 
                 openLogin = {
-                    navController.navigate(ComposeScreen.Login.description)
+                    navigate(navController, ComposeScreen.Login.description)
                 },
 
                 openSetupHousehold = {
-                    navController.navigate(ComposeScreen.SetupHousehold.description)
+                    navigate(navController, ComposeScreen.SetupHousehold.description)
                 },
 
                 openDashboard = {
-                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                    navigate(navController, ComposeScreen.DashboardNavigationRoot.description)
                 }
             )
         }
@@ -45,17 +45,17 @@ fun OnboardingNavigation() {
             LoginScreen(
                 onRegister = {
                     Log.d("TAG", "OnRegister")
-                    navController.navigate(ComposeScreen.Register.description)
+                    navigate(navController, ComposeScreen.Register.description)
                 },
 
                 onLoginCompletion = {
                     Log.d("TAG", "OnLogin")
-                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                    navigate(navController, ComposeScreen.DashboardNavigationRoot.description)
                 },
 
                 onBoardingNotComplete = {
                     Log.d("TAG", "Household Not Found")
-                    navController.navigate(ComposeScreen.SetupHousehold.description)
+                    navigate(navController, ComposeScreen.SetupHousehold.description)
                 }
             )
         }
@@ -65,12 +65,12 @@ fun OnboardingNavigation() {
             RegisterScreen(
                 onSuccess = {
                     Log.d("TAG", "On Register Success")
-                    navController.navigate(ComposeScreen.SetupHousehold.description)
+                    navigate(navController, ComposeScreen.SetupHousehold.description)
                 },
 
                 onLogin = {
                     Log.d("TAG", "onLogin")
-                    navController.navigate(ComposeScreen.Login.description)
+                    navigate(navController, ComposeScreen.Login.description)
                 })
         }
 
@@ -78,12 +78,12 @@ fun OnboardingNavigation() {
             SetupHouseholdScreen(
                 onJoinHousehold = {
 
-                    navController.navigate(ComposeScreen.FindHousehold.description)
+                    navigate(navController, ComposeScreen.FindHousehold.description)
                 },
 
                 onCreateHousehold = {
 
-                    navController.navigate(ComposeScreen.CreateHousehold.description)
+                    navigate(navController, ComposeScreen.CreateHousehold.description)
                 }
             )
         }
@@ -92,7 +92,7 @@ fun OnboardingNavigation() {
             FindHouseholdScreen(
                 onSuccess = { findHouseholdResponse ->
 
-                    navController.navigate("${ComposeScreen.ConfirmHousehold.description}/${findHouseholdResponse?.householdName}/${findHouseholdResponse?.householdId}/${findHouseholdResponse?.invitationCode}")
+                    navigate(navController, "${ComposeScreen.ConfirmHousehold.description}/${findHouseholdResponse?.householdName}/${findHouseholdResponse?.householdId}/${findHouseholdResponse?.invitationCode}")
                 }
             )
         }
@@ -111,7 +111,7 @@ fun OnboardingNavigation() {
                 invitationCode = invitationCode,
 
                 onSuccess = {
-                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                    navigate(navController, ComposeScreen.DashboardNavigationRoot.description)
                 }
             )
         }
@@ -119,7 +119,7 @@ fun OnboardingNavigation() {
         composable(ComposeScreen.CreateHousehold.description) {
             CreateHouseholdScreen(
                 onSuccess = {
-                    navController.navigate(ComposeScreen.DashboardNavigationRoot.description)
+                    navigate(navController, ComposeScreen.DashboardNavigationRoot.description)
                 }
             )
         }

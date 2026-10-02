@@ -44,7 +44,11 @@ fun BottomNavigationBar(
         NavigationBarItem(
             selected = false,
             onClick = {
-                navController.navigate(ComposeScreen.RechargeListing.description)
+                navController.navigate(ComposeScreen.RechargeListing.description) {
+
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
             },
             icon = {
                 Icon(
@@ -60,7 +64,11 @@ fun BottomNavigationBar(
         NavigationBarItem(
             selected = false,
             onClick = {
-                navController.navigate(ComposeScreen.Setting.description)
+                navController.navigate(ComposeScreen.Setting.description) {
+
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
             },
             icon = {
                 Icon(

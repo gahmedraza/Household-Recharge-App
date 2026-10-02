@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,10 +20,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,39 +62,70 @@ fun RechargeListingScreen(
 
     ) { paddingValues ->
 
-        val modifier = Modifier.padding(paddingValues)
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+            contentAlignment = Alignment.Center
+        ) {
+            LazyColumn {
 
-        if (rechargeListingUIState.rechargeList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
+                if (rechargeListingUIState.isLoading) {
 
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    text = "no recharges found",
-                    style = MaterialTheme.typography.titleLarge
-                )
+                    item {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(24.dp)
+                                .align(Alignment.Center),
+                        )
+                    }
+                }
+
+                else if (rechargeListingUIState.rechargeList.isEmpty()) {
+                    item {
+                        Text(
+                            text = "no recharges found",
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+
+                else {
+                    item {
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+
+                    items(rechargeListingUIState.rechargeList) { item ->
+                        RechargeListItemCard(
+                            item = item,
+                            onClick = {
+
+                            }
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(100.dp))
+                    }
+                }
             }
-        } else {
-            LazyColumn(modifier = modifier) {
-                item {
-                    Spacer(modifier = Modifier.height(20.dp))
+        }
+
+        if(rechargeListingUIState.showBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    viewmodel.onShowBottomSheetModified(false)
                 }
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Text("api response")
 
-                items(rechargeListingUIState.rechargeList) { item ->
-                    RechargeListItemCard(
-                        item = item,
-                        onClick = {
-
-                        }
-                    )
-                }
-
-                item {
-                    Spacer(modifier = Modifier.height(20.dp))
+                    Text(rechargeListingUIState.apiResponse)
                 }
             }
         }
