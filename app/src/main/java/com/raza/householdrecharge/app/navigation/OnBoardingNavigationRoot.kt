@@ -78,12 +78,12 @@ fun OnboardingNavigation() {
             SetupHouseholdScreen(
                 onJoinHousehold = {
 
-                    navigate(navController, ComposeScreen.FindHousehold.description)
+                    navController.navigate(ComposeScreen.FindHousehold.description)
                 },
 
                 onCreateHousehold = {
 
-                    navigate(navController, ComposeScreen.CreateHousehold.description)
+                    navController.navigate(ComposeScreen.CreateHousehold.description)
                 }
             )
         }

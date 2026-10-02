@@ -5,10 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AuthDto
 import com.raza.householdrecharge.data.remote.dto.OnboardingDto
+import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.error.response.AccountResponseError
 import com.raza.householdrecharge.domain.error.response.ResponseError
 import com.raza.householdrecharge.domain.usecase.AuthUseCase
+import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
+import com.raza.householdrecharge.domain.validator.request.MobileNumberRequestValidator
 import com.raza.householdrecharge.presentation.common.MobileNumberValidator
 import com.raza.householdrecharge.presentation.common.PasswordValidator
 import com.raza.householdrecharge.presentation.common.AccountNameValidator
@@ -18,6 +21,7 @@ import com.raza.householdrecharge.util.cleanString
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -83,38 +87,35 @@ class RegisterViewModel @Inject constructor(
                 authDto
             )
 
-            when(result) {
-                is Result.Success -> {
+            if (result is Result.Failure) {
 
-                    val onBoardingDto = result.data
-
-                    viewModelScope.launch(Dispatchers.IO) {
-                        sessionManager.saveUserId(onBoardingDto.authId.cleanString())
-                        sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
-                        sessionManager.saveMobileNumber(registerUIState.value.mobileNumber)
-                    }
-
-                    registerUIState.value.authId = onBoardingDto.authId.cleanString()
-
-                    registerUIState.update {
-                        it.copy(
-                            apiResponse = "account creation success",
-                            shouldProceed = true,
-                            isLoading = false
-                        )
-                    }
-                }
-
-                is Result.Failure -> {
-
-                    registerUIState.update {
-                        it.copy(
-                            apiResponse = "account creation failure ${responseErrorMapper.map(result.error)}",
-                            isLoading = false
-                        )
-                    }
+                registerUIState.update {
+                    it.copy(
+                        apiResponse = "account creation failure ${responseErrorMapper.map(result.error)}",
+                        isLoading = false
+                    )
                 }
             }
+
+            //
+            val onBoardingDto = (result as Result.Success).data
+
+            viewModelScope.launch(Dispatchers.IO) {
+                sessionManager.saveUserId(onBoardingDto.authId.cleanString())
+                sessionManager.saveAccountId(onBoardingDto.accountId.cleanString())
+                sessionManager.saveMobileNumber(registerUIState.value.mobileNumber)
+            }
+
+            registerUIState.value.authId = onBoardingDto.authId.cleanString()
+
+            registerUIState.update {
+                it.copy(
+                    apiResponse = "account creation success",
+                    shouldProceed = true,
+                    isLoading = false
+                )
+            }
+            //
         }
     }
 

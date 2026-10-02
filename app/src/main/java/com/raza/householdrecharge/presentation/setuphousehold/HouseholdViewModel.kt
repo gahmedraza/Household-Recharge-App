@@ -7,9 +7,12 @@ import com.raza.householdrecharge.core.logging.Logger.log
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.AppUserDto
 import com.raza.householdrecharge.data.remote.dto.HouseholdDto
+import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
 import com.raza.householdrecharge.data.session.SessionManager
 import com.raza.householdrecharge.domain.usecase.HouseholdUseCase
+import com.raza.householdrecharge.domain.usecase.MobileNumberUseCase
 import com.raza.householdrecharge.domain.validator.request.HouseholdRequestValidator
+import com.raza.householdrecharge.domain.validator.request.MobileNumberRequestValidator
 import com.raza.householdrecharge.presentation.common.HouseholdNameValidator
 import com.raza.householdrecharge.presentation.common.InvitationCodeValidator
 import com.raza.householdrecharge.presentation.error.RequestErrorMapper
@@ -27,6 +30,8 @@ import javax.inject.Inject
 class HouseholdViewModel @Inject constructor(
     private val sessionManager: SessionManager,
     private val householdUseCase: HouseholdUseCase,
+    private val mobileNumberUseCase: MobileNumberUseCase,
+    private val requestValidator: MobileNumberRequestValidator,
     private val householdRequestValidator: HouseholdRequestValidator,
     private val householdNameValidator: HouseholdNameValidator,
     private val invitationCodeValidator: InvitationCodeValidator,
@@ -109,23 +114,77 @@ class HouseholdViewModel @Inject constructor(
                 householdDto = householdDto
             )
 
-            when(result) {
+            if (result is Result.Failure) {
+
+                householdUIState.update {
+                    it.copy(
+                        apiResponse = "household creation failure\n${responseErrorMapper.map(result.error)}",
+                        shouldProceed = false,
+                        isLoading = false
+                    )
+                }
+
+                return@launch
+            }
+
+            val householdId = (result as Result.Success).data
+
+            viewModelScope.launch(Dispatchers.IO) {
+                sessionManager.saveHouseholdName(householdName)
+                sessionManager.saveHouseholdId(householdId)
+
+                householdUIState.update {
+                    it.copy(
+                        apiResponse = "household creation success",
+                        shouldProceed = true,
+                        isLoading = false
+                    )
+                }
+            }
+
+            //
+            val mobileNumber = sessionManager.mobileNumber.first()
+
+            val mobileNumberDto = MobileNumberDtoFactory(
+                sessionManager = sessionManager
+            ).create(
+                mobileNumber = mobileNumber.toLong()
+            )
+
+            val validationResult2 = requestValidator.validate(
+                authId = sessionManager.authId.first(),
+                householdId = sessionManager.householdId.first(),
+                mobileNumber = mobileNumber
+            )
+
+            //user understandable errors should be placed in a class
+            if (validationResult2 is Result.Failure) {
+
+                householdUIState.update {
+                    it.copy(
+                        apiResponse = "failure: ${requestErrorMapper.map(validationResult2.error)}",
+                        isLoading = false,
+                        shouldProceed = false
+                    )
+                }
+
+                return@launch
+            }
+            //
+
+            val result2 = mobileNumberUseCase.addMobileNumber(
+                mobileNumberDto = mobileNumberDto
+            )
+
+            when (result2) {
 
                 is Result.Success<String> -> {
-
-                    val householdId = result.data
-
-                    viewModelScope.launch(Dispatchers.IO) {
-                        sessionManager.saveHouseholdName(householdName)
-                        sessionManager.saveHouseholdId(householdId)
-
-                        householdUIState.update {
-                            it.copy(
-                                apiResponse = "household creation success",
-                                shouldProceed = true,
-                                isLoading = false
-                            )
-                        }
+                    householdUIState.update {
+                        it.copy(
+                            apiResponse = "mobile number has been added",
+                            isLoading = false,
+                            shouldProceed = true
+                        )
                     }
                 }
 
@@ -133,13 +192,14 @@ class HouseholdViewModel @Inject constructor(
 
                     householdUIState.update {
                         it.copy(
-                            apiResponse = "household creation failure\n${responseErrorMapper.map(result.error)}",
+                            apiResponse = "failure: ${responseErrorMapper.map(result2.error)}",
                             shouldProceed = false,
                             isLoading = false
                         )
                     }
                 }
             }
+            //
         }
     }
 
@@ -276,15 +336,69 @@ class HouseholdViewModel @Inject constructor(
                     invitationCode = invitationCode
                 )
 
-                when(result) {
+                if(result is Result.Failure) {
+
+                    householdUIState.update {
+                        it.copy(
+                            isLoading = false,
+                            shouldProceed = false,
+                            apiResponse = "unable to add you to the household"
+                        )
+                    }
+
+                    return@launch
+                }
+
+                householdUIState.update {
+                    it.copy(
+                        isLoading = false,
+                        shouldProceed = true,
+                        apiResponse = "you have been added to the household"
+                    )
+                }
+
+                //
+                val mobileNumber = sessionManager.mobileNumber.first()
+
+                val mobileNumberDto = MobileNumberDtoFactory(
+                    sessionManager = sessionManager
+                ).create(
+                    mobileNumber = mobileNumber.toLong()
+                )
+
+                val validationResult2 = requestValidator.validate(
+                    authId = sessionManager.authId.first(),
+                    householdId = sessionManager.householdId.first(),
+                    mobileNumber = mobileNumber
+                )
+
+                //user understandable errors should be placed in a class
+                if (validationResult2 is Result.Failure) {
+
+                    householdUIState.update {
+                        it.copy(
+                            apiResponse = "failure: ${requestErrorMapper.map(validationResult2.error)}",
+                            isLoading = false,
+                            shouldProceed = false
+                        )
+                    }
+
+                    return@launch
+                }
+                //
+
+                val result2 = mobileNumberUseCase.addMobileNumber(
+                    mobileNumberDto = mobileNumberDto
+                )
+
+                when (result2) {
 
                     is Result.Success<String> -> {
-
                         householdUIState.update {
                             it.copy(
+                                apiResponse = "mobile number has been added",
                                 isLoading = false,
-                                shouldProceed = true,
-                                apiResponse = "you have been added to the household"
+                                shouldProceed = true
                             )
                         }
                     }
@@ -293,13 +407,14 @@ class HouseholdViewModel @Inject constructor(
 
                         householdUIState.update {
                             it.copy(
-                                isLoading = false,
+                                apiResponse = "failure: ${responseErrorMapper.map(result2.error)}",
                                 shouldProceed = false,
-                                apiResponse = "unable to add you to the household"
+                                isLoading = false
                             )
                         }
                     }
                 }
+                //
 
             } catch (e: Exception) {
 

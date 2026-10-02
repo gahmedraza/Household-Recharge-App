@@ -9,10 +9,13 @@ import com.raza.householdrecharge.data.repository.AuthRepository
 import com.raza.householdrecharge.util.cleanString
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.dto.UserDto
+import com.raza.householdrecharge.data.remote.factory.MobileNumberDtoFactory
 import com.raza.householdrecharge.domain.error.response.AccountResponseError
 import com.raza.householdrecharge.domain.error.response.AuthResponseError
 import com.raza.householdrecharge.domain.error.usecase.AuthUseCaseError
 import com.raza.householdrecharge.domain.model.Account
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class AuthUseCase @Inject constructor(
@@ -34,52 +37,51 @@ class AuthUseCase @Inject constructor(
 
             val registerResult = authRepository.register(authDto = authDto)
 
-            when (registerResult) {
-                is Result.Success -> {
+            if (registerResult is Result.Failure) {
+                val error = registerResult.error.toString()
+                Logger.log(error)
+                return Result.Failure(AccountResponseError.Unknown(error))
+            }
 
-                    accountDto = AccountDto(
-                        accountName = authDto.accountName,
-                        accountId = registerResult.data.cleanString(),
-                        primaryMobileNumber = authDto.mobileNumber
+            //
+            val accountId = (registerResult as Result.Success).data.cleanString()
+
+            accountDto = AccountDto(
+                accountName = authDto.accountName,
+                accountId = accountId,
+                primaryMobileNumber = authDto.mobileNumber
+            )
+
+            val addAccountResult = accountRepository
+
+                .createAccount(
+                    collectionId = accountId,
+                    accountDto = accountDto
+                )
+
+            if (addAccountResult is Result.Success<Unit>) {
+
+                onBoardingDto =
+                    OnboardingDto(
+                        authId = accountId,
+                        accountId = accountId
                     )
 
-                    val addAccountResult = accountRepository
+                result = Result.Success(onBoardingDto)
 
-                        .createAccount(
-                            collectionId = registerResult.data.cleanString(),
-                            accountDto = accountDto
-                        )
+            } else {
 
-                    if (addAccountResult is Result.Success<Unit>) {
+                val error = "account id was not generated in accounts collection"
+                Logger.log(error)
+                return Result.Failure(AccountResponseError.AccountIdNotGenerated(error))
 
-                        onBoardingDto =
-                            OnboardingDto(
-                                authId = registerResult.data.cleanString(),
-                                accountId = registerResult.data.cleanString()
-                            )
-
-                        result = Result.Success(onBoardingDto)
-
-                    } else {
-
-                        val error = "account id was not generated in accounts collection"
-                        Logger.log(error)
-                        result = Result.Failure(AccountResponseError.AccountIdNotGenerated(error))
-
-                    }
-                }
-
-                is Result.Failure -> {
-                    val error = registerResult.error.toString()
-                    Logger.log(error)
-                    result = Result.Failure(AccountResponseError.Unknown(error))
-                }
             }
+            //
 
         } catch (e: Exception) {
             val error = e.message.cleanString()
             Logger.log(error)
-            result = Result.Failure(AccountResponseError.Unknown(error))
+            return Result.Failure(AccountResponseError.Unknown(error))
         }
 
         return result

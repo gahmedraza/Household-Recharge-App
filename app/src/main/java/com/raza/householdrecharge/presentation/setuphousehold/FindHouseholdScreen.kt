@@ -46,11 +46,11 @@ fun FindHouseholdScreen(
 
         Box(
             modifier = Modifier
-                .imePadding()
-                .verticalScroll(rememberScrollState())
                 .padding(paddingValues)
                 .padding(start = 20.dp, end = 20.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .imePadding()
+                .verticalScroll(rememberScrollState()),
             contentAlignment = Alignment.Center
 
         ) {
