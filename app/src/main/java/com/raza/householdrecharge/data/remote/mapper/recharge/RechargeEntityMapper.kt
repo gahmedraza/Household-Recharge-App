@@ -6,8 +6,6 @@ import com.raza.householdrecharge.data.remote.dto.RechargeDto
 
 object RechargeEntityMapper {
 
-    val TAG: String = RechargeEntityMapper.javaClass.simpleName
-
     fun map(rechargeDto: RechargeDto): RechargeEntity {
         return RechargeEntity(
             id = rechargeDto.id,
@@ -24,7 +22,7 @@ object RechargeEntityMapper {
 
     fun map(rechargeDtoList: List<RechargeDto>): List<RechargeEntity> {
         val rechargeEntityList = mutableListOf<RechargeEntity>()
-        Logger.log(TAG, "size of input list: ${rechargeDtoList.size}")
+        Logger.log("size of input list: ${rechargeDtoList.size}")
 
         rechargeDtoList.forEach { rechargeDto ->
             if(rechargeDto.id.trim().isNotBlank()) {
@@ -32,11 +30,11 @@ object RechargeEntityMapper {
 
                 rechargeEntityList.add(rechargeEntity)
             } else {
-                Logger.log(TAG, "recharge with empty id skipped")
+                Logger.log("recharge with empty id skipped")
             }
         }
 
-        Logger.log(TAG, "size of output list: ${rechargeEntityList.size}")
+        Logger.log("size of output list: ${rechargeEntityList.size}")
 
         return rechargeEntityList
 

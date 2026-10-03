@@ -129,17 +129,15 @@ class HouseholdViewModel @Inject constructor(
 
             val householdId = (result as Result.Success).data
 
-            viewModelScope.launch(Dispatchers.IO) {
-                sessionManager.saveHouseholdName(householdName)
-                sessionManager.saveHouseholdId(householdId)
+            sessionManager.saveHouseholdName(householdName)
+            sessionManager.saveHouseholdId(householdId)
 
-                householdUIState.update {
-                    it.copy(
-                        apiResponse = "household creation success",
-                        shouldProceed = true,
-                        isLoading = false
-                    )
-                }
+            householdUIState.update {
+                it.copy(
+                    apiResponse = "household creation success",
+                    shouldProceed = true,
+                    isLoading = false
+                )
             }
 
             //
@@ -176,29 +174,29 @@ class HouseholdViewModel @Inject constructor(
                 mobileNumberDto = mobileNumberDto
             )
 
-            when (result2) {
-
-                is Result.Success<String> -> {
-                    householdUIState.update {
-                        it.copy(
-                            apiResponse = "mobile number has been added",
-                            isLoading = false,
-                            shouldProceed = true
-                        )
-                    }
-                }
-
-                is Result.Failure -> {
-
-                    householdUIState.update {
-                        it.copy(
-                            apiResponse = "failure: ${responseErrorMapper.map(result2.error)}",
-                            shouldProceed = false,
-                            isLoading = false
-                        )
-                    }
-                }
-            }
+//            when (result2) {
+//
+//                is Result.Success<String> -> {
+//                    householdUIState.update {
+//                        it.copy(
+//                            apiResponse = "mobile number has been added",
+//                            isLoading = false,
+//                            shouldProceed = true
+//                        )
+//                    }
+//                }
+//
+//                is Result.Failure -> {
+//
+//                    householdUIState.update {
+//                        it.copy(
+//                            apiResponse = "failure: ${responseErrorMapper.map(result2.error)}",
+//                            shouldProceed = false,
+//                            isLoading = false
+//                        )
+//                    }
+//                }
+//            }
             //
         }
     }
@@ -391,29 +389,29 @@ class HouseholdViewModel @Inject constructor(
                     mobileNumberDto = mobileNumberDto
                 )
 
-                when (result2) {
-
-                    is Result.Success<String> -> {
-                        householdUIState.update {
-                            it.copy(
-                                apiResponse = "mobile number has been added",
-                                isLoading = false,
-                                shouldProceed = true
-                            )
-                        }
-                    }
-
-                    is Result.Failure -> {
-
-                        householdUIState.update {
-                            it.copy(
-                                apiResponse = "failure: ${responseErrorMapper.map(result2.error)}",
-                                shouldProceed = false,
-                                isLoading = false
-                            )
-                        }
-                    }
-                }
+//                when (result2) {
+//
+//                    is Result.Success<String> -> {
+//                        householdUIState.update {
+//                            it.copy(
+//                                apiResponse = "mobile number has been added",
+//                                isLoading = false,
+//                                shouldProceed = true
+//                            )
+//                        }
+//                    }
+//
+//                    is Result.Failure -> {
+//
+//                        householdUIState.update {
+//                            it.copy(
+//                                apiResponse = "failure: ${responseErrorMapper.map(result2.error)}",
+//                                shouldProceed = false,
+//                                isLoading = false
+//                            )
+//                        }
+//                    }
+//                }
                 //
 
             } catch (e: Exception) {

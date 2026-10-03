@@ -1,7 +1,6 @@
 package com.raza.householdrecharge.presentation.dashbord
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -43,10 +42,7 @@ fun DashboardListItemCard(
             .padding(
                 horizontal = 16.dp,
                 vertical = 8.dp
-            )
-            .clickable {
-                onClick()
-            },
+            ),
         elevation = CardDefaults
             .cardElevation(
                 defaultElevation = 4.dp
@@ -94,35 +90,146 @@ fun DashboardListItemCard(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Text(
-                //text = "Last Recharge: 979 INR",
-                text = "Last Recharge: ${recharge.rechargeAmount}",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            val isRechargeAvailable = recharge.rechargeAmount > 0 &&
+                    recharge.rechargedBy.isNotEmpty() &&
+                    recharge.rechargeDescription.isNotEmpty() &&
+                    recharge.rechargeDate > 0L
 
-            Spacer(modifier = Modifier.height(10.dp))
+            if(isRechargeAvailable) {
+                Column {
+                    Text(
+                        //text = "Last Recharge: 979 INR",
+                        text = "Last Recharge: ${recharge.rechargeAmount}",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
 
-            Text(
-                //text = "2GB per day for 84 days",
-                text = recharge.rechargeDescription,
-                style = MaterialTheme.typography.bodyLarge
-            )
+                    Spacer(modifier = Modifier.height(10.dp))
 
-            Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        //text = "2GB per day for 84 days",
+                        text = recharge.rechargeDescription,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
 
-            Text(
-                //text = "Recharge Date: 02 Sep 2026",
-                text = "Recharge Date: ${getPrintableDate(recharge.rechargeDate.toString())}",
-                style = MaterialTheme.typography.bodyLarge
-            )
+                    Spacer(modifier = Modifier.height(10.dp))
 
-            Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        //text = "Recharge Date: 02 Sep 2026",
+                        text = "Recharge Date: ${getPrintableDate(recharge.rechargeDate.toString())}",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
 
-            Text(
-                //text = "Recharged by: Raza",
-                text = "Recharged by: ${recharge.rechargedBy}",
-                style = MaterialTheme.typography.bodyLarge
-            )
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    Text(
+                        //text = "Recharged by: Raza",
+                        text = "Recharged by: ${recharge.rechargedBy}",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            } else {
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Text(
+                    text = "recharge has not been added yet",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+            }
+
+            //
+            var isActive: Boolean
+            var isSet: Boolean
+
+            val millisPerDay = 24*60*60*1000L
+            val currentMillis = System.currentTimeMillis()
+            val expiryMillis = recharge.expiryDate
+            val daysToExpiry = (expiryMillis - currentMillis + millisPerDay - 1) / millisPerDay
+            var activeText: String
+            var expiryInfoText: String
+
+            if(expiryMillis == 0L) {
+                //not set
+                isActive = false
+                isSet = false
+                activeText = ""
+                expiryInfoText = ""
+            }
+
+            else if(daysToExpiry < 0) {
+                //expired
+                isActive = false
+                isSet = true
+                activeText = "Plan Expired"
+                expiryInfoText = "Expired on ${getPrintableDate(recharge.expiryDate.toString())}"
+            }
+
+            else {
+
+                isActive = true
+                isSet = true
+                activeText = "Plan Active"
+                expiryInfoText = "Expires in $daysToExpiry days"
+            }
+            //
+
+            if(isSet) {
+
+                Spacer(modifier = Modifier.height(20.dp))
+                HorizontalDivider()
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Row {
+                    Column {
+                        Row {
+
+                            if (isActive) {
+                                ActivePlanIndicator(
+                                    modifier = Modifier.align(
+                                        alignment = Alignment.CenterVertically
+                                    )
+                                )
+
+                            } else {
+                                ExpiredPlanIndicator(
+                                    modifier = Modifier.align(
+                                        alignment = Alignment.CenterVertically
+                                    )
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.width(4.dp))
+
+                            Text(
+                                //text = "Plan Active",
+                                text = activeText,
+                                color = if (isActive) {
+                                    MaterialTheme.colorScheme.primary
+                                } else {
+                                    Red66
+                                },
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(4.dp))
+
+                        Text(
+                            //text = "Expires in 24 days",
+                            text = expiryInfoText,
+                            color = if (isActive) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                Red66
+                            },
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
+                    //Spacer(modifier = Modifier.weight(1f))
+                }
+            }
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -131,75 +238,31 @@ fun DashboardListItemCard(
             Spacer(modifier = Modifier.height(20.dp))
 
             Row {
-                Column {
-                    val millisPerDay = 24*60*60*1000L
-                    val currentMillis = System.currentTimeMillis()
-                    val expiryMillis = recharge.expiryDate
-                    val daysToExpiry = (expiryMillis - currentMillis + millisPerDay - 1) / millisPerDay
-                    var isActive: Boolean
-                    var activeText: String
-                    var expiryInfoText: String
-
-                    if(daysToExpiry < 0) {
-                        //expired
-                        isActive = false
-                        activeText = "Plan Expired"
-                        expiryInfoText = "Expired on ${getPrintableDate(recharge.expiryDate.toString())}"
-                    } else {
-
-                        isActive = true
-                        activeText = "Plan Active"
-                        expiryInfoText = "Expires in $daysToExpiry days"
+                OutlinedButton(
+                    modifier = Modifier
+                        .align(Alignment.Top)
+                        .height(40.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    contentPadding = PaddingValues(
+                        top = 0.dp,
+                        bottom = 0.dp,
+                        start = 24.dp,
+                        end = 24.dp
+                    ),
+                    onClick = {
+                        onClick()
                     }
-
-                    Row {
-
-                        if(isActive) {
-                            ActivePlanIndicator(
-                                modifier = Modifier.align(
-                                    alignment = Alignment.CenterVertically
-                                )
-                            )
-
-                        } else {
-                            ExpiredPlanIndicator(
-                                modifier = Modifier.align(
-                                    alignment = Alignment.CenterVertically
-                                )
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            //text = "Plan Active",
-                            text = activeText,
-                            color = if (isActive) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                Red66
-                            },
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(4.dp))
-
+                ) {
                     Text(
-                        //text = "Expires in 24 days",
-                        text = expiryInfoText,
-                        color = if (isActive) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            Red66
-                        },
-                        style = MaterialTheme.typography.bodyMedium
+                        text = "Add Recharge",
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 OutlinedButton(
+                    enabled = isRechargeAvailable,
                     modifier = Modifier
                         .align(Alignment.Top)
                         .height(40.dp),

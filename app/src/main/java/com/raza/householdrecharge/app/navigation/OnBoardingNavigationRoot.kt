@@ -1,6 +1,5 @@
 package com.raza.householdrecharge.app.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +11,7 @@ import com.raza.householdrecharge.presentation.setuphousehold.CreateHouseholdScr
 import com.raza.householdrecharge.presentation.setuphousehold.FindHouseholdScreen
 import com.raza.householdrecharge.presentation.setuphousehold.SetupHouseholdScreen
 import com.raza.householdrecharge.presentation.splash.SplashScreen
+import com.raza.householdrecharge.core.logging.Logger
 
 @Composable
 fun OnboardingNavigation() {
@@ -44,17 +44,17 @@ fun OnboardingNavigation() {
 
             LoginScreen(
                 onRegister = {
-                    Log.d("TAG", "OnRegister")
+                    Logger.log("OnRegister")
                     navigate(navController, ComposeScreen.Register.description)
                 },
 
                 onLoginCompletion = {
-                    Log.d("TAG", "OnLogin")
+                    Logger.log("OnLogin")
                     navigate(navController, ComposeScreen.DashboardNavigationRoot.description)
                 },
 
                 onBoardingNotComplete = {
-                    Log.d("TAG", "Household Not Found")
+                    Logger.log("Household Not Found")
                     navigate(navController, ComposeScreen.SetupHousehold.description)
                 }
             )
@@ -64,12 +64,12 @@ fun OnboardingNavigation() {
 
             RegisterScreen(
                 onSuccess = {
-                    Log.d("TAG", "On Register Success")
+                    Logger.log("On Register Success")
                     navigate(navController, ComposeScreen.SetupHousehold.description)
                 },
 
                 onLogin = {
-                    Log.d("TAG", "onLogin")
+                    Logger.log("onLogin")
                     navigate(navController, ComposeScreen.Login.description)
                 })
         }

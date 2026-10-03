@@ -36,8 +36,6 @@ import com.raza.householdrecharge.domain.model.Recharge
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
 
-const val TAG2 = "Dashboard"
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
@@ -108,15 +106,15 @@ fun DashboardScreen(
 
                     items(dashboardUIState.mobileNumberList) { item ->
 
-                        Logger.log(TAG2, dashboardUIState.rechargeList.toString())
+                        Logger.log(dashboardUIState.rechargeList.toString())
                         var rechargeDto = dashboardUIState.rechargeList.find {
-                            Logger.log(TAG2, "rechargeId: ${it.id}, lastRechargeId: ${item.lastRechargeId}")
+                            Logger.log("rechargeId: ${it.id}, lastRechargeId: ${item.lastRechargeId}")
                             it.id == item.lastRechargeId
                         }
-                        Logger.log(TAG2, rechargeDto.toString())
+                        Logger.log(rechargeDto.toString())
 
                         if(rechargeDto == null) {
-                            Logger.log(TAG2, "empty recharge dto")
+                            Logger.log("empty recharge dto")
                             rechargeDto = Recharge()
                         }
 

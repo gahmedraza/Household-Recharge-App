@@ -1,7 +1,7 @@
 package com.raza.householdrecharge.data.remote.datasource
 
-import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
+import com.raza.householdrecharge.core.logging.Logger
 import com.raza.householdrecharge.core.result.Result
 import com.raza.householdrecharge.data.remote.CollectionField
 import com.raza.householdrecharge.data.remote.HouseholdCollection
@@ -61,8 +61,8 @@ class MobileNumberRemoteDataSource @Inject constructor(
             val mobileNumberList = documentSnapshot.documents.mapNotNull { document ->
                 val data = document.data
                 val id = document.id
-                Log.d("TAG", "data: $data")
-                Log.d("TAG","id: $id")
+                Logger.log("data: $data")
+                Logger.log("id: $id")
 
                 val mobileNumberDto = document.toObject(MobileNumberDto::class.java)
                 mobileNumberDto?.id = document.id

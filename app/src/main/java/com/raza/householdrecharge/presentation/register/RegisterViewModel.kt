@@ -95,6 +95,8 @@ class RegisterViewModel @Inject constructor(
                         isLoading = false
                     )
                 }
+
+                return@launch
             }
 
             //

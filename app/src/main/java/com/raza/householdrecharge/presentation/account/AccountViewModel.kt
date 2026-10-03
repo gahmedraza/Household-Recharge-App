@@ -79,7 +79,7 @@ class AccountViewModel @Inject constructor(
                 is Result.Success -> {
 
                     val householdName = sessionManager.householdName.first()
-                    Logger.log("AccountViewModel", "householdName = $householdName")
+                    Logger.log("householdName = $householdName")
 
                     accountUIState.update {
                         it.copy(
