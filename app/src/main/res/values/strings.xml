@@ -41,4 +41,8 @@
     <string name="add_first_member">Add a member to begin tracking recharge plans.</string>
 
     <string name="logo_message">Seamless \nRecharge \nTracking</string>
+
+    <string name="feedback_message">
+    Your feedback helps us improve the app. Please share any issues or suggestions you have.
+    </string>
 </resources>

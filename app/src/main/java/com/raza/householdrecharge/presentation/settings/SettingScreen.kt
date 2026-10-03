@@ -22,6 +22,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.raza.householdrecharge.presentation.components.TitleBar
 import com.raza.householdrecharge.presentation.theme.HouseholdRechargeTheme
+import com.google.firebase.Firebase
+import com.google.firebase.appdistribution.appDistribution
+import com.raza.householdrecharge.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,6 +76,19 @@ fun SettingScreen(
                     }
                     .padding(cellPadding),
 
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            HorizontalDivider(modifier = Modifier.height(1.dp))
+
+            Text(
+                text = "Send Feedback",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        Firebase.appDistribution.startFeedback(R.string.feedback_message)
+                    }
+                    .padding(cellPadding),
                 style = MaterialTheme.typography.titleLarge
             )
 
